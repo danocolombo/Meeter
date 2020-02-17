@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { setAlert } from './alert';
-import { GET_GATHERINGS, GATHERING_ERROR, GET_GATHERING } from './types';
+import { GET_GATHERINGS, GATHERING_ERROR, GET_GATHERING, DELETE_GATHERING } from './types';
 
 //get gatherings
 export const getGatherings = () => async dispatch => {
@@ -30,7 +30,7 @@ export const createGathering = (
         'Content-Type': 'application/json'
       }
     };
-
+    console.log("in action/gatherings");
     const res = await axios.post('/api/meeting', formData, config);
 
     dispatch({
@@ -67,6 +67,24 @@ export const getGathering = id => async dispatch => {
       type: GET_GATHERING,
       payload: res.data
     });
+  } catch (err) {
+    dispatch({
+      type: GATHERING_ERROR,
+      payload: { msg: err.response.statusText, status: err.response.status }
+    });
+  }
+};
+// Delete GATHERING
+export const deleteGathering = id => async dispatch => {
+  try {
+    await axios.delete(`/api/meeting/${id}`);
+
+    dispatch({
+      type: DELETE_GATHERING,
+      payload: id
+    });
+
+    dispatch(setAlert('Meeting Removed', 'success'));
   } catch (err) {
     dispatch({
       type: GATHERING_ERROR,

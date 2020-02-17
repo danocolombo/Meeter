@@ -3,7 +3,8 @@ import {
   GATHERING_ERROR,
   GET_GATHERING,
   CLEAR_GATHERINGS,
-  CLEAR_GATHERING
+  CLEAR_GATHERING,
+  DELETE_GATHERING
 } from '../actions/types';
 
 const initialState = {
@@ -45,6 +46,12 @@ export default function(state = initialState, action) {
       return {
         ...state,
         gatherings: [],
+        loading: false
+      };
+    case DELETE_GATHERING:
+      return {
+        ...state,
+        gatherings: state.gatherings.filter(gathering => gathering._id !== payload),
         loading: false
       };
     default:

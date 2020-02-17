@@ -453,6 +453,13 @@ button {
   flex-basis: 20%;
 }
 
+/* GATHERINGS Page */
+.DeleteTarget {
+  float: right;
+  padding-right: 5px;
+}
+
+
 /* Posts Page */
 .post-form .post-form-header {
   background: var(--primary-color);

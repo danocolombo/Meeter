@@ -1,11 +1,20 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { deleteGathering } from '../../actions/gathering';
 
 const GatheringItem = ({
-  gathering: { _id, meetingTitle, facilitator, meetingType }
+  deleteGathering, gathering: { _id, meetingTitle, facilitator, meetingType }
 }) => (
   <div className="PersonBox">
+    <div className="DeleteTarget">
+      <button
+        onClick={() => deleteGathering(_id)}
+        type='button'
+        className='btn btn-danger'>
+        <i className='fas fa-trash' />
+      </button>
+    </div>
     <div>
       title: {meetingTitle}
       <br />
@@ -13,6 +22,7 @@ const GatheringItem = ({
       <br />
       facilitator: {facilitator}
       <br />
+      <i class="fas fa-pen"></i>
     </div>
   </div>
 );
