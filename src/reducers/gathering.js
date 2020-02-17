@@ -7,6 +7,7 @@ import {
   DELETE_GATHERING
 } from '../actions/types';
 
+
 const initialState = {
   gatherings: [],
   gathering: null,
