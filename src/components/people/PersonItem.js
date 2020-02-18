@@ -10,7 +10,7 @@ const PersonItem = ({ person: { _id, name, email, phone } }) => (
             {/* only show phone field if there is a number for the user */}
             {phone ? (
                 <Fragment>
-                    <i class='fas fa-phone-square'></i>&nbsp;&nbsp;
+                    <i className='fas fa-phone-square'></i>&nbsp;&nbsp;
                     {phone}
                     <br />
                 </Fragment>
@@ -19,7 +19,7 @@ const PersonItem = ({ person: { _id, name, email, phone } }) => (
             )}
             {email ? (
                 <Fragment>
-                    <i class='fas fa-envelope-square'></i>&nbsp;&nbsp;
+                    <i className='fas fa-envelope-square'></i>&nbsp;&nbsp;
                     {email}
                     <br />
                 </Fragment>
@@ -29,9 +29,7 @@ const PersonItem = ({ person: { _id, name, email, phone } }) => (
         </div>
     </div>
 );
-{
-    /* <i class="fas fa-phone-square-alt"></i> */
-}
+
 PersonItem.propTypes = {
     person: PropTypes.object.isRequired
 };

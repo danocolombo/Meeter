@@ -19,7 +19,9 @@ const People = ({ getPeople, person: { people, loading } }) => {
                 <i className='fas fa-user'></i>These are your peeps
             </p>
             <div>
-                <i class='fas fa-plus-square'></i> - Add a person
+                <a href='/personForm'>
+                    <i className='fas fa-plus-square'></i> - Add a person
+                </a>
             </div>
             <div className='posts'>
                 {people.map(person => (
