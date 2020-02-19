@@ -1,37 +1,42 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, Profiler } from 'react';
+import moment from 'moment';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { deleteGathering } from '../../actions/gathering';
 
 const GatheringItem = ({
     deleteGathering,
-    gathering: { _id, meetingTitle, facilitator, meetingType }
+    gathering: { _id, meetingDate, title, facilitator, meetingType }
 }) => (
-    <div className='PersonBox'>
-        <div className='DeleteTarget'>
-            <button
-                onClick={() => deleteGathering(_id)}
-                type='button'
-                className='btn btn-danger'
-            >
-                <i className='fas fa-trash' />
-            </button>
+    <Fragment>
+        <div className='PersonBox'>
+            <div className='DeleteTarget'>
+                <a
+                    id='deleteGathering'
+                    title='-'
+                    href='/#'
+                    onClick={() => deleteGathering(_id)}
+                >
+                    <i className='fas fa-minus-circle'></i>
+                </a>
+            </div>
+            <div>
+                {moment.utc(meetingDate).format('ll')}
+                <br />
+                {meetingType}: {title}
+                <br />
+                facilitator: {facilitator}
+                <br />
+                <i className='fas fa-pen'></i>
+            </div>
         </div>
-        <div>
-            title: {meetingTitle}
-            <br />
-            type: {meetingType}
-            <br />
-            facilitator: {facilitator}
-            <br />
-            <i className='fas fa-pen'></i>
-        </div>
-    </div>
+    </Fragment>
 );
 
 GatheringItem.propTypes = {
-    gathering: PropTypes.object.isRequired
+    gathering: PropTypes.object.isRequired,
+    deleteGathering: PropTypes.func.isRequired
 };
 
-export default connect(null, {})(GatheringItem);
+export default connect(null, { deleteGathering })(GatheringItem);
 //post bg-white p-1 my-1

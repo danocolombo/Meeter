@@ -2,9 +2,9 @@ import React, { useEffect, useState, Fragment } from 'react';
 import { Link, withRouter, Redirect } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { createPerson } from '../../actions/person';
+import { createPerson, getCurrentPerson } from '../../actions/person';
 
-const PersonForm = ({ createPerson, history }) => {
+const PersonForm = ({ createPerson, getCurrentPerson, history }) => {
     const [formData, setFormData] = useState({
         name: '',
         email: '',
@@ -17,10 +17,11 @@ const PersonForm = ({ createPerson, history }) => {
         e.preventDefault();
         createPerson(formData, history);
     };
-    // useEffect(() => {
-    //   getCurrentProfile();
-    //   // eslint-disable-next-line react-hooks/exhaustive-deps
-    // }, [getCurrentProfile]);
+    useEffect(() => {
+        //useEffect is called when page first loads to get on Edit
+        getCurrentPerson();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [getCurrentPerson]);
 
     // return loading && profile === null ? (
     //   <Redirect to="/dashboard" />
@@ -39,8 +40,9 @@ const PersonForm = ({ createPerson, history }) => {
                         type='text'
                         placeholder='Name of Person'
                         name='name'
+                        onChange={e => onChange(e)}
                     />
-                    <small className='form-text' name='headline-hint'>
+                    <small className='form-text' name='name-hint'>
                         Person's full name
                     </small>
                 </div>
@@ -49,11 +51,17 @@ const PersonForm = ({ createPerson, history }) => {
                         type='text'
                         placeholder='Phone Number'
                         name='phone'
+                        onChange={e => onChange(e)}
                     />
                     <small className='form-text'>Person's phone number</small>
                 </div>
                 <div className='form-group'>
-                    <input type='email' placeholder='Email' name='email' />
+                    <input
+                        type='email'
+                        placeholder='Email'
+                        name='email'
+                        onChange={e => onChange(e)}
+                    />
                     <small className='form-text'>Person's email address</small>
                 </div>
 
@@ -67,13 +75,13 @@ const PersonForm = ({ createPerson, history }) => {
 };
 
 PersonForm.propTypes = {
-    createPerson: PropTypes.func.isRequired
-    // getCurrentProfile: PropTypes.func.isRequired
+    createPerson: PropTypes.func.isRequired,
+    getCurrentPerson: PropTypes.func.isRequired
     // profile: PropTypes.object.isRequired
 };
 const mapStateToProps = state => ({
     // profile: state.profile
 });
-export default connect(mapStateToProps, { createPerson })(
+export default connect(mapStateToProps, { createPerson, getCurrentPerson })(
     withRouter(PersonForm)
 );

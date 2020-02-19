@@ -1,9 +1,20 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { deletePerson } from '../../actions/person';
 
-const PersonItem = ({ person: { _id, name, email, phone } }) => (
+const PersonItem = ({ deletePerson, person: { _id, name, email, phone } }) => (
     <div className='PersonBox'>
+        <div className='DeleteTarget'>
+            <a
+                id='deletePerson'
+                title='-'
+                href='/#'
+                onClick={() => deletePerson(_id)}
+            >
+                <i className='fas fa-minus-circle'></i>
+            </a>
+        </div>
         <div>
             {name}
             <br />
@@ -31,8 +42,9 @@ const PersonItem = ({ person: { _id, name, email, phone } }) => (
 );
 
 PersonItem.propTypes = {
-    person: PropTypes.object.isRequired
+    person: PropTypes.object.isRequired,
+    deletePerson: PropTypes.func.isRequired
 };
 
-export default connect(null, {})(PersonItem);
+export default connect(null, { deletePerson })(PersonItem);
 //post bg-white p-1 my-1

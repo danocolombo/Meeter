@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { setAlert } from './alert';
-import { GET_PEOPLE, PERSON_ERROR, GET_PERSON } from './types';
+import { GET_PEOPLE, PERSON_ERROR, GET_PERSON, DELETE_PERSON } from './types';
 
 export const getPeople = () => async dispatch => {
     try {
@@ -19,9 +19,28 @@ export const getPeople = () => async dispatch => {
         });
     }
 };
-export const getPerson = () => async dispatch => {
+// getCurrentPerson is used when editting a person, need to get it, to edit it.DeleteTarget
+export const getCurrentPerson = id => async dispatch => {
     try {
-        const res = await axios.get('/api/person/');
+        const res = await axios.get(`/api/person/${id}`);
+        dispatch({
+            type: GET_PERSON,
+            payload: res.data
+        });
+    } catch (err) {
+        dispatch({
+            type: PERSON_ERROR,
+            payload: {
+                msg: err.response.statusText,
+                status: err.response.status
+            }
+        });
+    }
+};
+
+export const getPerson = id => async dispatch => {
+    try {
+        const res = await axios.get(`/api/person/${id}`);
         dispatch({
             type: GET_PERSON,
             payload: res.data
@@ -49,6 +68,7 @@ export const createPerson = (
             }
         };
         console.log('in action/createPerson');
+        console.log(formData);
         const res = await axios.post('/api/person', formData, config);
 
         dispatch({
@@ -70,6 +90,26 @@ export const createPerson = (
             errors.forEach(error => dispatch(setAlert(error.msg, 'danger')));
         }
 
+        dispatch({
+            type: PERSON_ERROR,
+            payload: {
+                msg: err.response.statusText,
+                status: err.response.status
+            }
+        });
+    }
+};
+// Delete PERSON
+export const deletePerson = id => async dispatch => {
+    try {
+        await axios.delete(`/api/person/${id}`);
+
+        dispatch({
+            type: DELETE_PERSON,
+            payload: id
+        });
+        dispatch(setAlert('Person Removed', 'success'));
+    } catch (err) {
         dispatch({
             type: PERSON_ERROR,
             payload: {

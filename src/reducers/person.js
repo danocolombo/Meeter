@@ -1,4 +1,9 @@
-import { GET_PEOPLE, PERSON_ERROR, GET_PERSON } from '../actions/types';
+import {
+    GET_PEOPLE,
+    PERSON_ERROR,
+    GET_PERSON,
+    DELETE_PERSON
+} from '../actions/types';
 
 const initialState = {
     people: [],
@@ -22,6 +27,11 @@ export default function(state = initialState, action) {
                 ...state,
                 person: payload,
                 loading: false
+            };
+        case DELETE_PERSON:
+            return {
+                ...state,
+                people: state.people.filter(person => person._id !== payload)
             };
         case PERSON_ERROR:
             return {

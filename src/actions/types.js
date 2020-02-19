@@ -24,6 +24,7 @@ export const ADD_COMMENT = 'ADD_COMMENT';
 export const REMOVE_COMMENT = 'REMOVE_COMMENT';
 export const GET_PERSON = 'GET_PERSON';
 export const GET_PEOPLE = 'GET_PEOPLE';
+export const DELETE_PERSON = 'DELETE_PERSON';
 export const PERSON_ERROR = 'PERSON_ERROR';
 export const CLEAR_PEOPLE = 'CLEAR_PEOPLE';
 export const GET_GATHERINGS = 'GET_GATHERINGS';
