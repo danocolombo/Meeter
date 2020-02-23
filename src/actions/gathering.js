@@ -4,7 +4,8 @@ import {
     GET_GATHERINGS,
     GATHERING_ERROR,
     GET_GATHERING,
-    DELETE_GATHERING
+    DELETE_GATHERING,
+    CLEAR_GATHERING
 } from './types';
 
 //get gatherings
@@ -76,6 +77,7 @@ export const createGathering = (
 // Get gathering
 export const getGathering = id => async dispatch => {
     try {
+        dispatch({ type: CLEAR_GATHERING });
         const res = await axios.get(`/api/meeting/${id}`);
 
         dispatch({

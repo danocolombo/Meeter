@@ -1,4 +1,4 @@
-import React, { Fragment, Profiler } from 'react';
+import React, { Fragment } from 'react';
 import { Link } from 'react-router-dom';
 import moment from 'moment';
 import PropTypes from 'prop-types';
