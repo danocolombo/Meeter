@@ -1,4 +1,5 @@
 import React, { Fragment, Profiler } from 'react';
+import { Link } from 'react-router-dom';
 import moment from 'moment';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -21,7 +22,9 @@ const GatheringItem = ({
                 </a>
             </div>
             <div>
-                {moment.utc(meetingDate).format('ll')}
+                <Link to={`/gatheringForm/${_id}`}>
+                    {moment.utc(meetingDate).format('ll')}
+                </Link>
                 <br />
                 {meetingType}: {title}
                 <br />

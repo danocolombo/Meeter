@@ -1,10 +1,18 @@
-import React, { useEffect, useState, Fragment } from 'react';
+import React, { useEffect, useState, Fragment, Profiler } from 'react';
 import { Link, withRouter, Redirect } from 'react-router-dom';
+import axios from 'axios';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createGathering, getGathering } from '../../actions/gathering';
 
-const GatheringForm = ({ createGathering, history }) => {
+const GatheringForm = ({
+    match,
+    getGathering,
+    gathering: { gathering, lodaing },
+    createGathering,
+    history
+}) => {
+    const [gatheringId, setGatheringId] = useState({ id: null });
     const [formData, setFormData] = useState({
         meetingDate: '',
         facilitator: '',
@@ -68,6 +76,27 @@ const GatheringForm = ({ createGathering, history }) => {
         console.log('submitting');
         createGathering(formData, history);
     };
+    useEffect(() => {
+        if (match.params.id) {
+            //we have an id, which means that we need to fetch and load
+            getGathering(match.params.id);
+            const mtgData = { ...formData };
+            for (const key in gathering) {
+                if (key in mtgData) mtgData[key] = gathering[key];
+            }
+            setFormData(mtgData);
+            // if ({{gathering._id}}) {
+            //     console.log('we got data');
+            // }
+            // var dbValues = [];
+            // (gathering.title) dbValues().add(title: {gathering.title});
+        }
+
+        setFormData({
+            ...formData
+        });
+    }, [getGathering]);
+
     // useEffect(() => {
     //   getCurrentProfile();
     //   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -136,16 +165,16 @@ const GatheringForm = ({ createGathering, history }) => {
                         name='title'
                         onChange={e => onChange(e)}
                     />
-                    <small className='form-text' name='headline-hint'>
+                    <small
+                        className='form-text'
+                        name='headline-hint'
+                        visible={{ meetingType: 'Testmony' ? false : true }}
+                    >
                         {supportString}
                     </small>
                 </div>
                 <div className='form-group'>
-                    <select
-                        name='teacher'
-                        onChange={e => onChange(e)}
-                        visible={teacherVisible}
-                    >
+                    <select name='teacher' onChange={e => onChange(e)} visible>
                         <option value='0'>
                             * Select who is teaching the lesson
                         </option>
@@ -170,7 +199,7 @@ const GatheringForm = ({ createGathering, history }) => {
                 <div className='form-group'>
                     <input
                         type='text'
-                        placeholder='Meal plans'
+                        placeholder={meal}
                         name='meal'
                         onChange={e => onChange(e)}
                     />
@@ -251,13 +280,15 @@ const GatheringForm = ({ createGathering, history }) => {
 };
 
 GatheringForm.propTypes = {
-    createGathering: PropTypes.func.isRequired
+    createGathering: PropTypes.func.isRequired,
+    getGathering: PropTypes.func.isRequired,
+    gathering: PropTypes.object.isRequired
     // getCurrentProfile: PropTypes.func.isRequired
     // profile: PropTypes.object.isRequired
 };
 const mapStateToProps = state => ({
-    // profile: state.profile
+    gathering: state.gathering
 });
-export default connect(mapStateToProps, { createGathering })(
+export default connect(mapStateToProps, { createGathering, getGathering })(
     withRouter(GatheringForm)
 );

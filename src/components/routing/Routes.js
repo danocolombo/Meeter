@@ -59,6 +59,11 @@ const Routes = () => {
                     path='/gatheringForm'
                     component={GatheringForm}
                 />
+                <PrivateRoute
+                    exact
+                    path='/gatheringForm/:id'
+                    component={GatheringForm}
+                />
                 <Route component={NotFound} />
             </Switch>
         </section>
