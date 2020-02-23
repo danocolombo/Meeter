@@ -22,7 +22,7 @@ const GatheringItem = ({
                 </a>
             </div>
             <div>
-                <Link to={`/gatheringForm/${_id}`}>
+                <Link to={`/EditGathering/${_id}`}>
                     {moment.utc(meetingDate).format('ll')}
                 </Link>
                 <br />

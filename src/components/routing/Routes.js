@@ -15,6 +15,7 @@ import Post from '../post/Post';
 import People from '../people/People';
 import Gatherings from '../gatherings/Gatherings';
 import GatheringForm from '../gatherings/GatheringForm';
+import EditGathering from '../gatherings/EditGathering';
 import NotFound from '../layout/NotFound';
 import PrivateRoute from '../routing/PrivateRoute';
 import PersonForm from '../people/PersonForm';
@@ -64,6 +65,7 @@ const Routes = () => {
                     path='/gatheringForm/:id'
                     component={GatheringForm}
                 />
+                <PrivateRoute exact path='/EditGathering/:id' component={EditGathering} />
                 <Route component={NotFound} />
             </Switch>
         </section>
