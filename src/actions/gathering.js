@@ -11,8 +11,8 @@ import {
 //get gatherings
 export const getGatherings = () => async dispatch => {
     try {
-        const res = await axios.get('/api/meeting');
-
+        const res = await axios.get('/api/meeting/future');
+        dispatch({ type: CLEAR_GATHERING });
         dispatch({
             type: GET_GATHERINGS,
             payload: res.data

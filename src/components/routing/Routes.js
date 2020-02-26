@@ -13,9 +13,10 @@ import Profile from '../profile/Profile';
 import Posts from '../posts/Posts';
 import Post from '../post/Post';
 import People from '../people/People';
+// import Gathering from '../gatherings/Gathering';
 import Gatherings from '../gatherings/Gatherings';
-import GatheringForm from '../gatherings/GatheringForm';
 import EditGathering from '../gatherings/EditGathering';
+import GatheringForm from '../gatherings/GatheringForm';
 import NotFound from '../layout/NotFound';
 import PrivateRoute from '../routing/PrivateRoute';
 import PersonForm from '../people/PersonForm';
@@ -53,6 +54,11 @@ const Routes = () => {
                 <PrivateRoute exact path='/posts' component={Posts} />
                 <PrivateRoute exact path='/posts/:id' component={Post} />
                 <PrivateRoute exact path='/people' component={People} />
+                {/* <PrivateRoute
+                    exact
+                    path='/gathering/:id'
+                    component={Gathering}
+                /> */}
                 <PrivateRoute exact path='/personForm' component={PersonForm} />
                 <PrivateRoute exact path='/gatherings' component={Gatherings} />
                 <PrivateRoute
@@ -60,12 +66,17 @@ const Routes = () => {
                     path='/gatheringForm'
                     component={GatheringForm}
                 />
-                <PrivateRoute
+                {/* <PrivateRoute
                     exact
                     path='/gatheringForm/:id'
                     component={GatheringForm}
+                /> */}
+
+                <PrivateRoute
+                    exact
+                    path='/EditGathering/:id'
+                    component={EditGathering}
                 />
-                <PrivateRoute exact path='/EditGathering/:id' component={EditGathering} />
                 <Route component={NotFound} />
             </Switch>
         </section>
