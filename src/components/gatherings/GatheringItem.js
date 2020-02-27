@@ -7,7 +7,7 @@ import { deleteGathering } from '../../actions/gathering';
 
 const GatheringItem = ({
     deleteGathering,
-    gathering: { _id, meetingDate, title, facilitator, meetingType }
+    gathering: { _id, meetingDate, title, supportRole, facilitator, meetingType }
 }) => (
     <Fragment>
         <div className='PersonBox'>
@@ -28,12 +28,14 @@ const GatheringItem = ({
                 <br />
                 {meetingType}: {title}
                 <br />
-                facilitator: {facilitator}
+                {supportRole}
+                
                 <br />
                 <i className='fas fa-pen'></i>
             </div>
         </div>
     </Fragment>
+    
 );
 
 GatheringItem.propTypes = {

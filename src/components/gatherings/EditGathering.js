@@ -10,6 +10,7 @@ const initialState = {
     facilitator: '',
     meetingType: '',
     supportRole: '',
+    worship: '',
     title: '',
     meal: '',
     mealCoordinator: '',
@@ -46,6 +47,7 @@ const EditGathering = ({
         meetingType,
         supportRole,
         title,
+        worship,
         meal,
         mealCoordinator,
         mealCount,
@@ -108,6 +110,17 @@ const EditGathering = ({
                         onChange={onChange}
                     />
                     <small className='form-text'>{diplayTitleSubtitle()}</small>
+                </div>
+                <div className='form-group'>{displayTeacher()}</div>
+                <div className='form-group'>
+                    <h4>Meal</h4>
+                    <input
+                        type='text'
+                        name='title'
+                        value={meal}
+                        onChange={onChange}
+                    />
+                    <small className='form-text'>What was the meal?</small>
                 </div>
                 <div className='form-group'>{displayTeacher()}</div>
                 {/* <div className='form-group'>
