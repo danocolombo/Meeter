@@ -17,7 +17,7 @@ const GatheringForm = ({
         meetingDate: '',
         facilitator: '',
         meetingType: '',
-        supportString: 'First value',
+        supportRole: 'First value',
         title: '',
         teacher: '',
         teacherVisible: true,
@@ -61,7 +61,7 @@ const GatheringForm = ({
             setFormData({
                 ...formData,
                 [e.target.name]: e.target.value,
-                supportString: assistString
+                supportRole: assistString
             });
         } else {
             setFormData({

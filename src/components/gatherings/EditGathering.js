@@ -1,9 +1,10 @@
 import React, { Fragment, useState, useEffect } from 'react';
 import { Link, withRouter } from 'react-router-dom';
+import Range from 'react-materialize';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createGathering, getGathering } from '../../actions/gathering';
-
+import ServantSelect from './ServantSelect';
 const initialState = {
     _id: '',
     meetingDate: '',
@@ -21,7 +22,7 @@ const initialState = {
 };
 
 const EditGathering = ({
-    gathering: { gathering, loading },
+    gathering: { gathering, servants, loading },
     createGathering,
     getGathering,
     match,
@@ -82,6 +83,14 @@ const EditGathering = ({
                         onChange={e => onChange(e)}
                     />
                 </div>
+                <br />
+                <ServantSelect
+                    arrayOfData={servants}
+                    onSelectChange={onChange}
+                    component='Facilitator'
+                    selectedValue={facilitator}
+                />
+
                 <div className='form-group'>
                     <h4>Meeting Type **</h4>
                     <select
@@ -111,185 +120,27 @@ const EditGathering = ({
                     />
                     <small className='form-text'>{diplayTitleSubtitle()}</small>
                 </div>
-                <div className='form-group'>{displayTeacher()}</div>
+                {checkForTeacher()}
+
                 <div className='form-group'>
                     <h4>Meal</h4>
                     <input
                         type='text'
-                        name='title'
+                        placeholder='Dinner plans...'
+                        name='meal'
                         value={meal}
                         onChange={onChange}
                     />
-                    <small className='form-text'>What was the meal?</small>
+                    <small className='form-text'>Dinner provided</small>
                 </div>
-                <div className='form-group'>{displayTeacher()}</div>
-                {/* <div className='form-group'>
-                    <select name='status' value={status} onChange={onChange}>
-                        <option>* Select Professional Status</option>
-                        <option value='Developer'>Developer</option>
-                        <option value='Junior Developer'>
-                            Junior Developer
-                        </option>
-                        <option value='Senior Developer'>
-                            Senior Developer
-                        </option>
-                        <option value='Manager'>Manager</option>
-                        <option value='Student or Learning'>
-                            Student or Learning
-                        </option>
-                        <option value='Instructor'>
-                            Instructor or Teacher
-                        </option>
-                        <option value='Intern'>Intern</option>
-                        <option value='Other'>Other</option>
-                    </select>
-                    <small className='form-text'>
-                        Give us an idea of where you are at in your career
-                    </small>
-                </div> */}
-                {/* <div className='form-group'>
-                    <input
-                        type='text'
-                        placeholder='Company'
-                        name='company'
-                        value={company}
-                        onChange={onChange}
-                    />
-                    <small className='form-text'>
-                        Could be your own company or one you work for
-                    </small>
-                </div>
-                <div className='form-group'>
-                    <input
-                        type='text'
-                        placeholder='Website'
-                        name='website'
-                        value={website}
-                        onChange={onChange}
-                    />
-                    <small className='form-text'>
-                        Could be your own or a company website
-                    </small>
-                </div> */}
-                {/* <div className='form-group'>
-                    <input
-                        type='text'
-                        placeholder='Location'
-                        name='location'
-                        value={location}
-                        onChange={onChange}
-                    />
-                    <small className='form-text'>
-                        City & state suggested (eg. Boston, MA)
-                    </small>
-                </div>
-                <div className='form-group'>
-                    <input
-                        type='text'
-                        placeholder='* Skills'
-                        name='skills'
-                        value={skills}
-                        onChange={onChange}
-                    />
-                    <small className='form-text'>
-                        Please use comma separated values (eg.
-                        HTML,CSS,JavaScript,PHP)
-                    </small>
-                </div> */}
-                {/* <div className='form-group'>
-                    <input
-                        type='text'
-                        placeholder='Github Username'
-                        name='githubusername'
-                        value={githubusername}
-                        onChange={onChange}
-                    />
-                    <small className='form-text'>
-                        If you want your latest repos and a Github link, include
-                        your username
-                    </small>
-                </div>
-                <div className='form-group'>
-                    <textarea
-                        placeholder='A short bio of yourself'
-                        name='bio'
-                        value={bio}
-                        onChange={onChange}
-                    />
-                    <small className='form-text'>
-                        Tell us a little about yourself
-                    </small>
-                </div>
-
-                <div className='my-2'>
-                    <button
-                        onClick={() => toggleSocialInputs(!displaySocialInputs)}
-                        type='button'
-                        className='btn btn-light'
-                    >
-                        Add Social Network Links
-                    </button>
-                    <span>Optional</span>
-                </div> */}
-
-                {/* {displaySocialInputs && (
-                    <Fragment>
-                        <div className='form-group social-input'>
-                            <i className='fab fa-twitter fa-2x' />
-                            <input
-                                type='text'
-                                placeholder='Twitter URL'
-                                name='twitter'
-                                value={twitter}
-                                onChange={onChange}
-                            />
-                        </div>
-
-                        <div className='form-group social-input'>
-                            <i className='fab fa-facebook fa-2x' />
-                            <input
-                                type='text'
-                                placeholder='Facebook URL'
-                                name='facebook'
-                                value={facebook}
-                                onChange={onChange}
-                            />
-                        </div>
-
-                        <div className='form-group social-input'>
-                            <i className='fab fa-youtube fa-2x' />
-                            <input
-                                type='text'
-                                placeholder='YouTube URL'
-                                name='youtube'
-                                value={youtube}
-                                onChange={onChange}
-                            />
-                        </div>
-
-                        <div className='form-group social-input'>
-                            <i className='fab fa-linkedin fa-2x' />
-                            <input
-                                type='text'
-                                placeholder='Linkedin URL'
-                                name='linkedin'
-                                value={linkedin}
-                                onChange={onChange}
-                            />
-                        </div>
-
-                        <div className='form-group social-input'>
-                            <i className='fab fa-instagram fa-2x' />
-                            <input
-                                type='text'
-                                placeholder='Instagram URL'
-                                name='instagram'
-                                value={instagram}
-                                onChange={onChange}
-                            />
-                        </div>
-                    </Fragment>
-                )} */}
+                <ServantSelect
+                    arrayOfData={servants}
+                    onSelectChange={onChange}
+                    component='Meal Coordinator'
+                    selectedValue={mealCoordinator}
+                />
+                <h4>Individuals Fed</h4>
+                {/* <Range max='50' min='0' name='Fed' /> */}
 
                 <input type='submit' className='btn btn-primary my-1' />
                 <Link className='btn btn-light my-1' to='/dashboard'>
@@ -313,7 +164,7 @@ const EditGathering = ({
     function diplayTitleHint() {
         switch (meetingType) {
             case 'Lesson':
-                return 'Teacher?';
+                return 'What is the lesson?';
                 break;
             case 'Testimony':
                 return "Who's testimony?";
@@ -334,6 +185,18 @@ const EditGathering = ({
                 return 'Please provide a description of the event';
         }
     }
+    function checkForTeacher() {
+        if (meetingType === 'Lesson') {
+            return [
+                <ServantSelect
+                    arrayOfData={servants}
+                    onSelectChange={onChange}
+                    component='Teacher'
+                    selectedValue={supportRole}
+                />
+            ];
+        }
+    }
     function displayTeacher() {
         if (meetingType === 'Lesson') {
             return [
@@ -350,6 +213,31 @@ const EditGathering = ({
         }
         return null;
     }
+    function displayFacilitator() {
+        {
+            console.log(servants.length);
+            var peeps = '';
+            servants.forEach(peep => {
+                peeps = peeps + peep;
+            });
+            const sample =
+                "<option value='Junior Developer'>Junior Developer</option>";
+            console.log(peeps);
+            return [
+                <div className='form-group'>
+                    ,
+                    <select name='status' value='{status}' onChange={onChange}>
+                        ,<option>* Select Professional Status</option>,{sample},
+                    </select>
+                    ,
+                    <small className='form-text'>
+                        , 'Give us an idea of where you are at in your career',
+                    </small>
+                    ,
+                </div>
+            ];
+        }
+    }
 };
 
 EditGathering.propTypes = {
@@ -359,7 +247,8 @@ EditGathering.propTypes = {
 };
 
 const mapStateToProps = state => ({
-    gathering: state.gathering
+    gathering: state.gathering,
+    servants: state.servants
 });
 
 export default connect(mapStateToProps, { createGathering, getGathering })(

@@ -5,7 +5,9 @@ import {
     GATHERING_ERROR,
     GET_GATHERING,
     DELETE_GATHERING,
-    CLEAR_GATHERING
+    CLEAR_GATHERING,
+    CLEAR_SERVANTS,
+    GET_SERVANTS
 } from './types';
 
 //get gatherings
@@ -16,6 +18,12 @@ export const getGatherings = () => async dispatch => {
         dispatch({
             type: GET_GATHERINGS,
             payload: res.data
+        });
+        dispatch({ type: CLEAR_SERVANTS });
+        const res2 = await axios.get('/api/person/servants');
+        dispatch({
+            type: GET_SERVANTS,
+            payload: res2.data
         });
     } catch (err) {
         dispatch({
