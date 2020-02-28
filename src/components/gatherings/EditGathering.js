@@ -1,6 +1,6 @@
 import React, { Fragment, useState, useEffect } from 'react';
 import { Link, withRouter } from 'react-router-dom';
-import Range from 'react-materialize';
+
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createGathering, getGathering } from '../../actions/gathering';
@@ -121,7 +121,38 @@ const EditGathering = ({
                     <small className='form-text'>{diplayTitleSubtitle()}</small>
                 </div>
                 {checkForTeacher()}
-
+                
+                <div className='form-group'>
+                <h4>Attendance</h4>
+                <input
+                        type='number'
+                        id='attendance'
+                        name='attendance'
+                        value={attendance}
+                        min='0'
+                        max='200'
+                        onChange={e => onChange(e)}
+                    />
+                    <small className='form-text'>
+                        Number of people attending general meeting?
+                    </small>
+                    </div>
+                    <div className='form-group'>
+                <h4>Donations</h4>
+                <input
+                        type='number'
+                        id='donations'
+                        name='donations'
+                        value={donations}
+                        min='0.00'
+                        step='0.01'
+                        max='500'
+                        onChange={e => onChange(e)}
+                    />
+                    <small className='form-text'>
+                        Amount of donations received?
+                    </small>
+                    </div>
                 <div className='form-group'>
                     <h4>Meal</h4>
                     <input
@@ -139,9 +170,28 @@ const EditGathering = ({
                     component='Meal Coordinator'
                     selectedValue={mealCoordinator}
                 />
+                <br/>
                 <h4>Individuals Fed</h4>
-                {/* <Range max='50' min='0' name='Fed' /> */}
-
+                <input
+                        type='number'
+                        id='mealCount'
+                        name='mealCount'
+                        value={mealCount}
+                        min='0'
+                        max='200'
+                        onChange={e => onChange(e)}
+                    />
+                    <small className='form-text'>
+                        Number of people served?
+                    </small>
+                <div className='form-group'>
+                <textarea
+                    placeholder='Description and notes for meeting'
+                    name='notes'
+                    onChange={e => onChange(e)}
+                ></textarea>
+                <small className='form-text'>Things to remember</small>
+                </div>
                 <input type='submit' className='btn btn-primary my-1' />
                 <Link className='btn btn-light my-1' to='/dashboard'>
                     Go Back
