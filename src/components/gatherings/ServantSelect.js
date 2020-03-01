@@ -6,10 +6,9 @@ class ServantSelect extends Component {
     }
 
     //On the change event for the select box pass the selected value back to the parent
-    handleChange = event => {
-        let selectedValue = event.target.value;
-        this.props.onSelectChange(selectedValue);
-    };
+    // handleChange = event => {
+    //     let selectedValue = event.target.value;
+    // };
 
     render() {
         let arrayOfData = this.props.arrayOfData;
@@ -25,7 +24,9 @@ class ServantSelect extends Component {
                 value='{this.props.selectedValue}'
                 name='{data.component}'
                 className='{data.component}'
-                onChange={this.handleChange}
+                onClick={this.props.onClick}
+                onChange='onServantChange'
+                //onChange={this.handleChange}
             >
                 <option>{this.props.selectedValue}</option>
                 {options}
