@@ -21,6 +21,7 @@ class ServantSelect extends Component {
         return [
             <h4>{this.props.component}</h4>,
             <select
+                key='{data.id}'
                 value='{this.props.selectedValue}'
                 name='{data.component}'
                 className='{data.component}'

@@ -1,6 +1,6 @@
-import React, { Fragment, useState, useEffect } from 'react';
+import React, { Component, Fragment, useState, useEffect } from 'react';
 import { Link, withRouter } from 'react-router-dom';
-
+import Select from 'react-select';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createGathering, getGathering } from '../../actions/gathering';
@@ -57,8 +57,9 @@ const EditGathering = ({
         notes
     } = formData;
 
-    const onChange = e =>
+    const onChange = e => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
+    };
 
     const onServantChange = servantSelected => {
         //we are assuming Facilitator
@@ -69,6 +70,14 @@ const EditGathering = ({
         e.preventDefault();
         createGathering(formData, history, true);
     };
+    const servantList = servants.map(servant => ({
+        label: servant.name,
+        value: servant.name
+    }));
+    const handleServantListChange = facilitator => {
+        setFormData({ ...formData, [facilitator]: facilitator });
+        console.log(`Option selected:`, { facilitator });
+    };
 
     return (
         <Fragment>
@@ -76,6 +85,7 @@ const EditGathering = ({
             <p className='lead'>
                 <i className='fas fa-user' /> Have at it...
             </p>
+
             <small>* = required field</small>
             <form className='form' onSubmit={onSubmit}>
                 <div>
@@ -88,18 +98,22 @@ const EditGathering = ({
                         onChange={e => onChange(e)}
                     />
                 </div>
-                <br />
-                <ServantSelect
-                    arrayOfData={servants}
-                    onSelectChange={onChange}
-                    component='Facilitator'
-                    onClick={onServantChange}
-                    selectedValue={facilitator}
-                />
-
+                <h4>Facilitator</h4>
+                <select
+                    value={facilitator}
+                    name='facilitator'
+                    onChange={onChange}
+                >
+                    {servants.map(s => (
+                        <option key={s.name} value={s.name}>
+                            {s.name}
+                        </option>
+                    ))}
+                </select>
                 <div className='form-group'>
                     <h4>Meeting Type **</h4>
                     <select
+                        key='2'
                         name='meetingType'
                         value={meetingType}
                         onChange={e => onChange(e)}
@@ -126,8 +140,24 @@ const EditGathering = ({
                     />
                     <small className='form-text'>{diplayTitleSubtitle()}</small>
                 </div>
-                {checkForTeacher()}
-
+                {meetingType === 'Lesson' && (
+                    <Fragment>
+                        <select
+                            value={supportRole}
+                            name='supportRole'
+                            onChange={onChange}
+                        >
+                            {servants.map(s => (
+                                <option key={s.name} value={s.name}>
+                                    {s.name}
+                                </option>
+                            ))}
+                        </select>
+                        <small className='form-text'>
+                            Who is teaching the lesson?
+                        </small>
+                    </Fragment>
+                )}
                 <div className='form-group'>
                     <h4>Attendance</h4>
                     <input
@@ -170,12 +200,18 @@ const EditGathering = ({
                     />
                     <small className='form-text'>Dinner provided</small>
                 </div>
-                <ServantSelect
-                    arrayOfData={servants}
-                    onSelectChange={onChange}
-                    component='Meal Coordinator'
-                    selectedValue={mealCoordinator}
-                />
+                <h4>Meal Coordinator</h4>
+                <select
+                    value={mealCoordinator ? mealCoordinator : 'pick someone'}
+                    name='mealCoordinator'
+                    onChange={onChange}
+                >
+                    {servants.map(s => (
+                        <option key={s.name} value={s.name}>
+                            {s.name}
+                        </option>
+                    ))}
+                </select>
                 <br />
                 <h4>Individuals Fed</h4>
                 <input
@@ -239,18 +275,7 @@ const EditGathering = ({
                 return 'Please provide a description of the event';
         }
     }
-    function checkForTeacher() {
-        if (meetingType === 'Lesson') {
-            return [
-                <ServantSelect
-                    arrayOfData={servants}
-                    onSelectChange={onChange}
-                    component='Teacher'
-                    selectedValue={supportRole}
-                />
-            ];
-        }
-    }
+    function checkForTeacher() {}
     function displayTeacher() {
         if (meetingType === 'Lesson') {
             return [
