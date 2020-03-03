@@ -5,6 +5,7 @@ import {
     GATHERING_ERROR,
     GET_GATHERING,
     DELETE_GATHERING,
+    CLEAR_GATHERINGS,
     CLEAR_GATHERING,
     CLEAR_SERVANTS,
     GET_SERVANTS
@@ -13,6 +14,7 @@ import {
 //get gatherings
 export const getGatherings = () => async dispatch => {
     try {
+        dispatch({ type: CLEAR_GATHERINGS });
         const res = await axios.get('/api/meeting/future');
         dispatch({ type: CLEAR_GATHERING });
         dispatch({

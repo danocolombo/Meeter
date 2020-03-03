@@ -52,6 +52,7 @@ const EditGathering = ({
         meal,
         mealCoordinator,
         mealCount,
+        cafeCoordinator,
         attendance,
         donations,
         notes
@@ -159,6 +160,17 @@ const EditGathering = ({
                     </Fragment>
                 )}
                 <div className='form-group'>
+                    <h4>Worship</h4>
+                    <input
+                        type='text'
+                        placeholder='Worship provided by...'
+                        name='worship'
+                        value={worship}
+                        onChange={onChange}
+                    />
+                    <small className='form-text'>Worship supplied by...</small>
+                </div>
+                <div className='form-group'>
                     <h4>Attendance</h4>
                     <input
                         type='number'
@@ -224,6 +236,20 @@ const EditGathering = ({
                     onChange={e => onChange(e)}
                 />
                 <small className='form-text'>Number of people served?</small>
+                <h4>Cafe Coordinator</h4>
+                <select
+                    value={cafeCoordinator ? cafeCoordinator : 'pick someone'}
+                    name='cafeCoordinator'
+                    onChange={onChange}
+                >
+                    {servants.map(s => (
+                        <option key={s.name} value={s.name}>
+                            {s.name}
+                        </option>
+                    ))}
+                </select>
+                <small className='form-text'>Cafe coordinator</small>
+                <br />
                 <div className='form-group'>
                     <textarea
                         placeholder='Description and notes for meeting'
