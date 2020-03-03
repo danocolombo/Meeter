@@ -44,13 +44,19 @@ export const createGathering = (
     edit = false
 ) => async dispatch => {
     try {
+        console.log('in action/gatherings.js');
+        console.table(formData);
+        formData.meetingId = formData._id;
+        formData._id = "";
+        // if(formData._id) formData.push("meetingId", formData._id);
+        //delete formData._id;
+        console.log('transformed formdata')
+        console.log(JSON.stringify(formData));
         const config = {
             headers: {
                 'Content-Type': 'application/json'
             }
         };
-        console.log('in action/gatherings');
-        console.log(formData);
         const res = await axios.post('/api/meeting', formData, config);
 
         dispatch({

@@ -7,6 +7,7 @@ import { createGathering, getGathering } from '../../actions/gathering';
 import ServantSelect from './ServantSelect';
 const initialState = {
     _id: '',
+    meetingId: '',
     meetingDate: '',
     facilitator: '',
     meetingType: '',
@@ -15,6 +16,7 @@ const initialState = {
     title: '',
     meal: '',
     mealCoordinator: '',
+    cafeCoordinator: '',
     mealCount: 0,
     attendance: 0,
     donations: 0,
@@ -39,13 +41,14 @@ const EditGathering = ({
             }
             setFormData(gatheringData);
         }
+        if (_id) setFormData({ ...formData, 'meetingId': _id });
     }, [loading, getGathering, gathering]);
 
     const {
         _id,
         meetingDate,
-        facilitator,
         meetingType,
+        facilitator,
         supportRole,
         title,
         worship,
@@ -81,10 +84,12 @@ const EditGathering = ({
     };
 
     return (
+        
         <Fragment>
             <h1 className='large text-primary'>Your Meeting</h1>
             <p className='lead'>
-                <i className='fas fa-user' /> Have at it...
+                <i className='fas fa-user' /> Have at it...<br/>
+                
             </p>
 
             <small>* = required field</small>
@@ -136,7 +141,7 @@ const EditGathering = ({
                         type='text'
                         placeholder={diplayTitleHint()}
                         name='title'
-                        value={title}
+                        value={(title) ? title: " "}
                         onChange={onChange}
                     />
                     <small className='form-text'>{diplayTitleSubtitle()}</small>
@@ -254,6 +259,7 @@ const EditGathering = ({
                     <textarea
                         placeholder='Description and notes for meeting'
                         name='notes'
+                        value={notes}
                         onChange={e => onChange(e)}
                     ></textarea>
                     <small className='form-text'>Things to remember</small>
