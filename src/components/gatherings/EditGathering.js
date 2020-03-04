@@ -41,7 +41,9 @@ const EditGathering = ({
             }
             setFormData(gatheringData);
         }
+        
         if (_id) setFormData({ ...formData, 'meetingId': _id });
+        
     }, [loading, getGathering, gathering]);
 
     const {
@@ -84,7 +86,9 @@ const EditGathering = ({
     };
 
     return (
-        
+        // function inside(){
+        //     console.log('inside');
+        // }
         <Fragment>
             <h1 className='large text-primary'>Your Meeting</h1>
             <p className='lead'>

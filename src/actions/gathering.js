@@ -23,6 +23,8 @@ export const getGatherings = () => async dispatch => {
         });
         dispatch({ type: CLEAR_SERVANTS });
         const res2 = await axios.get('/api/person/servants');
+        console.log('res2 is...', typeof res2);
+        console.log(typeof res2);
         dispatch({
             type: GET_SERVANTS,
             payload: res2.data
@@ -100,6 +102,9 @@ export const createGathering = (
 };
 // Get gathering
 export const getGathering = id => async dispatch => {
+    //endure that id is not null, if so return
+    if (id.length < 1) return;
+    if (id == 0) return;
     try {
         dispatch({ type: CLEAR_GATHERING });
         const res = await axios.get(`/api/meeting/${id}`);
