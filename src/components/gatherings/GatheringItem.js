@@ -26,10 +26,9 @@ const GatheringItem = ({
                     {moment.utc(meetingDate).format('ll')}
                 </Link>
                 <br />
-                {meetingType}: {title}
-                <br />
-                {supportRole}
-                
+                    {title}<br/>
+                    {supportRole}
+            
                 <br />
                 <i className='fas fa-pen'></i>
             </div>

@@ -17,12 +17,9 @@ const Gatherings = ({ getGatherings, gathering: { gatherings, loading } }) => {
             <h2 className='large text-primary'>
                 <i className='far fa-calendar-alt'></i> Gatherings
             </h2>
-            <p className='lead'>These are your gatherings...</p>
-            <a href='/EditGathering'>
-                <i className='far fa-calendar-plus'></i>
-                {'  '}Add a meeting
-            </a>
-
+            <p className='lead'>Below is the upcoming meetings...</p>
+            
+            
             <div className='posts'>
                 {gatherings.map(gathering => (
                     <GatheringItem key={gathering._id} gathering={gathering} />
