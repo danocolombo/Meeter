@@ -18,7 +18,7 @@ const Gatherings = ({ getGatherings, gathering: { gatherings, loading } }) => {
                 <i className='far fa-calendar-alt'></i> Gatherings
             </h2>
             <p className='lead'>These are your gatherings...</p>
-            <a href='/gatheringForm'>
+            <a href='/EditGathering'>
                 <i className='far fa-calendar-plus'></i>
                 {'  '}Add a meeting
             </a>

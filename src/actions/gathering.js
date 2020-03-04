@@ -46,12 +46,20 @@ export const createGathering = (
     try {
         console.log('in action/gatherings.js');
         console.table(formData);
-        formData.meetingId = formData._id;
-        formData._id = "";
+        console.log(typeof formData._id);
+        console.log(formData._id.length);
+        if (formData._id.length < 1) {
+            //this is an add, so delete _id and meetingId from formData
+            delete formData._id;
+            delete formData.meetingId;
+        } else {
+            formData.meetingId = formData._id;
+            //formData._id = '';
+        }
         // if(formData._id) formData.push("meetingId", formData._id);
         //delete formData._id;
-        console.log('transformed formdata')
-        console.log(JSON.stringify(formData));
+        // console.log('transformed formdata');
+        // console.log(JSON.stringify(formData));
         const config = {
             headers: {
                 'Content-Type': 'application/json'
