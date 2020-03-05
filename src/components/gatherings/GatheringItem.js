@@ -13,6 +13,8 @@ const GatheringItem = ({
         title,
         supportRole,
         facilitator,
+        attendance,
+        newcomers,
         meetingType
     }
 }) => (
@@ -35,7 +37,9 @@ const GatheringItem = ({
                 <br />
                 {meetingType}: {title}
                 <br />
-                {supportRole}
+                {displaySR(supportRole)}
+                {displayAttendance(attendance)}
+                {displayNewcomers(newcomers)}
                 <br />
                 <Link to={`/EditGathering/${_id}`}>
                     <i className='fas fa-pen'></i>
@@ -44,7 +48,21 @@ const GatheringItem = ({
         </div>
     </Fragment>
 );
-
+function displaySR(supportRole) {
+    //this only displays numbers if there are any
+    return [supportRole, <br />];
+}
+function displayAttendance(attendance) {
+    //this only displays numbers if there are any
+    if (attendance > 0) {
+        return ['attendance:', attendance, <br />];
+    }
+}
+function displayNewcomers(newcomers) {
+    if (newcomers > 0) {
+        return ['newcomers:', newcomers, <br />];
+    }
+}
 GatheringItem.propTypes = {
     gathering: PropTypes.object.isRequired,
     deleteGathering: PropTypes.func.isRequired

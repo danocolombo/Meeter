@@ -55,11 +55,11 @@ export const createGathering = (
     edit = false
 ) => async dispatch => {
     try {
-        console.log('in action/gatherings.js');
-        console.log(formData);
-        console.table(formData);
-        console.log(typeof formData._id);
-        console.log(formData._id.length);
+        // console.log('in action/gatherings.js');
+        // console.log(JSON.stringify(formData));
+        // console.table(formData);
+        // console.log(typeof formData._id);
+        // console.log(formData._id.length);
         if (formData._id.length < 1) {
             //this is an add, so delete _id and meetingId from formData
             delete formData._id;
