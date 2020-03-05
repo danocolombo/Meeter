@@ -7,7 +7,14 @@ import { deleteGathering } from '../../actions/gathering';
 
 const GatheringItem = ({
     deleteGathering,
-    gathering: { _id, meetingDate, title, supportRole, facilitator, meetingType }
+    gathering: {
+        _id,
+        meetingDate,
+        title,
+        supportRole,
+        facilitator,
+        meetingType
+    }
 }) => (
     <Fragment>
         <div className='PersonBox'>
@@ -26,15 +33,16 @@ const GatheringItem = ({
                     {moment.utc(meetingDate).format('ll')}
                 </Link>
                 <br />
-                    {title}<br/>
-                    {supportRole}
-            
+                {meetingType}: {title}
                 <br />
-                <i className='fas fa-pen'></i>
+                {supportRole}
+                <br />
+                <Link to={`/EditGathering/${_id}`}>
+                    <i className='fas fa-pen'></i>
+                </Link>
             </div>
         </div>
     </Fragment>
-    
 );
 
 GatheringItem.propTypes = {

@@ -54,13 +54,14 @@ const Routes = () => {
                 <PrivateRoute exact path='/posts' component={Posts} />
                 <PrivateRoute exact path='/posts/:id' component={Post} />
                 <PrivateRoute exact path='/people' component={People} />
-                {/* <PrivateRoute
-                    exact
-                    path='/gathering/:id'
-                    component={Gathering}
-                /> */}
+
                 <PrivateRoute exact path='/personForm' component={PersonForm} />
                 <PrivateRoute exact path='/gatherings' component={Gatherings} />
+                <PrivateRoute
+                    exact
+                    path='/gatherings/:options'
+                    component={Gatherings}
+                />
                 <PrivateRoute
                     exact
                     path='/gatheringForm'

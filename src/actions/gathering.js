@@ -8,7 +8,9 @@ import {
     CLEAR_GATHERINGS,
     CLEAR_GATHERING,
     CLEAR_SERVANTS,
-    GET_SERVANTS
+    GET_SERVANTS,
+    GET_HATHERINGS,
+    CLEAR_HATHERINGS
 } from './types';
 
 //get gatherings
@@ -21,9 +23,16 @@ export const getGatherings = () => async dispatch => {
             type: GET_GATHERINGS,
             payload: res.data
         });
+        //get the historical gathererings
+        dispatch({ type: CLEAR_HATHERINGS });
+        const res1 = await axios.get('/api/meeting/history');
+        dispatch({
+            type: GET_HATHERINGS,
+            payload: res1.data
+        });
         dispatch({ type: CLEAR_SERVANTS });
         const res2 = await axios.get('/api/person/servants');
-        console.log('res2 is...', typeof res2);
+        console.log('servants: res is...', typeof res2);
         console.log(typeof res2);
         dispatch({
             type: GET_SERVANTS,

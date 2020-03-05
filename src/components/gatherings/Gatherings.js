@@ -6,8 +6,15 @@ import Spinner from '../layout/Spinner';
 import GatheringItem from './GatheringItem';
 import { getGatherings } from '../../actions/gathering';
 
-const Gatherings = ({ getGatherings, gathering: { gatherings, loading } }) => {
+const Gatherings = ({
+    getGatherings,
+    gathering: { gatherings, hatherings, loading },
+    match,
+    historyView
+}) => {
     useEffect(() => {
+        console.log('SKylar: ' + match.params.options);
+
         getGatherings();
     }, [getGatherings]);
     return loading ? (
@@ -15,28 +22,65 @@ const Gatherings = ({ getGatherings, gathering: { gatherings, loading } }) => {
     ) : (
         <Fragment>
             <div>
-            <h2 className='large text-primary'>
-                <i className='far fa-calendar-alt'></i> Gatherings
-            </h2>
-            <div className='gatheringDirection'>HISTORY</div>
-        </div>
-           <p className='lead'>Below is the upcoming meetings...</p>
-            <Link to='/EditGathering/0'>NEW</Link>
-            
+                <h2 className='large text-primary'>
+                    <i className='far fa-calendar-alt'></i> Meetings
+                </h2>
+
+                {offerView()}
+            </div>
+
             <div className='posts'>
-                {gatherings.map(gathering => (
+                {throwList()}
+                {/* {gatherings.map(gathering => (
                     <GatheringItem key={gathering._id} gathering={gathering} />
-                ))}
+                ))} */}
             </div>
         </Fragment>
     );
+    function throwList() {
+        if (match.params.options == 'historyView') {
+            return [
+                hatherings.map(hathering => (
+                    <GatheringItem key={hathering._id} gathering={hathering} />
+                ))
+            ];
+        } else {
+            return [
+                gatherings.map(gathering => (
+                    <GatheringItem key={gathering._id} gathering={gathering} />
+                ))
+            ];
+        }
+        return null;
+    }
+    function offerView() {
+        console.log('match.params.options:' + match.params.options);
+        if (match.params.options == 'historyView') {
+            return [
+                <Link to='/gatherings'>Active Gatherings</Link>,
+                <p className='lead'>Your historical list of meetings...</p>
+            ];
+        } else {
+            return [
+                <Link to='/gatherings/historyView'>HISTORY</Link>,
+                <p className='lead'>Below is the upcoming meetings...</p>,
+                <Link to='/EditGathering/0'>NEW</Link>
+            ];
+        }
+        return null;
+    }
 };
 
+Gatherings.defaultProps = {
+    historyView: false
+};
 Gatherings.propTypes = {
     getGatherings: PropTypes.func.isRequired,
-    gathering: PropTypes.object.isRequired
+    gathering: PropTypes.object.isRequired,
+    hathering: PropTypes.object.isRequired
 };
 const mapStateToProps = state => ({
-    gathering: state.gathering
+    gathering: state.gathering,
+    hathering: state.hathering
 });
 export default connect(mapStateToProps, { getGatherings })(Gatherings);

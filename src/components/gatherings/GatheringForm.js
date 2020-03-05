@@ -8,7 +8,7 @@ import { createGathering, getGathering } from '../../actions/gathering';
 const GatheringForm = ({
     match,
     getGathering,
-    gathering: { gathering, lodaing },
+    gathering: { gathering, loading },
     createGathering,
     history
 }) => {
