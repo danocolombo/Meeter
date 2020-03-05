@@ -6,11 +6,14 @@ import {
     CLEAR_GATHERING,
     DELETE_GATHERING,
     GET_SERVANTS,
-    CLEAR_SERVANTS
+    CLEAR_SERVANTS,
+    GET_HATHERINGS,
+    CLEAR_HATHERINGS
 } from '../actions/types';
 
 const initialState = {
     gatherings: [],
+    hatherings: [],
     gathering: null,
     servants: [],
     loading: true,
@@ -25,6 +28,12 @@ export default function(state = initialState, action) {
             return {
                 ...state,
                 gatherings: payload,
+                loading: false
+            };
+        case GET_HATHERINGS:
+            return {
+                ...state,
+                hatherings: payload,
                 loading: false
             };
         case GET_GATHERING:
@@ -61,6 +70,12 @@ export default function(state = initialState, action) {
             return {
                 ...state,
                 gatherings: [],
+                loading: false
+            };
+        case CLEAR_HATHERINGS:
+            return {
+                ...state,
+                hatherings: [],
                 loading: false
             };
         case DELETE_GATHERING:
