@@ -56,6 +56,7 @@ export const createGathering = (
 ) => async dispatch => {
     try {
         console.log('in action/gatherings.js');
+        console.log(formData);
         console.table(formData);
         console.log(typeof formData._id);
         console.log(formData._id.length);

@@ -20,6 +20,10 @@ const initialState = {
     mealCount: 0,
     attendance: 0,
     donations: 0,
+    newcomers: 0,
+    nursery: 0,
+    children: 0,
+    youth: 0,
     notes: ''
 };
 
@@ -60,6 +64,10 @@ const EditGathering = ({
         cafeCoordinator,
         attendance,
         donations,
+        newcomers,
+        nursery,
+        children,
+        youth,
         notes
     } = formData;
 
@@ -194,6 +202,17 @@ const EditGathering = ({
                         Number of people attending general meeting?
                     </small>
                 </div>
+                <h4>Newcomers</h4>
+                <input
+                    type='number'
+                    id='newcomers'
+                    name='newcomers'
+                    value={newcomers}
+                    min='0'
+                    max='200'
+                    onChange={e => onChange(e)}
+                />
+                <small className='form-text'>Number of newcomers?</small>
                 <div className='form-group'>
                     <h4>Donations</h4>
                     <input
@@ -259,6 +278,42 @@ const EditGathering = ({
                 </select>
                 <small className='form-text'>Cafe coordinator</small>
                 <br />
+                <h4>Nursery Count</h4>
+                <input
+                    type='number'
+                    id='nursery'
+                    name='nursery'
+                    value={nursery}
+                    min='0'
+                    max='200'
+                    onChange={e => onChange(e)}
+                />
+                <small className='form-text'>Number of kids in nursery?</small>
+                <br />
+                <h4>Children Count</h4>
+                <input
+                    type='number'
+                    id='children'
+                    name='children'
+                    value={children}
+                    min='0'
+                    max='200'
+                    onChange={e => onChange(e)}
+                />
+                <small className='form-text'>Number of kids in childcare?</small>
+                <br />
+                <h4>Youth Count</h4>
+                <input
+                    type='number'
+                    id='youth'
+                    name='youth'
+                    value={youth}
+                    min='0'
+                    max='200'
+                    onChange={e => onChange(e)}
+                />
+                <small className='form-text'>Number of kids in youth?</small>
+                <br/>
                 <div className='form-group'>
                     <textarea
                         placeholder='Description and notes for meeting'
