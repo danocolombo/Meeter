@@ -115,6 +115,9 @@ const EditGathering = ({
                         value={meetingDate.slice(0, 10)}
                         onChange={e => onChange(e)}
                     />
+                    <Link to='/add-experience' className='btn btn-light'>
+        <i className='fab fa-black-tie text-primary' /> Add Experience
+      </Link>
                 </div>
                 <h4>Facilitator</h4>
                 <select

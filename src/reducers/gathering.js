@@ -43,9 +43,16 @@ export default function(state = initialState, action) {
                 loading: false
             };
         case GET_SERVANTS:
+            //this inserts a blank row at the top of payload
+            var newPayload = [];
+            newPayload[0] = {"_id":"","name":" ","servant":"","__v": "0","date":"","training":"","email": "", "phone": "", "sysem":""};
+            payload.forEach(element => {
+                newPayload.push(element);
+            });
+            
             return {
                 ...state,
-                servants: payload,
+                servants: newPayload,
                 loading: false
             };
         case GATHERING_ERROR:

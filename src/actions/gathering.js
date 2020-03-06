@@ -32,8 +32,35 @@ export const getGatherings = () => async dispatch => {
         });
         dispatch({ type: CLEAR_SERVANTS });
         const res2 = await axios.get('/api/person/servants');
-        console.log('servants: res is...', typeof res2);
-        console.log(typeof res2);
+        // console.log('servants: results are...', typeof res2);
+        // console.log(JSON.stringify(res2));
+        //==========================================
+        // we want to insert blank option in the list
+        // before returning
+        //===========================================
+        // create blank object
+        //===========================================
+        // const newList = {
+        //     _id:"",
+        //     name:"",
+        //     servant:"",
+        //     __v: 0,
+        //     date:"",
+        //     training:[]
+        // }
+        // console.log(JSON.stringify(newList));
+        // console.log('-----------');
+        //===========================================
+        // combine blank object with response from db
+        //===========================================
+        //function extend(newList, res2) {
+        // for(var key in res2) {
+        //     newList[key] = res2[key];
+        // }
+        // //    return dest;
+        // console.log(JSON.stringify(newList));
+
+
         dispatch({
             type: GET_SERVANTS,
             payload: res2.data

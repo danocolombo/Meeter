@@ -20,6 +20,7 @@ const GatheringItem = ({
 }) => (
     <Fragment>
         <div className='PersonBox'>
+            <Fragment>
             <div className='DeleteTarget'>
                 <a
                     id='deleteGathering'
@@ -30,16 +31,20 @@ const GatheringItem = ({
                     <i className='fas fa-minus-circle'></i>
                 </a>
             </div>
+            </Fragment>
             <div>
                 <Link to={`/EditGathering/${_id}`}>
                     {moment.utc(meetingDate).format('ll')}
                 </Link>
                 <br />
                 {meetingType}: {title}
-                <br />
-                {displaySR(supportRole)}
-                {displayAttendance(attendance)}
-                {displayNewcomers(newcomers)}
+                {supportRole && <Fragment>
+                    <br/>{supportRole}</Fragment>}
+                
+                {attendance > 0 && <Fragment>
+                    <br/>Attendance: {attendance}</Fragment>}
+                {newcomers > 0 && <Fragment>
+                    <br/>Newcomers: {newcomers}</Fragment>}
                 <br />
                 <Link to={`/EditGathering/${_id}`}>
                     <i className='fas fa-pen'></i>
