@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createGathering, getGathering } from '../../actions/gathering';
 import ServantSelect from './ServantSelect';
+import Groups from './Groups';
 const initialState = {
     _id: '',
     meetingId: '',
@@ -45,9 +46,8 @@ const EditGathering = ({
             }
             setFormData(gatheringData);
         }
-        
-        if (_id) setFormData({ ...formData, 'meetingId': _id });
-        
+
+        if (_id) setFormData({ ...formData, meetingId: _id });
     }, [loading, getGathering, gathering]);
 
     const {
@@ -100,8 +100,8 @@ const EditGathering = ({
         <Fragment>
             <h1 className='large text-primary'>Your Meeting</h1>
             <p className='lead'>
-                <i className='fas fa-user' /> Have at it...<br/>
-                
+                <i className='fas fa-user' /> Have at it...
+                <br />
             </p>
 
             <small>* = required field</small>
@@ -115,9 +115,6 @@ const EditGathering = ({
                         value={meetingDate.slice(0, 10)}
                         onChange={e => onChange(e)}
                     />
-                    <Link to='/add-experience' className='btn btn-light'>
-        <i className='fab fa-black-tie text-primary' /> Add Experience
-      </Link>
                 </div>
                 <h4>Facilitator</h4>
                 <select
@@ -156,7 +153,7 @@ const EditGathering = ({
                         type='text'
                         placeholder={diplayTitleHint()}
                         name='title'
-                        value={(title) ? title: " "}
+                        value={title ? title : ' '}
                         onChange={onChange}
                     />
                     <small className='form-text'>{diplayTitleSubtitle()}</small>
@@ -303,7 +300,9 @@ const EditGathering = ({
                     max='200'
                     onChange={e => onChange(e)}
                 />
-                <small className='form-text'>Number of kids in childcare?</small>
+                <small className='form-text'>
+                    Number of kids in childcare?
+                </small>
                 <br />
                 <h4>Youth Count</h4>
                 <input
@@ -316,7 +315,6 @@ const EditGathering = ({
                     onChange={e => onChange(e)}
                 />
                 <small className='form-text'>Number of kids in youth?</small>
-                <br/>
                 <div className='form-group'>
                     <textarea
                         placeholder='Description and notes for meeting'
@@ -330,6 +328,11 @@ const EditGathering = ({
                 <Link className='btn btn-light my-1' to='/dashboard'>
                     Go Back
                 </Link>
+                <div>NOW</div>
+                {console.log('in between')}
+                {/*console.table(gathering.group)*/}
+                {/* <Groups group={gathering.group} /> */}
+                <div>THEN</div>
             </form>
         </Fragment>
     );

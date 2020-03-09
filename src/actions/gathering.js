@@ -7,10 +7,13 @@ import {
     DELETE_GATHERING,
     CLEAR_GATHERINGS,
     CLEAR_GATHERING,
+    UPDATE_GATHERING,
     CLEAR_SERVANTS,
     GET_SERVANTS,
     GET_HATHERINGS,
-    CLEAR_HATHERINGS
+    CLEAR_HATHERINGS,
+    EDIT_GROUP,
+    DELETE_GROUP
 } from './types';
 
 //get gatherings
@@ -59,7 +62,6 @@ export const getGatherings = () => async dispatch => {
         // }
         // //    return dest;
         // console.log(JSON.stringify(newList));
-
 
         dispatch({
             type: GET_SERVANTS,
@@ -180,4 +182,44 @@ export const deleteGathering = id => async dispatch => {
             }
         });
     }
+};
+// Delete group
+export const deleteGroup = (mtgId, groupId) => async dispatch => {
+    try {
+        const res = await axios.delete(`/api/meeting/${mtgId}/${groupId}`);
+
+        dispatch({
+            type: UPDATE_GATHERING,
+            payload: res.data
+        });
+
+        dispatch(setAlert('Group Removed', 'success'));
+    } catch (err) {
+        dispatch({
+            type: GATHERING_ERROR,
+            payload: {
+                msg: err.response.statusText,
+                status: err.response.status
+            }
+        });
+    }
+};
+// Edit group
+export const editGroup = (mtgId, groupId) => async dispatch => {
+    // try {
+    //     const res = await axios.delete(`/api/meeting/${mtgId}/${groupId}`);
+    //     dispatch({
+    //         type: UPDATE_GATHERING,
+    //         payload: res.data
+    //     });
+    //     dispatch(setAlert('Group Removed', 'success'));
+    // } catch (err) {
+    //     dispatch({
+    //         type: GATHERING_ERROR,
+    //         payload: {
+    //             msg: err.response.statusText,
+    //             status: err.response.status
+    //         }
+    //     });
+    // }
 };

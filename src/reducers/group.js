@@ -1,14 +1,15 @@
 import {
-    GET_PEOPLE,
-    PERSON_ERROR,
-    CLEAR_PERSON,
-    GET_PERSON,
-    DELETE_PERSON
+    GET_GROUPS,
+    GROUP_ERROR,
+    CLEAR_GROUPS,
+    CLEAR_GROUP,
+    GET_GROUP,
+    DELETE_GROUP
 } from '../actions/types';
 
 const initialState = {
-    people: [],
-    person: null,
+    groups: [],
+    group: null,
     loading: true,
     error: {}
 };
@@ -17,36 +18,43 @@ export default function(state = initialState, action) {
     const { type, payload } = action;
 
     switch (type) {
-        case GET_PEOPLE:
-            return {
-                ...state,
-                people: payload,
-                loading: false
-            };
-        case GET_PERSON:
-            return {
-                ...state,
-                person: payload,
-                loading: false
-            };
-        case CLEAR_PERSON:
-            return {
-                ...state,
-                person: null,
-                loading: false
-            };
-        case DELETE_PERSON:
-            return {
-                ...state,
-                people: state.people.filter(person => person._id !== payload)
-            };
-        case PERSON_ERROR:
+        case GROUP_ERROR:
             return {
                 ...state,
                 error: payload,
                 loading: false
             };
+        case GET_GROUPS:
+            return {
+                ...state,
+                groups: payload,
+                loading: false
+            };
+        case CLEAR_GROUPS:
+            return {
+                ...state,
+                groups: null,
+                loading: false
+            };
+        case CLEAR_GROUP:
+            return {
+                ...state,
+                group: null,
+                loading: false
+            };
+        case GET_GROUP:
+            return {
+                ...state,
+                group: payload,
+                loading: false
+            };
+        case DELETE_GROUP:
+            return {
+                ...state,
+                groups: state.groups.filter(group => group._id !== payload),
+                loading: false
+            };
         default:
-            return state;
+            return false;
     }
 }

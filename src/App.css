@@ -656,3 +656,7 @@ button {
     font-size: 0.8rem;
     color: red;
 }
+.person-birthday {
+    font-size: 1em;
+    size: 15;
+}

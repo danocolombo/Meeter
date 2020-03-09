@@ -16,10 +16,11 @@ import People from '../people/People';
 // import Gathering from '../gatherings/Gathering';
 import Gatherings from '../gatherings/Gatherings';
 import EditGathering from '../gatherings/EditGathering';
-import GatheringForm from '../gatherings/GatheringForm';
+import EditPerson from '../people/EditPerson';
+//import GatheringForm from '../gatherings/GatheringForm';
 import NotFound from '../layout/NotFound';
 import PrivateRoute from '../routing/PrivateRoute';
-import PersonForm from '../people/PersonForm';
+// import PersonForm from '../people/PersonForm';
 
 const Routes = () => {
     return (
@@ -55,18 +56,17 @@ const Routes = () => {
                 <PrivateRoute exact path='/posts/:id' component={Post} />
                 <PrivateRoute exact path='/people' component={People} />
 
-                <PrivateRoute exact path='/personForm' component={PersonForm} />
                 <PrivateRoute exact path='/gatherings' component={Gatherings} />
                 <PrivateRoute
                     exact
                     path='/gatherings/:options'
                     component={Gatherings}
                 />
-                <PrivateRoute
+                {/* <PrivateRoute
                     exact
                     path='/gatheringForm'
                     component={GatheringForm}
-                />
+                /> */}
                 {/* <PrivateRoute
                     exact
                     path='/gatheringForm/:id'
@@ -77,6 +77,11 @@ const Routes = () => {
                     exact
                     path='/EditGathering/:id'
                     component={EditGathering}
+                />
+                <PrivateRoute
+                    exact
+                    path='/EditPerson/:id'
+                    component={EditPerson}
                 />
                 <Route component={NotFound} />
             </Switch>

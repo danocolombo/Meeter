@@ -1,9 +1,16 @@
 import axios from 'axios';
 import { setAlert } from './alert';
-import { GET_PEOPLE, PERSON_ERROR, GET_PERSON, DELETE_PERSON } from './types';
+import {
+    GET_PEOPLE,
+    PERSON_ERROR,
+    CLEAR_PERSON,
+    GET_PERSON,
+    DELETE_PERSON
+} from './types';
 
 export const getPeople = () => async dispatch => {
     try {
+        //dispatch({ CLEAR_PERSON });
         const res = await axios.get('/api/person');
         dispatch({
             type: GET_PEOPLE,
@@ -22,6 +29,7 @@ export const getPeople = () => async dispatch => {
 // getCurrentPerson is used when editting a person, need to get it, to edit it.DeleteTarget
 export const getCurrentPerson = id => async dispatch => {
     try {
+        dispatch({ CLEAR_PERSON });
         const res = await axios.get(`/api/person/${id}`);
         dispatch({
             type: GET_PERSON,
@@ -39,7 +47,11 @@ export const getCurrentPerson = id => async dispatch => {
 };
 
 export const getPerson = id => async dispatch => {
+    if (id.length < 1) return;
+    if (id == 0) return;
     try {
+        console.log('getPerson: CLEAR_PERSON..................');
+        //dispatch({ type: CLEAR_PERSON });
         const res = await axios.get(`/api/person/${id}`);
         dispatch({
             type: GET_PERSON,
@@ -109,6 +121,20 @@ export const deletePerson = id => async dispatch => {
             payload: id
         });
         dispatch(setAlert('Person Removed', 'success'));
+    } catch (err) {
+        dispatch({
+            type: PERSON_ERROR,
+            payload: {
+                msg: err.response.statusText,
+                status: err.response.status
+            }
+        });
+    }
+};
+export const editPerson = id => async dispatch => {
+    try {
+        //something
+        dispatch({ CLEAR_PERSON });
     } catch (err) {
         dispatch({
             type: PERSON_ERROR,
