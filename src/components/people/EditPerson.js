@@ -27,6 +27,7 @@ const EditPeep = ({
     const [formData, setFormData] = useState(initialState);
 
     useEffect(() => {
+        
         if (!person) getPerson(match.params.id);
         if (!loading) {
             const personData = { ...initialState };
@@ -64,11 +65,10 @@ const EditPeep = ({
         // }
 
         <Fragment>
-            <h2>Person:{name}</h2>
             <h1 className='large text-primary'>People</h1>
             <p className='lead'>
                 <i className='fas fa-user' />
-                The most valuable
+                Your valuable resource...
                 <br />
             </p>
 
@@ -89,7 +89,7 @@ const EditPeep = ({
                     Email
                     <input
                         type='email'
-                        placeholder='good@everything....'
+                        // placeholder='good@everything....'
                         name='email'
                         value={email ? email : ' '}
                         onChange={onChange}
@@ -99,7 +99,7 @@ const EditPeep = ({
                 <div className='form-group'>
                     Phone
                     <input
-                        type='phone'
+                        type='text'
                         placeholder='(123) 867-5309'
                         name='phone'
                         value={phone ? phone : ' '}
@@ -108,14 +108,14 @@ const EditPeep = ({
                     <small className='form-text'>Contact phone number</small>
                 </div>
                 <div className='form-group'>
-                    <h4>Active</h4>
+                    
                     <input
                         type='checkbox'
                         id='active'
                         name='active'
                         checked={!active ? false : true} //might not have value, if so default to true
                         onChange={e => onChange(e)}
-                    />
+                    /><span>&nbsp;&nbsp;ACTIVE</span>
                     <small className='form-text'>
                         Is the person still an active participant? (Shows up in
                         dropdown lists)
@@ -152,7 +152,7 @@ const EditPeep = ({
                 <div className='form-group'>
                     Birthday
                     <input
-                        className='person-birthday'
+                        className='person-form-birthday'
                         type='text'
                         placeholder='Sep 10'
                         name='birthday'
@@ -188,7 +188,7 @@ EditPeep.propTypes = {
 };
 
 const mapStateToProps = state => ({
-    person: state.profile
+    person: state.person
 });
 
 export default connect(mapStateToProps, { createPerson, getPerson })(

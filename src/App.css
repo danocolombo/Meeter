@@ -251,16 +251,33 @@ img {
     border: 1px solid #ccc;
 }
 
-.form input[type='text'],
 .form input[type='email'],
 .form input[type='password'],
 .form select,
 .form textarea {
     display: block;
+    color: blueviolet;
     width: 100%;
     padding: 0.4rem;
     font-size: 1.2rem;
     border: 1px solid #ccc;
+}
+.form input[name='person-form-birthday']  {
+    display: block;
+    color: orange;
+    width: 100%;
+    padding: 0.4rem;
+    font-size: 1.2rem;
+    border: 1px solid #ccc;
+}
+
+.form input[type='text'] {
+    display: block;
+    width: 75%;
+    color: blueviolet;
+    padding: 0.4rem;
+    font-size: 1.5rem;
+    border: 1px solid #ccc; 
 }
 
 .form input[type='submit'],

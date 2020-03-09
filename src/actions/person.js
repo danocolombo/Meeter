@@ -10,7 +10,9 @@ import {
 
 export const getPeople = () => async dispatch => {
     try {
-        //dispatch({ CLEAR_PERSON });
+        //we know that this is called when the people list is created.
+        //for this reason. Clear out the temporary person value.
+        dispatch({ type: CLEAR_PERSON });
         const res = await axios.get('/api/person');
         dispatch({
             type: GET_PEOPLE,
@@ -74,6 +76,7 @@ export const createPerson = (
     edit = false
 ) => async dispatch => {
     try {
+        console.log("ACTION::PERSON - createPerson");
         const config = {
             headers: {
                 'Content-Type': 'application/json'
