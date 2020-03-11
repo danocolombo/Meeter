@@ -262,7 +262,7 @@ img {
     font-size: 1.2rem;
     border: 1px solid #ccc;
 }
-.form input[name='person-form-birthday']  {
+.form input[name='person-form-birthday'] {
     display: block;
     color: orange;
     width: 100%;
@@ -277,7 +277,7 @@ img {
     color: blueviolet;
     padding: 0.4rem;
     font-size: 1.5rem;
-    border: 1px solid #ccc; 
+    border: 1px solid #ccc;
 }
 
 .form input[type='submit'],

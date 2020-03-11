@@ -72,6 +72,9 @@ const EditGathering = ({
     } = formData;
 
     const onChange = e => {
+        if (e.target == 'phone') {
+            console.log('phonephonephonephone');
+        }
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
@@ -82,6 +85,8 @@ const EditGathering = ({
     };
     const onSubmit = e => {
         e.preventDefault();
+        if (formData['meetingType'] == 'Testimony')
+            delete formData['supportRole'];
         createGathering(formData, history, true);
     };
     const servantList = servants.map(servant => ({
