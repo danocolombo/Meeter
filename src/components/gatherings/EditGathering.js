@@ -330,7 +330,7 @@ const EditGathering = ({
                     <small className='form-text'>Things to remember</small>
                 </div>
                 <input type='submit' className='btn btn-primary my-1' />
-                <Link className='btn btn-light my-1' to='/dashboard'>
+                <Link className='btn btn-light my-1' to='/gatherings'>
                     Go Back
                 </Link>
                 <div>NOW</div>

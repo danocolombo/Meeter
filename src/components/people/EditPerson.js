@@ -239,7 +239,7 @@ const EditPeep = ({
                     <small className='form-text'>Things to keep in mind</small>
                 </div>
                 <input type='submit' className='btn btn-primary my-1' />
-                <Link className='btn btn-light my-1' to='/dashboard'>
+                <Link className='btn btn-light my-1' to='/people'>
                     Go Back
                 </Link>
             </form>
