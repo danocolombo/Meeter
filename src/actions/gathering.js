@@ -7,6 +7,7 @@ import {
     DELETE_GATHERING,
     CLEAR_GATHERINGS,
     CLEAR_GATHERING,
+    UPDATE_GATHERING,
     CLEAR_SERVANTS,
     GET_SERVANTS,
     GET_HATHERINGS,
@@ -32,8 +33,34 @@ export const getGatherings = () => async dispatch => {
         });
         dispatch({ type: CLEAR_SERVANTS });
         const res2 = await axios.get('/api/person/servants');
-        console.log('servants: res is...', typeof res2);
-        console.log(typeof res2);
+        // console.log('servants: results are...', typeof res2);
+        // console.log(JSON.stringify(res2));
+        //==========================================
+        // we want to insert blank option in the list
+        // before returning
+        //===========================================
+        // create blank object
+        //===========================================
+        // const newList = {
+        //     _id:"",
+        //     name:"",
+        //     servant:"",
+        //     __v: 0,
+        //     date:"",
+        //     training:[]
+        // }
+        // console.log(JSON.stringify(newList));
+        // console.log('-----------');
+        //===========================================
+        // combine blank object with response from db
+        //===========================================
+        //function extend(newList, res2) {
+        // for(var key in res2) {
+        //     newList[key] = res2[key];
+        // }
+        // //    return dest;
+        // console.log(JSON.stringify(newList));
+
         dispatch({
             type: GET_SERVANTS,
             payload: res2.data
@@ -55,10 +82,11 @@ export const createGathering = (
     edit = false
 ) => async dispatch => {
     try {
-        console.log('in action/gatherings.js');
-        console.table(formData);
-        console.log(typeof formData._id);
-        console.log(formData._id.length);
+        // console.log('in action/gatherings.js');
+        // console.log(JSON.stringify(formData));
+        // console.table(formData);
+        // console.log(typeof formData._id);
+        // console.log(formData._id.length);
         if (formData._id.length < 1) {
             //this is an add, so delete _id and meetingId from formData
             delete formData._id;
@@ -113,7 +141,7 @@ export const createGathering = (
 export const getGathering = id => async dispatch => {
     //endure that id is not null, if so return
     if (id.length < 1) return;
-    if (id == 0) return;
+    if (id === 0) return;
     try {
         dispatch({ type: CLEAR_GATHERING });
         const res = await axios.get(`/api/meeting/${id}`);
@@ -152,4 +180,44 @@ export const deleteGathering = id => async dispatch => {
             }
         });
     }
+};
+// Delete group
+export const deleteGroup = (mtgId, groupId) => async dispatch => {
+    try {
+        const res = await axios.delete(`/api/meeting/${mtgId}/${groupId}`);
+
+        dispatch({
+            type: UPDATE_GATHERING,
+            payload: res.data
+        });
+
+        dispatch(setAlert('Group Removed', 'success'));
+    } catch (err) {
+        dispatch({
+            type: GATHERING_ERROR,
+            payload: {
+                msg: err.response.statusText,
+                status: err.response.status
+            }
+        });
+    }
+};
+// Edit group
+export const editGroup = (mtgId, groupId) => async dispatch => {
+    // try {
+    //     const res = await axios.delete(`/api/meeting/${mtgId}/${groupId}`);
+    //     dispatch({
+    //         type: UPDATE_GATHERING,
+    //         payload: res.data
+    //     });
+    //     dispatch(setAlert('Group Removed', 'success'));
+    // } catch (err) {
+    //     dispatch({
+    //         type: GATHERING_ERROR,
+    //         payload: {
+    //             msg: err.response.statusText,
+    //             status: err.response.status
+    //         }
+    //     });
+    // }
 };

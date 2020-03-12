@@ -1,10 +1,10 @@
-import React, { Component, Fragment, useState, useEffect } from 'react';
+import React, { Fragment, useState, useEffect } from 'react';
 import { Link, withRouter } from 'react-router-dom';
-import Select from 'react-select';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createGathering, getGathering } from '../../actions/gathering';
 import ServantSelect from './ServantSelect';
+import Groups from './Groups';
 const initialState = {
     _id: '',
     meetingId: '',
@@ -20,6 +20,10 @@ const initialState = {
     mealCount: 0,
     attendance: 0,
     donations: 0,
+    newcomers: 0,
+    nursery: 0,
+    children: 0,
+    youth: 0,
     notes: ''
 };
 
@@ -41,9 +45,8 @@ const EditGathering = ({
             }
             setFormData(gatheringData);
         }
-        
-        if (_id) setFormData({ ...formData, 'meetingId': _id });
-        
+
+        if (_id) setFormData({ ...formData, meetingId: _id });
     }, [loading, getGathering, gathering]);
 
     const {
@@ -60,10 +63,17 @@ const EditGathering = ({
         cafeCoordinator,
         attendance,
         donations,
+        newcomers,
+        nursery,
+        children,
+        youth,
         notes
     } = formData;
 
     const onChange = e => {
+        if (e.target == 'phone') {
+            console.log('phonephonephonephone');
+        }
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
@@ -74,6 +84,8 @@ const EditGathering = ({
     };
     const onSubmit = e => {
         e.preventDefault();
+        if (formData['meetingType'] == 'Testimony')
+            delete formData['supportRole'];
         createGathering(formData, history, true);
     };
     const servantList = servants.map(servant => ({
@@ -92,8 +104,8 @@ const EditGathering = ({
         <Fragment>
             <h1 className='large text-primary'>Your Meeting</h1>
             <p className='lead'>
-                <i className='fas fa-user' /> Have at it...<br/>
-                
+                <i className='fas fa-user' /> Have at it...
+                <br />
             </p>
 
             <small>* = required field</small>
@@ -145,7 +157,7 @@ const EditGathering = ({
                         type='text'
                         placeholder={diplayTitleHint()}
                         name='title'
-                        value={(title) ? title: " "}
+                        value={title ? title : ' '}
                         onChange={onChange}
                     />
                     <small className='form-text'>{diplayTitleSubtitle()}</small>
@@ -194,6 +206,17 @@ const EditGathering = ({
                         Number of people attending general meeting?
                     </small>
                 </div>
+                <h4>Newcomers</h4>
+                <input
+                    type='number'
+                    id='newcomers'
+                    name='newcomers'
+                    value={newcomers}
+                    min='0'
+                    max='200'
+                    onChange={e => onChange(e)}
+                />
+                <small className='form-text'>Number of newcomers?</small>
                 <div className='form-group'>
                     <h4>Donations</h4>
                     <input
@@ -259,6 +282,43 @@ const EditGathering = ({
                 </select>
                 <small className='form-text'>Cafe coordinator</small>
                 <br />
+                <h4>Nursery Count</h4>
+                <input
+                    type='number'
+                    id='nursery'
+                    name='nursery'
+                    value={nursery}
+                    min='0'
+                    max='200'
+                    onChange={e => onChange(e)}
+                />
+                <small className='form-text'>Number of kids in nursery?</small>
+                <br />
+                <h4>Children Count</h4>
+                <input
+                    type='number'
+                    id='children'
+                    name='children'
+                    value={children}
+                    min='0'
+                    max='200'
+                    onChange={e => onChange(e)}
+                />
+                <small className='form-text'>
+                    Number of kids in childcare?
+                </small>
+                <br />
+                <h4>Youth Count</h4>
+                <input
+                    type='number'
+                    id='youth'
+                    name='youth'
+                    value={youth}
+                    min='0'
+                    max='200'
+                    onChange={e => onChange(e)}
+                />
+                <small className='form-text'>Number of kids in youth?</small>
                 <div className='form-group'>
                     <textarea
                         placeholder='Description and notes for meeting'
@@ -269,9 +329,14 @@ const EditGathering = ({
                     <small className='form-text'>Things to remember</small>
                 </div>
                 <input type='submit' className='btn btn-primary my-1' />
-                <Link className='btn btn-light my-1' to='/dashboard'>
+                <Link className='btn btn-light my-1' to='/gatherings'>
                     Go Back
                 </Link>
+                <div>NOW</div>
+                {console.log('in between')}
+                {/*console.table(gathering.group)*/}
+                {/* <Groups group={gathering.group} /> */}
+                <div>THEN</div>
             </form>
         </Fragment>
     );

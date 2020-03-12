@@ -8,7 +8,8 @@ import {
     GET_SERVANTS,
     CLEAR_SERVANTS,
     GET_HATHERINGS,
-    CLEAR_HATHERINGS
+    CLEAR_HATHERINGS,
+    UPDATE_GATHERING
 } from '../actions/types';
 
 const initialState = {
@@ -37,15 +38,33 @@ export default function(state = initialState, action) {
                 loading: false
             };
         case GET_GATHERING:
+        case UPDATE_GATHERING:
             return {
                 ...state,
                 gathering: payload,
                 loading: false
             };
         case GET_SERVANTS:
+            //this inserts a blank row at the top of payload
+            var newPayload = [];
+            newPayload[0] = {
+                _id: '',
+                name: ' ',
+                servant: '',
+                __v: '0',
+                date: '',
+                training: '',
+                email: '',
+                phone: '',
+                sysem: ''
+            };
+            payload.forEach(element => {
+                newPayload.push(element);
+            });
+
             return {
                 ...state,
-                servants: payload,
+                servants: newPayload,
                 loading: false
             };
         case GATHERING_ERROR:

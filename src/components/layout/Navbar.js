@@ -10,7 +10,7 @@ const Navbar = ({ auth: { isAuthenticated, loading }, logout }) => {
       <li>
         <Link to="/gatherings">
           <i className="far fa-calendar-alt"></i>{' '}
-          <span className="hide-sm">Gatherings</span>
+          <span className="hide-sm">Meetings</span>
         </Link>
       </li>
       <li>

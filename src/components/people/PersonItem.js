@@ -1,4 +1,5 @@
 import React, { Fragment } from 'react';
+import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { deletePerson } from '../../actions/person';
@@ -16,7 +17,7 @@ const PersonItem = ({ deletePerson, person: { _id, name, email, phone } }) => (
             </a>
         </div>
         <div>
-            {name}
+            <Link to={`/EditPerson/${_id}`}>{name}</Link>
             <br />
             {/* only show phone field if there is a number for the user */}
             {phone ? (
