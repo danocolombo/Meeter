@@ -50,7 +50,7 @@ export const getCurrentPerson = id => async dispatch => {
 
 export const getPerson = id => async dispatch => {
     if (id.length < 1) return;
-    if (id == 0) return;
+    if (id === 0) return;
     try {
         console.log('getPerson: CLEAR_PERSON..................');
         //dispatch({ type: CLEAR_PERSON });
@@ -76,14 +76,15 @@ export const createPerson = (
     edit = false
 ) => async dispatch => {
     try {
-        console.log("ACTION::PERSON - createPerson");
+        // console.log('ACTION::PERSON - createPerson');
         const config = {
             headers: {
                 'Content-Type': 'application/json'
             }
         };
-        console.log('in action/createPerson');
-        console.log(formData);
+        // console.log('in action/createPerson');
+        console.table(formData);
+        console.log(JSON.stringify(formData));
         const res = await axios.post('/api/person', formData, config);
 
         dispatch({

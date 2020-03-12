@@ -1,6 +1,5 @@
-import React, { Component, Fragment, useState, useEffect } from 'react';
+import React, { Fragment, useState, useEffect } from 'react';
 import { Link, withRouter } from 'react-router-dom';
-import Select from 'react-select';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createGathering, getGathering } from '../../actions/gathering';

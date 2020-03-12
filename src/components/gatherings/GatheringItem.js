@@ -21,16 +21,16 @@ const GatheringItem = ({
     <Fragment>
         <div className='PersonBox'>
             <Fragment>
-            <div className='DeleteTarget'>
-                <a
-                    id='deleteGathering'
-                    title='-'
-                    href='/#'
-                    onClick={() => deleteGathering(_id)}
-                >
-                    <i className='fas fa-minus-circle'></i>
-                </a>
-            </div>
+                <div className='DeleteTarget'>
+                    <a
+                        id='deleteGathering'
+                        title='-'
+                        href='/#'
+                        onClick={() => deleteGathering(_id)}
+                    >
+                        <i className='fas fa-minus-circle'></i>
+                    </a>
+                </div>
             </Fragment>
             <div>
                 <Link to={`/EditGathering/${_id}`}>
@@ -38,13 +38,24 @@ const GatheringItem = ({
                 </Link>
                 <br />
                 {meetingType}: {title}
-                {supportRole && <Fragment>
-                    <br/>{supportRole}</Fragment>}
-                
-                {attendance > 0 && <Fragment>
-                    <br/>Attendance: {attendance}</Fragment>}
-                {newcomers > 0 && <Fragment>
-                    <br/>Newcomers: {newcomers}</Fragment>}
+                {supportRole && (
+                    <Fragment>
+                        <br />
+                        {supportRole}
+                    </Fragment>
+                )}
+                {attendance > 0 && (
+                    <Fragment>
+                        <br />
+                        Attendance: {attendance}
+                    </Fragment>
+                )}
+                {newcomers > 0 && (
+                    <Fragment>
+                        <br />
+                        Newcomers: {newcomers}
+                    </Fragment>
+                )}
                 <br />
                 <Link to={`/EditGathering/${_id}`}>
                     <i className='fas fa-pen'></i>
@@ -53,10 +64,7 @@ const GatheringItem = ({
         </div>
     </Fragment>
 );
-function displaySR(supportRole) {
-    //this only displays numbers if there are any
-    return [supportRole, <br />];
-}
+
 function displayAttendance(attendance) {
     //this only displays numbers if there are any
     if (attendance > 0) {

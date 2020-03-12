@@ -11,9 +11,7 @@ import {
     CLEAR_SERVANTS,
     GET_SERVANTS,
     GET_HATHERINGS,
-    CLEAR_HATHERINGS,
-    EDIT_GROUP,
-    DELETE_GROUP
+    CLEAR_HATHERINGS
 } from './types';
 
 //get gatherings
@@ -143,7 +141,7 @@ export const createGathering = (
 export const getGathering = id => async dispatch => {
     //endure that id is not null, if so return
     if (id.length < 1) return;
-    if (id == 0) return;
+    if (id === 0) return;
     try {
         dispatch({ type: CLEAR_GATHERING });
         const res = await axios.get(`/api/meeting/${id}`);

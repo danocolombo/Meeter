@@ -38,7 +38,7 @@ const Gatherings = ({
         </Fragment>
     );
     function throwList() {
-        if (match.params.options == 'historyView') {
+        if (match.params.options === 'historyView') {
             return [
                 hatherings.map(hathering => (
                     <GatheringItem key={hathering._id} gathering={hathering} />
@@ -51,11 +51,9 @@ const Gatherings = ({
                 ))
             ];
         }
-        return null;
     }
     function offerView() {
-        console.log('match.params.options:' + match.params.options);
-        if (match.params.options == 'historyView') {
+        if (match.params.options === 'historyView') {
             return [
                 <Link to='/gatherings'>Active Gatherings</Link>,
                 <p className='lead'>Your historical list of meetings...</p>

@@ -1,5 +1,4 @@
 import React, { Fragment, useState, useEffect } from 'react';
-import ReactDOM from 'react-dom';
 import { Link, withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -9,11 +8,11 @@ const initialState = {
     name: '',
     email: '',
     phone: '',
-    service: [],
+    service: '',
     active: true,
     shirtSize: '',
     birthday: '',
-    training: [],
+    training: '',
     system: false,
     notes: ''
 };
@@ -37,7 +36,7 @@ const EditPeep = ({
             }
             setFormData(personData);
         }
-    }, [loading, getPerson, person]);
+    }, [loading, getPerson, person, match]);
 
     const {
         name,
@@ -53,9 +52,9 @@ const EditPeep = ({
     } = formData;
 
     const onChange = e => {
-        if (e.target.name == 'phone') {
+        if (e.target.name === 'phone') {
             const was = e.target.value;
-            const is = '';
+            let is = '';
             switch (was.size) {
                 case 1:
                     is = '(' + was;
