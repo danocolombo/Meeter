@@ -28,7 +28,7 @@ const initialState = {
 };
 
 const EditGathering = ({
-    gathering: { gathering, servants, loading },
+    gathering: { gathering, servants, loading, newGathering },
     createGathering,
     getGathering,
     match,
@@ -37,6 +37,9 @@ const EditGathering = ({
     const [formData, setFormData] = useState(initialState);
 
     useEffect(() => {
+        console.log('match.params.id:' + match.params.id);
+
+        //if (match.params.id === 0) setState(newGathering = true;
         if (!gathering) getGathering(match.params.id);
         if (!loading) {
             const gatheringData = { ...initialState };

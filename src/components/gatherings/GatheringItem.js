@@ -65,12 +65,6 @@ const GatheringItem = ({
     </Fragment>
 );
 
-function displayAttendance(attendance) {
-    //this only displays numbers if there are any
-    if (attendance > 0) {
-        return ['attendance:', attendance, <br />];
-    }
-}
 function displayNewcomers(newcomers) {
     if (newcomers > 0) {
         return ['newcomers:', newcomers, <br />];
