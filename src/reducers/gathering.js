@@ -18,6 +18,7 @@ const initialState = {
     gathering: null,
     servants: [],
     loading: true,
+    newGathering: false,
     error: {}
 };
 

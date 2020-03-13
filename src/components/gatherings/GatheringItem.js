@@ -19,7 +19,7 @@ const GatheringItem = ({
     }
 }) => (
     <Fragment>
-        <div className='PersonBox'>
+        <div className={meetingType!='Other'?"PersonBox":"OtherBox"}>
             <Fragment>
                 <div className='DeleteTarget'>
                     <a
@@ -65,12 +65,6 @@ const GatheringItem = ({
     </Fragment>
 );
 
-function displayAttendance(attendance) {
-    //this only displays numbers if there are any
-    if (attendance > 0) {
-        return ['attendance:', attendance, <br />];
-    }
-}
 function displayNewcomers(newcomers) {
     if (newcomers > 0) {
         return ['newcomers:', newcomers, <br />];

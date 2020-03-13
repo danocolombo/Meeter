@@ -31,9 +31,6 @@ const Gatherings = ({
 
             <div className='posts'>
                 {throwList()}
-                {/* {gatherings.map(gathering => (
-                    <GatheringItem key={gathering._id} gathering={gathering} />
-                ))} */}
             </div>
         </Fragment>
     );
@@ -55,13 +52,13 @@ const Gatherings = ({
     function offerView() {
         if (match.params.options === 'historyView') {
             return [
-                <Link to='/gatherings'>Active Gatherings</Link>,
+                <Link to='/gatherings'>Active Meetings</Link>,
                 <p className='lead'>Your historical list of meetings...</p>
             ];
         } else {
             return [
                 <Link to='/gatherings/historyView'>HISTORY</Link>,
-                <p className='lead'>Below is the upcoming meetings...</p>,
+                <p className='lead'>List of upcoming meetings...</p>,
                 <Link to='/EditGathering/0'>NEW</Link>
             ];
         }

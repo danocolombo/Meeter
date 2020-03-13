@@ -3,6 +3,7 @@ import { Link, withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createPerson, getPerson } from '../../actions/person';
+import { components } from 'react-select';
 
 const initialState = {
     name: '',
@@ -37,7 +38,7 @@ const EditPeep = ({
             setFormData(personData);
         }
     }, [loading, getPerson, person, match]);
-
+    
     const {
         name,
         email,
@@ -78,7 +79,11 @@ const EditPeep = ({
     const onSubmit = e => {
         e.preventDefault();
         createPerson(formData, history, true);
+        window.scrollTo(0,0);
     };
+    const moveToTop = () => {
+        window.scrollTo(0,0);
+    }
     //++++++++++++++++++++++++++++++++++++++++++++++++++++++
     // used for the phone validation and formatting
     //++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -114,10 +119,10 @@ const EditPeep = ({
     //++++++++++++++++++++++++++++++++++++++++++++++++++++++
     //++++++++++++++++++++++++++++++++++++++++++++++++++++++
     return (
+        
         // function inside(){
         //     console.log('inside');
         // }
-
         <Fragment>
             <h1 className='large text-primary'>People</h1>
             <p className='lead'>
@@ -242,6 +247,7 @@ const EditPeep = ({
                     Go Back
                 </Link>
             </form>
+            {moveToTop()}
         </Fragment>
     );
 };

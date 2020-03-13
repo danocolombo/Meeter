@@ -83,8 +83,8 @@ export const createPerson = (
             }
         };
         // console.log('in action/createPerson');
-        console.table(formData);
-        console.log(JSON.stringify(formData));
+        // console.table(formData);
+        // console.log(JSON.stringify(formData));
         const res = await axios.post('/api/person', formData, config);
 
         dispatch({
