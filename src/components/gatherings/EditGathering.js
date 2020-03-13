@@ -90,15 +90,16 @@ const EditGathering = ({
         if (formData['meetingType'] == 'Testimony')
             delete formData['supportRole'];
         createGathering(formData, history, true);
+        window.scrollTo(0,0);
     };
-    const servantList = servants.map(servant => ({
-        label: servant.name,
-        value: servant.name
-    }));
-    const handleServantListChange = facilitator => {
-        setFormData({ ...formData, [facilitator]: facilitator });
-        console.log(`Option selected:`, { facilitator });
-    };
+    // const servantList = servants.map(servant => ({
+    //     label: servant.name,
+    //     value: servant.name
+    // }));
+    // const handleServantListChange = facilitator => {
+    //     setFormData({ ...formData, [facilitator]: facilitator });
+    //     console.log(`Option selected:`, { facilitator });
+    // };
 
     return (
         // function inside(){
@@ -335,11 +336,7 @@ const EditGathering = ({
                 <Link className='btn btn-light my-1' to='/gatherings'>
                     Go Back
                 </Link>
-                <div>NOW</div>
-                {console.log('in between')}
-                {/*console.table(gathering.group)*/}
-                {/* <Groups group={gathering.group} /> */}
-                <div>THEN</div>
+                <div>OPEN_SHARE</div>
             </form>
         </Fragment>
     );

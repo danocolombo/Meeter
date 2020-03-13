@@ -84,7 +84,8 @@ export const createGathering = (
     try {
         // console.log('in action/gatherings.js');
         // console.log(JSON.stringify(formData));
-        // console.table(formData);
+        console.table(formData);
+        console.log('that was from actions::gatherings::createGathering');
         // console.log(typeof formData._id);
         // console.log(formData._id.length);
         if (formData._id.length < 1) {

@@ -19,7 +19,7 @@ const GatheringItem = ({
     }
 }) => (
     <Fragment>
-        <div className='PersonBox'>
+        <div className={meetingType!='Other'?"PersonBox":"OtherBox"}>
             <Fragment>
                 <div className='DeleteTarget'>
                     <a
