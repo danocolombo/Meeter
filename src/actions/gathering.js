@@ -141,9 +141,12 @@ export const createGathering = (
 // Get gathering
 export const getGathering = id => async dispatch => {
     //endure that id is not null, if so return
+    // console.log('getGathering:IN');
     if (id.length < 1) return;
     if (id === 0) return;
     try {
+        // console.log('getGathering:TRY');
+        // console.log('id:' + id);
         dispatch({ type: CLEAR_GATHERING });
         const res = await axios.get(`/api/meeting/${id}`);
 
@@ -151,6 +154,8 @@ export const getGathering = id => async dispatch => {
             type: GET_GATHERING,
             payload: res.data
         });
+        const tmp = await axios.get(`/api/meeting/${id}`);
+        // console.log('res.data [AFTER]' + res.data);
     } catch (err) {
         dispatch({
             type: GATHERING_ERROR,
@@ -221,4 +226,12 @@ export const editGroup = (mtgId, groupId) => async dispatch => {
     //         }
     //     });
     // }
+};
+export const createGroup = (
+    formData,
+    history,
+    edit = false
+) => async dispatch => {
+    try {
+    } catch (err) {}
 };

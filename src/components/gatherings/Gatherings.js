@@ -29,9 +29,7 @@ const Gatherings = ({
                 {offerView()}
             </div>
 
-            <div className='posts'>
-                {throwList()}
-            </div>
+            <div className='posts'>{throwList()}</div>
         </Fragment>
     );
     function throwList() {
@@ -71,8 +69,8 @@ Gatherings.defaultProps = {
 };
 Gatherings.propTypes = {
     getGatherings: PropTypes.func.isRequired,
-    gathering: PropTypes.object.isRequired,
-    hathering: PropTypes.object.isRequired
+    gathering: PropTypes.object.isRequired
+    // hathering: PropTypes.object.isRequired
 };
 const mapStateToProps = state => ({
     gathering: state.gathering,

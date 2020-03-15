@@ -4,7 +4,9 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createGathering, getGathering } from '../../actions/gathering';
 import ServantSelect from './ServantSelect';
-import Groups from './Groups';
+import GroupList from './GroupList';
+//import GroupItem from './GroupItem';
+import GroupLine from './GroupLine';
 const initialState = {
     _id: '',
     meetingId: '',
@@ -37,10 +39,13 @@ const EditGathering = ({
     const [formData, setFormData] = useState(initialState);
 
     useEffect(() => {
-        console.log('match.params.id:' + match.params.id);
+        // console.log('match.params.id:' + match.params.id);
 
         //if (match.params.id === 0) setState(newGathering = true;
+        // console.log('gathering:' + gathering);
+        // if (gathering == null) console.log('YEP');
         if (!gathering) getGathering(match.params.id);
+        // console.log('gathering2:' + gathering);
         if (!loading) {
             const gatheringData = { ...initialState };
             for (const key in gathering) {
@@ -90,7 +95,7 @@ const EditGathering = ({
         if (formData['meetingType'] == 'Testimony')
             delete formData['supportRole'];
         createGathering(formData, history, true);
-        window.scrollTo(0,0);
+        window.scrollTo(0, 0);
     };
     // const servantList = servants.map(servant => ({
     //     label: servant.name,
@@ -336,10 +341,21 @@ const EditGathering = ({
                 <Link className='btn btn-light my-1' to='/gatherings'>
                     Go Back
                 </Link>
-                <div>OPEN_SHARE</div>
+                <hr />
+                {gathering !== null ? (
+                    <GroupLine grp={gathering.groups} />
+                ) : (
+                    <Fragment>
+                        <p>
+                            You have not yet setup a profile, please add some
+                            info
+                        </p>
+                    </Fragment>
+                )}
             </form>
         </Fragment>
     );
+
     function displayTitle() {
         switch (meetingType) {
             case 'Lesson':
@@ -352,6 +368,7 @@ const EditGathering = ({
                 return <h4>Description</h4>;
         }
     }
+
     function diplayTitleHint() {
         switch (meetingType) {
             case 'Lesson':
