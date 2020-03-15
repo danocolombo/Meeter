@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createGathering, getGathering } from '../../actions/gathering';
 import ServantSelect from './ServantSelect';
-import GroupList from './GroupList';
+//import GroupList from './GroupList';
 //import GroupItem from './GroupItem';
 import GroupLine from './GroupLine';
 const initialState = {
