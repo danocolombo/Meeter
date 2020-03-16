@@ -33,7 +33,12 @@ ul {
 img {
     width: 100%;
 }
-
+.plusSign {
+    height: 30px;
+    width: 30px;
+    margin-left: 20px;
+    vertical-align: text-bottom;
+}
 /* Utilities */
 .container {
     max-width: 1100px;
@@ -680,10 +685,105 @@ button {
 .OtherBox {
     border: 1px solid rgb(109, 84, 84);
     box-shadow: 0 2px 3px rgb(216, 146, 146);
-    background-color: rgb(255,239,213);
+    background-color: rgb(255, 239, 213);
     padding: 10px;
     margin-left: 25px;
     margin-bottom: 10px;
     margin-right: 10px;
     max-width: 400px;
+}
+
+/* GROUP STYLES */
+.group-form .group-form-header {
+    background: var(--primary-color);
+    padding: 0.5rem;
+}
+.group-container {
+    display: grid;
+    grid-template-areas:
+        'grpHeader grpHeader'
+        'grpTitle navButtons'
+        'grpCntRadios grpCntRadios'
+        'grpLocation grpLocSpace'
+        'grpFacilitator grpFacSpace'
+        'grpCoFacilitator grpCoFacSpace'
+        'grpNotes grpNotes';
+    grid-gap: 1rem;
+}
+.grpHeader,
+.grpTitle,
+.navButtons,
+.grpCntRadios,
+.grpLocation,
+.grpLocSpace,
+.grpFacilitator,
+.grpFacSpace,
+.grpCoFaciliator,
+.grpCoFacSpace,
+.grpNotes {
+    border: 1px #ccc solid;
+    padding: 0.5rem;
+}
+.grpHeader {
+    grid-area: grpHeader;
+}
+.grpTitle {
+    grid-area: grpTitle;
+}
+.navButtons {
+    grid-area: navButtons;
+}
+.grpCntRadios {
+    grid-area: grpCntRadios;
+}
+.grpLocation {
+    grid-area: grpLocation;
+}
+.grpLocSpace {
+    grid-area: grpLocSpace;
+}
+.grpFacilitator {
+    grid-area: grpFacilitator;
+}
+.grpFacSpace {
+    grid-area: grpFacSpace;
+}
+.grpCoFacilitator {
+    grid-area: grpCoFacilitator;
+}
+.grpCoFacSpace {
+    grid-area: grpCoFacSpace;
+}
+.grpNotes {
+    grid-area: grpNotes;
+}
+
+.group {
+    display: grid;
+    /* grid-template-columns: 1fr 4fr; */
+    grid-template-columns: 125px auto;
+    grid-gap: 2rem;
+    align-items: left;
+}
+
+.group > div:first-child {
+    text-align: center;
+}
+
+.group img {
+    width: 100px;
+}
+
+.group .comment-count {
+    background: var(--light-color);
+    color: var(--primary-color);
+    padding: 0.1rem 0.2rem;
+    border-radius: 5px;
+    font-size: 0.8rem;
+}
+
+.group .group-date {
+    color: #aaa;
+    font-size: 0.8rem;
+    margin-bottom: 0.5rem;
 }
