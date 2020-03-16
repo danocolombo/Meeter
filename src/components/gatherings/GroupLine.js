@@ -7,7 +7,7 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import Moment from 'react-moment';
 import moment from 'moment';
-import plusSign from '../../img/red-cross.png';
+// import plusSign from '../../img/red-cross.png';
 import { connect } from 'react-redux';
 import { deleteGroup } from '../../actions/gathering';
 

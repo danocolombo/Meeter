@@ -33,12 +33,6 @@ ul {
 img {
     width: 100%;
 }
-.plusSign {
-    height: 30px;
-    width: 30px;
-    margin-left: 20px;
-    vertical-align: text-bottom;
-}
 /* Utilities */
 .container {
     max-width: 1100px;
@@ -104,7 +98,9 @@ img {
 .py-3 {
     padding: 3rem 0;
 }
-
+.pl10 {
+    padding-left: 10px;
+}
 /* Margin */
 .m {
     margin: 0.5rem;
@@ -704,9 +700,9 @@ button {
         'grpHeader grpHeader'
         'grpTitle navButtons'
         'grpCntRadios grpCntRadios'
-        'grpLocation grpLocSpace'
-        'grpFacilitator grpFacSpace'
-        'grpCoFacilitator grpCoFacSpace'
+        'grpLocation grpSpace'
+        'grpFacilitator grpSpace'
+        'grpCoFacilitator grpSpace'
         'grpNotes grpNotes';
     grid-gap: 1rem;
 }
@@ -715,10 +711,10 @@ button {
 .navButtons,
 .grpCntRadios,
 .grpLocation,
-.grpLocSpace,
+.grpSpace,
 .grpFacilitator,
 .grpFacSpace,
-.grpCoFaciliator,
+.grpCoFacilitator,
 .grpCoFacSpace,
 .grpNotes {
     border: 1px #ccc solid;
@@ -726,36 +722,47 @@ button {
 }
 .grpHeader {
     grid-area: grpHeader;
+    border: none;
 }
 .grpTitle {
     grid-area: grpTitle;
+    border: none;
 }
 .navButtons {
     grid-area: navButtons;
+    border: none;
 }
 .grpCntRadios {
     grid-area: grpCntRadios;
+    border: none;
 }
 .grpLocation {
     grid-area: grpLocation;
+    border: none;
+}
+.grpSpace {
+    border: none;
 }
 .grpLocSpace {
     grid-area: grpLocSpace;
 }
 .grpFacilitator {
     grid-area: grpFacilitator;
+    border: none;
 }
 .grpFacSpace {
     grid-area: grpFacSpace;
 }
 .grpCoFacilitator {
     grid-area: grpCoFacilitator;
+    border: none;
 }
 .grpCoFacSpace {
     grid-area: grpCoFacSpace;
 }
 .grpNotes {
     grid-area: grpNotes;
+    border: none;
 }
 
 .group {
@@ -786,4 +793,7 @@ button {
     color: #aaa;
     font-size: 0.8rem;
     margin-bottom: 0.5rem;
+}
+.attendance {
+    size: "3";
 }
