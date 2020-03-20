@@ -699,7 +699,8 @@ button {
     grid-template-areas:
         'grpHeader grpHeader'
         'grpTitle navButtons'
-        'grpCntRadios grpCntRadios'
+        'grpAttendance grpAttendance'
+        'grpRadios grpRadios'
         'grpLocation grpSpace'
         'grpFacilitator grpSpace'
         'grpCoFacilitator grpSpace'
@@ -709,7 +710,8 @@ button {
 .grpHeader,
 .grpTitle,
 .navButtons,
-.grpCntRadios,
+.grpAttendance,
+.grpRadios,
 .grpLocation,
 .grpSpace,
 .grpFacilitator,
@@ -732,8 +734,12 @@ button {
     grid-area: navButtons;
     border: none;
 }
-.grpCntRadios {
-    grid-area: grpCntRadios;
+.grpAttendance {
+    grid-area: grpAttendance;
+    border: none;
+}
+.grpRadios {
+    grid-area: grpRadios;
     border: none;
 }
 .grpLocation {
@@ -795,5 +801,19 @@ button {
     margin-bottom: 0.5rem;
 }
 .attendance {
-    size: "3";
+    size: '3';
+}
+.dashboardLogo {
+    width: 25%;
+    margin-left: -15;
+}
+.plusAddNew {
+    vertical-align: super;
+    font-style: var(--success-color);
+    font-weight: ;
+}
+.meeterNavTextHighlight {
+    vertical-align: super;
+    font-style: var(--success-color);
+    font-weight: ;
 }

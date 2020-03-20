@@ -20,7 +20,16 @@ const People = ({ getPeople, person: { people, loading } }) => {
                 <i className='fas fa-user'></i>These are your peeps
             </p>
             <div>
-                <Link to='/EditPerson/0'>NEW</Link>
+                <Link to='/EditPerson/0'>
+                    <a class='waves-effect waves-light btn green'>
+                        <i class='material-icons left green'>
+                            add_circle_outline
+                        </i>
+                        <span className='meeterNavTextHighlight'>
+                            {'  '}Add
+                        </span>
+                    </a>
+                </Link>
             </div>
             <div className='posts'>
                 {people.map(person => (

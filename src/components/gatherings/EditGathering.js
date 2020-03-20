@@ -343,13 +343,10 @@ const EditGathering = ({
                 </Link>
                 <hr />
                 {gathering !== null ? (
-                    <GroupLine grp={gathering.groups} />
+                    <GroupLine grp={gathering.groups} gID={_id} />
                 ) : (
                     <Fragment>
-                        <p>
-                            You have not yet setup a profile, please add some
-                            info
-                        </p>
+                        <p>We cannot display any group information</p>
                     </Fragment>
                 )}
             </form>
