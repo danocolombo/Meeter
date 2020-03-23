@@ -12,10 +12,10 @@ const GroupList = ({ group: { groups, loading }, mid, getGroups, history }) => {
     return (
         <Fragment>
             <h2>WHAT??</h2>
-            {/* if (groups){' '}
-            {groups.map(grp => (
+            if (groups){' '}
+            {group.map(grp => (
                 <div>id: {grp._id}</div>
-            ))} */}
+            ))}
         </Fragment>
     );
 };
@@ -27,6 +27,7 @@ GroupList.propTypes = {
     groups: PropTypes.object.isRequired
 };
 const mapStateToProps = state => ({
-    group: state.group
+    group: state.group,
+    groups: state.groups
 });
 export default connect(mapStateToProps, { getGroups, deleteGroup })(GroupList);
