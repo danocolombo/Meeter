@@ -12,10 +12,10 @@ const GroupList = ({ group: { groups, loading }, mid, getGroups, history }) => {
     return (
         <Fragment>
             <h2>WHAT??</h2>
-            if (groups){' '}
-            {group.map(grp => (
+            {/* if (groups){' '}
+            {groups.map(grp => (
                 <div>id: {grp._id}</div>
-            ))}
+            ))} */}
         </Fragment>
     );
 };
