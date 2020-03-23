@@ -10,11 +10,7 @@ import { Input } from '@material-ui/core';
 import { Radio } from '@material-ui/core';
 import { InputLabel } from '@material-ui/core';
 import { connect } from 'react-redux';
-import {
-    deleteGroup,
-    createGroup,
-    deleteGathering
-} from '../../actions/gathering';
+import { deleteGroup, createGroup, getGroup } from '../../actions/group';
 
 const initialState = {
     id: '',
@@ -27,20 +23,29 @@ const initialState = {
     notes: ''
 };
 
-const EditGroup = ({ gathering: { gathering, servants, loading }, match }) => {
+const EditGroup = ({
+    gathering: { gathering, servants, loading },
+    match,
+    createGroup,
+    deleteGroup,
+    getGroup
+}) => {
     var MID = '';
     var GID = '';
     const [formData, setFormData] = useState(initialState);
-    const [selectedValue, setSelectedValue] = React.useState('a');
-    const handleRadioChange = event => {
-        setSelectedValue(event.target.value);
-    };
+    // const [selectedValue, setSelectedValue] = React.useState('a');
+    // const handleRadioChange = event => {
+    //     setSelectedValue(event.target.value);
+    // };
     const handleSlide = (event, newValue) => {
         //setValue(newValue);
     };
     useEffect(() => {
         MID = match.params.mID;
         GID = match.params.gID;
+        // if (!group) {
+        //     //call getGroup;
+        // }
         // if (!loading) {
         //     const gatheringData = { ...initialState };
         //     for (const key in gathering) {
@@ -51,7 +56,7 @@ const EditGroup = ({ gathering: { gathering, servants, loading }, match }) => {
         gathering ? console.log('gathered') : console.log('ungathered');
         MID ? console.log('MID' + MID) : console.log('MID not set');
         GID ? console.log('GID' + GID) : console.log('GID not set');
-    }, [gathering, loading, deleteGathering]);
+    }, [gathering, loading]);
 
     return (
         <>
@@ -114,8 +119,8 @@ const EditGroup = ({ gathering: { gathering, servants, loading }, match }) => {
                     <div className='grpRadios'>
                         <Radio
                             id='gender'
-                            checked={selectedValue === 'f'}
-                            onChange={handleRadioChange}
+                            // checked={selectedValue === 'f'}
+                            // onChange={handleRadioChange}
                             value='f'
                             label='Women'
                             name='radio-button-demo'
@@ -124,8 +129,8 @@ const EditGroup = ({ gathering: { gathering, servants, loading }, match }) => {
                         Women
                         <Radio
                             id='gender'
-                            checked={selectedValue === 'm'}
-                            onChange={handleRadioChange}
+                            // checked={selectedValue === 'm'}
+                            // onChange={handleRadioChange}
                             value='m'
                             name='radio-button-demo'
                             inputProps={{ 'aria-label': 'm' }}
@@ -133,8 +138,8 @@ const EditGroup = ({ gathering: { gathering, servants, loading }, match }) => {
                         Men
                         <Radio
                             id='gender'
-                            checked={selectedValue === 'x'}
-                            onChange={handleRadioChange}
+                            // checked={selectedValue === 'x'}
+                            // onChange={handleRadioChange}
                             value='x'
                             label='Mixed'
                             name='radio-button-demo'

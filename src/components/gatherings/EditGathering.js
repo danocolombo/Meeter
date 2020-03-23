@@ -6,7 +6,8 @@ import { createGathering, getGathering } from '../../actions/gathering';
 import ServantSelect from './ServantSelect';
 //import GroupList from './GroupList';
 //import GroupItem from './GroupItem';
-import GroupLine from './GroupLine';
+//import GroupLine from './GroupLine';
+import GroupList from './GroupList';
 const initialState = {
     _id: '',
     meetingId: '',
@@ -97,14 +98,6 @@ const EditGathering = ({
         createGathering(formData, history, true);
         window.scrollTo(0, 0);
     };
-    // const servantList = servants.map(servant => ({
-    //     label: servant.name,
-    //     value: servant.name
-    // }));
-    // const handleServantListChange = facilitator => {
-    //     setFormData({ ...formData, [facilitator]: facilitator });
-    //     console.log(`Option selected:`, { facilitator });
-    // };
 
     return (
         // function inside(){
@@ -343,10 +336,11 @@ const EditGathering = ({
                 </Link>
                 <hr />
                 {gathering !== null ? (
-                    <GroupLine grp={gathering.groups} gID={_id} />
+                    <GroupList mid={_id} />
                 ) : (
+                    // <GroupLine grp={gathering.groups} gID={_id} />
                     <Fragment>
-                        <p>We cannot display any group information</p>
+                        <p>No groups defined.</p>
                     </Fragment>
                 )}
             </form>

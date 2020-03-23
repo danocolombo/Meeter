@@ -145,7 +145,7 @@ export const getGathering = id => async dispatch => {
     if (id.length < 1) return;
     if (id === 0) return;
     try {
-        // console.log('getGathering:TRY');
+        console.log('getGathering:TRY');
         // console.log('id:' + id);
         dispatch({ type: CLEAR_GATHERING });
         const res = await axios.get(`/api/meeting/${id}`);
