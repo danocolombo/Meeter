@@ -8,6 +8,7 @@ import ServantSelect from './ServantSelect';
 //import GroupItem from './GroupItem';
 //import GroupLine from './GroupLine';
 import GroupList from './GroupList';
+import GrpGrp from './GroupGroup';
 const initialState = {
     _id: '',
     meetingId: '',
@@ -334,6 +335,8 @@ const EditGathering = ({
                 <Link className='btn btn-light my-1' to='/gatherings'>
                     Go Back
                 </Link>
+                <hr />
+                <GrpGrp/>
                 <hr />
                 {gathering !== null ? (
                     <GroupList mid={_id} />
