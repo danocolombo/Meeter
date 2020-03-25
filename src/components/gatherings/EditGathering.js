@@ -9,6 +9,7 @@ import ServantSelect from './ServantSelect';
 //import GroupLine from './GroupLine';
 import GroupList from './GroupList';
 import GrpGrp from './GroupGroup';
+import { getGroups } from '../../actions/group';
 const initialState = {
     _id: '',
     meetingId: '',
@@ -33,6 +34,7 @@ const initialState = {
 
 const EditGathering = ({
     gathering: { gathering, servants, loading, newGathering },
+    group: { groups },
     createGathering,
     getGathering,
     match,
@@ -47,6 +49,7 @@ const EditGathering = ({
         // console.log('gathering:' + gathering);
         // if (gathering == null) console.log('YEP');
         if (!gathering) getGathering(match.params.id);
+        getGroups(match.params.id);
         // console.log('gathering2:' + gathering);
         if (!loading) {
             const gatheringData = { ...initialState };
@@ -336,7 +339,9 @@ const EditGathering = ({
                     Go Back
                 </Link>
                 <hr />
-                <GrpGrp/>
+                {groups !== null
+                    ? groups.map(grp => <GrpGrp key={grp._id} group={grp} />)
+                    : console.log('no groups')}
                 <hr />
                 {gathering !== null ? (
                     <GroupList mid={_id} />
@@ -434,14 +439,18 @@ const EditGathering = ({
 EditGathering.propTypes = {
     createGathering: PropTypes.func.isRequired,
     getGathering: PropTypes.func.isRequired,
+    getGroups: PropTypes.func.isRequired,
     gathering: PropTypes.object.isRequired
 };
 
 const mapStateToProps = state => ({
     gathering: state.gathering,
+    group: state.group,
     servants: state.servants
 });
 
-export default connect(mapStateToProps, { createGathering, getGathering })(
-    withRouter(EditGathering)
-);
+export default connect(mapStateToProps, {
+    createGathering,
+    getGathering,
+    getGroups
+})(withRouter(EditGathering));

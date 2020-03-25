@@ -1,34 +1,21 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import { useSelector } from 'react-redux';
+import React from 'react';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { deleteGroup } from '../../actions/group';
 
-
-function GroupGroup(props) {
-    const meeting = useSelector(state =>
-        state.group.groups)
-    return (
-        <div>
-            <h3>Group-Group</h3>
-            <div>we are going to do this...</div>
-            {console.log(typeof meeting)}
-            { (meeting)?console.log('gotSomething'):console.log('nope')}
-            { console.log(Object.getOwnPropertyNames)}
-            {/* {group.map(grp => (
-                <div>ok</div>
-            ))} */}
-
-
-            {/* if (groups){' '}
-            {groups.map(grp => (
-                <div>id: {grp._id}</div>
-            ))} */}
-        </div>
-    )
-}
+const GroupGroup = ({
+    auth,
+    deleteGroup,
+    group: { _id, title, facilitator, location }
+}) => <div>Yep</div>;
 
 GroupGroup.propTypes = {
+    auth: PropTypes.object.isRequired,
+    group: PropTypes.object.isRequired,
+    deleteGroup: PropTypes.func.isRequired
+};
 
-}
-
-export default GroupGroup
-
+const mapStateToProps = state => ({
+    auth: state.auth
+});
+export default connect(mapStateToProps, deleteGroup)(GroupGroup);
