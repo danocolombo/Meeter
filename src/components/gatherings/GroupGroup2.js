@@ -3,10 +3,11 @@ import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
 
 function GroupGroup(props) {
-    const meeting = useSelector(state => state.group.groups);
+    const meetings = useSelector(state => state.group);
     return (
         <div>
             <h3>Group-Group</h3>
+            
             {/* <div>we are going to do this...</div>
             {console.log(typeof meeting)}
             { (meeting)?console.log('gotSomething'):console.log('nope')}

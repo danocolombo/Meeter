@@ -48,8 +48,10 @@ const EditGathering = ({
         //if (match.params.id === 0) setState(newGathering = true;
         // console.log('gathering:' + gathering);
         // if (gathering == null) console.log('YEP');
-        if (!gathering) getGathering(match.params.id);
-        getGroups(match.params.id);
+        if (!gathering) {
+            getGathering(match.params.id);
+            getGroups(match.params.id);
+        }
         // console.log('gathering2:' + gathering);
         if (!loading) {
             const gatheringData = { ...initialState };
@@ -60,7 +62,7 @@ const EditGathering = ({
         }
 
         if (_id) setFormData({ ...formData, meetingId: _id });
-    }, [loading, getGathering, gathering]);
+    }, [loading, getGathering, gathering, getGroups]);
 
     const {
         _id,
@@ -339,18 +341,19 @@ const EditGathering = ({
                     Go Back
                 </Link>
                 <hr />
-                {groups !== null
-                    ? groups.map(grp => <GrpGrp key={grp._id} group={grp} />)
+                <GrpGrp/>
+                {/* {group !== null
+                    ? group.map(grp => <GrpGrp key={grp._id} group={grp} />)
                     : console.log('no groups')}
-                <hr />
-                {gathering !== null ? (
+                <hr /> */}
+                {/* {groups !== null ? (
                     <GroupList mid={_id} />
                 ) : (
                     // <GroupLine grp={gathering.groups} gID={_id} />
                     <Fragment>
                         <p>No groups defined.</p>
                     </Fragment>
-                )}
+                )} */}
             </form>
         </Fragment>
     );
@@ -440,7 +443,8 @@ EditGathering.propTypes = {
     createGathering: PropTypes.func.isRequired,
     getGathering: PropTypes.func.isRequired,
     getGroups: PropTypes.func.isRequired,
-    gathering: PropTypes.object.isRequired
+    gathering: PropTypes.object.isRequired,
+    group: PropTypes.object.isRequired
 };
 
 const mapStateToProps = state => ({
