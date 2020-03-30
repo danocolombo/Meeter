@@ -7,7 +7,7 @@ import ServantSelect from './ServantSelect';
 //import GroupList from './GroupList';
 //import GroupItem from './GroupItem';
 //import GroupLine from './GroupLine';
-import GroupList from './GroupList';
+//import GroupList from './GroupList';
 import GrpGrp from './GroupGroup';
 import { getGroups } from '../../actions/group';
 const initialState = {
@@ -37,6 +37,7 @@ const EditGathering = ({
     group: { groups },
     createGathering,
     getGathering,
+    getGroups,
     match,
     history
 }) => {
@@ -50,6 +51,8 @@ const EditGathering = ({
         // if (gathering == null) console.log('YEP');
         if (!gathering) {
             getGathering(match.params.id);
+        }
+        if (!groups) {
             getGroups(match.params.id);
         }
         // console.log('gathering2:' + gathering);
@@ -62,7 +65,7 @@ const EditGathering = ({
         }
 
         if (_id) setFormData({ ...formData, meetingId: _id });
-    }, [loading, getGathering, gathering, getGroups]);
+    }, [loading, getGathering, gathering]);
 
     const {
         _id,
@@ -341,7 +344,14 @@ const EditGathering = ({
                     Go Back
                 </Link>
                 <hr />
-                <GrpGrp/>
+                {groups
+                    ? groups.map(g => {
+                          console.log('yippy');
+                          //   <GrpGrp key={g.id} group={g} />;
+                      })
+                    : console.log('no groups')}
+                {/* <GrpGrp groups={groups} /> */}
+
                 {/* {group !== null
                     ? group.map(grp => <GrpGrp key={grp._id} group={grp} />)
                     : console.log('no groups')}
@@ -442,15 +452,15 @@ const EditGathering = ({
 EditGathering.propTypes = {
     createGathering: PropTypes.func.isRequired,
     getGathering: PropTypes.func.isRequired,
-    getGroups: PropTypes.func.isRequired,
     gathering: PropTypes.object.isRequired,
-    group: PropTypes.object.isRequired
+    group: PropTypes.object.isRequired,
+    getGroups: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
     gathering: state.gathering,
-    group: state.group,
-    servants: state.servants
+    servants: state.servants,
+    group: state.group
 });
 
 export default connect(mapStateToProps, {

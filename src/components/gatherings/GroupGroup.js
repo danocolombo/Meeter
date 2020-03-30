@@ -1,21 +1,14 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { deleteGroup } from '../../actions/group';
+import { getGroups } from '../../actions/group';
 
-const GroupGroup = ({
-    auth,
-    deleteGroup,
-    group: { _id, title, facilitator, location }
-}) => <div>Yep</div>;
-
+const GroupGroup = ({ group }) => {
+    return <div>GROUPGROUP</div>;
+};
 GroupGroup.propTypes = {
-    auth: PropTypes.object.isRequired,
-    group: PropTypes.object.isRequired,
-    deleteGroup: PropTypes.func.isRequired
+    // auth: PropTypes.object.isRequired,
+    group: PropTypes.array.isRequired
 };
 
-const mapStateToProps = state => ({
-    auth: state.auth
-});
-export default connect(mapStateToProps, deleteGroup)(GroupGroup);
+export default connect(null, null)(GroupGroup);

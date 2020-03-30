@@ -11,7 +11,7 @@ import {
 // Get groups associated with meetingId
 export const getGroups = mid => async dispatch => {
     try {
-        dispatch({ type: CLEAR_GROUPS });
+        // dispatch({ type: CLEAR_GROUPS });
         const res = await axios.get(`/api/groups/meeting/${mid}`);
 
         dispatch({

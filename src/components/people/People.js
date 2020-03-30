@@ -21,14 +21,14 @@ const People = ({ getPeople, person: { people, loading } }) => {
             </p>
             <div>
                 <Link to='/EditPerson/0'>
-                    <a class='waves-effect waves-light btn green'>
+                    <div class='waves-effect waves-light btn green'>
                         <i class='material-icons left green'>
                             add_circle_outline
                         </i>
                         <span className='meeterNavTextHighlight'>
                             {'  '}Add
                         </span>
-                    </a>
+                    </div>
                 </Link>
             </div>
             <div className='posts'>
