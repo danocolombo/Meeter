@@ -817,3 +817,6 @@ button {
     font-style: var(--success-color);
     font-weight: ;
 }
+.groupsOpenShareListTable {
+    padding-right: 10px;
+}

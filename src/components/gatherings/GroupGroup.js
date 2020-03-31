@@ -1,26 +1,34 @@
-/* eslint-disable */
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { getGroups } from '../../actions/group';
 
-const GroupGroup = ({ group }) => {
+/* eslint react/prop-types: 0 */
+const GroupGroup = ({ groups }) => {
     return [
         <>
-        <div>GROUPGROUP</div>
-        <div>DivDiv</div>
-        group.map(g => (
-            <div>{g.title}</div>
-        ))
+            <h3>Open Share Groups</h3>
+            <table>
+                {groups.map(g => (
+                    <tr>
+                        <td className='groupsOpenShareListTable'>{g.title}</td>
+                        <td>{g.facilitator}</td>
+                    </tr>
+                ))}
+            </table>
         </>
     ];
 };
 GroupGroup.propTypes = {
     // auth: PropTypes.object.isRequired,
-    group: PropTypes.array.isRequired
+    groups: PropTypes.array.isRequired
+};
+const mapStateToProps = state => {
+    console.log(state);
+    return { groups: state.group.groups };
 };
 
-export default connect(null, null)(GroupGroup);
+export default connect(mapStateToProps)(GroupGroup);
 
 // [
 //     gatherings.map(gathering => (
