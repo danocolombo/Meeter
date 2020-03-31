@@ -5,6 +5,8 @@ import { connect } from 'react-redux';
 import Spinner from '../layout/Spinner';
 import DashboardActions from './DashboardActions';
 import DashboardPic from '../../img/Dashboard1-200.png';
+import DashLogo from '../../img/MMeeterLogo.png';
+// import DashboardMeeterLogo from '../../img/DashboardMeeterLogo.png';
 import Experience from './Experience';
 import Education from './Education';
 import { getCurrentProfile, deleteAccount } from '../../actions/profile';
@@ -24,7 +26,7 @@ const Dashboard = ({
     ) : (
         <Fragment>
             {/* <h1 className="large text-primary">Dashboard</h1> */}
-            <img className='dashboardLogo' src={DashboardPic} />
+            <img className='dashboardLogo' src={DashLogo} />
             <p className='lead'>
                 <i className='fas fa-user' /> Welcome {user && user.name}
             </p>

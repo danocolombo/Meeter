@@ -344,12 +344,13 @@ const EditGathering = ({
                     Go Back
                 </Link>
                 <hr />
-                {groups
+                {(groups)? <GrpGrp /> : console.log('No Groups')}
+                {/* {groups
                     ? groups.map(g => {
                           console.log('yippy');
-                          //   <GrpGrp key={g.id} group={g} />;
+                            <GrpGrp key={g.id} group={g} />;
                       })
-                    : console.log('no groups')}
+                    : console.log('no groups')} */}
                 {/* <GrpGrp groups={groups} /> */}
 
                 {/* {group !== null
