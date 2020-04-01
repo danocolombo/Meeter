@@ -1,4 +1,5 @@
 import React, { Fragment, useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import Moment from 'react-moment';
 import moment from 'moment';
@@ -30,6 +31,7 @@ const EditGroup = ({
     deleteGroup,
     getGroup
 }) => {
+    // (match.params.MID)?console.log(match.params.MID):console.log('no MID');
     var MID = '';
     var GID = '';
     const [formData, setFormData] = useState(initialState);
@@ -41,8 +43,9 @@ const EditGroup = ({
         //setValue(newValue);
     };
     useEffect(() => {
-        MID = match.params.mID;
-        GID = match.params.gID;
+        MID = match.params.mid;
+        GID = match.params.gid;
+        // console.log('meeting id: ' + match.params.mid);
         // if (!group) {
         //     //call getGroup;
         // }
@@ -54,8 +57,8 @@ const EditGroup = ({
         //     setFormData(gatheringData);
         // }
         gathering ? console.log('gathered') : console.log('ungathered');
-        MID ? console.log('MID' + MID) : console.log('MID not set');
-        GID ? console.log('GID' + GID) : console.log('GID not set');
+        MID ? console.log('MID ' + MID) : console.log('MID not set');
+        GID ? console.log('GID ' + GID) : console.log('GID not set');
     }, [gathering, loading]);
 
     return (
@@ -65,8 +68,8 @@ const EditGroup = ({
                     <header className='grpHeader'>
                         <h2>Open Share Group</h2>
                     </header>
-                    <div>Meeting:{MID}</div>
-                    <div>Group: {GID}</div>
+                    <div>Meeting:{MID}<br/>Group: {GID}</div>
+                    {/* <div>Group: {GID}</div> */}
                     <div className='input-field'>
                         <div className='grpTitle'>
                             <TextField
@@ -88,14 +91,19 @@ const EditGroup = ({
                             Save
                         </Button>
                         {'      '}
-                        <Button
+                        {/* ================== */}
+                        <Link className='btn btn-light my-1' to={`/editGatherings/${MID}`}>
+                            Go Back
+                        </Link>
+                        {/* ================== */}
+                        {/* <Button
                             variant='contained'
                             color='secondary'
                             size='small'
                             className='py-2'
                         >
                             Go Back
-                        </Button>
+                        </Button> */}
                     </div>
 
                     <div className='grpAttendance'>
