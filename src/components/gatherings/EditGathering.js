@@ -344,7 +344,20 @@ const EditGathering = ({
                     Go Back
                 </Link>
                 <hr />
-                {(groups)? <GrpGrp /> : console.log('No Groups')}
+                <h2>
+                    Open-Share Groups
+                    <Link to={`/EditGroup/${_id}`}>
+                        <a class='waves-effect waves-light btn'>
+                            <i class='material-icons left green'>
+                                add_circle_outline
+                            </i>
+                            <span className='meeterNavTextHighlight'>
+                                {'  '}NEW
+                            </span>
+                        </a>
+                    </Link>
+                </h2>
+                {groups ? <GrpGrp /> : console.log('No Groups')}
                 {/* {groups
                     ? groups.map(g => {
                           console.log('yippy');

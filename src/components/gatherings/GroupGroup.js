@@ -7,7 +7,6 @@ import { getGroups } from '../../actions/group';
 const GroupGroup = ({ groups }) => {
     return [
         <>
-            <h3>Open Share Groups</h3>
             <table>
                 {groups.map(g => (
                     <tr>
