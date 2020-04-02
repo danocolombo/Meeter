@@ -32,8 +32,6 @@ const EditGroup = ({
     getGroup
 }) => {
     // (match.params.MID)?console.log(match.params.MID):console.log('no MID');
-    var MID = '';
-    var GID = '';
     const [formData, setFormData] = useState(initialState);
     // const [selectedValue, setSelectedValue] = React.useState('a');
     // const handleRadioChange = event => {
@@ -43,8 +41,6 @@ const EditGroup = ({
         //setValue(newValue);
     };
     useEffect(() => {
-        MID = match.params.mid;
-        GID = match.params.gid;
         // console.log('meeting id: ' + match.params.mid);
         // if (!group) {
         //     //call getGroup;
@@ -56,9 +52,6 @@ const EditGroup = ({
         //     }
         //     setFormData(gatheringData);
         // }
-        gathering ? console.log('gathered') : console.log('ungathered');
-        MID ? console.log('MID ' + MID) : console.log('MID not set');
-        GID ? console.log('GID ' + GID) : console.log('GID not set');
     }, [gathering, loading]);
 
     return (
@@ -68,8 +61,7 @@ const EditGroup = ({
                     <header className='grpHeader'>
                         <h2>Open Share Group</h2>
                     </header>
-                    <div>Meeting:{MID}<br/>Group: {GID}</div>
-                    {/* <div>Group: {GID}</div> */}
+
                     <div className='input-field'>
                         <div className='grpTitle'>
                             <TextField
@@ -90,41 +82,25 @@ const EditGroup = ({
                         >
                             Save
                         </Button>
-                        {'      '}
-                        {/* ================== */}
-                        <Link className='btn btn-light my-1' to={`/editGatherings/${MID}`}>
-                            Go Back
-                        </Link>
-                        {/* ================== */}
-                        {/* <Button
-                            variant='contained'
-                            color='secondary'
-                            size='small'
-                            className='py-2'
+                        <span>&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                        <Link
+                            className='btn btn-light px-2'
+                            to={`/editGathering/${match.params.mid}`}
                         >
                             Go Back
-                        </Button> */}
-                    </div>
-
-                    <div className='grpAttendance'>
-                        <div class='input-field inline'>
-                            {/* <Slider
-                                value={attendance}
-                                onChange={handleSlide}
-                                aria-labelledby='continuous-slider'
-                            /> */}
-                            {/* <Input
-                                id='attendance'
-                                label='attendance'
-                                type='number'
-                                text-align='right'
-                                defaultValue='0'
-                                className='attendance'
-                            />
-                            <label for='grpAttendance'>Attendance</label> */}
-                        </div>
+                        </Link>
                     </div>
                     <div className='grpRadios'>
+                        <input
+                            type='number'
+                            id='attendence'
+                            name='attendence'
+                            value='0'
+                            min='1'
+                            max='300'
+                            className='groupAttendence'
+                        ></input>
+                        <span>&nbsp;Attendence&nbsp;&nbsp;</span>
                         <Radio
                             id='gender'
                             // checked={selectedValue === 'f'}
@@ -193,6 +169,11 @@ const EditGroup = ({
                             variant='outlined'
                         />
                     </div>
+                </div>
+                <div>
+                    Meeting:{match.params.mid}
+                    <br />
+                    Group: {match.params.gid}
                 </div>
             </Fragment>
         </>
