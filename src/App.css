@@ -824,3 +824,15 @@ button {
     border-color: rgb(109, 84, 84);
     font-size: 1em;
 }
+.grpBoxAttendance {
+    float: right;
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    font-weight: bolder;
+    font-size: 2em;
+}
+.grpBoxTitle {
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-weight: bold;
+    font-style: italic;
+    font-size: 1.2em;
+}
