@@ -33,12 +33,6 @@ ul {
 img {
     width: 100%;
 }
-.plusSign {
-    height: 30px;
-    width: 30px;
-    margin-left: 20px;
-    vertical-align: text-bottom;
-}
 /* Utilities */
 .container {
     max-width: 1100px;
@@ -104,7 +98,9 @@ img {
 .py-3 {
     padding: 3rem 0;
 }
-
+.pl10 {
+    padding-left: 10px;
+}
 /* Margin */
 .m {
     margin: 0.5rem;
@@ -703,22 +699,24 @@ button {
     grid-template-areas:
         'grpHeader grpHeader'
         'grpTitle navButtons'
-        'grpCntRadios grpCntRadios'
-        'grpLocation grpLocSpace'
-        'grpFacilitator grpFacSpace'
-        'grpCoFacilitator grpCoFacSpace'
+        'grpAttendance grpAttendance'
+        'grpRadios grpRadios'
+        'grpLocation grpSpace'
+        'grpFacilitator grpSpace'
+        'grpCoFacilitator grpSpace'
         'grpNotes grpNotes';
     grid-gap: 1rem;
 }
 .grpHeader,
 .grpTitle,
 .navButtons,
-.grpCntRadios,
+.grpAttendance,
+.grpRadios,
 .grpLocation,
-.grpLocSpace,
+.grpSpace,
 .grpFacilitator,
 .grpFacSpace,
-.grpCoFaciliator,
+.grpCoFacilitator,
 .grpCoFacSpace,
 .grpNotes {
     border: 1px #ccc solid;
@@ -726,36 +724,51 @@ button {
 }
 .grpHeader {
     grid-area: grpHeader;
+    border: none;
 }
 .grpTitle {
     grid-area: grpTitle;
+    border: none;
 }
 .navButtons {
     grid-area: navButtons;
+    border: none;
 }
-.grpCntRadios {
-    grid-area: grpCntRadios;
+.grpAttendance {
+    grid-area: grpAttendance;
+    border: none;
+}
+.grpRadios {
+    grid-area: grpRadios;
+    border: none;
 }
 .grpLocation {
     grid-area: grpLocation;
+    border: none;
+}
+.grpSpace {
+    border: none;
 }
 .grpLocSpace {
     grid-area: grpLocSpace;
 }
 .grpFacilitator {
     grid-area: grpFacilitator;
+    border: none;
 }
 .grpFacSpace {
     grid-area: grpFacSpace;
 }
 .grpCoFacilitator {
     grid-area: grpCoFacilitator;
+    border: none;
 }
 .grpCoFacSpace {
     grid-area: grpCoFacSpace;
 }
 .grpNotes {
     grid-area: grpNotes;
+    border: none;
 }
 
 .group {
@@ -786,4 +799,40 @@ button {
     color: #aaa;
     font-size: 0.8rem;
     margin-bottom: 0.5rem;
+}
+.attendance {
+    size: '3';
+}
+.dashboardLogo {
+    width: 50%;
+    margin-left: -25;
+}
+.plusAddNew {
+    vertical-align: super;
+    font-style: var(--success-color);
+    font-weight: ;
+}
+.meeterNavTextHighlight {
+    vertical-align: super;
+    font-style: var(--success-color);
+    font-weight: ;
+}
+.groupsOpenShareListTable {
+    padding-right: 10px;
+}
+.groupAttendence {
+    border-color: rgb(109, 84, 84);
+    font-size: 1em;
+}
+.grpBoxAttendance {
+    float: right;
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    font-weight: bolder;
+    font-size: 2em;
+}
+.grpBoxTitle {
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-weight: bold;
+    font-style: italic;
+    font-size: 1.2em;
 }

@@ -1,30 +1,179 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import Moment from 'react-moment';
 import moment from 'moment';
+import { FormLabel } from '@material-ui/core';
+import { TextField } from '@material-ui/core';
+import { Button } from '@material-ui/core';
+import { Slider } from '@material-ui/core';
+import { Input } from '@material-ui/core';
+import { Radio } from '@material-ui/core';
+import { InputLabel } from '@material-ui/core';
 import { connect } from 'react-redux';
-import { deleteGroup, createGroup } from '../../actions/gathering';
+import { deleteGroup, createGroup, getGroup } from '../../actions/group';
 
-const EditGroup = ({ deleteGroup, createGroup }) => {
+const initialState = {
+    id: '',
+    title: '',
+    attendance: '0',
+    gender: '',
+    location: '',
+    facilitator: '',
+    cofacilitator: '',
+    notes: ''
+};
+
+const EditGroup = ({
+    gathering: { gathering, servants, loading },
+    match,
+    createGroup,
+    deleteGroup,
+    getGroup
+}) => {
+    // (match.params.MID)?console.log(match.params.MID):console.log('no MID');
+    const [formData, setFormData] = useState(initialState);
+    // const [selectedValue, setSelectedValue] = React.useState('a');
+    // const handleRadioChange = event => {
+    //     setSelectedValue(event.target.value);
+    // };
+    const handleSlide = (event, newValue) => {
+        //setValue(newValue);
+    };
+    useEffect(() => {
+        // console.log('meeting id: ' + match.params.mid);
+        // if (!group) {
+        //     //call getGroup;
+        // }
+        // if (!loading) {
+        //     const gatheringData = { ...initialState };
+        //     for (const key in gathering) {
+        //         if (key in gatheringData) gatheringData[key] = gathering[key];
+        //     }
+        //     setFormData(gatheringData);
+        // }
+    }, [gathering, loading]);
+
     return (
         <>
             <Fragment>
                 <div className='group-container'>
-                    <header class='grpHeader'>
-                        <h1>Open Share Groups</h1>
+                    <header className='grpHeader'>
+                        <h2>Open Share Group</h2>
                     </header>
-                    <div className='Title'>Title</div>
-                    <div className='navButtons'>Buttons here</div>
-                    <div className='grpCntRadios'>
-                        This is where the attendance and M/F radios go..
+
+                    <div className='input-field'>
+                        <div className='grpTitle'>
+                            <TextField
+                                id='title'
+                                value=''
+                                label='Group title'
+                                variant='outlined'
+                                fullWidth='true'
+                            />
+                        </div>
                     </div>
-                    <div className='grpLocation'>Location</div>
-                    <div className='grpLocSpace' />
-                    <div className='grpFacilitator'>Facilitator</div>
-                    <div className='grpFacSpace'></div>
-                    <div className='grpCoFaciliator'>Co-Facilitator</div>
-                    <div className='grpCoFacSpace'></div>
-                    <div className='grpNotes'>NOTEs</div>
+                    <div className='navButtons'>
+                        <Button
+                            variant='contained'
+                            color='primary'
+                            size='small'
+                            className='pl10 py-2'
+                        >
+                            Save
+                        </Button>
+                        <span>&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                        <Link
+                            className='btn btn-light px-2'
+                            to={`/editGathering/${match.params.mid}`}
+                        >
+                            Go Back
+                        </Link>
+                    </div>
+                    <div className='grpRadios'>
+                        <input
+                            type='number'
+                            id='attendence'
+                            name='attendence'
+                            value='0'
+                            min='1'
+                            max='300'
+                            className='groupAttendence'
+                        ></input>
+                        <span>&nbsp;Attendence&nbsp;&nbsp;</span>
+                        <Radio
+                            id='gender'
+                            // checked={selectedValue === 'f'}
+                            // onChange={handleRadioChange}
+                            value='f'
+                            label='Women'
+                            name='radio-button-demo'
+                            inputProps={{ 'aria-label': 'f' }}
+                        />{' '}
+                        Women
+                        <Radio
+                            id='gender'
+                            // checked={selectedValue === 'm'}
+                            // onChange={handleRadioChange}
+                            value='m'
+                            name='radio-button-demo'
+                            inputProps={{ 'aria-label': 'm' }}
+                        />{' '}
+                        Men
+                        <Radio
+                            id='gender'
+                            // checked={selectedValue === 'x'}
+                            // onChange={handleRadioChange}
+                            value='x'
+                            label='Mixed'
+                            name='radio-button-demo'
+                            inputProps={{ 'aria-label': 'x' }}
+                        />{' '}
+                        Mixed
+                    </div>
+                    <div className='grpLocation'>
+                        <TextField
+                            id='location'
+                            label='Location'
+                            variant='outlined'
+                            fullWidth='true'
+                        />
+                    </div>
+                    <div className='grpSpace' />
+                    <div className='grpFacilitator'>
+                        <TextField
+                            id='facilitator'
+                            label='Facilitator'
+                            variant='outlined'
+                            fullWidth='true'
+                        />
+                    </div>
+                    <div className='grpSpace'></div>
+                    <div className='grpCoFacilitator'>
+                        <TextField
+                            id='cofacilitator'
+                            label='Co-Facilitator'
+                            variant='outlined'
+                            fullWidth='true'
+                        />
+                    </div>
+                    <div className='grpSpace'></div>
+                    <div className='grpNotes'>
+                        <TextField
+                            id='notes'
+                            label='Notes'
+                            multiline
+                            rows='2'
+                            defaultValue=''
+                            fullWidth='true'
+                            variant='outlined'
+                        />
+                    </div>
+                </div>
+                <div>
+                    Meeting:{match.params.mid}
+                    <br />
+                    Group: {match.params.gid}
                 </div>
             </Fragment>
         </>
@@ -36,5 +185,11 @@ EditGroup.propTypes = {
     deleteGroup: PropTypes.func.isRequired,
     createGroup: PropTypes.func.isRequired
 };
+const mapStateToProps = state => ({
+    gathering: state.gathering,
+    servants: state.servants
+});
 
-export default connect(null, { deleteGroup, createGroup })(EditGroup);
+export default connect(mapStateToProps, { deleteGroup, createGroup })(
+    EditGroup
+);

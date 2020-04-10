@@ -6,7 +6,10 @@ import { createGathering, getGathering } from '../../actions/gathering';
 import ServantSelect from './ServantSelect';
 //import GroupList from './GroupList';
 //import GroupItem from './GroupItem';
-import GroupLine from './GroupLine';
+//import GroupLine from './GroupLine';
+//import GroupList from './GroupList';
+import GrpGrp from './GroupGroup';
+import { getGroups } from '../../actions/group';
 const initialState = {
     _id: '',
     meetingId: '',
@@ -31,8 +34,10 @@ const initialState = {
 
 const EditGathering = ({
     gathering: { gathering, servants, loading, newGathering },
+    group: { groups },
     createGathering,
     getGathering,
+    getGroups,
     match,
     history
 }) => {
@@ -44,7 +49,12 @@ const EditGathering = ({
         //if (match.params.id === 0) setState(newGathering = true;
         // console.log('gathering:' + gathering);
         // if (gathering == null) console.log('YEP');
-        if (!gathering) getGathering(match.params.id);
+        if (!gathering) {
+            getGathering(match.params.id);
+        }
+        if (!groups) {
+            getGroups(match.params.id);
+        }
         // console.log('gathering2:' + gathering);
         if (!loading) {
             const gatheringData = { ...initialState };
@@ -97,14 +107,6 @@ const EditGathering = ({
         createGathering(formData, history, true);
         window.scrollTo(0, 0);
     };
-    // const servantList = servants.map(servant => ({
-    //     label: servant.name,
-    //     value: servant.name
-    // }));
-    // const handleServantListChange = facilitator => {
-    //     setFormData({ ...formData, [facilitator]: facilitator });
-    //     console.log(`Option selected:`, { facilitator });
-    // };
 
     return (
         // function inside(){
@@ -342,16 +344,40 @@ const EditGathering = ({
                     Go Back
                 </Link>
                 <hr />
-                {gathering !== null ? (
-                    <GroupLine grp={gathering.groups} />
+                <h2>
+                    Open-Share Groups
+                    <Link to={`/EditGroup/${_id}/0`}>
+                        <a class='waves-effect waves-light btn'>
+                            <i class='material-icons left green'>
+                                add_circle_outline
+                            </i>
+                            <span className='meeterNavTextHighlight'>
+                                {'  '}NEW
+                            </span>
+                        </a>
+                    </Link>
+                </h2>
+                {groups ? <GrpGrp /> : console.log('No Groups')}
+                {/* {groups
+                    ? groups.map(g => {
+                          console.log('yippy');
+                            <GrpGrp key={g.id} group={g} />;
+                      })
+                    : console.log('no groups')} */}
+                {/* <GrpGrp groups={groups} /> */}
+
+                {/* {group !== null
+                    ? group.map(grp => <GrpGrp key={grp._id} group={grp} />)
+                    : console.log('no groups')}
+                <hr /> */}
+                {/* {groups !== null ? (
+                    <GroupList mid={_id} />
                 ) : (
+                    // <GroupLine grp={gathering.groups} gID={_id} />
                     <Fragment>
-                        <p>
-                            You have not yet setup a profile, please add some
-                            info
-                        </p>
+                        <p>No groups defined.</p>
                     </Fragment>
-                )}
+                )} */}
             </form>
         </Fragment>
     );
@@ -440,14 +466,19 @@ const EditGathering = ({
 EditGathering.propTypes = {
     createGathering: PropTypes.func.isRequired,
     getGathering: PropTypes.func.isRequired,
-    gathering: PropTypes.object.isRequired
+    gathering: PropTypes.object.isRequired,
+    group: PropTypes.object.isRequired,
+    getGroups: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
     gathering: state.gathering,
-    servants: state.servants
+    servants: state.servants,
+    group: state.group
 });
 
-export default connect(mapStateToProps, { createGathering, getGathering })(
-    withRouter(EditGathering)
-);
+export default connect(mapStateToProps, {
+    createGathering,
+    getGathering,
+    getGroups
+})(withRouter(EditGathering));

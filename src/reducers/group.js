@@ -51,7 +51,7 @@ export default function(state = initialState, action) {
         case DELETE_GROUP:
             return {
                 ...state,
-                groups: state.groups.filter(group => group._id !== payload),
+                groups: state.groups.filter(group => group.id !== payload),
                 loading: false
             };
         default:

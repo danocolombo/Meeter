@@ -2,6 +2,7 @@ import React, { Fragment, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import Button from '@material-ui/core/Button';
 import Spinner from '../layout/Spinner';
 import GatheringItem from './GatheringItem';
 import { getGatherings } from '../../actions/gathering';
@@ -50,14 +51,27 @@ const Gatherings = ({
     function offerView() {
         if (match.params.options === 'historyView') {
             return [
-                <Link to='/gatherings'>Active Meetings</Link>,
+                <Link to='/gatherings'>
+                    <span className='meeterNavTextHighlight'>
+                        Active Meetings
+                    </span>
+                </Link>,
                 <p className='lead'>Your historical list of meetings...</p>
             ];
         } else {
             return [
                 <Link to='/gatherings/historyView'>HISTORY</Link>,
                 <p className='lead'>List of upcoming meetings...</p>,
-                <Link to='/EditGathering/0'>NEW</Link>
+                <Link to='/EditGathering/0'>
+                    <a class='waves-effect waves-light btn'>
+                        <i class='material-icons left green'>
+                            add_circle_outline
+                        </i>
+                        <span className='meeterNavTextHighlight'>
+                            {'  '}NEW
+                        </span>
+                    </a>
+                </Link>
             ];
         }
         return null;

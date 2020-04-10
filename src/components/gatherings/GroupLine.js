@@ -7,15 +7,17 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import Moment from 'react-moment';
 import moment from 'moment';
-import plusSign from '../../img/red-cross.png';
+// import plusSign from '../../img/red-cross.png';
 import { connect } from 'react-redux';
 import { deleteGroup } from '../../actions/gathering';
 
-const GroupLine = ({ grp, deleteGroup }) => {
+const GroupLine = ({ grp, deleteGroup, gID }) => {
     const grps = grp.map(group => (
         <tr key={group.id}>
             <td>
-                {group.gender} {group.title}
+                <Link to={`/EditGroup/mID=${gID}&gID=${group.id}`}>
+                    {group.gender} {group.title}
+                </Link>
             </td>
             <td>{group.facilitator}</td>
             <td>{group.attendance}</td>
@@ -29,10 +31,13 @@ const GroupLine = ({ grp, deleteGroup }) => {
 
     return (
         <Fragment>
+            <div>Gathering:{gID}</div>
             <h2 className='my-1'>
                 Open Share Groups{''}
                 <Link to='/EditGroup/0'>
-                    <Icon style={{ color: green[500] }}>add_circle</Icon>
+                    <i class='material-icons green' small right>
+                        add_circle
+                    </i>
                 </Link>
             </h2>
             <table className='table'>
@@ -52,6 +57,7 @@ const GroupLine = ({ grp, deleteGroup }) => {
 
 GroupLine.propTypes = {
     grp: PropTypes.array.isRequired,
+    gID: PropTypes.string.isRequired,
     deleteGrouup: PropTypes.func.isRequired
 };
 
