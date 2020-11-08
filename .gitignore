@@ -4,3 +4,4 @@ config/default.json
 src/components/ds_drive
 .DS_Store
 src/.DS_Store
+build/
