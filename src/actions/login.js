@@ -33,11 +33,6 @@ export const login = (email, password) => async (dispatch) => {
         onSuccess: (data) => {
             console.log('onSuccess:', data);
 
-            const util = require('util');
-            console.log(
-                'data: ' +
-                    util.inspect(data, { showHidden: false, depth: null })
-            );
             const jwToken = data.idToken.jwtToken;
             data.token = jwToken;
             console.log('\n\nlook what we found...\njwToken:' + jwToken);
@@ -49,10 +44,19 @@ export const login = (email, password) => async (dispatch) => {
         },
         onFailure: (err) => {
             console.error('onFailure:', err);
+            const util = require('util');
+            console.log(
+                'err: ' + util.inspect(err, { showHidden: false, depth: null })
+            );
+
+            dispatch(setAlert(err.message, 'danger'));
+            dispatch({
+                type: LOGIN_FAIL,
+            });
         },
-        newPasswordRequired: (data) => {
-            console.log('newPasswordRequired:', data);
-        },
+        // newPasswordRequired: (data) => {
+        //     console.log('newPasswordRequired:', data);
+        // },
     });
 };
 
