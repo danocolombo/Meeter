@@ -14,7 +14,7 @@ import {
 import setAuthToken from '../utils/setAuthToken';
 
 import UserPool from './UserPool';
-import { CollectionsOutlined } from '@material-ui/icons';
+import { CollectionsOutlined, DateRange } from '@material-ui/icons';
 
 // Login (Authenticate)
 //============================
@@ -31,15 +31,46 @@ export const login = (email, password) => async (dispatch) => {
     // try to authenticate....
     user.authenticateUser(authDetails, {
         onSuccess: (data) => {
-            console.log('onSuccess:', data);
-
             const jwToken = data.idToken.jwtToken;
             data.token = jwToken;
-            console.log('\n\nlook what we found...\njwToken:' + jwToken);
+
             //pass the jwt to LOGIN_SUCCESS
             dispatch({
                 type: LOGIN_SUCCESS,
                 payload: data,
+            });
+            //======================================
+            //now lets get our user information
+            // create user payload
+            let uData = {
+                _id: 0,
+                approved: true,
+                date: 'undefined',
+                defaultClient: 'undefined',
+                email: 'undefined',
+                name: 'undefined',
+                firstName: 'undefined',
+                lastName: 'undefined',
+                phone: 'undefined',
+            };
+            if (data.idToken.payload.sub) uData._id = data.idToken.payload.sub;
+            if (data.idToken.payload.given_name)
+                uData.firstName = data.idToken.payload.given_name;
+            if (data.idToken.payload.family_name)
+                uData.lastName = data.idToken.payload.family_name;
+            if (
+                uData.firstName != 'undefined' &&
+                uData.lastName != 'undefined'
+            ) {
+                uData.name = uData.firstName + ' ' + uData.lastName;
+            }
+            if (data.idToken.payload.email)
+                uData.email = data.idToken.payload.email;
+            if (data.idToken.payload.phone_number)
+                uData.phone = data.idToken.payload.phone_number;
+            dispatch({
+                type: USER_LOADED,
+                payload: uData,
             });
         },
         onFailure: (err) => {
