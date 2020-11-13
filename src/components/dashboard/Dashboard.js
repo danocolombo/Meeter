@@ -15,28 +15,29 @@ const Dashboard = ({
     getCurrentProfile,
     deleteAccount,
     auth: { user },
-    profile: { profile, loading },
+    profile: { settings, loading },
 }) => {
     useEffect(() => {
         getCurrentProfile();
     }, [getCurrentProfile]);
 
-    return loading && profile === null ? (
+    return loading && settings === null ? (
         <Spinner />
     ) : (
         <Fragment>
             {/* <h1 className="large text-primary">Dashboard</h1> */}
             <img className='dashboardLogo' src={DashLogo} />
             <p className='lead'>
-                <i className='fas fa-user' /> Welcome {user && user.firstName}
+                <i className='fas fa-user' /> Welcome{' '}
+                {settings && settings.name}
             </p>
-            {profile !== null ? (
+            {settings !== null ? (
                 <Fragment>
-                    <DashboardActions />
-                    <Experience experience={profile.experience} />
-                    <Education education={profile.education} />
-
-                    <div className='my-2'>
+                    {/* <DashboardActions /> */}
+                    {/* <Experience experience={profile.experience} />
+                    <Education education={profile.education} /> */}
+                    <h2>Moving forward</h2>
+                    {/* <div className='my-2'>
                         <button
                             className='btn btn-danger'
                             onClick={() => deleteAccount()}
@@ -44,7 +45,7 @@ const Dashboard = ({
                             <i className='fas fa-user-minus' /> Delete My
                             Account
                         </button>
-                    </div>
+                    </div> */}
                 </Fragment>
             ) : (
                 <Fragment>

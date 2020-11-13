@@ -4,17 +4,17 @@ import { setAlert } from './alert';
 import {
     REGISTER_SUCCESS,
     REGISTER_FAIL,
-    USER_LOADED,
     AUTH_ERROR,
     LOGIN_SUCCESS,
     LOGIN_FAIL,
     LOGOUT,
     CLEAR_PROFILE,
+    SET_PROFILE,
 } from './types';
 import setAuthToken from '../utils/setAuthToken';
 
 import UserPool from './UserPool';
-import { CollectionsOutlined, DateRange } from '@material-ui/icons';
+// import { CollectionsOutlined, DateRange } from '@material-ui/icons';
 
 // Login (Authenticate)
 //============================
@@ -33,11 +33,21 @@ export const login = (email, password) => async (dispatch) => {
         onSuccess: (data) => {
             const jwToken = data.idToken.jwtToken;
             data.token = jwToken;
-
+            // const util = require('util');
+            // console.log(
+            //     '@@@@@@@@@@ login @@@@@@@@@@@@\n: ' +
+            //         util.inspect(data, {
+            //             showHidden: false,
+            //             depth: null,
+            //         })
+            // );
+            const authData = { token: jwToken };
+            // console.log('\n%%%%%%%%%%%%%%%%%%%%%%%%\n');
             //pass the jwt to LOGIN_SUCCESS
+            // used to pass data
             dispatch({
                 type: LOGIN_SUCCESS,
-                payload: data,
+                payload: authData,
             });
             //======================================
             //now lets get our user information
@@ -59,8 +69,8 @@ export const login = (email, password) => async (dispatch) => {
             if (data.idToken.payload.family_name)
                 uData.lastName = data.idToken.payload.family_name;
             if (
-                uData.firstName != 'undefined' &&
-                uData.lastName != 'undefined'
+                uData.firstName !== 'undefined' &&
+                uData.lastName !== 'undefined'
             ) {
                 uData.name = uData.firstName + ' ' + uData.lastName;
             }
@@ -68,10 +78,15 @@ export const login = (email, password) => async (dispatch) => {
                 uData.email = data.idToken.payload.email;
             if (data.idToken.payload.phone_number)
                 uData.phone = data.idToken.payload.phone_number;
-            dispatch({
-                type: USER_LOADED,
-                payload: uData,
-            });
+            //---------------------------------
+            // lets get the meeter userinfo
+            //---------------------------------
+            dispatch(loadUser);
+
+            // dispatch({
+            //     type: USER_LOADED,
+            //     payload: uData,
+            // });
         },
         onFailure: (err) => {
             console.error('onFailure:', err);
@@ -98,13 +113,50 @@ export const loadUser = () => async (dispatch) => {
     }
 
     try {
-        const res = await axios.get('/api/auth');
+        if (localStorage.token) {
+            //new header for AWS call
+            const config = {
+                heaers: {
+                    'Access-Control-Allow-Headers':
+                        'Content-Type, x-auth-token, Access-Control-Allow-Headers',
+                    'Content-Type': 'application-json',
+                },
+            };
+            let userId = '4090ce40-4d32-474e-8df8-2212e70f5fee';
+            let obj = { operation: 'authenticate', payload: { uid: userId } };
+            const body = JSON.stringify(obj);
+            const res = await axios.post(
+                'https://2byneyioe4.execute-api.us-east-1.amazonaws.com/dev/user',
+                body,
+                config
+            );
 
-        dispatch({
-            type: USER_LOADED,
-            payload: res.data,
-        });
+            const util = require('util');
+            console.log(
+                '@@@@@@@@@@ loadUser @@@@@@@@@@@@\n: ' +
+                    util.inspect(res, {
+                        showHidden: false,
+                        depth: null,
+                    })
+            );
+
+            console.log('\n%%%%%%%%%%%%%%%%%%%%%%%%\n');
+            const userRole = res.data.status.body.userRole;
+            console.log('\nUSER-ROLE: ' + userRole + '\n');
+            // was USER_LOADED
+            dispatch({
+                type: SET_PROFILE,
+                payload: res,
+            });
+        } else {
+            // we don't have token
+            dispatch({
+                type: AUTH_ERROR,
+            });
+        }
     } catch (err) {
+        //this means that we were not able to know who we are. Need to clean store
+
         dispatch({
             type: AUTH_ERROR,
         });

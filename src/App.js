@@ -7,33 +7,37 @@ import Routes from './components/routing/Routes';
 // Redux
 import { Provider } from 'react-redux';
 import store from './store';
-import { loadUser } from './actions/auth';
+import { loadUser } from './actions/login';
 import setAuthToken from './utils/setAuthToken';
 
 import './App.css';
 
 if (localStorage.token) {
-  setAuthToken(localStorage.token);
+    // when this page first loads, lets delete the auth token
+    // if we don't have a profile, we need to remvoe token
+
+    // localStorage.removeItem('token');
+    setAuthToken(localStorage.token);
 }
 
 const App = () => {
-  useEffect(() => {
-    store.dispatch(loadUser());
-  }, []);
+    useEffect(() => {
+        store.dispatch(loadUser());
+    }, []);
 
-  return (
-    <Provider store={store}>
-      <Router>
-        <Fragment>
-          <Navbar />
-          <Switch>
-            <Route exact path='/' component={Landing} />
-            <Route component={Routes} />
-          </Switch>
-        </Fragment>
-      </Router>
-    </Provider>
-  );
+    return (
+        <Provider store={store}>
+            <Router>
+                <Fragment>
+                    <Navbar />
+                    <Switch>
+                        <Route exact path='/' component={Landing} />
+                        <Route component={Routes} />
+                    </Switch>
+                </Fragment>
+            </Router>
+        </Provider>
+    );
 };
 
 export default App;
