@@ -15,7 +15,7 @@ const Dashboard = ({
     getCurrentProfile,
     deleteAccount,
     auth: { user },
-    profile: { profile, loading }
+    profile: { profile, loading },
 }) => {
     useEffect(() => {
         getCurrentProfile();
@@ -28,7 +28,7 @@ const Dashboard = ({
             {/* <h1 className="large text-primary">Dashboard</h1> */}
             <img className='dashboardLogo' src={DashLogo} />
             <p className='lead'>
-                <i className='fas fa-user' /> Welcome {user && user.name}
+                <i className='fas fa-user' /> Welcome {user && user.firstName}
             </p>
             {profile !== null ? (
                 <Fragment>
@@ -64,12 +64,12 @@ Dashboard.propTypes = {
     getCurrentProfile: PropTypes.func.isRequired,
     deleteAccount: PropTypes.func.isRequired,
     auth: PropTypes.object.isRequired,
-    profile: PropTypes.object.isRequired
+    profile: PropTypes.object.isRequired,
 };
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
     auth: state.auth,
-    profile: state.profile
+    profile: state.profile,
 });
 
 export default connect(mapStateToProps, { getCurrentProfile, deleteAccount })(
