@@ -10,6 +10,8 @@ import {
     LOGOUT,
     CLEAR_PROFILE,
     SET_PROFILE,
+    SET_AUTH_ACTIVE,
+    AUTH_CLEAR,
 } from './types';
 import setAuthToken from '../utils/setAuthToken';
 
@@ -81,7 +83,8 @@ export const login = (email, password) => async (dispatch) => {
             //---------------------------------
             // lets get the meeter userinfo
             //---------------------------------
-            dispatch(loadUser);
+            let id = uData._id;
+            dispatch(loadUser({ id }));
 
             // dispatch({
             //     type: USER_LOADED,
@@ -107,11 +110,21 @@ export const login = (email, password) => async (dispatch) => {
 };
 
 // Load User
-export const loadUser = () => async (dispatch) => {
+export const loadUser = (userId) => async (dispatch) => {
     if (localStorage.token) {
         setAuthToken(localStorage.token);
     }
+    const util = require('util');
+    console.log(
+        'userId............\n: ' +
+            util.inspect(userId, {
+                showHidden: false,
+                depth: null,
+            })
+    );
 
+    // let uid = userId;
+    // console.log('INSIDE loadUser, userId: ' + Obj;
     try {
         if (localStorage.token) {
             //new header for AWS call
@@ -131,23 +144,35 @@ export const loadUser = () => async (dispatch) => {
                 config
             );
 
-            const util = require('util');
-            console.log(
-                '@@@@@@@@@@ loadUser @@@@@@@@@@@@\n: ' +
-                    util.inspect(res, {
-                        showHidden: false,
-                        depth: null,
-                    })
-            );
+            // const util = require('util');
+            // console.log(
+            //     '@@@@@@@@@@ loadUser @@@@@@@@@@@@\n: ' +
+            //         util.inspect(res, {
+            //             showHidden: false,
+            //             depth: null,
+            //         })
+            // );
 
-            console.log('\n%%%%%%%%%%%%%%%%%%%%%%%%\n');
-            const userRole = res.data.status.body.userRole;
-            console.log('\nUSER-ROLE: ' + userRole + '\n');
-            // was USER_LOADED
+            // console.log('\n%%%%%%%%%%%%%%%%%%%%%%%%\n');
+            const ac = res.data.body.defaultClient;
+            const ar = res.data.body.role;
+            const as = res.data.body.status;
+            const activeData = {
+                activeClient: ac,
+                activeRole: ar,
+                activeStatus: as,
+            };
             dispatch({
-                type: SET_PROFILE,
-                payload: res,
+                type: SET_AUTH_ACTIVE,
+                payload: activeData,
             });
+            // const userRole = res.data.body.userRole;
+            // console.log('\nUSER-ROLE: ' + userRole + '\n');
+            // was USER_LOADED
+            // dispatch({
+            //     type: SET_PROFILE,
+            //     payload: res,
+            // });
         } else {
             // we don't have token
             dispatch({
@@ -193,6 +218,14 @@ export const register = ({ name, email, password }) => async (dispatch) => {
             type: REGISTER_FAIL,
         });
     }
+};
+export const clearSystem = () => async (dispatch) => {
+    dispatch({
+        type: AUTH_CLEAR,
+    });
+    dispatch({
+        type: AUTH_CLEAR,
+    });
 };
 
 // Login User

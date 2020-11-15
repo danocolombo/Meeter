@@ -5,7 +5,6 @@ import profile from './profile';
 import person from './person';
 import group from './group';
 import gathering from './gathering';
-import post from './post';
 
 export default combineReducers({
     alert,
@@ -14,5 +13,4 @@ export default combineReducers({
     group,
     person,
     gathering,
-    post
 });

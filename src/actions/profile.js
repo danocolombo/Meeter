@@ -29,18 +29,18 @@ export const getCurrentProfile = () => async (dispatch) => {
             body,
             config
         );
-        const util = require('util');
-        console.log(
-            '@@@@@@@@@@ profile::getCurrentProfile @@@@@@@@@@@@\n: ' +
-                util.inspect(res, {
-                    showHidden: false,
-                    depth: null,
-                })
-        );
+        // const util = require('util');
+        // console.log(
+        //     '@@@@@@@@@@ profile::getCurrentProfile @@@@@@@@@@@@\n: ' +
+        //         util.inspect(res, {
+        //             showHidden: false,
+        //             depth: null,
+        //         })
+        // );
 
-        console.log('\n%%%%%%%%%%%%%%%%%%%%%%%%\n');
+        // console.log('\n%%%%%%%%%%%%%%%%%%%%%%%%\n');
         const userRole = res.data.body.role;
-        console.log('\nUSER-ROLE: ' + userRole + '\n');
+        // console.log('\nUSER-ROLE: ' + userRole + '\n');
         const uData = {};
         if (res.data.body._id) uData.uid = res.data.body._id;
         if (res.data.body.name) uData.name = res.data.body.name;
@@ -49,7 +49,7 @@ export const getCurrentProfile = () => async (dispatch) => {
         if (res.data.body.defaultClient)
             uData.defaultClient = res.data.body.defaultClient;
         if (res.data.body.role) uData.role = res.data.body.role;
-        if (res.data.body.status) uData.uid = res.data.body.status;
+        if (res.data.body.status) uData.status = res.data.body.status;
 
         //const res = await axios.get('/api/profile/me');
         // payload was res.data

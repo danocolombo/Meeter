@@ -3,9 +3,9 @@ import { Link, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 //import { login } from '../../actions/auth';
-import { login } from '../../actions/login';
+import { login, clearSystem } from '../../actions/login';
 
-const Login = ({ login, isAuthenticated }) => {
+const Login = ({ login, isAuthenticated, token }) => {
     const [formData, setFormData] = useState({
         email: '',
         password: '',
@@ -22,7 +22,7 @@ const Login = ({ login, isAuthenticated }) => {
         login(email, password);
     };
 
-    if (isAuthenticated) {
+    if (isAuthenticated && token) {
         return <Redirect to='/dashboard' />;
     }
 
@@ -73,6 +73,7 @@ Login.propTypes = {
 
 const mapStateToProps = (state) => ({
     isAuthenticated: state.auth.isAuthenticated,
+    token: state.auth.token,
 });
 
-export default connect(mapStateToProps, { login })(Login);
+export default connect(mapStateToProps, { login, clearSystem })(Login);

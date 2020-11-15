@@ -3,6 +3,7 @@ import {
     PROFILE_ERROR,
     CLEAR_PROFILE,
     UPDATE_PROFILE,
+    PROFILE_CLEAR,
 } from '../actions/types';
 
 const initialState = {
@@ -38,10 +39,10 @@ export default function (state = initialState, action) {
                 settings: null,
             };
         case CLEAR_PROFILE:
+        case PROFILE_CLEAR:
             return {
                 ...state,
                 settings: null,
-                repos: [],
                 loading: false,
             };
         // case GET_REPOS:
