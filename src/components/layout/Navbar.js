@@ -2,82 +2,112 @@ import React, { Fragment } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { logout } from '../../actions/auth';
+import { logout } from '../../actions/login';
 
-const Navbar = ({ auth: { isAuthenticated, loading }, logout }) => {
-  const authLinks = (
-    <ul>
-      <li>
-        <Link to="/gatherings">
-          <i className="far fa-calendar-alt"></i>{' '}
-          <span className="hide-sm">Meetings</span>
-        </Link>
-      </li>
-      <li>
-        <Link to="/people">
-          <i className="fas fa-user-shield"></i>{' '}
-          <span className="hide-sm">People</span>
-        </Link>
-      </li>
-      <li>
-        <Link to="/#">
-          <i className="fas fa-chalkboard-teacher"></i>{' '}
-          <span className="hide-sm">Training</span>
-        </Link>
-      </li>
-      <li>
-        <Link to="/posts">Posts</Link>
-      </li>
-      {/* <li>
-        <Link to="/dashboard">
-          <i className="fas fa-user" />{' '}
-          <span className="hide-sm">Dashboard</span>
-        </Link>
-      </li> */}
-      <li>
-        <a onClick={logout} href="#!">
-          <i className="fas fa-sign-out-alt" />{' '}
-          <span className="hide-sm">Logout</span>
-        </a>
-      </li>
-    </ul>
-  );
+const Navbar = ({ auth, logout }) => {
+    const authLinks = (
+        <Fragment>
+            <ul>
+                {auth.user && auth.user.activeStatus === 'approved' ? (
+                    <Fragment>
+                        <li>
+                            <Link to='/gatherings'>
+                                <i className='far fa-calendar-alt'></i>{' '}
+                                <span className='hide-sm'>Meetings</span>
+                            </Link>
+                        </li>
+                    </Fragment>
+                ) : (
+                    <Fragment>
+                        <li></li>
+                    </Fragment>
+                )}
+                {auth.user &&
+                auth.user.activeRole !== 'guest' &&
+                auth.user.activeStatus === 'approved' ? (
+                    <Fragment>
+                        <li>
+                            <Link to='/people'>
+                                <i className='fa fa-users'></i>{' '}
+                                <span className='hide-sm'>People</span>
+                            </Link>
+                        </li>
+                    </Fragment>
+                ) : null}
+                {auth.user &&
+                (auth.user.activeRole === 'superuser' ||
+                    auth.user.activeRole === 'owner') &&
+                auth.user.activeStatus === 'approved' ? (
+                    <Fragment>
+                        <li>
+                            <Link to='/DisplaySecurity'>
+                                <i className='fa fa-cog'></i>{' '}
+                                <span className='hide-sm'> Admin</span>
+                            </Link>
+                        </li>
+                    </Fragment>
+                ) : null}
 
-  const guestLinks = (
-    <ul>
-      {/* <li>
-        <Link to="/profiles">Developers</Link>
-      </li> */}
-      <li>
-        <Link to="/register">Register</Link>
-      </li>
-      <li>
-        <Link to="/login">Login</Link>
-      </li>
-    </ul>
-  );
+                {auth.user && auth.user.activeStatus === 'approved' ? (
+                    <Fragment>
+                        <li>
+                            <Link to={`/UserProfile`}>
+                                <i className='fas fa fa-user' />{' '}
+                                <span className='hide-sm'>Profile</span>
+                            </Link>
+                        </li>
+                    </Fragment>
+                ) : (
+                    <Fragment>
+                        <li></li>
+                    </Fragment>
+                )}
+                <li>
+                    <a onClick={logout} href='#!'>
+                        <i className='fas fa-sign-out-alt' />{' '}
+                        <span className='hide-sm'>Logout</span>
+                    </a>
+                </li>
+            </ul>
+        </Fragment>
+    );
+    //=========================================================
+    // following links are displayed to non-logged in visitors
+    //=========================================================
+    const guestLinks = (
+        <ul>
+            <li>
+                <Link to='/register'>Register</Link>
+            </li>
+            <li>
+                <Link to='/login'>Login</Link>
+            </li>
+        </ul>
+    );
 
-  return (
-    <nav className="navbar bg-dark">
-      <h1>
-        <Link to="/">
-          <i className="fas fa-users" /> Meeter
-        </Link>
-      </h1>
-      {!loading && (
-        <Fragment>{isAuthenticated ? authLinks : guestLinks}</Fragment>
-      )}
-    </nav>
-  );
+    return (
+        <nav className='navbar bg-dark'>
+            <h1>
+                <Link to='/'>
+                    <i className='fa fa-cubes' /> Meeter
+                </Link>
+            </h1>
+            {!auth.loading && (
+                <Fragment>
+                    {auth.isAuthenticated ? authLinks : guestLinks}
+                </Fragment>
+            )}
+        </nav>
+    );
 };
 
 Navbar.propTypes = {
-  logout: PropTypes.func.isRequired,
-  auth: PropTypes.object.isRequired
+    logout: PropTypes.func.isRequired,
+    auth: PropTypes.object.isRequired,
 };
 
-const mapStateToProps = state => ({
-  auth: state.auth
+const mapStateToProps = (state) => ({
+    auth: state.auth,
 });
 
 export default connect(mapStateToProps, { logout })(Navbar);
