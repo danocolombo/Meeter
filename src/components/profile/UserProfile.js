@@ -21,8 +21,8 @@ const UserProfile = ({ auth }) => {
                 <p>Email: {auth.user.email}</p>
                 <p>Phone: {auth.user.phone}</p>
                 <p>Default Client: {auth.user.defaultClient}</p>
-                <p>Default Role: {auth.user.defaultRole}</p>
-                <p>Default Status: {auth.user.defaultStatus}</p>
+                <p>Default Role: {auth.user.defaultClientRole}</p>
+                <p>Default Status: {auth.user.defaultClientStatus}</p>
                 <hr />
                 <p>Active Client: {auth.user.activeClient}</p>
                 <p>Active Role: {auth.user.activeRole}</p>
