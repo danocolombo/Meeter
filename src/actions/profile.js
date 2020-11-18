@@ -13,18 +13,22 @@ import {
 
 // Get current users profile
 export const getCurrentProfile = () => async (dispatch) => {
-    // try {
-    //   //const res = await axios.get('/api/profile/me');
-    //   // dispatch({
-    //   //   type: GET_PROFILE,
-    //   //   payload: res.data
-    //   // });
-    // } catch (err) {
-    //   dispatch({
-    //     type: PROFILE_ERROR,
-    //     payload: { msg: err.response.statusText, status: err.response.status }
-    //   });
-    // }
+    try {
+        const res = await axios.get('/api/profile/me');
+
+        dispatch({
+            type: GET_PROFILE,
+            payload: res.data,
+        });
+    } catch (err) {
+        dispatch({
+            type: PROFILE_ERROR,
+            payload: {
+                msg: err.response.statusText,
+                status: err.response.status,
+            },
+        });
+    }
 };
 
 // Get all profiles
@@ -46,6 +50,30 @@ export const getProfiles = () => async (dispatch) => {
                 status: err.response.status,
             },
         });
+    }
+};
+
+// Get clients user has access to
+export const getClientsForUser = (userId) => async (dispatch) => {
+    try {
+        // get all the clients
+
+        const res = await axios.get('/api/client');
+        //-----------------------------------------------
+        // res now has all the clients and their details
+        // including registered users.
+        //-----------------------------------------------
+
+        if (!res.status(200)) {
+            return null;
+        }
+
+        var client = JSON.parse(JSON.stringify(res.data));
+        client.forEach((c) => {
+            console.log('church: ' + c.name);
+        });
+    } catch (err) {
+        return { msg: 'getClientsForUser failed' };
     }
 };
 

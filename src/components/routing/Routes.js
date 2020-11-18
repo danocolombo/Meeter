@@ -4,14 +4,10 @@ import Register from '../auth/Register';
 import Login from '../auth/Login';
 import Alert from '../layout/Alert';
 import Dashboard from '../dashboard/Dashboard';
-import CreateProfile from '../profile-forms/CreateProfile';
-import EditProfile from '../profile-forms/EditProfile';
-import AddExperience from '../profile-forms/AddExperience';
-import AddEducation from '../profile-forms/AddEducation';
-import Profiles from '../profiles/Profiles';
-import Profile from '../profile/Profile';
-import Posts from '../posts/Posts';
-import Post from '../post/Post';
+
+// import Profiles from '../profiles/Profiles';
+// import Profile from '../profile/UserProfile';
+
 import People from '../people/People';
 // import Gathering from '../gatherings/Gathering';
 import Gatherings from '../gatherings/Gatherings';
@@ -21,6 +17,7 @@ import EditPerson from '../people/EditPerson';
 //import GatheringForm from '../gatherings/GatheringForm';
 import NotFound from '../layout/NotFound';
 import PrivateRoute from '../routing/PrivateRoute';
+import UserProfile from '../profile/UserProfile';
 // import PersonForm from '../people/PersonForm';
 
 const Routes = () => {
@@ -30,10 +27,11 @@ const Routes = () => {
             <Switch>
                 <Route exact path='/register' component={Register} />
                 <Route exact path='/login' component={Login} />
-                <PrivateRoute exact path='/profiles' component={Profiles} />
-                <PrivateRoute exact path='/profile/:id' component={Profile} />
+                <Route exact path='/userprofile' component={UserProfile} />
+                {/* <PrivateRoute exact path='/profiles' component={Profiles} />
+                <PrivateRoute exact path='/profile/:id' component={Profile} /> */}
                 <PrivateRoute exact path='/dashboard' component={Dashboard} />
-                <PrivateRoute
+                {/* <PrivateRoute
                     exact
                     path='/create-profile'
                     component={CreateProfile}
@@ -43,20 +41,10 @@ const Routes = () => {
                     path='/edit-profile'
                     component={EditProfile}
                 />
-                <PrivateRoute
-                    exact
-                    path='/add-experience'
-                    component={AddExperience}
-                />
-                <PrivateRoute
-                    exact
-                    path='/add-education'
-                    component={AddEducation}
-                />
-                <PrivateRoute exact path='/posts' component={Posts} />
-                <PrivateRoute exact path='/posts/:id' component={Post} />
+                {/* <PrivateRoute exact path='/posts' component={Posts} />
+                <PrivateRoute exact path='/posts/:id' component={Post} /> */}{' '}
+                */}
                 <PrivateRoute exact path='/people' component={People} />
-
                 <PrivateRoute exact path='/gatherings' component={Gatherings} />
                 <PrivateRoute
                     exact
@@ -73,7 +61,6 @@ const Routes = () => {
                     path='/gatheringForm/:id'
                     component={GatheringForm}
                 /> */}
-
                 <PrivateRoute
                     exact
                     path='/EditGathering/:id'

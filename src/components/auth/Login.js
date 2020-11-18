@@ -6,6 +6,10 @@ import PropTypes from 'prop-types';
 import { login } from '../../actions/login';
 
 const Login = ({ login, isAuthenticated }) => {
+    // const meeter_id = process.env.MEETER_COGNITO_APPID;
+    // console.log('meeter_id:' + meeter_id);
+    const thisVersion = process.env.REACT_APP_MEETER_VERSION;
+    console.log(process.env);
     const [formData, setFormData] = useState({
         email: '',
         password: '',
@@ -62,6 +66,7 @@ const Login = ({ login, isAuthenticated }) => {
             <p className='my-1'>
                 Don't have an account? <Link to='/register'>Sign Up</Link>
             </p>
+            <div className='appVersion'>build: {thisVersion}</div>
         </Fragment>
     );
 };

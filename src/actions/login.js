@@ -92,8 +92,13 @@ export const loadUser = (userId) => async (dispatch) => {
         let sub = userId.uData._id;
         let obj = { operation: 'authenticate', payload: { uid: sub } };
         const body = JSON.stringify(obj);
+        // const res = await axios.post(
+        //     'https://2byneyioe4.execute-api.us-east-1.amazonaws.com/dev/user',
+        //     body,
+        //     config
+        // );
         const res = await axios.post(
-            'https://2byneyioe4.execute-api.us-east-1.amazonaws.com/dev/user',
+            `${process.env.REACT_APP_MEETER_API}`,
             body,
             config
         );
