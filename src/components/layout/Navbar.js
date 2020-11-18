@@ -51,7 +51,7 @@ const Navbar = ({ auth, logout }) => {
                 {auth.user && auth.user.activeStatus === 'approved' ? (
                     <Fragment>
                         <li>
-                            <Link to={`/UserProfile`}>
+                            <Link to={`/userprofile`}>
                                 <i className='fas fa fa-user' />{' '}
                                 <span className='hide-sm'>Profile</span>
                             </Link>
@@ -63,7 +63,7 @@ const Navbar = ({ auth, logout }) => {
                     </Fragment>
                 )}
                 <li>
-                    <a onClick={logout} href='#!'>
+                    <a onClick={logout} href='/login'>
                         <i className='fas fa-sign-out-alt' />{' '}
                         <span className='hide-sm'>Logout</span>
                     </a>
