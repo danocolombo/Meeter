@@ -1,5 +1,5 @@
 import React, { Fragment, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Button from '@material-ui/core/Button';
@@ -8,17 +8,28 @@ import GatheringItem from './GatheringItem';
 import { getGatherings } from '../../actions/gathering';
 
 const Gatherings = ({
+    auth,
     getGatherings,
     gathering: { gatherings, hatherings, loading },
     match,
-    historyView
+    historyView,
 }) => {
     useEffect(() => {
-        // console.log('SKylar: ' + match.params.options);
-
-        getGatherings();
-    }, [getGatherings]);
-    return loading ? (
+        //we need to make sure that the system token is loaded and we don't have a cutter.
+        // also need the activeClient set.
+        // if (
+        //     !auth.token ||
+        //     auth.isAuthenticated !== true ||
+        //     !auth.user.acitveClient
+        // ) {
+        //     return <Redirect to='/login' />;
+        // }
+        console.log(
+            'GATHERINGS::useEffect, activeClient: ' + auth.user.activeClient
+        );
+        getGatherings(auth.user.activeClient);
+    }, []);
+    return auth.loading ? (
         <Spinner />
     ) : (
         <Fragment>
@@ -36,15 +47,15 @@ const Gatherings = ({
     function throwList() {
         if (match.params.options === 'historyView') {
             return [
-                hatherings.map(hathering => (
+                hatherings.map((hathering) => (
                     <GatheringItem key={hathering._id} gathering={hathering} />
-                ))
+                )),
             ];
         } else {
             return [
-                gatherings.map(gathering => (
+                gatherings.map((gathering) => (
                     <GatheringItem key={gathering._id} gathering={gathering} />
-                ))
+                )),
             ];
         }
     }
@@ -56,7 +67,7 @@ const Gatherings = ({
                         Active Meetings
                     </span>
                 </Link>,
-                <p className='lead'>Your historical list of meetings...</p>
+                <p className='lead'>Your historical list of meetings...</p>,
             ];
         } else {
             return [
@@ -71,7 +82,7 @@ const Gatherings = ({
                             {'  '}NEW
                         </span>
                     </a>
-                </Link>
+                </Link>,
             ];
         }
         return null;
@@ -79,15 +90,17 @@ const Gatherings = ({
 };
 
 Gatherings.defaultProps = {
-    historyView: false
+    historyView: false,
 };
 Gatherings.propTypes = {
+    auth: PropTypes.object.isRequired,
     getGatherings: PropTypes.func.isRequired,
-    gathering: PropTypes.object.isRequired
+    gathering: PropTypes.object.isRequired,
     // hathering: PropTypes.object.isRequired
 };
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
     gathering: state.gathering,
-    hathering: state.hathering
+    hathering: state.hathering,
+    auth: state.auth,
 });
 export default connect(mapStateToProps, { getGatherings })(Gatherings);

@@ -80,7 +80,6 @@ export const loadUser = (userId) => async (dispatch) => {
     }
 
     try {
-        // const res = await axios.get('/api/auth');
         const config = {
             headers: {
                 'Access-Control-Allow-Headers':
@@ -92,16 +91,9 @@ export const loadUser = (userId) => async (dispatch) => {
         let sub = userId.uData._id;
         let obj = { operation: 'authenticate', payload: { uid: sub } };
         const body = JSON.stringify(obj);
-        // const res = await axios.post(
-        //     'https://2byneyioe4.execute-api.us-east-1.amazonaws.com/dev/user',
-        //     body,
-        //     config
-        // );
-        const res = await axios.post(
-            `${process.env.REACT_APP_MEETER_API}`,
-            body,
-            config
-        );
+
+        const api2use = process.env.REACT_APP_MEETER_API + '/user';
+        const res = await axios.post(api2use, body, config);
         // now add response data location: res.data.body.x values
         // to the values already passed in from login (cognito)
         let user_data = {

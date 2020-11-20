@@ -11,28 +11,79 @@ import {
     CLEAR_SERVANTS,
     GET_SERVANTS,
     GET_HATHERINGS,
-    CLEAR_HATHERINGS
+    CLEAR_HATHERINGS,
     // CLEAR_GROUPS
     // GET_GROUPS
 } from './types';
 
 //get gatherings
-export const getGatherings = () => async dispatch => {
+export const getGatherings = (clientId) => async (dispatch) => {
     try {
         dispatch({ type: CLEAR_GATHERINGS });
-        const res = await axios.get('/api/meeting/future');
-        dispatch({ type: CLEAR_GATHERING });
-        dispatch({
-            type: GET_GATHERINGS,
-            payload: res.data
-        });
+        //lets get the future meetings
+        const config = {
+            headers: {
+                'Access-Control-Allow-Headers':
+                    'Content-Type, x-auth-token, Access-Control-Allow-Headers',
+                'Content-Type': 'application/json',
+            },
+        };
+        let client = clientId;
+        let obj = {
+            operation: 'getFutureMeetings',
+            payload: {
+                clientId: client,
+            },
+        };
+        let body = JSON.stringify(obj);
+
+        let api2use = process.env.REACT_APP_MEETER_API + '/meetings';
+        let res = await axios.post(api2use, body, config);
+
+        if (res.status === 200) {
+            console.log('we have ' + res.data.count + ' meetings returned');
+            dispatch({ type: CLEAR_GATHERING });
+            dispatch({
+                type: GET_GATHERINGS,
+                payload: res.data.body,
+            });
+        } else {
+            console.log('we got no meetings');
+        }
+        // const res = await axios.get('/api/meeting/future');
+        // dispatch({ type: CLEAR_GATHERING });
+        // dispatch({
+        //     type: GET_GATHERINGS,
+        //     payload: res.data,
+        // });
         //get the historical gathererings
         dispatch({ type: CLEAR_HATHERINGS });
-        const res1 = await axios.get('/api/meeting/history');
-        dispatch({
-            type: GET_HATHERINGS,
-            payload: res1.data
-        });
+        obj = {
+            operation: 'getHistoricMeetings',
+            payload: {
+                clientId: client,
+            },
+        };
+        body = JSON.stringify(obj);
+        res = await axios.post(api2use, body, config);
+
+        if (res.status === 200) {
+            console.log(
+                'we have ' + res.data.count + ' historical meetings returned'
+            );
+
+            dispatch({
+                type: GET_HATHERINGS,
+                payload: res.data.body,
+            });
+        } else {
+            console.log('we got no history ');
+        }
+        // const res1 = await axios.get('/api/meeting/history');
+        // dispatch({
+        //     type: GET_HATHERINGS,
+        //     payload: res1.data,
+        // });
         dispatch({ type: CLEAR_SERVANTS });
         const res2 = await axios.get('/api/person/servants');
         // console.log('servants: results are...', typeof res2);
@@ -65,24 +116,22 @@ export const getGatherings = () => async dispatch => {
 
         dispatch({
             type: GET_SERVANTS,
-            payload: res2.data
+            payload: res2.data,
         });
     } catch (err) {
         dispatch({
             type: GATHERING_ERROR,
             payload: {
                 msg: err.response.statusText,
-                status: err.response.status
-            }
+                status: err.response.status,
+            },
         });
     }
 };
 // Create or update gathering
-export const createGathering = (
-    formData,
-    history,
-    edit = false
-) => async dispatch => {
+export const createGathering = (formData, history, edit = false) => async (
+    dispatch
+) => {
     try {
         // console.log('in action/gatherings.js');
         // console.log(JSON.stringify(formData));
@@ -104,14 +153,14 @@ export const createGathering = (
         // console.log(JSON.stringify(formData));
         const config = {
             headers: {
-                'Content-Type': 'application/json'
-            }
+                'Content-Type': 'application/json',
+            },
         };
         const res = await axios.post('/api/meeting', formData, config);
 
         dispatch({
             type: GET_GATHERING,
-            payload: res.data
+            payload: res.data,
         });
 
         dispatch(
@@ -128,20 +177,20 @@ export const createGathering = (
         const errors = err.response.data.errors;
 
         if (errors) {
-            errors.forEach(error => dispatch(setAlert(error.msg, 'danger')));
+            errors.forEach((error) => dispatch(setAlert(error.msg, 'danger')));
         }
 
         dispatch({
             type: GATHERING_ERROR,
             payload: {
                 msg: err.response.statusText,
-                status: err.response.status
-            }
+                status: err.response.status,
+            },
         });
     }
 };
 // Get gathering
-export const getGathering = id => async dispatch => {
+export const getGathering = (id) => async (dispatch) => {
     //endure that id is not null, if so return
 
     // console.log('getGathering:IN');
@@ -161,7 +210,7 @@ export const getGathering = id => async dispatch => {
 
         dispatch({
             type: GET_GATHERING,
-            payload: res.data
+            payload: res.data,
         });
         const tmp = await axios.get(`/api/meeting/${id}`);
         // console.log('res.data [AFTER]' + res.data);
@@ -170,19 +219,19 @@ export const getGathering = id => async dispatch => {
             type: GATHERING_ERROR,
             payload: {
                 msg: err.response.statusText,
-                status: err.response.status
-            }
+                status: err.response.status,
+            },
         });
     }
 };
 // Delete GATHERING
-export const deleteGathering = id => async dispatch => {
+export const deleteGathering = (id) => async (dispatch) => {
     try {
         await axios.delete(`/api/meeting/${id}`);
 
         dispatch({
             type: DELETE_GATHERING,
-            payload: id
+            payload: id,
         });
 
         dispatch(setAlert('Meeting Removed', 'success'));
@@ -191,19 +240,19 @@ export const deleteGathering = id => async dispatch => {
             type: GATHERING_ERROR,
             payload: {
                 msg: err.response.statusText,
-                status: err.response.status
-            }
+                status: err.response.status,
+            },
         });
     }
 };
 // Delete group
-export const deleteGroup = (mtgId, groupId) => async dispatch => {
+export const deleteGroup = (mtgId, groupId) => async (dispatch) => {
     try {
         const res = await axios.delete(`/api/meeting/${mtgId}/${groupId}`);
 
         dispatch({
             type: UPDATE_GATHERING,
-            payload: res.data
+            payload: res.data,
         });
 
         dispatch(setAlert('Group Removed', 'success'));
@@ -212,13 +261,13 @@ export const deleteGroup = (mtgId, groupId) => async dispatch => {
             type: GATHERING_ERROR,
             payload: {
                 msg: err.response.statusText,
-                status: err.response.status
-            }
+                status: err.response.status,
+            },
         });
     }
 };
 // Edit group
-export const editGroup = (mtgId, groupId) => async dispatch => {
+export const editGroup = (mtgId, groupId) => async (dispatch) => {
     // try {
     //     const res = await axios.delete(`/api/meeting/${mtgId}/${groupId}`);
     //     dispatch({
@@ -236,11 +285,9 @@ export const editGroup = (mtgId, groupId) => async dispatch => {
     //     });
     // }
 };
-export const createGroup = (
-    formData,
-    history,
-    edit = false
-) => async dispatch => {
+export const createGroup = (formData, history, edit = false) => async (
+    dispatch
+) => {
     try {
     } catch (err) {}
 };
