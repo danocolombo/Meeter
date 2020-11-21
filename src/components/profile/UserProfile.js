@@ -23,10 +23,16 @@ const UserProfile = ({ auth }) => {
                 <p>Default Client: {auth.user.defaultClient}</p>
                 <p>Default Role: {auth.user.defaultClientRole}</p>
                 <p>Default Status: {auth.user.defaultClientStatus}</p>
+                <br />
                 <hr />
+                <br />
                 <p>Active Client: {auth.user.activeClient}</p>
                 <p>Active Role: {auth.user.activeRole}</p>
                 <p>Active Status: {auth.user.activeStatus}</p>
+                <p>
+                    <br />
+                    System Revision: {process.env.REACT_APP_MEETER_VERSION}
+                </p>
             </Fragment>
             {/* <UserProfileClients uid={uid} /> */}
         </Fragment>
