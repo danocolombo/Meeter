@@ -29,11 +29,16 @@ export const getGroups = (mid) => async (dispatch) => {
 
         let api2use = process.env.REACT_APP_MEETER_API + '/groups';
         let res = await axios.post(api2use, body, config);
-
-        dispatch({
-            type: GET_GROUPS,
-            payload: res.data.body,
-        });
+        //=================================
+        // now lets handle the response
+        //=================================
+        let proceed = false;
+        if (res.data.status === '200') {
+            dispatch({
+                type: GET_GROUPS,
+                payload: res.data.body,
+            });
+        }
     } catch (err) {
         dispatch({
             type: GROUP_ERROR,
