@@ -342,7 +342,7 @@ const EditGathering = ({
                 <hr />
                 <h2>
                     Open-Share Groups
-                    <Link to={`/EditGroup/${_id}/0`}>
+                    <Link to={`/EditGroup/${match.params.id}/0`}>
                         <a class='waves-effect waves-light btn'>
                             <i class='material-icons left green'>
                                 add_circle_outline
