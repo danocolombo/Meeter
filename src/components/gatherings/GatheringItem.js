@@ -8,15 +8,15 @@ import { deleteGathering } from '../../actions/gathering';
 const GatheringItem = ({
     deleteGathering,
     gathering: {
-        _id,
+        id,
         meetingDate,
         title,
         supportRole,
         facilitator,
         attendance,
         newcomers,
-        meetingType
-    }
+        meetingType,
+    },
 }) => (
     <Fragment>
         <div className={meetingType !== 'Other' ? 'PersonBox' : 'OtherBox'}>
@@ -26,14 +26,14 @@ const GatheringItem = ({
                         id='deleteGathering'
                         title='-'
                         href='/#'
-                        onClick={() => deleteGathering(_id)}
+                        onClick={() => deleteGathering(id)}
                     >
                         <i className='fas fa-minus-circle'></i>
                     </a>
                 </div>
             </Fragment>
             <div>
-                <Link to={`/EditGathering/${_id}`}>
+                <Link to={`/EditGathering/${id}`}>
                     {moment.utc(meetingDate).format('ll')}
                 </Link>
                 <br />
@@ -57,7 +57,7 @@ const GatheringItem = ({
                     </Fragment>
                 )}
                 <br />
-                <Link to={`/EditGathering/${_id}`}>
+                <Link to={`/EditGathering/${id}`}>
                     <i className='fas fa-pen'></i>
                 </Link>
             </div>
@@ -72,7 +72,7 @@ function displayNewcomers(newcomers) {
 }
 GatheringItem.propTypes = {
     gathering: PropTypes.object.isRequired,
-    deleteGathering: PropTypes.func.isRequired
+    deleteGathering: PropTypes.func.isRequired,
 };
 
 export default connect(null, { deleteGathering })(GatheringItem);

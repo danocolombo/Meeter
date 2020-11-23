@@ -48,13 +48,13 @@ const Gatherings = ({
         if (match.params.options === 'historyView') {
             return [
                 hatherings.map((hathering) => (
-                    <GatheringItem key={hathering._id} gathering={hathering} />
+                    <GatheringItem key={hathering.id} gathering={hathering} />
                 )),
             ];
         } else {
             return [
                 gatherings.map((gathering) => (
-                    <GatheringItem key={gathering._id} gathering={gathering} />
+                    <GatheringItem key={gathering.id} gathering={gathering} />
                 )),
             ];
         }

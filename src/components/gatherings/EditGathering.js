@@ -29,28 +29,24 @@ const initialState = {
     nursery: 0,
     children: 0,
     youth: 0,
-    notes: ''
+    notes: '',
 };
 
 const EditGathering = ({
     gathering: { gathering, servants, loading, newGathering },
     group: { groups },
+    auth,
     createGathering,
     getGathering,
     getGroups,
     match,
-    history
+    history,
 }) => {
     const [formData, setFormData] = useState(initialState);
 
     useEffect(() => {
-        // console.log('match.params.id:' + match.params.id);
-
-        //if (match.params.id === 0) setState(newGathering = true;
-        // console.log('gathering:' + gathering);
-        // if (gathering == null) console.log('YEP');
         if (!gathering) {
-            getGathering(match.params.id);
+            getGathering(match.params.id, auth.user.activeClient);
         }
         if (!groups) {
             getGroups(match.params.id);
@@ -85,22 +81,22 @@ const EditGathering = ({
         nursery,
         children,
         youth,
-        notes
+        notes,
     } = formData;
 
-    const onChange = e => {
+    const onChange = (e) => {
         if (e.target == 'phone') {
             console.log('phonephonephonephone');
         }
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
-    const onServantChange = servantSelected => {
+    const onServantChange = (servantSelected) => {
         //we are assuming Facilitator
         setFormData({ ...formData, [facilitator]: servantSelected });
         console.log('back from servantSelect. value: ' + servantSelected);
     };
-    const onSubmit = e => {
+    const onSubmit = (e) => {
         e.preventDefault();
         if (formData['meetingType'] == 'Testimony')
             delete formData['supportRole'];
@@ -128,7 +124,7 @@ const EditGathering = ({
                         type='date'
                         name='meetingDate'
                         value={meetingDate.slice(0, 10)}
-                        onChange={e => onChange(e)}
+                        onChange={(e) => onChange(e)}
                     />
                 </div>
                 <h4>Facilitator</h4>
@@ -137,7 +133,7 @@ const EditGathering = ({
                     name='facilitator'
                     onChange={onChange}
                 >
-                    {servants.map(s => (
+                    {servants.map((s) => (
                         <option key={s.name} value={s.name}>
                             {s.name}
                         </option>
@@ -149,7 +145,7 @@ const EditGathering = ({
                         key='2'
                         name='meetingType'
                         value={meetingType}
-                        onChange={e => onChange(e)}
+                        onChange={(e) => onChange(e)}
                     >
                         <option value='0'>** Select the type of meeting</option>
                         <option value='Lesson'>Lesson</option>
@@ -180,7 +176,7 @@ const EditGathering = ({
                             name='supportRole'
                             onChange={onChange}
                         >
-                            {servants.map(s => (
+                            {servants.map((s) => (
                                 <option key={s.name} value={s.name}>
                                     {s.name}
                                 </option>
@@ -211,7 +207,7 @@ const EditGathering = ({
                         value={attendance}
                         min='0'
                         max='200'
-                        onChange={e => onChange(e)}
+                        onChange={(e) => onChange(e)}
                     />
                     <small className='form-text'>
                         Number of people attending general meeting?
@@ -225,7 +221,7 @@ const EditGathering = ({
                     value={newcomers}
                     min='0'
                     max='200'
-                    onChange={e => onChange(e)}
+                    onChange={(e) => onChange(e)}
                 />
                 <small className='form-text'>Number of newcomers?</small>
                 <div className='form-group'>
@@ -238,7 +234,7 @@ const EditGathering = ({
                         min='0.00'
                         step='0.01'
                         max='500'
-                        onChange={e => onChange(e)}
+                        onChange={(e) => onChange(e)}
                     />
                     <small className='form-text'>
                         Amount of donations received?
@@ -261,7 +257,7 @@ const EditGathering = ({
                     name='mealCoordinator'
                     onChange={onChange}
                 >
-                    {servants.map(s => (
+                    {servants.map((s) => (
                         <option key={s.name} value={s.name}>
                             {s.name}
                         </option>
@@ -276,7 +272,7 @@ const EditGathering = ({
                     value={mealCount}
                     min='0'
                     max='200'
-                    onChange={e => onChange(e)}
+                    onChange={(e) => onChange(e)}
                 />
                 <small className='form-text'>Number of people served?</small>
                 <h4>Cafe Coordinator</h4>
@@ -285,7 +281,7 @@ const EditGathering = ({
                     name='cafeCoordinator'
                     onChange={onChange}
                 >
-                    {servants.map(s => (
+                    {servants.map((s) => (
                         <option key={s.name} value={s.name}>
                             {s.name}
                         </option>
@@ -301,7 +297,7 @@ const EditGathering = ({
                     value={nursery}
                     min='0'
                     max='200'
-                    onChange={e => onChange(e)}
+                    onChange={(e) => onChange(e)}
                 />
                 <small className='form-text'>Number of kids in nursery?</small>
                 <br />
@@ -313,7 +309,7 @@ const EditGathering = ({
                     value={children}
                     min='0'
                     max='200'
-                    onChange={e => onChange(e)}
+                    onChange={(e) => onChange(e)}
                 />
                 <small className='form-text'>
                     Number of kids in childcare?
@@ -327,7 +323,7 @@ const EditGathering = ({
                     value={youth}
                     min='0'
                     max='200'
-                    onChange={e => onChange(e)}
+                    onChange={(e) => onChange(e)}
                 />
                 <small className='form-text'>Number of kids in youth?</small>
                 <div className='form-group'>
@@ -335,7 +331,7 @@ const EditGathering = ({
                         placeholder='Description and notes for meeting'
                         name='notes'
                         value={notes}
-                        onChange={e => onChange(e)}
+                        onChange={(e) => onChange(e)}
                     ></textarea>
                     <small className='form-text'>Things to remember</small>
                 </div>
@@ -431,7 +427,7 @@ const EditGathering = ({
                     value={supportRole}
                     onChange={onChange}
                 />,
-                <small className='form-text'>Who taught the lesson?</small>
+                <small className='form-text'>Who taught the lesson?</small>,
             ];
         }
         return null;
@@ -440,7 +436,7 @@ const EditGathering = ({
         {
             console.log(servants.length);
             var peeps = '';
-            servants.forEach(peep => {
+            servants.forEach((peep) => {
                 peeps = peeps + peep;
             });
             const sample =
@@ -457,7 +453,7 @@ const EditGathering = ({
                         , 'Give us an idea of where you are at in your career',
                     </small>
                     ,
-                </div>
+                </div>,
             ];
         }
     }
@@ -468,17 +464,19 @@ EditGathering.propTypes = {
     getGathering: PropTypes.func.isRequired,
     gathering: PropTypes.object.isRequired,
     group: PropTypes.object.isRequired,
-    getGroups: PropTypes.func.isRequired
+    auth: PropTypes.object.isRequired,
+    getGroups: PropTypes.func.isRequired,
 };
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
     gathering: state.gathering,
     servants: state.servants,
-    group: state.group
+    group: state.group,
+    auth: state.auth,
 });
 
 export default connect(mapStateToProps, {
     createGathering,
     getGathering,
-    getGroups
+    getGroups,
 })(withRouter(EditGathering));

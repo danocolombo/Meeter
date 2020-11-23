@@ -5,75 +5,89 @@ import {
     GROUP_ERROR,
     DELETE_GROUP,
     GET_GROUP,
-    CLEAR_GROUPS
+    CLEAR_GROUPS,
 } from './types';
 
 // Get groups associated with meetingId
-export const getGroups = mid => async dispatch => {
+export const getGroups = (mid) => async (dispatch) => {
     try {
-        // dispatch({ type: CLEAR_GROUPS });
-        const res = await axios.get(`/api/groups/meeting/${mid}`);
+        const config = {
+            headers: {
+                'Access-Control-Allow-Headers':
+                    'Content-Type, x-auth-token, Access-Control-Allow-Headers',
+                'Content-Type': 'application/json',
+            },
+        };
+
+        let obj = {
+            operation: 'getGroupsByMeetingId',
+            payload: {
+                meetingId: mid,
+            },
+        };
+        let body = JSON.stringify(obj);
+
+        let api2use = process.env.REACT_APP_MEETER_API + '/groups';
+        let res = await axios.post(api2use, body, config);
 
         dispatch({
             type: GET_GROUPS,
-            payload: res.data
+            payload: res.data.body,
         });
     } catch (err) {
         dispatch({
             type: GROUP_ERROR,
             payload: {
                 msg: err.response.statusText,
-                status: err.response.status
-            }
+                status: err.response.status,
+            },
         });
     }
 };
 // Get group by groupId
-export const getGroup = groupId => async dispatch => {
+export const getGroup = (groupId) => async (dispatch) => {
     try {
         const res = await axios.get(`/api/groups/group/${groupId}`);
 
         dispatch({
             type: GET_GROUP,
-            payload: res.data
+            payload: res.data,
         });
     } catch (err) {
         dispatch({
             type: GROUP_ERROR,
             payload: {
                 msg: err.response.statusText,
-                status: err.response.status
-            }
+                status: err.response.status,
+            },
         });
     }
 };
 
 // Delete group
-export const deleteGroup = groupId => async dispatch => {
+export const deleteGroup = (groupId) => async (dispatch) => {
     try {
         const res = await axios.delete(`/api/groups/group/${groupId}`);
 
         dispatch({
             type: DELETE_GROUP,
-            payload: res.data
+            payload: res.data,
         });
     } catch (err) {
         dispatch({
             type: GROUP_ERROR,
             payload: {
                 msg: err.response.statusText,
-                status: err.response.status
-            }
+                status: err.response.status,
+            },
         });
     }
 };
 
 // Create or update groups
-export const createGroup = (
-    formData,
-    history,
-    edit = false
-) => async dispatch => {
+export const createGroup = (formData, history, edit = false) => async (
+    dispatch
+) => {
     try {
         if (formData._id.length < 1) {
             //this is an add, so delete groupId from formData
@@ -83,8 +97,8 @@ export const createGroup = (
         }
         const config = {
             headers: {
-                'Content-Type': 'application/json'
-            }
+                'Content-Type': 'application/json',
+            },
         };
         const res = await axios.post(
             '/api/groups/group/{$_id}',
@@ -94,7 +108,7 @@ export const createGroup = (
 
         dispatch({
             type: GET_GROUP,
-            payload: res.data
+            payload: res.data,
         });
 
         dispatch(setAlert(edit ? 'Group Updated' : 'Group Created', 'success'));
@@ -106,15 +120,15 @@ export const createGroup = (
         const errors = err.response.data.errors;
 
         if (errors) {
-            errors.forEach(error => dispatch(setAlert(error.msg, 'danger')));
+            errors.forEach((error) => dispatch(setAlert(error.msg, 'danger')));
         }
 
         dispatch({
             type: GROUP_ERROR,
             payload: {
                 msg: err.response.statusText,
-                status: err.response.status
-            }
+                status: err.response.status,
+            },
         });
     }
 };

@@ -19,7 +19,6 @@ import {
 //get gatherings
 export const getGatherings = (clientId) => async (dispatch) => {
     try {
-        dispatch({ type: CLEAR_GATHERINGS });
         //lets get the future meetings
         const config = {
             headers: {
@@ -50,13 +49,9 @@ export const getGatherings = (clientId) => async (dispatch) => {
         } else {
             console.log('we got no meetings');
         }
-        // const res = await axios.get('/api/meeting/future');
-        // dispatch({ type: CLEAR_GATHERING });
-        // dispatch({
-        //     type: GET_GATHERINGS,
-        //     payload: res.data,
-        // });
+        //------------------------------------
         //get the historical gathererings
+        //------------------------------------
         dispatch({ type: CLEAR_HATHERINGS });
         obj = {
             operation: 'getHistoricMeetings',
@@ -79,45 +74,6 @@ export const getGatherings = (clientId) => async (dispatch) => {
         } else {
             console.log('we got no history ');
         }
-        // const res1 = await axios.get('/api/meeting/history');
-        // dispatch({
-        //     type: GET_HATHERINGS,
-        //     payload: res1.data,
-        // });
-        dispatch({ type: CLEAR_SERVANTS });
-        const res2 = await axios.get('/api/person/servants');
-        // console.log('servants: results are...', typeof res2);
-        // console.log(JSON.stringify(res2));
-        //==========================================
-        // we want to insert blank option in the list
-        // before returning
-        //===========================================
-        // create blank object
-        //===========================================
-        // const newList = {
-        //     _id:"",
-        //     name:"",
-        //     servant:"",
-        //     __v: 0,
-        //     date:"",
-        //     training:[]
-        // }
-        // console.log(JSON.stringify(newList));
-        // console.log('-----------');
-        //===========================================
-        // combine blank object with response from db
-        //===========================================
-        //function extend(newList, res2) {
-        // for(var key in res2) {
-        //     newList[key] = res2[key];
-        // }
-        // //    return dest;
-        // console.log(JSON.stringify(newList));
-
-        dispatch({
-            type: GET_SERVANTS,
-            payload: res2.data,
-        });
     } catch (err) {
         dispatch({
             type: GATHERING_ERROR,
@@ -190,29 +146,44 @@ export const createGathering = (formData, history, edit = false) => async (
     }
 };
 // Get gathering
-export const getGathering = (id) => async (dispatch) => {
-    //endure that id is not null, if so return
+export const getGathering = (mid, cid) => async (dispatch) => {
+    //ensure that id is not null, if so return
 
     // console.log('getGathering:IN');
-    if (id.length < 1) return;
-    if (id === 0) return;
+    if (mid.length < 1) return;
+    if (mid === 0) return;
     try {
-        // dispatch({ type: CLEAR_GROUPS });
-        // const resGrp = await axios.get(`/api/groups/meeting/${id}`);
-        // dispatch({
-        //     type: GET_GROUPS,
-        //     payload: resGrp.data
-        // });
-        //console.log('getGathering:TRY');
-        // console.log('id:' + id);
+        //=====================================
+        // get the meeting by ID for client
+
         dispatch({ type: CLEAR_GATHERING });
-        const res = await axios.get(`/api/meeting/${id}`);
+        const config = {
+            headers: {
+                'Access-Control-Allow-Headers':
+                    'Content-Type, x-auth-token, Access-Control-Allow-Headers',
+                'Content-Type': 'application/json',
+            },
+        };
+        let client = cid;
+        let obj = {
+            operation: 'getMeetingByIdAndClient',
+            payload: {
+                id: mid,
+                clientId: client,
+            },
+        };
+        let body = JSON.stringify(obj);
+
+        let api2use = process.env.REACT_APP_MEETER_API + '/meetings';
+        let res = await axios.post(api2use, body, config);
+
+        //const res = await axios.get(`/api/meeting/${id}`);
 
         dispatch({
             type: GET_GATHERING,
-            payload: res.data,
+            payload: res.data.body,
         });
-        const tmp = await axios.get(`/api/meeting/${id}`);
+        //const tmp = await axios.get(`/api/meeting/${id}`);
         // console.log('res.data [AFTER]' + res.data);
     } catch (err) {
         dispatch({
