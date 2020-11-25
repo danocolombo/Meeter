@@ -12,13 +12,17 @@ import {
     GET_SERVANTS,
     GET_HATHERINGS,
     CLEAR_HATHERINGS,
-    // CLEAR_GROUPS
-    // GET_GROUPS
+    CLEAR_GROUPS,
+    GET_GROUPS,
+    CLEAR_GROUP,
 } from './types';
 
 //get gatherings
 export const getGatherings = (clientId) => async (dispatch) => {
     try {
+        //clear all the group related data
+        dispatch({ type: CLEAR_GROUPS });
+        dispatch({ type: CLEAR_GROUP });
         //lets get the future meetings
         const config = {
             headers: {
@@ -261,4 +265,64 @@ export const createGroup = (formData, history, edit = false) => async (
 ) => {
     try {
     } catch (err) {}
+};
+export const addDefaultGroups = (grps2add) => async (dispatch) => {
+    console.log('in actions/gatherings :: addDefaultGroups');
+    console.log('typeof grps2add: ' + typeof grps2add);
+    const util = require('util');
+    console.log(
+        'defaultGroups: ' +
+            util.inspect(grps2add, { showHidden: false, depth: null })
+    );
+
+    // going to need the meeting id. We will grab while rotating through...
+    let mid = null;
+    // let axiosResponse = null;
+    try {
+        const config = {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        };
+        const newGroups = [];
+        let result = grps2add.map((g) => {
+            newGroups.push(g);
+            mid = g.mid;
+        });
+        for (let i = 0; i < newGroups.length; i++) {
+            const axiosResponse = await axios.post(
+                '/api/groups/group/0',
+                newGroups[i],
+                config
+            );
+        }
+
+        console.table(newGroups[0]);
+
+        // for (let i = 0; i < newGroups.length; i++) {
+        //     const axiosResponse = await axios.put(
+        //         '/api/client/defaultgroup',
+        //         newGroups[i],
+        //         config
+        //     );
+        // }
+        // now get the groups for the meeting and load in REDUX
+        const res = await axios.get(`/api/groups/meeting/${mid}`);
+        dispatch({ type: CLEAR_GROUPS });
+        dispatch({
+            type: GET_GROUPS,
+            payload: res.data,
+        });
+    } catch (err) {
+        console.log('actions/gatherings.js addDefaultGroups');
+        console.error(err);
+        // dispatch({
+        //     //actions:getGroups
+        //     type: GROUP_ERROR,
+        //     payload: {
+        //         msg: err.response.statusText,
+        //         status: err.response.status,
+        //     },
+        // });
+    }
 };

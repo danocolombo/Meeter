@@ -8,12 +8,12 @@ import { getGroups } from '../../actions/group';
 const GroupGroup = ({ groups, gathering }) => {
     return [
         <Fragment>
-            {groups.map(g => (
+            {groups.map((g) => (
                 <div className={'PersonBox'}>
                     <span className={'grpBoxTitle'}>
-                        {/* <Link to={`/EditGroup/${gathering._id}/${g._id}`}> */}
-                        {g.title}
-                        {/* </Link> */}
+                        <Link to={`/EditGroup/${gathering.id}/${g.id}`}>
+                            {g.title}
+                        </Link>
                     </span>
                     <span className={'grpBoxAttendance'}>{g.attendance}</span>
                     <br />
@@ -22,18 +22,18 @@ const GroupGroup = ({ groups, gathering }) => {
                     </div>
                 </div>
             ))}
-        </Fragment>
+        </Fragment>,
     ];
 };
 GroupGroup.propTypes = {
     // auth: PropTypes.object.isRequired,
     gathering: PropTypes.array.isRequired,
-    groups: PropTypes.array.isRequired
+    groups: PropTypes.array.isRequired,
 };
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
     return {
         gathering: state.gathering.gathering,
-        groups: state.group.groups
+        groups: state.group.groups,
     };
 };
 
