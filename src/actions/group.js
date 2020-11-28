@@ -1,17 +1,21 @@
 import axios from 'axios';
 import { setAlert } from './alert';
 import {
+    //----Beta4---
+    CLEAR_GROUPS,
+    SET_GROUPS,
+    //------------
     GET_GROUPS,
     GROUP_ERROR,
     DELETE_GROUP,
     GET_GROUP,
     CLEAR_GROUP,
-    CLEAR_GROUPS,
 } from './types';
 
 // Get groups associated with meetingId
 export const getGroups = (mid) => async (dispatch) => {
     try {
+        dispatch({ type: CLEAR_GROUPS });
         const config = {
             headers: {
                 'Access-Control-Allow-Headers':
@@ -36,7 +40,7 @@ export const getGroups = (mid) => async (dispatch) => {
         let proceed = false;
         if (res.data.status === '200') {
             dispatch({
-                type: GET_GROUPS,
+                type: SET_GROUPS,
                 payload: res.data.body,
             });
         }

@@ -2,7 +2,7 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import UserProfileClients from './UserProfileClients';
-const UserProfile = ({ auth }) => {
+const UserProfile = ({ auth, meeter }) => {
     // useEffect(() => {
     //     //getProfileById(match.params.id);
     // }, [getProfileById, match.params.id]);
@@ -26,9 +26,9 @@ const UserProfile = ({ auth }) => {
                 <br />
                 <hr />
                 <br />
-                <p>Active Client: {auth.user.activeClient}</p>
-                <p>Active Role: {auth.user.activeRole}</p>
-                <p>Active Status: {auth.user.activeStatus}</p>
+                <p>Active Client: {meeter.active.client}</p>
+                <p>Active Role: {meeter.active.role}</p>
+                <p>Active Status: {meeter.active.status}</p>
                 <p>
                     <br />
                     System Revision: {process.env.REACT_APP_MEETER_VERSION}
@@ -41,10 +41,12 @@ const UserProfile = ({ auth }) => {
 
 UserProfile.propTypes = {
     auth: PropTypes.object.isRequired,
+    meeter: PropTypes.object.isRequired,
 };
 
 const mapStateToProps = (state) => ({
     auth: state.auth,
+    meeter: state.meeter,
 });
 
 export default connect(mapStateToProps, {})(UserProfile);

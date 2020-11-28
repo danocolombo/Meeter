@@ -10,6 +10,7 @@ import {
     LOGIN_FAIL,
     LOGOUT,
     CLEAR_PROFILE,
+    SET_ACTIVES,
     SET_AUTH_ACTIVES,
 } from './types';
 import setAuthToken from '../utils/setAuthToken';
@@ -105,10 +106,19 @@ export const loadUser = (userId) => async (dispatch) => {
             defaultClient: res.data.body.defaultClient,
             defaultClientRole: res.data.body.role,
             defaultClientStatus: res.data.body.status,
-            activeClient: res.data.body.defaultClient,
-            activeRole: res.data.body.role,
-            activeStatus: res.data.body.status,
+            // activeClient: res.data.body.defaultClient,
+            // activeRole: res.data.body.role,
+            // activeStatus: res.data.body.status,
         };
+        let active_data = {
+            client: res.data.body.defaultClient,
+            role: res.data.body.role,
+            status: res.data.body.status,
+        };
+        dispatch({
+            type: SET_ACTIVES,
+            payload: active_data,
+        });
         dispatch({
             type: USER_LOADED,
             payload: user_data,

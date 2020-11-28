@@ -1,14 +1,10 @@
-import React, { Fragment, useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { FormLabel } from '@material-ui/core';
-import { FormControlLabel } from '@material-ui/core';
 import { TextField } from '@material-ui/core';
-import { Button } from '@material-ui/core';
 import { Input } from '@material-ui/core';
-import { RadioGroup } from '@material-ui/core';
-import { Radio } from '@material-ui/core';
+
 import { addGroup, getGroup, deleteGroup } from '../../actions/group';
 const initialState = {
     id: '',
@@ -22,29 +18,22 @@ const initialState = {
     notes: '',
 };
 
-const EditGroup = ({
-    group: { group, loading, newGroup },
-    addGroup,
-    auth,
-    getGroup,
-    match,
-    history,
-}) => {
+const EditGroup = ({ group, role, deleteGroup, history }) => {
     const [formData, setFormData] = useState(initialState);
-    useEffect(() => {
-        if (match.params.iid !== 0) {
-            getGroup(match.params.gid);
-            setFormData({ ...formData, id: match.params.gid });
-            setFormData({ ...formData, meetingId: match.params.mid });
-            const groupData = { ...initialState };
-            for (const key in group) {
-                if (key in groupData) groupData[key] = group[key];
-            }
-            groupData['meetingId'] = match.params.mid;
-            setFormData(groupData);
-            setFormData({ ...formData, id: match.params.gid });
-        }
-    }, []);
+    // useEffect(() => {
+    //     if (match.params.iid !== 0) {
+    //         getGroup(match.params.gid);
+    //         setFormData({ ...formData, id: match.params.gid });
+    //         setFormData({ ...formData, meetingId: match.params.mid });
+    //         const groupData = { ...initialState };
+    //         for (const key in group) {
+    //             if (key in groupData) groupData[key] = group[key];
+    //         }
+    //         groupData['meetingId'] = match.params.mid;
+    //         setFormData(groupData);
+    //         setFormData({ ...formData, id: match.params.gid });
+    //     }
+    // }, []);
     // useEffect(() => {
     //     if (!group) {
     //         if (match.params.gid != 0) {
@@ -64,9 +53,9 @@ const EditGroup = ({
     // }, [loading, getGroup, group]);
 
     const {
-        _id,
+        id,
         title,
-        mid,
+        meetingId,
         gender,
         location,
         facilitator,
@@ -92,7 +81,7 @@ const EditGroup = ({
 
     const onSubmit = (e) => {
         e.preventDefault();
-        formData.mid = match.params.mid;
+        formData.meetingId = group.meetingId;
         addGroup(formData, history, true);
         window.scrollTo(0, 0);
     };
@@ -107,7 +96,7 @@ const EditGroup = ({
                         key='2'
                         // className=''
                         name='gender'
-                        value={gender}
+                        value={group.gender}
                         onChange={(e) => onChange(e)}
                     >
                         <option value='0'>** Select Gender</option>
@@ -125,7 +114,7 @@ const EditGroup = ({
                             label='attendance'
                             name='attendance'
                             placeholder='0'
-                            value={attendance}
+                            value={group.attendance}
                             type='number'
                             size='3'
                             maxlength='2'
@@ -143,7 +132,7 @@ const EditGroup = ({
                         label='Group title'
                         // variant='outlined'
                         fullWidth
-                        value={title}
+                        value={group.title}
                         onChange={(e) => onChange(e)}
                     />
                 </div>
@@ -153,7 +142,7 @@ const EditGroup = ({
                         label='Location'
                         name='location'
                         fullWidth
-                        value={location}
+                        value={group.location}
                         // variant='outlined'
                         onChange={(e) => onChange(e)}
                     />
@@ -163,7 +152,7 @@ const EditGroup = ({
                         id='facilitator'
                         label='Facilitator'
                         name='facilitator'
-                        value={facilitator}
+                        value={group.facilitator}
                         fullWidth
                         // variant='outlined'
                         onChange={(e) => onChange(e)}
@@ -173,7 +162,7 @@ const EditGroup = ({
                     <TextField
                         id='cofacilitator'
                         name='cofacilitator'
-                        value={cofacilitator}
+                        value={group.cofacilitator}
                         fullWidth
                         label='Co-Facilitator'
                         // variant='outlined'
@@ -184,7 +173,7 @@ const EditGroup = ({
                     <TextField
                         id='notes'
                         name='notes'
-                        value={notes}
+                        value={group.notes}
                         label='Notes'
                         fullWidth
                         multiline
@@ -199,7 +188,7 @@ const EditGroup = ({
                     <span className='pl-2'>
                         <Link
                             className='btn btn-light my-1'
-                            to={`/editGathering/${match.params.mid}`}
+                            to={`/editGathering/${group.meetingId}`}
                         >
                             Go Back
                         </Link>

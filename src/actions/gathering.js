@@ -1,6 +1,12 @@
 import axios from 'axios';
 import { setAlert } from './alert';
 import {
+    //--- Beta5 updates
+    MEETING_ERROR,
+    CLEAR_MEETING,
+    SET_MEETING,
+    CLEAR_GROUPS,
+    //---
     GET_GATHERINGS,
     GATHERING_ERROR,
     GET_GATHERING,
@@ -12,12 +18,56 @@ import {
     GET_SERVANTS,
     GET_HATHERINGS,
     CLEAR_HATHERINGS,
-    CLEAR_GROUPS,
     GET_GROUPS,
     CLEAR_GROUP,
 } from './types';
+export const getMeeting = (meetingId, clientId) => async (dispatch) => {
+    //ensure that id is not null, if so return
 
+    // console.log('getGathering:IN');
+    if (meetingId.length < 1) return;
+    if (meetingId === 0) return;
+    try {
+        //=====================================
+        // get the meeting by ID for client
+
+        dispatch({ type: CLEAR_MEETING });
+        const config = {
+            headers: {
+                'Access-Control-Allow-Headers':
+                    'Content-Type, x-auth-token, Access-Control-Allow-Headers',
+                'Content-Type': 'application/json',
+            },
+        };
+        let obj = {
+            operation: 'getMeetingByIdAndClient',
+            payload: {
+                id: meetingId,
+                clientId: clientId,
+            },
+        };
+        let body = JSON.stringify(obj);
+
+        let api2use = process.env.REACT_APP_MEETER_API + '/meetings';
+        let res = await axios.post(api2use, body, config);
+
+        dispatch({
+            type: SET_MEETING,
+            payload: res.data.body,
+        });
+    } catch (err) {
+        dispatch({
+            type: MEETING_ERROR,
+            payload: {
+                msg: err.response.statusText,
+                status: err.response.status,
+            },
+        });
+    }
+};
+//#########################
 //get gatherings
+//#########################
 export const getGatherings = (clientId) => async (dispatch) => {
     try {
         //clear all the group related data
@@ -276,7 +326,7 @@ export const addDefaultGroups = (grps2add) => async (dispatch) => {
     );
 
     // going to need the meeting id. We will grab while rotating through...
-    let mid = null;
+    let meetingId = null;
     // let axiosResponse = null;
     try {
         const config = {
@@ -287,7 +337,7 @@ export const addDefaultGroups = (grps2add) => async (dispatch) => {
         const newGroups = [];
         let result = grps2add.map((g) => {
             newGroups.push(g);
-            mid = g.mid;
+            meetingId = g.meetingId;
         });
         for (let i = 0; i < newGroups.length; i++) {
             const axiosResponse = await axios.post(
@@ -307,7 +357,7 @@ export const addDefaultGroups = (grps2add) => async (dispatch) => {
         //     );
         // }
         // now get the groups for the meeting and load in REDUX
-        const res = await axios.get(`/api/groups/meeting/${mid}`);
+        const res = await axios.get(`/api/groups/meeting/${meetingId}`);
         dispatch({ type: CLEAR_GROUPS });
         dispatch({
             type: GET_GROUPS,

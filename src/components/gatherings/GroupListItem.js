@@ -1,28 +1,24 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-// import Moment from 'react-moment';
 import { connect } from 'react-redux';
 import { deleteGroup } from '../../actions/group';
 
 const GroupListItem = ({
-    deleteGroup,
-    mid,
-    auth: { activeRole },
-    group: { _id, gender, title, location, facilitator },
+    group: { id, gender, title, location, facilitator },
     role,
-    deleteResponse,
+    deleteGroup,
 }) => {
     const handleDeleteRequest = () => {
         // send key of entry to delete
         console.log('delete click');
-        deleteResponse(_id);
+        deleteGroup(id);
     };
     return (
         <Fragment>
             <div className='GItem-Box'>
                 <div className={'GItem-Line1'}>
-                    <Link to={`/EditGroup/${mid}/${_id}`}>
+                    <Link to={`/EditGroup/${id}`}>
                         {get1Line(gender, title, location, facilitator)}
                     </Link>
                 </div>
@@ -33,7 +29,7 @@ const GroupListItem = ({
                     {role !== 'guest' ? (
                         <i
                             className={'fa fa-trash my'}
-                            onClick={() => deleteGroup(_id, mid)}
+                            onClick={() => deleteGroup(id)}
                         ></i>
                     ) : null}
                 </div>
