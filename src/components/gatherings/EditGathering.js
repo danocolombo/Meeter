@@ -60,12 +60,9 @@ const EditGathering = ({
     auth,
     meeting: { meeting, groups },
     meeter,
-    // mtgConfigs,
     createGathering,
     getGathering,
     getGroups,
-    getMtgConfigs,
-    getDefGroups,
     addDefaultGroups,
     match,
     history,
@@ -75,9 +72,7 @@ const EditGathering = ({
         getGathering(match.params.id, meeter.active.client);
         getGroups(match.params.id);
 
-        getMtgConfigs(meeter.active.client);
-        getDefGroups(meeter.active.client);
-    }, [getGathering, getGroups, getMtgConfigs, getDefGroups]);
+    }, [getGathering, getGroups]);
     useEffect(() => {
         const gatheringData = { ...initialState };
         for (const key in gathering) {
@@ -1043,8 +1038,6 @@ EditGathering.propTypes = {
     createGathering: PropTypes.func.isRequired,
     getGathering: PropTypes.func.isRequired,
     getGroups: PropTypes.func.isRequired,
-    getMtgConfigs: PropTypes.func.isRequired,
-    getDefGroups: PropTypes.func.isRequired,
     addDefaultGroups: PropTypes.func.isRequired,
     gathering: PropTypes.object.isRequired,
     meeting: PropTypes.object.isRequired,
@@ -1066,8 +1059,6 @@ export default connect(mapStateToProps, {
     createGathering,
     getGathering,
     getGroups,
-    getMtgConfigs,
-    getDefGroups,
     addDefaultGroups,
     deleteGroup,
 })(withRouter(EditGathering));

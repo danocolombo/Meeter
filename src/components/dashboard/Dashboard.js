@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import Spinner from '../layout/Spinner';
 import DashLogo from '../../img/MMeeterLogo.png';
 
-const Dashboard = ({ auth }) => {
+const Dashboard = ({ auth, meeter }) => {
     useEffect(() => {
         if (!auth.token || auth.isAuthenticated === null) {
             return <Redirect to='/login' />;
@@ -15,7 +15,7 @@ const Dashboard = ({ auth }) => {
     //     getCurrentProfile();
     // }, [getCurrentProfile]);
 
-    return auth.loading ? (
+    return auth.loading || meeter.loading ? (
         <Spinner />
     ) : (
         <Fragment>
@@ -43,10 +43,12 @@ const Dashboard = ({ auth }) => {
 
 Dashboard.propTypes = {
     auth: PropTypes.object.isRequired,
+    meeter: PropTypes.object.isRequired,
 };
 
 const mapStateToProps = (state) => ({
     auth: state.auth,
+    meeter: state.meeter,
 });
 
 export default connect(mapStateToProps, {})(Dashboard);

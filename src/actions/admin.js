@@ -3,9 +3,7 @@ import { setAlert } from './alert';
 import {
     SET_CLIENT_USERS,
     ADMIN_ERROR,
-    SET_DEFAULT_GROUPS,
     REMOVE_CLIENT_USER,
-    SET_MTG_CONFIGS,
     TOGGLE_CONFIG,
 } from './types';
 
@@ -42,139 +40,8 @@ export const getClientUsers = (client) => async (dispatch) => {
         });
     }
 };
-export const getMtgConfigs = (cid) => async (dispatch) => {
-    //this loads all the default groups for cid
-    //into meeter.defaultGroups
-    if (!cid) return;
-    console.log('getMtgConfigs(' + cid + ')');
-    console.log('/api/client/meetingConfigs/' + cid);
-    try {
-        //----------------------------------
-        // get client meeting configs
-        //----------------------------------
-        const config = {
-            headers: {
-                'Access-Control-Allow-Headers':
-                    'Content-Type, x-auth-token, Access-Control-Allow-Headers',
-                'Content-Type': 'application/json',
-            },
-        };
 
-        let client = cid;
-        let obj = {
-            operation: 'getConfigs',
-            payload: {
-                clientId: client,
-            },
-        };
-        let body = JSON.stringify(obj);
 
-        let api2use = process.env.REACT_APP_MEETER_API + '/clients';
-        let axerror;
-        let res = null;
-        try {
-            res = await axios.post(api2use, body, config).catch((err) => {
-                if (err.response.status === 404) {
-                    throw new Error(`${err.config.url} not found`);
-                }
-                throw err;
-            });
-        } catch (err) {
-            axerror = err;
-        }
-        if (res.status === 200) {
-            dispatch({
-                type: SET_MTG_CONFIGS,
-                payload: res.data.body,
-            });
-        } else {
-            console.log('NO CLIENT MEETING CONFIGS');
-        }
-    } catch (err) {
-        console.log('actions/admin.js getMtgConfigs ADMIN_ERROR');
-        dispatch({
-            type: ADMIN_ERROR,
-            payload: {
-                msg: err.response.statusText ? err.response.statusText : '',
-                status: err.response.status,
-            },
-        });
-    }
-};
-export const getDefGroups = (cid) => async (dispatch) => {
-    //this loads all the default groups for cid
-    //into meeter.defaultGroups
-    console.log('getDefGroups(' + cid + ')');
-    try {
-        const config = {
-            headers: {
-                'Access-Control-Allow-Headers':
-                    'Content-Type, x-auth-token, Access-Control-Allow-Headers',
-                'Content-Type': 'application/json',
-            },
-        };
-        let client = cid;
-        let obj = {
-            operation: 'getConfigs',
-            payload: {
-                clientId: client,
-            },
-        };
-        let body = JSON.stringify(obj);
-
-        let api2use = process.env.REACT_APP_MEETER_API + '/clients';
-        let axerror;
-        let res = null;
-        try {
-            res = await axios.post(api2use, body, config).catch((err) => {
-                if (err.response.status === 404) {
-                    throw new Error(`${err.config.url} not found`);
-                }
-                throw err;
-            });
-        } catch (err) {
-            axerror = err;
-        }
-
-        if (res.status === 200) {
-            dispatch({
-                type: SET_DEFAULT_GROUPS,
-                payload: res.body,
-            });
-        }
-    } catch (error) {
-        console.log('actions/admin.js getDefGroups ADMIN_ERROR');
-        dispatch({
-            type: ADMIN_ERROR,
-            // payload: {
-            //     msg: err.response.statusText ? err.response.statusText : '',
-            //     status: err.response.status,
-            // },
-        });
-    }
-
-    // console.log('/api/client/defaultgroups/' + cid);
-    // try {
-    //     const res = await axios.get(`/api/client/defaultgroups/${cid}`);
-    //     if (res) {
-    //         dispatch({
-    //             type: SET_DEFAULT_GROUPS,
-    //             payload: res.data,
-    //         });
-    //     } else {
-    //         console.log('NO DEFAULT GROUPS RETURNED');
-    //     }
-    // } catch (err) {
-    //     console.log('actions/admin.js getDefGroups ADMIN_ERROR');
-    //     dispatch({
-    //         type: ADMIN_ERROR,
-    //         // payload: {
-    //         //     msg: err.response.statusText ? err.response.statusText : '',
-    //         //     status: err.response.status,
-    //         // },
-    //     });
-    // }
-};
 export const updateDefaultGroup = (revised) => async (dispatch) => {
     console.log('getting the work done.');
     console.log('_id:' + revised._id);
@@ -199,7 +66,7 @@ export const updateDefaultGroup = (revised) => async (dispatch) => {
             `/api/client/defaultgroups/${revised.cid}`
         );
         dispatch({
-            type: SET_DEFAULT_GROUPS,
+            type: 'SET_DEFAULT_GROUPS',
             payload: ress.data,
         });
         dispatch(setAlert('Default Group Updated.', 'success'));
@@ -217,7 +84,7 @@ export const deleteDefaultGroup = (cid, gid) => async (dispatch) => {
         const res = await axios.get(`/api/client/defaultgroups/${cid}`);
         if (res) {
             dispatch({
-                type: SET_DEFAULT_GROUPS,
+                type: 'SET_DEFAULT_GROUPS',
                 payload: res.data,
             });
         } else {
@@ -376,7 +243,7 @@ export const removeDefGroup = (cid, gid) => async (dispatch) => {
         const res = await axios.get(`/api/client/defaultgroups/${cid}`);
         if (res) {
             dispatch({
-                type: SET_DEFAULT_GROUPS,
+                type: 'SET_DEFAULT_GROUPS',
                 payload: res.data,
             });
         } else {
