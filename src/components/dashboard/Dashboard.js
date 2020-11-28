@@ -15,7 +15,7 @@ const Dashboard = ({ auth }) => {
     //     getCurrentProfile();
     // }, [getCurrentProfile]);
 
-    return auth.loading && auth.user === null ? (
+    return auth.loading ? (
         <Spinner />
     ) : (
         <Fragment>

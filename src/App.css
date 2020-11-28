@@ -547,6 +547,11 @@ button {
     .lead {
         font-size: 1rem;
     }
+    /* Navbar Logo */
+    .dashboardLogo-sm {
+        width: 10%;
+        margin-left: -25;
+    }
 
     /* Navbar */
     .navbar {
@@ -560,7 +565,7 @@ button {
     }
 
     .navbar h1 {
-        margin-bottom: 1rem;
+        margin-bottom: 0rem;
     }
 
     .navbar .welcome {

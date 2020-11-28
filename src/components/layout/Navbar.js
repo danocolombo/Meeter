@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { logout } from '../../actions/login';
-
+import DashLogo from '../../img/MMeeterLogo2.png';
 const Navbar = ({ auth, meeter, logout }) => {
     const authLinks = (
         <Fragment>
@@ -89,7 +89,11 @@ const Navbar = ({ auth, meeter, logout }) => {
         <nav className='navbar bg-dark'>
             <h1>
                 <Link to='/'>
-                    <i className='fa fa-cubes' /> Meeter
+                    <img
+                        className='dashboardLogo dashboardLogo-sm'
+                        src={DashLogo}
+                    />
+                    {/* <i className='fa fa-cubes' /> Meeter */}
                 </Link>
             </h1>
             {!auth.loading && (

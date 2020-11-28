@@ -30,7 +30,7 @@ const Gatherings = ({
         );
         getGatherings(meeter.active.client);
     }, []);
-    return auth.loading ? (
+    return auth.loading || loading ? (
         <Spinner />
     ) : (
         <Fragment>
