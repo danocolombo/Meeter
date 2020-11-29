@@ -71,7 +71,6 @@ const EditGathering = ({
     useEffect(() => {
         getGathering(match.params.id, meeter.active.client);
         getGroups(match.params.id);
-
     }, [getGathering, getGroups]);
     useEffect(() => {
         const gatheringData = { ...initialState };
@@ -79,29 +78,7 @@ const EditGathering = ({
             if (key in gatheringData) gatheringData[key] = gathering[key];
         }
         setFormData(gatheringData);
-    }, [gathering]);
-    // useEffect(() => {
-    //     getGroups(match.params.id);
-
-    //     getMtgConfigs(meeter.active.client);
-    //     getDefGroups(meeter.active.client);
-    //     // console.log('just ran getGroups');
-    // }, [meeter.active.client, getGroups, getMtgConfigs, match.params.id]);
-    // useEffect(() => {
-    //     if (!gathering && match.params.id !== '0') {
-    //         getGathering(match.params.id);
-    //         // getGroups(match.params.id);
-    //     }
-    //     if (!loading) {
-    //         const gatheringData = { ...initialState };
-    //         for (const key in gathering) {
-    //             if (key in gatheringData) gatheringData[key] = gathering[key];
-    //         }
-    //         setFormData(gatheringData);
-    //     }
-
-    //     if (id) setFormData({ ...formData, meetingId: id });
-    // }, [loading, gathering, auth.user.activeClient]);
+    }, [gathering, groups]);
 
     const {
         id,
@@ -211,7 +188,7 @@ const EditGathering = ({
             if (g.facilitator) aGroup.facilitator = g.facilitator;
             groupsToAdd.push(aGroup);
         });
-        addDefaultGroups(groupsToAdd);
+        addDefaultGroups(groupsToAdd, gathering.id);
         // newGroup.push({
         //     mid: match.params.id,
         //     gender: g.gender,

@@ -316,7 +316,7 @@ export const createGroup = (formData, history, edit = false) => async (
     try {
     } catch (err) {}
 };
-export const addDefaultGroups = (grps2add) => async (dispatch) => {
+export const addDefaultGroups = (grps2add, mid) => async (dispatch) => {
     console.log('in actions/gatherings :: addDefaultGroups');
     console.log('typeof grps2add: ' + typeof grps2add);
     const util = require('util');
@@ -326,7 +326,7 @@ export const addDefaultGroups = (grps2add) => async (dispatch) => {
     );
 
     // going to need the meeting id. We will grab while rotating through...
-    let meetingId = null;
+    let meetingId = mid;
     // let axiosResponse = null;
     try {
         const config = {
@@ -334,34 +334,44 @@ export const addDefaultGroups = (grps2add) => async (dispatch) => {
                 'Content-Type': 'application/json',
             },
         };
-        const newGroups = [];
-        let result = grps2add.map((g) => {
-            newGroups.push(g);
-            meetingId = g.meetingId;
-        });
-        for (let i = 0; i < newGroups.length; i++) {
-            const axiosResponse = await axios.post(
-                '/api/groups/group/0',
-                newGroups[i],
-                config
-            );
+        for (let i = 0; i < grps2add.length; i++) {
+            //add each group to database
+            let obj = {
+                operation: 'addGroup',
+                payload: {
+                    Item: {
+                        clientId: grps2add[i].clientId,
+                        meetingId: mid,
+                        facilitator: grps2add[i].facilitator,
+                        gender: grps2add[i].gender,
+                        location: grps2add[i].location,
+                        title: grps2add[i].title,
+                    },
+                },
+            };
+            let body = JSON.stringify(obj);
+
+            let api2use = process.env.REACT_APP_MEETER_API + '/groups';
+            let res = await axios.post(api2use, body, config);
         }
-
-        console.table(newGroups[0]);
-
-        // for (let i = 0; i < newGroups.length; i++) {
-        //     const axiosResponse = await axios.put(
-        //         '/api/client/defaultgroup',
-        //         newGroups[i],
-        //         config
-        //     );
-        // }
         // now get the groups for the meeting and load in REDUX
-        const res = await axios.get(`/api/groups/meeting/${meetingId}`);
+
+        let obj = {
+            operation: 'getGroupsByMeetingId',
+            payload: {
+                meetingId: mid,
+            },
+        };
+        let body = JSON.stringify(obj);
+
+        let api2use = process.env.REACT_APP_MEETER_API + '/groups';
+        let res = await axios.post(api2use, body, config);
+
         dispatch({ type: CLEAR_GROUPS });
         dispatch({
             type: GET_GROUPS,
             payload: res.data,
+            body,
         });
     } catch (err) {
         console.log('actions/gatherings.js addDefaultGroups');
