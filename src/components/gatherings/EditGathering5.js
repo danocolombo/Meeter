@@ -9,18 +9,15 @@ import {
     createGathering,
     getGathering,
     addDefaultGroups,
-} from '../../actions/gathering4';
-import { deleteGroup } from '../../actions/group4';
+} from '../../actions/gathering';
+import { getGroups, deleteGroup } from '../../actions/group';
 import GroupListItem from './GroupListItem';
-import { getMtgConfigs, getDefGroups } from '../../actions/admin4';
-// import ServantSelect from './ServantSelect';
-// import GroupList from './GroupList';
+import MeetingDate from './editComponents/MeetingDateComp';
 import Spinner from '../layout/Spinner';
 
 const initialState = {
-    _id: '',
-    tenantId: '',
     meetingId: '',
+    clientId: '',
     meetingDate: '',
     facilitator: '',
     meetingType: '',
@@ -57,47 +54,32 @@ const initialState = {
 
 const EditGathering = ({
     gathering: { gathering, servants, loading, newGathering },
-    // auth: { activeClient, activeRole, activeStatus },
-    //group: { groups, groupLoading },
-    meeter,
+    auth,
     meeting,
-    // mtgConfigs,
+    meeter,
     createGathering,
     getGathering,
-    // getGroups,
-    getMtgConfigs,
-    getDefGroups,
+    getGroups,
     addDefaultGroups,
     match,
     history,
 }) => {
     const [formData, setFormData] = useState(initialState);
     useEffect(() => {
-        // getGroups(match.params.id);
-
-        getMtgConfigs(meeter.active.client);
-        getDefGroups(meeter.active.client);
-    }, [getMtgConfigs]);
+        getGathering(match.params.id, meeter.active.client);
+        getGroups(match.params.id);
+    }, [getGathering, getGroups]);
     useEffect(() => {
-        if (!gathering && match.params.id !== '0') {
-            getGathering(match.params.id, meeter.active.client);
-            // getGroups(match.params.id);
+        const gatheringData = { ...initialState };
+        for (const key in gathering) {
+            if (key in gatheringData) gatheringData[key] = gathering[key];
         }
-        if (!loading) {
-            const gatheringData = { ...initialState };
-            for (const key in gathering) {
-                if (key in gatheringData) gatheringData[key] = gathering[key];
-            }
-            setFormData(gatheringData);
-        }
-
-        if (_id) setFormData({ ...formData, meetingId: _id });
-    }, [loading, gathering, meeter.active.client]);
+        setFormData(gatheringData);
+    }, [gathering]);
 
     const {
-        _id,
-        tenantId,
         meetingId,
+        clientId,
         meetingDate,
         facilitator,
         meetingType,
@@ -133,13 +115,16 @@ const EditGathering = ({
     } = formData;
 
     const onChange = (e) => {
+        if (e.target === 'phone') {
+            console.log('phonephonephonephone');
+        }
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
     const onServantChange = (servantSelected) => {
         //we are assuming Facilitator
         setFormData({ ...formData, [facilitator]: servantSelected });
-        // console.log('back from servantSelect. value: ' + servantSelected);
+        console.log('back from servantSelect. value: ' + servantSelected);
     };
     const onSubmit = (e) => {
         e.preventDefault();
@@ -151,37 +136,35 @@ const EditGathering = ({
     const handleGroupDeleteRequest = (gid) => {
         //this is going to delete the selected request
         //and update the groups for the meeting
-        // console.log('back in EditGathering');
+        console.log('back in EditGathering');
         deleteGroup(gid, meetingId);
     };
 
     const addDefaultGroupsToMeeting = () => {
-        // console.log('in EditGatherings :: addDefaultGroupsToMeeting');
+        console.log('in EditGatherings :: addDefaultGroupsToMeeting');
 
         let dgroups = meeter.defaultGroups;
         let groupsToAdd = [];
         // let newBatch = [];
-        let result = dgroups.map((g) => {
+        dgroups.map((g) => {
             let aGroup = {};
-            aGroup._id = g._id;
-            aGroup.cid = meeter.active.client;
-            aGroup.mid = match.params.id;
+            aGroup.id = g.id;
+            aGroup.clientId = meeter.active.client;
+            aGroup.meetingId = match.params.id;
             aGroup.gender = g.gender;
             aGroup.title = g.title;
             if (g.location) aGroup.location = g.location;
             if (g.facilitator) aGroup.facilitator = g.facilitator;
             groupsToAdd.push(aGroup);
         });
-        addDefaultGroups(groupsToAdd);
+        addDefaultGroups(groupsToAdd, gathering.id);
     };
 
-    //-----------------------------------------------------
-    // this next couple of lines gives the ability to see configs
-    // const util = require('util');
-    // console.log(
-    //     'meeter.mtgConfigs: ' +
-    //         util.inspect(meeter.mtgConfigs, { showHidden: false, depth: null })
-    // );
+    const util = require('util');
+    console.log(
+        'meeter.mtgConfigs: ' +
+            util.inspect(meeter.mtgConfigs, { showHidden: false, depth: null })
+    );
     return loading ? (
         <Spinner />
     ) : (
@@ -196,28 +179,38 @@ const EditGathering = ({
             </p> */}
             <small>* = required field</small>
             <form className='form' onSubmit={onSubmit}>
-                <div>
-                    <h4>Meeting Date **</h4>
-                    <input
-                        className='mDate'
-                        type='date'
-                        id='meetingDate'
-                        name='meetingDate'
-                        value={meetingDate.slice(0, 10)}
-                        onChange={(e) => onChange(e)}
-                    />
-                </div>
+                <MeetingDate
+                    theDate={meetingDate.slice(0, 10)}
+                    handleChange={(e) => onChange(e)}
+                />
+                {/* <TextBox
+                    theTitle='Facilitator'
+                    indentifier='facilitator'
+                    thePrompt='Responsible party for meeting'
+                    theValue={facilitator}
+                    handleChange={onChange}
+                /> */}
                 <h4>Facilitator</h4>
-                <span className='medium-text'>medium text</span>
                 <input
                     type='text'
-                    className='medium-text'
+                    class='x-large'
                     placeholder='Responsible party for meeting'
                     id='facilitator'
                     name='facilitator'
                     value={facilitator}
                     onChange={onChange}
                 />
+                {/* <select
+                    value={facilitator}
+                    name='facilitator'
+                    onChange={onChange}
+                >
+                    {servants.map((s) => (
+                        <option key={s.name} value={s.name}>
+                            {s.name}
+                        </option>
+                    ))}
+                </select> */}
                 <div className='form-group'>
                     <h4>Meeting Type **</h4>
                     <select
@@ -241,7 +234,6 @@ const EditGathering = ({
                     {displayTitle()}
                     <input
                         type='text'
-                        className='standard-text'
                         placeholder={diplayTitleHint()}
                         id='title'
                         name='title'
@@ -728,7 +720,7 @@ const EditGathering = ({
 
                 {meeter.active.status === 'approved' &&
                 meeter.active.role !== 'guest' &&
-                _id ? (
+                id ? (
                     <Fragment>
                         <hr className='group-ruler my-1' />
                         <h2>Open-Share Groups</h2>
@@ -739,14 +731,15 @@ const EditGathering = ({
                                 size='small'
                                 // className={classes.button}
                                 startIcon={<PlaylistAddIcon />}
-                                href={`/EditGroup/${_id}/0`}
+                                href={`/EditGroup/${id}/0`}
                             >
                                 New Group
                             </Button>
                         </span>
                         <span className={'pl-2'}>
-                            {meeter.defaultGroups.length > 0 &&
-                            meeter.active.role !== 'guest' ? (
+                            {meeter.defaultGroups &&
+                            meeter.defaultGroups.length > 0 &&
+                            auth.user.activeRole !== 'guest' ? (
                                 <span>
                                     <Button
                                         variant='contained'
@@ -758,8 +751,8 @@ const EditGathering = ({
                                         DEFAULTS
                                     </Button>
                                 </span>
-                            ) : meeter.active.role === 'owner' ||
-                              meeter.active.role === 'superuser' ? (
+                            ) : auth.user.activeRole === 'owner' ||
+                              auth.user.activeRole === 'superuser' ? (
                                 <span>
                                     <Button
                                         variant='contained'
@@ -773,7 +766,7 @@ const EditGathering = ({
                                     </Button>
                                 </span>
                             ) : null}
-                            {_id.length < 1 ? (
+                            {id.length < 1 ? (
                                 <div>
                                     Open-share groups can be added after the
                                     meeting is saved.
@@ -790,15 +783,14 @@ const EditGathering = ({
                     </Fragment>
                 )}
             </form>
-            <div style={{ paddingTop: 10 }}>
+            <div style={{ 'padding-top': 10 }}>
                 {meeting.groups &&
-                    meeting.groups.map((group) => (
+                    meeing.groups.map((group) => (
                         <GroupListItem
-                            key={group._id}
-                            mid={group.mid}
+                            key={group.id}
                             group={group}
-                            role={meeter.active.role}
-                            deleteResponse={handleGroupDeleteRequest}
+                            role={auth.user.activeRole}
+                            deleteGroup={handleGroupDeleteRequest}
                         />
                     ))}
             </div>
@@ -809,7 +801,6 @@ const EditGathering = ({
         switch (meetingType) {
             case 'Lesson':
                 return <h4>Lesson</h4>;
-
             case 'Testimony':
                 return <h4>Who's Testimony?</h4>;
 
@@ -871,7 +862,7 @@ const EditGathering = ({
         let target = tYear + '-' + tMonth + '-' + tDay + 'T00:00:00.000Z';
 
         if (meetingDate >= target) {
-            // console.log('greater than or equal');
+            console.log('greater than or equal');
             if (
                 meeter.active.status === 'approved' &&
                 meeter.active.role !== 'guest'
@@ -918,7 +909,7 @@ const EditGathering = ({
         }
         return [
             <>
-                <div>{returnValue}</div>
+                <table>{returnValue}</table>
             </>,
         ];
     }
@@ -969,34 +960,28 @@ const EditGathering = ({
 EditGathering.propTypes = {
     createGathering: PropTypes.func.isRequired,
     getGathering: PropTypes.func.isRequired,
-    // getGroups: PropTypes.func.isRequired,
-    getMtgConfigs: PropTypes.func.isRequired,
-    getDefGroups: PropTypes.func.isRequired,
+    getGroups: PropTypes.func.isRequired,
     addDefaultGroups: PropTypes.func.isRequired,
     gathering: PropTypes.object.isRequired,
-    group: PropTypes.object.isRequired,
+    meeting: PropTypes.object.isRequired,
     auth: PropTypes.object.isRequired,
     meeter: PropTypes.object.isRequired,
-    meeting: PropTypes.object.isRequired,
-    // mtgConfigs: PropTypes.object.isRequired,
+    mtgConfigs: PropTypes.object.isRequired,
 };
 
 const mapStateToProps = (state) => ({
     gathering: state.gathering,
     servants: state.servants,
-    group: state.group,
+    meeting: state.meeting,
     auth: state.auth,
     meeter: state.meeter,
-    meeting: state.meeting,
-    // mtgConfigs: state.meeter.mtgConfigs,
+    mtgConfigs: state.meeter.mtgConfigs,
 });
 
 export default connect(mapStateToProps, {
     createGathering,
     getGathering,
-    // getGroups,
-    getMtgConfigs,
-    getDefGroups,
+    getGroups,
     addDefaultGroups,
     deleteGroup,
 })(withRouter(EditGathering));

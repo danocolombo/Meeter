@@ -143,6 +143,46 @@ export const createGathering = (formData, history, edit = false) => async (
     dispatch
 ) => {
     try {
+        //================================================
+        // this will add (create) a new meeting
+        //================================================
+        // We don't always know what data we are going to
+        // get, but we will require certain fields
+        //================================================
+        /*
+            {'operation': 'createMeeting',
+               'payload': {
+                  'Item': {
+                    'clientId': 'test',
+                    'meetingDate': '2020-11-15',
+                    'meetingType': 'TEST',
+                    'supportRole': 
+                    'Dano','title': 'addTestMeeting'
+                  }
+                }
+            }
+        */
+        let Item = formData;
+        let obj = {
+            operation: 'addGroup',
+            payload: {
+                Item,
+            },
+        };
+        console.log('our humble attempt\n');
+        console.log(JSON.stringify(obj));
+
+        const config = {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        };
+
+        let body = JSON.stringify(obj);
+
+        let api2use = process.env.REACT_APP_MEETER_API + '/groups';
+        let res = await axios.post(api2use, body, config);
+
         // console.log('in action/gatherings.js');
         // console.log(JSON.stringify(formData));
         console.table(formData);
@@ -161,28 +201,28 @@ export const createGathering = (formData, history, edit = false) => async (
         //delete formData._id;
         // console.log('transformed formdata');
         // console.log(JSON.stringify(formData));
-        const config = {
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        };
-        const res = await axios.post('/api/meeting', formData, config);
+        // const config = {
+        //     headers: {
+        //         'Content-Type': 'application/json',
+        //     },
+        // };
+        // const res = await axios.post('/api/meeting', formData, config);
 
-        dispatch({
-            type: GET_GATHERING,
-            payload: res.data,
-        });
+        // dispatch({
+        //     type: GET_GATHERING,
+        //     payload: res.data,
+        // });
 
-        dispatch(
-            setAlert(
-                edit ? 'Gathering Updated' : 'Gathering Created',
-                'success'
-            )
-        );
+        // dispatch(
+        //     setAlert(
+        //         edit ? 'Gathering Updated' : 'Gathering Created',
+        //         'success'
+        //     )
+        // );
 
-        if (!edit) {
-            history.push('/gatherings');
-        }
+        // if (!edit) {
+        //     history.push('/gatherings');
+        // }
     } catch (err) {
         const errors = err.response.data.errors;
 

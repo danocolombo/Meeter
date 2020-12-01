@@ -6,7 +6,7 @@ import {
 } from '../actions/types';
 
 const initialState = {
-    meeting: [],
+    turnout: [],
     groups: [],
     loading: true,
     error: {},
@@ -19,7 +19,7 @@ export default function (state = initialState, action) {
         case SET_MEETING:
             return {
                 ...state,
-                meeting: payload,
+                turnout: payload,
                 loading: false,
             };
         case SET_GROUPS:
@@ -31,7 +31,7 @@ export default function (state = initialState, action) {
         case CLEAR_MEETING:
             return {
                 ...state,
-                meeting: null,
+                turnout: null,
                 loading: false,
             };
         case CLEAR_GROUPS:
