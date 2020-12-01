@@ -6,11 +6,11 @@ import PlaylistAddIcon from '@material-ui/icons/PlaylistAdd';
 import SettingsIcon from '@material-ui/icons/Settings';
 import { Button } from '@material-ui/core';
 import {
+    getMeeting,
     createGathering,
-    getGathering,
     addDefaultGroups,
-} from '../../actions/gathering4';
-import { deleteGroup } from '../../actions/group4';
+} from '../../actions/gathering';
+import { deleteGroup } from '../../actions/group';
 import GroupListItem from './GroupListItem';
 import { getMtgConfigs, getDefGroups } from '../../actions/admin4';
 import Spinner from '../layout/Spinner';
@@ -93,7 +93,7 @@ const EditGathering = ({
     meeter,
     meeting: { turnout, groups, meetingLoading },
     createGathering,
-    getGathering,
+    getMeeting,
     getMtgConfigs,
     getDefGroups,
     addDefaultGroups,
@@ -107,7 +107,7 @@ const EditGathering = ({
     }, [meeter.active.client, getMtgConfigs, getDefGroups, match.params.id]);
     useEffect(() => {
         if (!turnout && match.params.id !== '0') {
-            getGathering(match.params.id, meeter.active.client);
+            getMeeting(match.params.id, meeter.active.client);
         }
         if (!meetingLoading) {
             const turnoutData = { ...initialState };
@@ -950,15 +950,17 @@ const EditGathering = ({
 
 EditGathering.propTypes = {
     createGathering: PropTypes.func.isRequired,
-    getGathering: PropTypes.func.isRequired,
+    // getGathering: PropTypes.func.isRequired,
     getMtgConfigs: PropTypes.func.isRequired,
     getDefGroups: PropTypes.func.isRequired,
     addDefaultGroups: PropTypes.func.isRequired,
+    getMeeting: PropTypes.func.isRequired,
     gathering: PropTypes.object.isRequired,
     group: PropTypes.object.isRequired,
     auth: PropTypes.object.isRequired,
     meeter: PropTypes.object.isRequired,
     meeting: PropTypes.object.isRequired,
+
     // mtgConfigs: PropTypes.object.isRequired,
 };
 
@@ -974,7 +976,7 @@ const mapStateToProps = (state) => ({
 
 export default connect(mapStateToProps, {
     createGathering,
-    getGathering,
+    getMeeting,
     getMtgConfigs,
     getDefGroups,
     addDefaultGroups,
