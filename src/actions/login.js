@@ -103,7 +103,6 @@ export const loadSystem = (cid) => async (dispatch) => {
         let body = JSON.stringify(obj1);
 
         let api2use = process.env.REACT_APP_MEETER_API + '/clients';
-        let axerror;
         let res = null;
         try {
             res = await axios.post(api2use, body, config).catch((err) => {
@@ -113,7 +112,7 @@ export const loadSystem = (cid) => async (dispatch) => {
                 throw err;
             });
         } catch (err) {
-            axerror = err;
+            console.log('logoin.js - loadSystem: getConfigs failed');
         }
         if (res.status === 200) {
             dispatch({
@@ -141,7 +140,7 @@ export const loadSystem = (cid) => async (dispatch) => {
                 throw err;
             });
         } catch (err) {
-            axerror = err;
+            console.log('logoin.js - loadSystem: getDefaultGroups failed');
         }
 
         if (res.status === 200) {
@@ -150,13 +149,12 @@ export const loadSystem = (cid) => async (dispatch) => {
                 payload: res.data.body,
             });
         }
-    }catch(err){
+    } catch (err) {
         dispatch({
             type: AUTH_ERROR,
         });
-
     }
-}
+};
 // Load User
 export const loadUser = (userId) => async (dispatch) => {
     if (localStorage.token) {

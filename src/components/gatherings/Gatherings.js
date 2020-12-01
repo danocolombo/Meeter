@@ -26,7 +26,7 @@ const Gatherings = ({
         //     return <Redirect to='/login' />;
         // }
         console.log(
-            'GATHERINGS::useEffect, activeClient: ' + meeter.activeClient
+            'GATHERINGS::useEffect, activeClient: ' + meeter.active.client
         );
         getGatherings(meeter.active.client);
     }, []);

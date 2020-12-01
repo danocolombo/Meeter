@@ -69,10 +69,11 @@ export const getMeeting = (meetingId, clientId) => async (dispatch) => {
 //get gatherings
 //#########################
 export const getGatherings = (clientId) => async (dispatch) => {
+    console.log('gathering.js :: getGatherings');
     try {
         //clear all the group related data
-        dispatch({ type: CLEAR_GROUPS });
-        dispatch({ type: CLEAR_GROUP });
+        // dispatch({ type: CLEAR_GROUPS });
+        dispatch({ type: CLEAR_MEETING });
         //lets get the future meetings
         const config = {
             headers: {
@@ -95,7 +96,7 @@ export const getGatherings = (clientId) => async (dispatch) => {
 
         if (res.status === 200) {
             console.log('we have ' + res.data.count + ' meetings returned');
-            dispatch({ type: CLEAR_GATHERING });
+            // dispatch({ type: CLEAR_GATHERING });
             dispatch({
                 type: GET_GATHERINGS,
                 payload: res.data.body,

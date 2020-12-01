@@ -91,6 +91,7 @@ const Navbar = ({ auth, meeter, logout }) => {
                 <Link to='/'>
                     <img
                         className='dashboardLogo dashboardLogo-sm'
+                        alt=''
                         src={DashLogo}
                     />
                     {/* <i className='fa fa-cubes' /> Meeter */}

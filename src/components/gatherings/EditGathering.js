@@ -1,5 +1,5 @@
 import React, { Fragment, useState, useEffect } from 'react';
-import { Link, withRouter } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import PlaylistAddIcon from '@material-ui/icons/PlaylistAdd';
@@ -13,8 +13,6 @@ import {
 import { deleteGroup } from '../../actions/group4';
 import GroupListItem from './GroupListItem';
 import { getMtgConfigs, getDefGroups } from '../../actions/admin4';
-// import ServantSelect from './ServantSelect';
-// import GroupList from './GroupList';
 import Spinner from '../layout/Spinner';
 
 const initialState = {
@@ -54,45 +52,71 @@ const initialState = {
     youth: 0,
     notes: '',
 };
-
+const initialMtgState = {
+    meetingId: '',
+    clientId: '',
+    meetingDate: '',
+    facilitator: '',
+    meetingType: '',
+    supportRole: '',
+    title: '',
+    worship: '',
+    avContact: '',
+    attendance: 0,
+    newcomers: 0,
+    donations: 0,
+    meal: '',
+    mealCoordinator: 'TBD',
+    mealCnt: 0,
+    cafeCoordinator: 'TBD',
+    cafeCount: 0,
+    greeterContact1: '',
+    greeterContact2: '',
+    resourceContact: '',
+    announcementsContact: '',
+    closingContact: '',
+    securityContact: '',
+    setupContact: '',
+    cleanupContact: '',
+    transportationContact: '',
+    transportationCount: 0,
+    nurseryContact: '',
+    nursery: 0,
+    childrenContact: '',
+    children: 0,
+    youthContact: '',
+    youth: 0,
+    notes: '',
+};
 const EditGathering = ({
-    gathering: { gathering, servants, loading, newGathering },
-    // auth: { activeClient, activeRole, activeStatus },
-    //group: { groups, groupLoading },
+    // gathering: { gathering, servants, loading, newGathering },
     meeter,
-    meeting,
-    // mtgConfigs,
+    meeting: { turnout, groups, meetingLoading },
     createGathering,
     getGathering,
-    // getGroups,
     getMtgConfigs,
     getDefGroups,
     addDefaultGroups,
     match,
     history,
 }) => {
-    const [formData, setFormData] = useState(initialState);
+    const [formData, setFormData] = useState(initialMtgState);
     useEffect(() => {
-        // getGroups(match.params.id);
-
         getMtgConfigs(meeter.active.client);
         getDefGroups(meeter.active.client);
-    }, [getMtgConfigs]);
+    }, [meeter.active.client, getMtgConfigs, getDefGroups, match.params.id]);
     useEffect(() => {
-        if (!gathering && match.params.id !== '0') {
+        if (!turnout && match.params.id !== '0') {
             getGathering(match.params.id, meeter.active.client);
-            // getGroups(match.params.id);
         }
-        if (!loading) {
-            const gatheringData = { ...initialState };
-            for (const key in gathering) {
-                if (key in gatheringData) gatheringData[key] = gathering[key];
+        if (!meetingLoading) {
+            const turnoutData = { ...initialState };
+            for (const key in turnout) {
+                if (key in turnoutData) turnoutData[key] = turnout[key];
             }
-            setFormData(gatheringData);
+            setFormData(turnoutData);
         }
-
-        if (_id) setFormData({ ...formData, meetingId: _id });
-    }, [loading, gathering, meeter.active.client]);
+    }, [meetingLoading, turnout, meeter.active.client]);
 
     const {
         _id,
@@ -182,7 +206,7 @@ const EditGathering = ({
     //     'meeter.mtgConfigs: ' +
     //         util.inspect(meeter.mtgConfigs, { showHidden: false, depth: null })
     // );
-    return loading ? (
+    return meetingLoading ? (
         <Spinner />
     ) : (
         // function inside(){
@@ -791,8 +815,8 @@ const EditGathering = ({
                 )}
             </form>
             <div style={{ paddingTop: 10 }}>
-                {meeting.groups &&
-                    meeting.groups.map((group) => (
+                {groups &&
+                    groups.map((group) => (
                         <GroupListItem
                             key={group._id}
                             mid={group.mid}
@@ -922,54 +946,11 @@ const EditGathering = ({
             </>,
         ];
     }
-
-    // function displayTeacher() {
-    //     if (meetingType === 'Lesson') {
-    //         return [
-    //             <h4>Teacher</h4>,
-    //             <input
-    //                 type='text'
-    //                 placeholder='teacher...'
-    //                 name='title'
-    //                 value={supportRole}
-    //                 onChange={onChange}
-    //             />,
-    //             <small className='form-text'>Who taught the lesson?</small>,
-    //         ];
-    //     }
-    //     return null;
-    // }
-    // function displayFacilitator() {
-    //     {
-    //         console.log(servants.length);
-    //         var peeps = '';
-    //         servants.forEach((peep) => {
-    //             peeps = peeps + peep;
-    //         });
-    //         const sample =
-    //             "<option value='Junior Developer'>Junior Developer</option>";
-    //         console.log(peeps);
-    //         return [
-    //             <div className='form-group'>
-    //                 ,
-    //                 <select name='status' value='{status}' onChange={onChange}>
-    //                     ,<option>* Select Professional Status</option>,{sample},
-    //                 </select>
-    //                 ,
-    //                 <small className='form-text'>
-    //                     , 'Give us an idea of where you are at in your career',
-    //                 </small>
-    //                 ,
-    //             </div>,
-    //         ];
-    //     }
-    // }
 };
 
 EditGathering.propTypes = {
     createGathering: PropTypes.func.isRequired,
     getGathering: PropTypes.func.isRequired,
-    // getGroups: PropTypes.func.isRequired,
     getMtgConfigs: PropTypes.func.isRequired,
     getDefGroups: PropTypes.func.isRequired,
     addDefaultGroups: PropTypes.func.isRequired,
@@ -982,7 +963,7 @@ EditGathering.propTypes = {
 };
 
 const mapStateToProps = (state) => ({
-    gathering: state.gathering,
+    // gathering: state.gathering,
     servants: state.servants,
     group: state.group,
     auth: state.auth,
@@ -994,7 +975,6 @@ const mapStateToProps = (state) => ({
 export default connect(mapStateToProps, {
     createGathering,
     getGathering,
-    // getGroups,
     getMtgConfigs,
     getDefGroups,
     addDefaultGroups,

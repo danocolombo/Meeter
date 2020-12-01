@@ -8,7 +8,7 @@ import {
 const initialState = {
     turnout: [],
     groups: [],
-    loading: true,
+    meetingLoading: true,
     error: {},
 };
 
@@ -20,25 +20,26 @@ export default function (state = initialState, action) {
             return {
                 ...state,
                 turnout: payload,
-                loading: false,
+                meetingLoading: false,
             };
         case SET_GROUPS:
             return {
                 ...state,
                 groups: payload,
-                loading: false,
+                meetingLoading: false,
             };
         case CLEAR_MEETING:
             return {
                 ...state,
                 turnout: null,
-                loading: false,
+                groups: null,
+                meetingLoading: true,
             };
         case CLEAR_GROUPS:
             return {
                 ...state,
                 groups: null,
-                loading: false,
+                meetingLoading: false,
             };
         default:
             return state;

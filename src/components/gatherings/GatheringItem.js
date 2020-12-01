@@ -65,11 +65,6 @@ const GatheringItem = ({
     </Fragment>
 );
 
-function displayNewcomers(newcomers) {
-    if (newcomers > 0) {
-        return ['newcomers:', newcomers, <br />];
-    }
-}
 GatheringItem.propTypes = {
     gathering: PropTypes.object.isRequired,
     deleteGathering: PropTypes.func.isRequired,
