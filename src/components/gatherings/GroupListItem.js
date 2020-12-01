@@ -9,11 +9,11 @@ const GroupListItem = ({
     role,
     deleteGroup,
 }) => {
-    const handleDeleteRequest = () => {
-        // send key of entry to delete
-        console.log('delete click');
-        deleteGroup(id);
-    };
+    // const handleDeleteRequest = () => {
+    //     // send key of entry to delete
+    //     console.log('delete click');
+    //     deleteGroup(id);
+    // };
     return (
         <Fragment>
             <div className='GItem-Box'>
@@ -47,6 +47,7 @@ function get1Line(g, t) {
             break;
         case 'm':
             line1 = "Men's - ";
+            break;
         default:
             break;
     }

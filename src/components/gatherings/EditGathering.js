@@ -7,12 +7,11 @@ import SettingsIcon from '@material-ui/icons/Settings';
 import { Button } from '@material-ui/core';
 import {
     createGathering,
-    getGathering,
+    getMeeting,
     addDefaultGroups,
-} from '../../actions/gathering4';
-import { deleteGroup } from '../../actions/group4';
+} from '../../actions/gathering';
+import { deleteGroup } from '../../actions/group';
 import GroupListItem from './GroupListItem';
-import { getMtgConfigs, getDefGroups } from '../../actions/admin4';
 import Spinner from '../layout/Spinner';
 
 const initialState = {
@@ -92,22 +91,21 @@ const EditGathering = ({
     // gathering: { gathering, servants, loading, newGathering },
     meeter,
     meeting: { turnout, groups, meetingLoading },
-    createGathering,
-    getGathering,
-    getMtgConfigs,
-    getDefGroups,
+    // createGathering,
+    getMeeting,
+    //getGathering,
+    // getDefGroups,
     addDefaultGroups,
     match,
     history,
 }) => {
     const [formData, setFormData] = useState(initialMtgState);
-    useEffect(() => {
-        getMtgConfigs(meeter.active.client);
-        getDefGroups(meeter.active.client);
-    }, [meeter.active.client, getMtgConfigs, getDefGroups, match.params.id]);
+    // useEffect(() => {
+    //     getDefGroups(meeter.active.client);
+    // }, [meeter.active.client, getDefGroups, match.params.id]);
     useEffect(() => {
         if (!turnout && match.params.id !== '0') {
-            getGathering(match.params.id, meeter.active.client);
+            getMeeting(match.params.id, meeter.active.client);
         }
         if (!meetingLoading) {
             const turnoutData = { ...initialState };
@@ -950,33 +948,26 @@ const EditGathering = ({
 
 EditGathering.propTypes = {
     createGathering: PropTypes.func.isRequired,
-    getGathering: PropTypes.func.isRequired,
-    getMtgConfigs: PropTypes.func.isRequired,
-    getDefGroups: PropTypes.func.isRequired,
+    getMeeting: PropTypes.func.isRequired,
     addDefaultGroups: PropTypes.func.isRequired,
     gathering: PropTypes.object.isRequired,
     group: PropTypes.object.isRequired,
     auth: PropTypes.object.isRequired,
     meeter: PropTypes.object.isRequired,
     meeting: PropTypes.object.isRequired,
-    // mtgConfigs: PropTypes.object.isRequired,
 };
 
 const mapStateToProps = (state) => ({
-    // gathering: state.gathering,
     servants: state.servants,
     group: state.group,
     auth: state.auth,
     meeter: state.meeter,
     meeting: state.meeting,
-    // mtgConfigs: state.meeter.mtgConfigs,
 });
 
 export default connect(mapStateToProps, {
     createGathering,
-    getGathering,
-    getMtgConfigs,
-    getDefGroups,
+    getMeeting,
     addDefaultGroups,
     deleteGroup,
 })(withRouter(EditGathering));
