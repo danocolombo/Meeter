@@ -11,7 +11,6 @@ import {
     LOGOUT,
     CLEAR_PROFILE,
     SET_ACTIVES,
-    SET_AUTH_ACTIVES,
     SET_MTG_CONFIGS,
     SET_DEFAULT_GROUPS,
 } from './types';
@@ -196,6 +195,7 @@ export const loadUser = (userId) => async (dispatch) => {
             role: res.data.body.role,
             status: res.data.body.status,
         };
+        // this next dispatch does nothing...??
         dispatch({
             type: SET_ACTIVES,
             payload: active_data,
@@ -204,16 +204,7 @@ export const loadUser = (userId) => async (dispatch) => {
             type: USER_LOADED,
             payload: user_data,
         });
-        // now set the active client, role and status from default vales
-        let active_values = {
-            activeClient: userId.uData.defaultClient,
-            activeRole: userId.uData.defaultClientRole,
-            activeStatus: userId.uData.defaultClientStatus,
-        };
-        dispatch({
-            type: SET_AUTH_ACTIVES,
-            payload: active_values,
-        });
+
         let theClient = res.data.body.defaultClient;
         dispatch(loadSystem({ theClient }));
     } catch (err) {
