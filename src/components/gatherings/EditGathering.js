@@ -116,11 +116,10 @@ const EditGathering = ({
             }
             setFormData(turnoutData);
         }
-    }, [meetingLoading, turnout, meeter.active.client]);
+    }, [meetingLoading, getMeeting, turnout, meeter.active.client, match.params.id]);
 
     const {
         _id,
-        tenantId,
         meetingId,
         meetingDate,
         facilitator,
@@ -160,11 +159,11 @@ const EditGathering = ({
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
-    const onServantChange = (servantSelected) => {
-        //we are assuming Facilitator
-        setFormData({ ...formData, [facilitator]: servantSelected });
-        // console.log('back from servantSelect. value: ' + servantSelected);
-    };
+    // const onServantChange = (servantSelected) => {
+    //     //we are assuming Facilitator
+    //     setFormData({ ...formData, [facilitator]: servantSelected });
+    //     // console.log('back from servantSelect. value: ' + servantSelected);
+    // };
     const onSubmit = (e) => {
         e.preventDefault();
         if (formData['meetingType'] === 'Testimony')
@@ -874,7 +873,7 @@ const EditGathering = ({
         // // console.log('mDate:' + mDate);
         // // console.log('today:' + today);
         // need to create special date for today starting at T00:00:00.000Z
-        let mDate = new Date(meetingDate.slice(0, 10));
+        // let mDate = new Date(meetingDate.slice(0, 10));
         let tDate = new Date();
         let numMonth = tDate.getMonth() + 1;
         let tmpMonth = numMonth.toString();
