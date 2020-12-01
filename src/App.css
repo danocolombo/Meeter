@@ -547,6 +547,11 @@ button {
     .lead {
         font-size: 1rem;
     }
+    /* Navbar Logo */
+    .dashboardLogo-sm {
+        width: 10%;
+        margin-left: -25;
+    }
 
     /* Navbar */
     .navbar {
@@ -560,7 +565,7 @@ button {
     }
 
     .navbar h1 {
-        margin-bottom: 1rem;
+        margin-bottom: 0rem;
     }
 
     .navbar .welcome {
@@ -842,3 +847,87 @@ button {
     font-style: italic;
     font-size: 1.2em;
 }
+/* GroupList component of gathering page */
+/* --------------------------------------*/
+/* GItem-Box { */
+    .GItem-Box {
+        border: 1px solid rgb(109, 84, 84);
+        box-shadow: 0 2px 3px rgb(216, 146, 146);
+        display: grid;
+        grid-template-columns: auto 100px;
+        grid-template-rows: auto;
+        grid-template-areas:
+            'Line1 DelBtn'
+            'Line2 nutn';
+        grid-column-gap: 0px;
+        grid-row-gap: 0px;
+        margin-bottom: 10px;
+    }
+    .GItem-Line1 {
+        grid-area: Line1;
+        padding-left: 10px;
+    }
+    .GItem-Line2 {
+        grid-area: Line2;
+        padding-left: 10px;
+    }
+    .GItem-Button {
+        grid-area: DelBtn;
+        text-align: right;
+        padding-right: 10px;
+    }
+    .GItem-Nutn {
+        grid-area: nutn;
+    }
+    /*         
+        .GItem-Right { grid-area: 1 / 2 / 3 / 3; }
+        .GItem-TLeft { grid-area: 1 / 1 / 2 / 2; }
+        .GItem-BLeft { grid-area: 2 / 1 / 3 / 2; } */
+    
+    /* GATHERINGS Page */
+    /* GATHERING - GroupListItem */
+    .GGL-Box {
+        border: 1px solid rgb(109, 84, 84);
+        /* box-shadow: 0 2px 3px rgb(216, 146, 146); */
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+        grid-gap: 0rem;
+        /* align-items: center; */
+    }
+    .GGL {
+        font-size: 1rem;
+        margin-bottom: 1rem;
+        padding-left: 5px;
+        padding-right: 5px;
+    }
+    .GGL-Gender {
+        font-size: 1rem;
+        text-align: left;
+        /* margin-bottom: 1rem; */
+        /* padding-right: 5px; */
+    }
+    .GGL-Title {
+        font-size: 1rem;
+        text-align: left;
+        /* margin-bottom: 1rem; */
+        /* padding-right: 15px; */
+    }
+    .GGL-Location {
+        font-size: 1rem;
+        text-align: left;
+        /* margin-bottom: 1rem; */
+        /* padding-right: 10px; */
+    }
+    .GGL-Facilitator {
+        font-size: 1rem;
+        font-style: italic;
+        /* margin-bottom: 1rem; */
+        /* padding-left: 10px;
+        padding-right: 20px; */
+    }
+    .GGL-Button {
+        font-size: 1rem;
+        /* margin-bottom: 1rem; */
+        /* padding-left: 10px;
+        padding-right: 20px; */
+    }

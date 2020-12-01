@@ -10,7 +10,10 @@ import {
     LOGIN_FAIL,
     LOGOUT,
     CLEAR_PROFILE,
+    SET_ACTIVES,
     SET_AUTH_ACTIVES,
+    SET_MTG_CONFIGS,
+    SET_DEFAULT_GROUPS,
 } from './types';
 import setAuthToken from '../utils/setAuthToken';
 
@@ -73,6 +76,85 @@ export const login = (email, password) => async (dispatch) => {
     });
 };
 
+// Load System
+//---------------------------------------------------------
+// we want to load meeter mtgConfigs and defaultMeetings
+//---------------------------------------------------------
+export const loadSystem = (cid) => async (dispatch) => {
+    try {
+        let client = cid.theClient;
+        //----------------------------------
+        // get client meeting configs
+        //----------------------------------
+        const config = {
+            headers: {
+                'Access-Control-Allow-Headers':
+                    'Content-Type, x-auth-token, Access-Control-Allow-Headers',
+                'Content-Type': 'application/json',
+            },
+        };
+
+        let obj1 = {
+            operation: 'getConfigs',
+            payload: {
+                clientId: client,
+            },
+        };
+        let body = JSON.stringify(obj1);
+
+        let api2use = process.env.REACT_APP_MEETER_API + '/clients';
+        let res = null;
+        try {
+            res = await axios.post(api2use, body, config).catch((err) => {
+                if (err.response.status === 404) {
+                    throw new Error(`${err.config.url} not found`);
+                }
+                throw err;
+            });
+        } catch (err) {
+            console.log('logoin.js - loadSystem: getConfigs failed');
+        }
+        if (res.status === 200) {
+            dispatch({
+                type: SET_MTG_CONFIGS,
+                payload: res.data.body,
+            });
+        } else {
+            console.log('NO CLIENT MEETING CONFIGS');
+        }
+        let obj2 = {
+            operation: 'getDefaultGroups',
+            payload: {
+                clientId: client,
+            },
+        };
+        body = JSON.stringify(obj2);
+
+        api2use = process.env.REACT_APP_MEETER_API + '/clients';
+        res = null;
+        try {
+            res = await axios.post(api2use, body, config).catch((err) => {
+                if (err.response.status === 404) {
+                    throw new Error(`${err.config.url} not found`);
+                }
+                throw err;
+            });
+        } catch (err) {
+            console.log('logoin.js - loadSystem: getDefaultGroups failed');
+        }
+
+        if (res.status === 200) {
+            dispatch({
+                type: SET_DEFAULT_GROUPS,
+                payload: res.data.body,
+            });
+        }
+    } catch (err) {
+        dispatch({
+            type: AUTH_ERROR,
+        });
+    }
+};
 // Load User
 export const loadUser = (userId) => async (dispatch) => {
     if (localStorage.token) {
@@ -105,10 +187,19 @@ export const loadUser = (userId) => async (dispatch) => {
             defaultClient: res.data.body.defaultClient,
             defaultClientRole: res.data.body.role,
             defaultClientStatus: res.data.body.status,
-            activeClient: res.data.body.defaultClient,
-            activeRole: res.data.body.role,
-            activeStatus: res.data.body.status,
+            // activeClient: res.data.body.defaultClient,
+            // activeRole: res.data.body.role,
+            // activeStatus: res.data.body.status,
         };
+        let active_data = {
+            client: res.data.body.defaultClient,
+            role: res.data.body.role,
+            status: res.data.body.status,
+        };
+        dispatch({
+            type: SET_ACTIVES,
+            payload: active_data,
+        });
         dispatch({
             type: USER_LOADED,
             payload: user_data,
@@ -123,6 +214,8 @@ export const loadUser = (userId) => async (dispatch) => {
             type: SET_AUTH_ACTIVES,
             payload: active_values,
         });
+        let theClient = res.data.body.defaultClient;
+        dispatch(loadSystem({ theClient }));
     } catch (err) {
         dispatch({
             type: AUTH_ERROR,

@@ -11,6 +11,7 @@ const Gatherings = ({
     auth,
     getGatherings,
     gathering: { gatherings, hatherings, loading },
+    meeter,
     match,
     historyView,
 }) => {
@@ -25,11 +26,11 @@ const Gatherings = ({
         //     return <Redirect to='/login' />;
         // }
         console.log(
-            'GATHERINGS::useEffect, activeClient: ' + auth.user.activeClient
+            'GATHERINGS::useEffect, activeClient: ' + meeter.active.client
         );
-        getGatherings(auth.user.activeClient);
+        getGatherings(meeter.active.client);
     }, []);
-    return auth.loading ? (
+    return auth.loading || loading ? (
         <Spinner />
     ) : (
         <Fragment>
@@ -48,13 +49,13 @@ const Gatherings = ({
         if (match.params.options === 'historyView') {
             return [
                 hatherings.map((hathering) => (
-                    <GatheringItem key={hathering._id} gathering={hathering} />
+                    <GatheringItem key={hathering.id} gathering={hathering} />
                 )),
             ];
         } else {
             return [
                 gatherings.map((gathering) => (
-                    <GatheringItem key={gathering._id} gathering={gathering} />
+                    <GatheringItem key={gathering.id} gathering={gathering} />
                 )),
             ];
         }
@@ -94,6 +95,7 @@ Gatherings.defaultProps = {
 };
 Gatherings.propTypes = {
     auth: PropTypes.object.isRequired,
+    meeter: PropTypes.object.isRequired,
     getGatherings: PropTypes.func.isRequired,
     gathering: PropTypes.object.isRequired,
     // hathering: PropTypes.object.isRequired
@@ -101,6 +103,7 @@ Gatherings.propTypes = {
 const mapStateToProps = (state) => ({
     gathering: state.gathering,
     hathering: state.hathering,
+    meeter: state.meeter,
     auth: state.auth,
 });
 export default connect(mapStateToProps, { getGatherings })(Gatherings);

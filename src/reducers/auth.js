@@ -53,7 +53,7 @@ export default function (state = initialState, action) {
         case LOGOUT:
             localStorage.removeItem('token');
             //need to clean up all the cognito tokens
-            const COG_PROVIDER = 'CognitoIdentityServiceProvider';
+            // const COG_PROVIDER = 'CognitoIdentityServiceProvider';
             localStorage.clear();
             return {
                 ...state,

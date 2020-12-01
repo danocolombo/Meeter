@@ -3,12 +3,12 @@ import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { logout } from '../../actions/login';
-
-const Navbar = ({ auth, logout }) => {
+import DashLogo from '../../img/MMeeterLogo-Centered-M.png';
+const Navbar = ({ auth, meeter, logout }) => {
     const authLinks = (
         <Fragment>
             <ul>
-                {auth.user && auth.user.activeStatus === 'approved' ? (
+                {auth.user && meeter.active.status === 'approved' ? (
                     <Fragment>
                         <li>
                             <Link to='/gatherings'>
@@ -23,8 +23,8 @@ const Navbar = ({ auth, logout }) => {
                     </Fragment>
                 )}
                 {auth.user &&
-                auth.user.activeRole !== 'guest' &&
-                auth.user.activeStatus === 'approved' ? (
+                meeter.active.role !== 'guest' &&
+                meeter.active.status === 'approved' ? (
                     <Fragment>
                         <li>
                             <Link to='/people'>
@@ -35,9 +35,9 @@ const Navbar = ({ auth, logout }) => {
                     </Fragment>
                 ) : null}
                 {auth.user &&
-                (auth.user.activeRole === 'superuser' ||
-                    auth.user.activeRole === 'owner') &&
-                auth.user.activeStatus === 'approved' ? (
+                (meeter.active.role === 'superuser' ||
+                    meeter.active.role === 'owner') &&
+                meeter.active.status === 'approved' ? (
                     <Fragment>
                         <li>
                             <Link to='/DisplaySecurity'>
@@ -48,7 +48,7 @@ const Navbar = ({ auth, logout }) => {
                     </Fragment>
                 ) : null}
 
-                {auth.user && auth.user.activeStatus === 'approved' ? (
+                {auth.user && meeter.active.status === 'approved' ? (
                     <Fragment>
                         <li>
                             <Link to={`/userprofile`}>
@@ -89,7 +89,12 @@ const Navbar = ({ auth, logout }) => {
         <nav className='navbar bg-dark'>
             <h1>
                 <Link to='/'>
-                    <i className='fa fa-cubes' /> Meeter
+                    <img
+                        className='dashboardLogo dashboardLogo-sm'
+                        alt=''
+                        src={DashLogo}
+                    />
+                    {/* <i className='fa fa-cubes' /> Meeter */}
                 </Link>
             </h1>
             {!auth.loading && (
@@ -104,10 +109,12 @@ const Navbar = ({ auth, logout }) => {
 Navbar.propTypes = {
     logout: PropTypes.func.isRequired,
     auth: PropTypes.object.isRequired,
+    meeter: PropTypes.object.isRequired,
 };
 
 const mapStateToProps = (state) => ({
     auth: state.auth,
+    meeter: state.meeter,
 });
 
 export default connect(mapStateToProps, { logout })(Navbar);
