@@ -12,7 +12,7 @@ import {
 } from '../../actions/gathering';
 import { deleteGroup } from '../../actions/group';
 import GroupListItem from './GroupListItem';
-import { getMtgConfigs, getDefGroups } from '../../actions/admin4';
+import { getDefGroups } from '../../actions/admin4';
 import Spinner from '../layout/Spinner';
 
 const initialState = {
@@ -89,22 +89,15 @@ const initialMtgState = {
     notes: '',
 };
 const EditGathering = ({
-    // gathering: { gathering, servants, loading, newGathering },
     meeter,
     meeting: { turnout, groups, meetingLoading },
     createGathering,
     getMeeting,
-    getMtgConfigs,
-    getDefGroups,
     addDefaultGroups,
     match,
     history,
 }) => {
     const [formData, setFormData] = useState(initialMtgState);
-    useEffect(() => {
-        getMtgConfigs(meeter.active.client);
-        getDefGroups(meeter.active.client);
-    }, [meeter.active.client, getMtgConfigs, getDefGroups, match.params.id]);
     useEffect(() => {
         if (!turnout && match.params.id !== '0') {
             getMeeting(match.params.id, meeter.active.client);
@@ -159,11 +152,6 @@ const EditGathering = ({
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
-    // const onServantChange = (servantSelected) => {
-    //     //we are assuming Facilitator
-    //     setFormData({ ...formData, [facilitator]: servantSelected });
-    //     // console.log('back from servantSelect. value: ' + servantSelected);
-    // };
     const onSubmit = (e) => {
         e.preventDefault();
         if (formData['meetingType'] === 'Testimony')
@@ -949,7 +937,6 @@ const EditGathering = ({
 
 EditGathering.propTypes = {
     createGathering: PropTypes.func.isRequired,
-    // getGathering: PropTypes.func.isRequired,
     getMtgConfigs: PropTypes.func.isRequired,
     getDefGroups: PropTypes.func.isRequired,
     addDefaultGroups: PropTypes.func.isRequired,
@@ -976,7 +963,6 @@ const mapStateToProps = (state) => ({
 export default connect(mapStateToProps, {
     createGathering,
     getMeeting,
-    getMtgConfigs,
     getDefGroups,
     addDefaultGroups,
     deleteGroup,
