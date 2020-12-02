@@ -20,7 +20,7 @@ const Dashboard = ({ auth, meeter }) => {
     ) : (
         <Fragment>
             {/* <h1 className="large text-primary">Dashboard</h1> */}
-            <img className='dashboardLogo' src={DashLogo} />
+            <img className='dashboardLogo' alt='' src={DashLogo} />
             <p className='lead'>
                 <i className='fas fa-user' /> Welcome{' '}
                 {auth.user && auth.user.firstName}
