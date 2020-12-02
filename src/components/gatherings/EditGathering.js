@@ -171,17 +171,19 @@ const EditGathering = ({
         let dgroups = meeter.defaultGroups;
         let groupsToAdd = [];
         // let newBatch = [];
-        let result = dgroups.map((g) => {
+
+        for (let i = 0; i < dgroups.length; i++) {
+            // configs[data.Items[i].config] = data.Items[i].setting;
             let aGroup = {};
-            aGroup._id = g._id;
+            aGroup._id = dgroups[i]._id;
             aGroup.cid = meeter.active.client;
             aGroup.mid = match.params.id;
-            aGroup.gender = g.gender;
-            aGroup.title = g.title;
-            if (g.location) aGroup.location = g.location;
-            if (g.facilitator) aGroup.facilitator = g.facilitator;
+            aGroup.gender = dgroups[i].gender;
+            aGroup.title = dgroups[i].title;
+            if (dgroups[i].location) aGroup.location = dgroups[i].location;
+            if (dgroups[i].facilitator) aGroup.facilitator = dgroups[i].facilitator;
             groupsToAdd.push(aGroup);
-        });
+        };
         addDefaultGroups(groupsToAdd);
     };
 
