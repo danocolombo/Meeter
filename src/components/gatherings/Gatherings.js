@@ -1,8 +1,8 @@
 import React, { Fragment, useEffect } from 'react';
-import { Link, Redirect } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import Button from '@material-ui/core/Button';
+// import Button from '@material-ui/core/Button';
 import Spinner from '../layout/Spinner';
 import GatheringItem from './GatheringItem';
 import { getGatherings } from '../../actions/gathering';
@@ -29,7 +29,7 @@ const Gatherings = ({
             'GATHERINGS::useEffect, activeClient: ' + meeter.active.client
         );
         getGatherings(meeter.active.client);
-    }, []);
+    });
     return auth.loading || loading ? (
         <Spinner />
     ) : (
@@ -74,19 +74,21 @@ const Gatherings = ({
             return [
                 <Link to='/gatherings/historyView'>HISTORY</Link>,
                 <p className='lead'>List of upcoming meetings...</p>,
+                // <Link to='/EditGathering/0'>
+                //     <a class='waves-effect waves-light btn'>
+                //         <i class='material-icons left green'>
+                //             add_circle_outline
+                //         </i>
+                //         <span className='meeterNavTextHighlight'>
+                //             {'  '}NEW
+                //         </span>
+                //     </a>
+                // </Link>,
                 <Link to='/EditGathering/0'>
-                    <a class='waves-effect waves-light btn'>
-                        <i class='material-icons left green'>
-                            add_circle_outline
-                        </i>
-                        <span className='meeterNavTextHighlight'>
-                            {'  '}NEW
-                        </span>
-                    </a>
+                    <span className='meeterNavTextHighlight'>NEW</span>
                 </Link>,
             ];
         }
-        return null;
     }
 };
 

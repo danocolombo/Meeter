@@ -18,7 +18,7 @@ import {
 import setAuthToken from '../utils/setAuthToken';
 
 import UserPool from './UserPool';
-import { CollectionsOutlined, DateRange } from '@material-ui/icons';
+// import { CollectionsOutlined, DateRange } from '@material-ui/icons';
 
 // Login (Authenticate)
 //============================

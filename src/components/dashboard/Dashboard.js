@@ -10,7 +10,7 @@ const Dashboard = ({ auth, meeter }) => {
         if (!auth.token || auth.isAuthenticated === null) {
             return <Redirect to='/login' />;
         }
-    }, []);
+    });
     // useEffect(() => {
     //     getCurrentProfile();
     // }, [getCurrentProfile]);

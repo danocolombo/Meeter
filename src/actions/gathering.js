@@ -9,7 +9,6 @@ import {
     DELETE_GATHERING,
     UPDATE_GATHERING,
     CLEAR_GROUPS,
-    GET_GROUPS,
     SET_GROUPS,
     CLEAR_MEETING,
     SET_MEETING,
@@ -190,57 +189,58 @@ export const addDefaultGroups = (grps2add) => async (dispatch) => {
         'defaultGroups: ' +
             util.inspect(grps2add, { showHidden: false, depth: null })
     );
+    return;
 
     // going to need the meeting id. We will grab while rotating through...
-    let mid = null;
-    // let axiosResponse = null;
-    try {
-        const config = {
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        };
-        const newGroups = [];
-        let result = grps2add.map((g) => {
-            newGroups.push(g);
-            mid = g.mid;
-        });
-        for (let i = 0; i < newGroups.length; i++) {
-            const axiosResponse = await axios.post(
-                '/api/groups/group/0',
-                newGroups[i],
-                config
-            );
-        }
+    // let mid = null;
+    // // let axiosResponse = null;
+    // try {
+    //     // const config = {
+    //     //     headers: {
+    //     //         'Content-Type': 'application/json',
+    //     //     },
+    //     // };
+    //     // const newGroups = [];
+    //     // for (let cnt = 0; cnt < grps2add.length; cnt++) {
+    //     //     newGroups.push(grps2add[cnt]);
+    //     //     mid = grps2add[cnt].mid;
+    //     // }
+    //     // for (let i = 0; i < newGroups.length; i++) {
+    //     //     const axiosResponse = await axios.post(
+    //     //         '/api/groups/group/0',
+    //     //         newGroups[i],
+    //     //         config
+    //     //     );
+    //     // }
 
-        console.table(newGroups[0]);
+    //     // console.table(newGroups[0]);
 
-        // for (let i = 0; i < newGroups.length; i++) {
-        //     const axiosResponse = await axios.put(
-        //         '/api/client/defaultgroup',
-        //         newGroups[i],
-        //         config
-        //     );
-        // }
-        // now get the groups for the meeting and load in REDUX
-        const res = await axios.get(`/api/groups/meeting/${mid}`);
-        dispatch({ type: CLEAR_GROUPS });
-        dispatch({
-            type: GET_GROUPS,
-            payload: res.data,
-        });
-    } catch (err) {
-        console.log('actions/gatherings.js addDefaultGroups');
-        console.error(err);
-        // dispatch({
-        //     //actions:getGroups
-        //     type: GROUP_ERROR,
-        //     payload: {
-        //         msg: err.response.statusText,
-        //         status: err.response.status,
-        //     },
-        // });
-    }
+    //     // for (let i = 0; i < newGroups.length; i++) {
+    //     //     const axiosResponse = await axios.put(
+    //     //         '/api/client/defaultgroup',
+    //     //         newGroups[i],
+    //     //         config
+    //     //     );
+    //     // }
+    //     // now get the groups for the meeting and load in REDUX
+    //     const res = await axios.get(`/api/groups/meeting/${mid}`);
+    //     dispatch({ type: CLEAR_GROUPS });
+    //     dispatch({
+    //         type: GET_GROUPS,
+    //         payload: res.data,
+    //     });
+    // } catch (err) {
+    //     console.log('actions/gatherings.js addDefaultGroups');
+    //     console.error(err);
+    //     // dispatch({
+    //     //     //actions:getGroups
+    //     //     type: GROUP_ERROR,
+    //     //     payload: {
+    //     //         msg: err.response.statusText,
+    //     //         status: err.response.status,
+    //     //     },
+    //     // });
+    // }
 };
 // Create or update gathering
 // MODIFIED FOR MEETER5

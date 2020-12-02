@@ -37,7 +37,6 @@ export const getGroups = (mid) => async (dispatch) => {
         //=================================
         // now lets handle the response
         //=================================
-        let proceed = false;
         if (res.data.status === '200') {
             dispatch({
                 type: SET_GROUPS,
@@ -142,27 +141,27 @@ export const addGroup = (formData, history, edit = false) => async (
             //this is an add
             delete formData._id;
         }
-        const config = {
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        };
-        let res = null;
-        if (formData._id) {
-            res = await axios.post(
-                `/api/groups/group/${formData._id}`,
-                formData,
-                config
-            );
-        } else {
-            res = await axios.post(`/api/groups/group/0`, formData, config);
-        }
+        // const config = {
+        //     headers: {
+        //         'Content-Type': 'application/json',
+        //     },
+        // };
+        // let res = null;
+        // if (formData._id) {
+        //     res = await axios.post(
+        //         `/api/groups/group/${formData._id}`,
+        //         formData,
+        //         config
+        //     );
+        // } else {
+        //     res = await axios.post(`/api/groups/group/0`, formData, config);
+        // }
         //=============================================
         // we either added or updated. refresh redux
         //=======================================------
-        const newGroupList = await axios.get(
-            `/api/groups/meeting/~{formData.mid}`
-        );
+        // const newGroupList = await axios.get(
+        //     `/api/groups/meeting/~{formData.mid}`
+        // );
 
         const rose = await axios.get(`/api/groups/meeting/${formData.mid}`);
 

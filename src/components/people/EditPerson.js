@@ -3,7 +3,6 @@ import { Link, withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createPerson, getPerson } from '../../actions/person';
-import { components } from 'react-select';
 
 const initialState = {
     name: '',
@@ -15,7 +14,7 @@ const initialState = {
     birthday: '',
     training: '',
     system: false,
-    notes: ''
+    notes: '',
 };
 
 const EditPeep = ({
@@ -24,7 +23,7 @@ const EditPeep = ({
     getPerson,
     match,
     history,
-    pNum
+    pNum,
 }) => {
     const [formData, setFormData] = useState(initialState);
 
@@ -38,7 +37,7 @@ const EditPeep = ({
             setFormData(personData);
         }
     }, [loading, getPerson, person, match]);
-    
+
     const {
         name,
         email,
@@ -47,12 +46,10 @@ const EditPeep = ({
         active,
         shirtSize,
         birthday,
-        training,
-        system,
-        notes
+        notes,
     } = formData;
 
-    const onChange = e => {
+    const onChange = (e) => {
         if (e.target.name === 'phone') {
             const was = e.target.value;
             let is = '';
@@ -76,14 +73,14 @@ const EditPeep = ({
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
-    const onSubmit = e => {
+    const onSubmit = (e) => {
         e.preventDefault();
         createPerson(formData, history, true);
-        window.scrollTo(0,0);
+        window.scrollTo(0, 0);
     };
     const moveToTop = () => {
-        window.scrollTo(0,0);
-    }
+        window.scrollTo(0, 0);
+    };
     //++++++++++++++++++++++++++++++++++++++++++++++++++++++
     // used for the phone validation and formatting
     //++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -119,7 +116,6 @@ const EditPeep = ({
     //++++++++++++++++++++++++++++++++++++++++++++++++++++++
     //++++++++++++++++++++++++++++++++++++++++++++++++++++++
     return (
-        
         // function inside(){
         //     console.log('inside');
         // }
@@ -182,7 +178,7 @@ const EditPeep = ({
                         id='active'
                         name='active'
                         checked={!active ? false : true} //might not have value, if so default to true
-                        onChange={e => onChange(e)}
+                        onChange={(e) => onChange(e)}
                     />
                     <span>&nbsp;&nbsp;ACTIVE</span>
                     <small className='form-text'>
@@ -196,7 +192,7 @@ const EditPeep = ({
                         key='2'
                         name='shirtSize'
                         value={shirtSize}
-                        onChange={e => onChange(e)}
+                        onChange={(e) => onChange(e)}
                     >
                         <option value='0'>** Select the shirt size **</option>
                         <option value='S'>S</option>
@@ -238,7 +234,7 @@ const EditPeep = ({
                         placeholder='Description and notes relating to this person'
                         name='notes'
                         value={notes}
-                        onChange={e => onChange(e)}
+                        onChange={(e) => onChange(e)}
                     ></textarea>
                     <small className='form-text'>Things to keep in mind</small>
                 </div>
@@ -255,11 +251,11 @@ const EditPeep = ({
 EditPeep.propTypes = {
     createPerson: PropTypes.func.isRequired,
     getPerson: PropTypes.func.isRequired,
-    person: PropTypes.object.isRequired
+    person: PropTypes.object.isRequired,
 };
 
-const mapStateToProps = state => ({
-    person: state.person
+const mapStateToProps = (state) => ({
+    person: state.person,
 });
 
 export default connect(mapStateToProps, { createPerson, getPerson })(

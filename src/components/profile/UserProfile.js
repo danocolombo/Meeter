@@ -1,12 +1,12 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import UserProfileClients from './UserProfileClients';
+// import UserProfileClients from './UserProfileClients';
 const UserProfile = ({ auth, meeter }) => {
     // useEffect(() => {
     //     //getProfileById(match.params.id);
     // }, [getProfileById, match.params.id]);
-    let uid = auth.user._id;
+    // let uid = auth.user._id;
     const fullName = auth.user.firstName + ' ' + auth.user.lastName;
     return (
         <Fragment>
