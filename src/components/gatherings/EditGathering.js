@@ -12,7 +12,6 @@ import {
 } from '../../actions/gathering';
 import { deleteGroup } from '../../actions/group';
 import GroupListItem from './GroupListItem';
-import { getDefGroups } from '../../actions/admin4';
 import Spinner from '../layout/Spinner';
 
 const initialState = {
@@ -938,7 +937,6 @@ const EditGathering = ({
 EditGathering.propTypes = {
     createGathering: PropTypes.func.isRequired,
     getMtgConfigs: PropTypes.func.isRequired,
-    getDefGroups: PropTypes.func.isRequired,
     addDefaultGroups: PropTypes.func.isRequired,
     getMeeting: PropTypes.func.isRequired,
     gathering: PropTypes.object.isRequired,
@@ -947,23 +945,20 @@ EditGathering.propTypes = {
     meeter: PropTypes.object.isRequired,
     meeting: PropTypes.object.isRequired,
 
-    // mtgConfigs: PropTypes.object.isRequired,
 };
 
 const mapStateToProps = (state) => ({
-    // gathering: state.gathering,
     servants: state.servants,
     group: state.group,
     auth: state.auth,
     meeter: state.meeter,
     meeting: state.meeting,
-    // mtgConfigs: state.meeter.mtgConfigs,
+    
 });
 
 export default connect(mapStateToProps, {
     createGathering,
     getMeeting,
-    getDefGroups,
     addDefaultGroups,
     deleteGroup,
 })(withRouter(EditGathering));
