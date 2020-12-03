@@ -3,12 +3,16 @@ import {
     CLEAR_MEETING,
     SET_GROUPS,
     CLEAR_GROUPS,
+    SET_TMP_GROUP,
+    CLEAR_TMP_GROUP,
 } from '../actions/types';
 
 const initialState = {
     turnout: [],
     groups: [],
+    tmpGroup: {},
     meetingLoading: true,
+    tmpGroupLoading: true,
     error: {},
 };
 
@@ -40,6 +44,18 @@ export default function (state = initialState, action) {
                 ...state,
                 groups: null,
                 meetingLoading: false,
+            };
+        case SET_TMP_GROUP:
+            return {
+                ...state,
+                tmpGroup: payload,
+                tmpGroupLoading: false,
+            };
+        case CLEAR_TMP_GROUP:
+            return {
+                ...state,
+                tmpGroup: null,
+                tmpGroupLoading: true,
             };
         default:
             return state;

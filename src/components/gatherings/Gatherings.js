@@ -29,7 +29,7 @@ const Gatherings = ({
             'GATHERINGS::useEffect, activeClient: ' + meeter.active.client
         );
         getGatherings(meeter.active.client);
-    });
+    }, []);
     return auth.loading || loading ? (
         <Spinner />
     ) : (
@@ -72,8 +72,16 @@ const Gatherings = ({
             ];
         } else {
             return [
-                <Link to='/gatherings/historyView'>HISTORY</Link>,
-                <p className='lead'>List of upcoming meetings...</p>,
+                <Link
+                    key='historyLink'
+                    id='historyLink'
+                    to='/gatherings/historyView'
+                >
+                    HISTORY
+                </Link>,
+                <p key='marque' id='marque' className='lead'>
+                    List of upcoming meetings...
+                </p>,
                 // <Link to='/EditGathering/0'>
                 //     <a class='waves-effect waves-light btn'>
                 //         <i class='material-icons left green'>
@@ -84,7 +92,7 @@ const Gatherings = ({
                 //         </span>
                 //     </a>
                 // </Link>,
-                <Link to='/EditGathering/0'>
+                <Link key='futureLink' id='futureLink' to='/EditGathering/0'>
                     <span className='meeterNavTextHighlight'>NEW</span>
                 </Link>,
             ];

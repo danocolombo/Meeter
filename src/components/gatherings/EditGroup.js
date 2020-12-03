@@ -6,6 +6,7 @@ import { TextField } from '@material-ui/core';
 import { Input } from '@material-ui/core';
 
 import { addGroup, getGroup, deleteGroup } from '../../actions/group';
+
 const initialState = {
     id: '',
     title: '',
@@ -18,22 +19,43 @@ const initialState = {
     notes: '',
 };
 
-const EditGroup = ({ group, role, deleteGroup, history }) => {
+const EditGroup = ({
+    group: { tmpGroup, tmpGroupLoading },
+    role,
+    deleteGroup,
+    match,
+    history,
+}) => {
     const [formData, setFormData] = useState(initialState);
-    // useEffect(() => {
-    //     if (match.params.iid !== 0) {
-    //         getGroup(match.params.gid);
-    //         setFormData({ ...formData, id: match.params.gid });
-    //         setFormData({ ...formData, meetingId: match.params.mid });
-    //         const groupData = { ...initialState };
-    //         for (const key in group) {
-    //             if (key in groupData) groupData[key] = group[key];
-    //         }
-    //         groupData['meetingId'] = match.params.mid;
-    //         setFormData(groupData);
-    //         setFormData({ ...formData, id: match.params.gid });
-    //     }
-    // }, []);
+    useEffect(() => {
+        if (typeof tmpGroup.id === 'undefined') {
+            if (match.params.gid !== 0) {
+                getGroup(match.params.gid);
+            }
+        }
+        if (!tmpGroupLoading) {
+            const groupData = { ...initialState };
+            for (const key in tmpGroup) {
+                if (key in groupData) groupData[key] = tmpGroup[key];
+            }
+            groupData['mid'] = match.params.mid;
+            setFormData(groupData);
+        }
+        if (match.params.gid > 0)
+            setFormData({ ...formData, groupId: match.params.gid });
+        // if (match.params.gid !== 0) {
+        //     getGroup(match.params.gid);
+        //     setFormData({ ...formData, id: match.params.gid });
+        //     setFormData({ ...formData, meetingId: match.params.mid });
+        //     const groupData = { ...initialState };
+        //     for (const key in tmpGroup) {
+        //         if (key in groupData) groupData[key] = tmpGroup[key];
+        //     }
+        //     groupData['meetingId'] = match.params.mid;
+        //     setFormData(groupData);
+        //     setFormData({ ...formData, id: match.params.gid });
+        // }
+    }, [tmpGroupLoading]);
     // useEffect(() => {
     //     if (!group) {
     //         if (match.params.gid != 0) {
@@ -81,7 +103,7 @@ const EditGroup = ({ group, role, deleteGroup, history }) => {
 
     const onSubmit = (e) => {
         e.preventDefault();
-        formData.meetingId = group.meetingId;
+        formData.meetingId = tmpGroup.meetingId;
         addGroup(formData, history, true);
         window.scrollTo(0, 0);
     };
@@ -96,7 +118,7 @@ const EditGroup = ({ group, role, deleteGroup, history }) => {
                         key='2'
                         // className=''
                         name='gender'
-                        value={group.gender}
+                        value={tmpGroup.gender}
                         onChange={(e) => onChange(e)}
                     >
                         <option value='0'>** Select Gender</option>
@@ -114,10 +136,10 @@ const EditGroup = ({ group, role, deleteGroup, history }) => {
                             label='attendance'
                             name='attendance'
                             placeholder='0'
-                            value={group.attendance}
+                            value={tmpGroup.attendance}
                             type='number'
                             size='3'
-                            maxlength='2'
+                            maxLength='2'
                             min='0'
                             text-align='right'
                             // className='attendance'
@@ -132,7 +154,7 @@ const EditGroup = ({ group, role, deleteGroup, history }) => {
                         label='Group title'
                         // variant='outlined'
                         fullWidth
-                        value={group.title}
+                        value={tmpGroup.title}
                         onChange={(e) => onChange(e)}
                     />
                 </div>
@@ -142,7 +164,7 @@ const EditGroup = ({ group, role, deleteGroup, history }) => {
                         label='Location'
                         name='location'
                         fullWidth
-                        value={group.location}
+                        value={tmpGroup.location}
                         // variant='outlined'
                         onChange={(e) => onChange(e)}
                     />
@@ -152,7 +174,7 @@ const EditGroup = ({ group, role, deleteGroup, history }) => {
                         id='facilitator'
                         label='Facilitator'
                         name='facilitator'
-                        value={group.facilitator}
+                        value={tmpGroup.facilitator}
                         fullWidth
                         // variant='outlined'
                         onChange={(e) => onChange(e)}
@@ -162,7 +184,7 @@ const EditGroup = ({ group, role, deleteGroup, history }) => {
                     <TextField
                         id='cofacilitator'
                         name='cofacilitator'
-                        value={group.cofacilitator}
+                        value={tmpGroup.cofacilitator}
                         fullWidth
                         label='Co-Facilitator'
                         // variant='outlined'
@@ -173,7 +195,7 @@ const EditGroup = ({ group, role, deleteGroup, history }) => {
                     <TextField
                         id='notes'
                         name='notes'
-                        value={group.notes}
+                        value={tmpGroup.notes}
                         label='Notes'
                         fullWidth
                         multiline
@@ -188,7 +210,7 @@ const EditGroup = ({ group, role, deleteGroup, history }) => {
                     <span className='pl-2'>
                         <Link
                             className='btn btn-light my-1'
-                            to={`/editGathering/${group.meetingId}`}
+                            to={`/editGathering/${tmpGroup.meetingId}`}
                         >
                             Go Back
                         </Link>
@@ -208,7 +230,7 @@ EditGroup.propTypes = {
 };
 
 const mapStateToProps = (state) => ({
-    group: state.group,
+    group: state.meeting,
     auth: state.auth,
 });
 

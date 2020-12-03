@@ -108,7 +108,13 @@ const EditGathering = ({
             }
             setFormData(turnoutData);
         }
-    }, [meetingLoading, getMeeting, turnout, meeter.active.client, match.params.id]);
+    }, [
+        meetingLoading,
+        getMeeting,
+        turnout,
+        meeter.active.client,
+        match.params.id,
+    ]);
 
     const {
         _id,
@@ -181,9 +187,10 @@ const EditGathering = ({
             aGroup.gender = dgroups[i].gender;
             aGroup.title = dgroups[i].title;
             if (dgroups[i].location) aGroup.location = dgroups[i].location;
-            if (dgroups[i].facilitator) aGroup.facilitator = dgroups[i].facilitator;
+            if (dgroups[i].facilitator)
+                aGroup.facilitator = dgroups[i].facilitator;
             groupsToAdd.push(aGroup);
-        };
+        }
         addDefaultGroups(groupsToAdd);
     };
 
@@ -806,8 +813,7 @@ const EditGathering = ({
                 {groups &&
                     groups.map((group) => (
                         <GroupListItem
-                            key={group._id}
-                            mid={group.mid}
+                            key={group.id}
                             group={group}
                             role={meeter.active.role}
                             deleteResponse={handleGroupDeleteRequest}
@@ -938,15 +944,14 @@ const EditGathering = ({
 
 EditGathering.propTypes = {
     createGathering: PropTypes.func.isRequired,
-    getMtgConfigs: PropTypes.func.isRequired,
+    // getMtgConfigs: PropTypes.func.isRequired,
     addDefaultGroups: PropTypes.func.isRequired,
     getMeeting: PropTypes.func.isRequired,
-    gathering: PropTypes.object.isRequired,
+    // gathering: PropTypes.object.isRequired,
     group: PropTypes.object.isRequired,
     auth: PropTypes.object.isRequired,
     meeter: PropTypes.object.isRequired,
     meeting: PropTypes.object.isRequired,
-
 };
 
 const mapStateToProps = (state) => ({
@@ -955,7 +960,6 @@ const mapStateToProps = (state) => ({
     auth: state.auth,
     meeter: state.meeter,
     meeting: state.meeting,
-    
 });
 
 export default connect(mapStateToProps, {
