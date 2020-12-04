@@ -20,7 +20,7 @@ const initialState = {
 };
 
 const EditGroup = ({
-    group: { tmpGroup, tmpGroupLoading },
+    group: { tmpGroup, tmpGroupLoaded },
     role,
     deleteGroup,
     match,
@@ -33,7 +33,7 @@ const EditGroup = ({
                 getGroup(match.params.gid);
             }
         }
-        if (!tmpGroupLoading) {
+        if (tmpGroupLoaded) {
             const groupData = { ...initialState };
             for (const key in tmpGroup) {
                 if (key in groupData) groupData[key] = tmpGroup[key];
@@ -55,7 +55,7 @@ const EditGroup = ({
         //     setFormData(groupData);
         //     setFormData({ ...formData, id: match.params.gid });
         // }
-    }, [tmpGroupLoading]);
+    }, [tmpGroupLoaded]);
     // useEffect(() => {
     //     if (!group) {
     //         if (match.params.gid != 0) {

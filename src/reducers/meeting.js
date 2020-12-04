@@ -12,7 +12,7 @@ const initialState = {
     groups: [],
     tmpGroup: {},
     meetingLoading: true,
-    tmpGroupLoading: true,
+    tmpGroupLoaded: false,
     error: {},
 };
 
@@ -37,6 +37,8 @@ export default function (state = initialState, action) {
                 ...state,
                 turnout: null,
                 groups: null,
+                tmpGroup: null,
+                tmpGroupLoading: true,
                 meetingLoading: true,
             };
         case CLEAR_GROUPS:
@@ -49,13 +51,28 @@ export default function (state = initialState, action) {
             return {
                 ...state,
                 tmpGroup: payload,
-                tmpGroupLoading: false,
+                tmpGroupLoaded: true,
             };
+        // case SET_TMP_GROUP_FULL:
+        //     return {
+        //         ...state,
+        //         tmpGroup: {
+        //             id: payload.id,
+        //             clientId: payload.clientId,
+        //             meetingId: payload.meetingId,
+        //             location: payload.location,
+        //             gender: payload.gender,
+        //             facilitator: payload.facilitator,
+        //             cofacilitator: payload.coFacilitator,
+        //             title: payload.title,
+        //         },
+        //         tmpGroupLoaded: true,
+        //     };
         case CLEAR_TMP_GROUP:
             return {
                 ...state,
                 tmpGroup: null,
-                tmpGroupLoading: true,
+                tmpGroupLoaded: false,
             };
         default:
             return state;
