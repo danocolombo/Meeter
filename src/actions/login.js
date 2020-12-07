@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { CognitoUser, AuthenticationDetails } from 'amazon-cognito-identity-js';
+import { api_header_config } from './include/api_headers';
 import { setAlert } from './alert';
 import {
     REGISTER_SUCCESS,
@@ -83,16 +84,6 @@ export const login = (email, password) => async (dispatch) => {
 export const loadSystem = (cid) => async (dispatch) => {
     try {
         let client = cid.theClient;
-        //----------------------------------
-        // get client meeting configs
-        //----------------------------------
-        const config = {
-            headers: {
-                'Access-Control-Allow-Headers':
-                    'Content-Type, x-auth-token, Access-Control-Allow-Headers',
-                'Content-Type': 'application/json',
-            },
-        };
 
         let obj1 = {
             operation: 'getConfigs',
@@ -105,12 +96,14 @@ export const loadSystem = (cid) => async (dispatch) => {
         let api2use = process.env.REACT_APP_MEETER_API + '/clients';
         let res = null;
         try {
-            res = await axios.post(api2use, body, config).catch((err) => {
-                if (err.response.status === 404) {
-                    throw new Error(`${err.config.url} not found`);
-                }
-                throw err;
-            });
+            res = await axios
+                .post(api2use, body, api_header_config)
+                .catch((err) => {
+                    if (err.response.status === 404) {
+                        throw new Error(`${err.config.url} not found`);
+                    }
+                    throw err;
+                });
         } catch (err) {
             console.log('logoin.js - loadSystem: getConfigs failed');
         }
@@ -133,12 +126,14 @@ export const loadSystem = (cid) => async (dispatch) => {
         api2use = process.env.REACT_APP_MEETER_API + '/clients';
         res = null;
         try {
-            res = await axios.post(api2use, body, config).catch((err) => {
-                if (err.response.status === 404) {
-                    throw new Error(`${err.config.url} not found`);
-                }
-                throw err;
-            });
+            res = await axios
+                .post(api2use, body, api_header_config)
+                .catch((err) => {
+                    if (err.response.status === 404) {
+                        throw new Error(`${err.config.url} not found`);
+                    }
+                    throw err;
+                });
         } catch (err) {
             console.log('logoin.js - loadSystem: getDefaultGroups failed');
         }
