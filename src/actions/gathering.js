@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { setAlert } from './alert';
+import { api_header_config } from './include/api_headers';
 import {
     GATHERING_ERROR,
     GET_GATHERING,
@@ -29,13 +30,7 @@ export const getMeeting = (id, cid) => async (dispatch) => {
         // get the meeting by ID for client
 
         dispatch({ type: CLEAR_MEETING });
-        const config = {
-            headers: {
-                'Access-Control-Allow-Headers':
-                    'Content-Type, x-auth-token, Access-Control-Allow-Headers',
-                'Content-Type': 'application/json',
-            },
-        };
+
         let obj = {
             operation: 'getMeetingByIdAndClient',
             payload: {
@@ -46,7 +41,7 @@ export const getMeeting = (id, cid) => async (dispatch) => {
         let body = JSON.stringify(obj);
 
         let api2use = process.env.REACT_APP_MEETER_API + '/meetings';
-        let res = await axios.post(api2use, body, config);
+        let res = await axios.post(api2use, body, api_header_config);
 
         dispatch({
             type: SET_MEETING,
@@ -64,7 +59,7 @@ export const getMeeting = (id, cid) => async (dispatch) => {
         };
         body = JSON.stringify(groupQuery);
         api2use = process.env.REACT_APP_MEETER_API + '/groups';
-        res = await axios.post(api2use, body, config);
+        res = await axios.post(api2use, body, api_header_config);
         if (res.data.status === '200') {
             dispatch({
                 type: SET_GROUPS,
@@ -116,13 +111,7 @@ export const getGatherings = (clientId) => async (dispatch) => {
         // dispatch({ type: CLEAR_GROUPS });
         dispatch({ type: CLEAR_MEETING });
         //lets get the future meetings
-        const config = {
-            headers: {
-                'Access-Control-Allow-Headers':
-                    'Content-Type, x-auth-token, Access-Control-Allow-Headers',
-                'Content-Type': 'application/json',
-            },
-        };
+
         let client = clientId;
         let obj = {
             operation: 'getFutureMeetings',
@@ -133,7 +122,7 @@ export const getGatherings = (clientId) => async (dispatch) => {
         let body = JSON.stringify(obj);
 
         let api2use = process.env.REACT_APP_MEETER_API + '/meetings';
-        let res = await axios.post(api2use, body, config);
+        let res = await axios.post(api2use, body, api_header_config);
 
         if (res.status === 200) {
             console.log('we have ' + res.data.count + ' meetings returned');
@@ -156,7 +145,7 @@ export const getGatherings = (clientId) => async (dispatch) => {
             },
         };
         body = JSON.stringify(obj);
-        res = await axios.post(api2use, body, config);
+        res = await axios.post(api2use, body, api_header_config);
 
         if (res.status === 200) {
             console.log(

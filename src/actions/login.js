@@ -157,20 +157,13 @@ export const loadUser = (userId) => async (dispatch) => {
     }
 
     try {
-        const config = {
-            headers: {
-                'Access-Control-Allow-Headers':
-                    'Content-Type, x-auth-token, Access-Control-Allow-Headers',
-                'Content-Type': 'application/json',
-            },
-        };
         // take the _id value and get user from meeter API
         let sub = userId.uData._id;
         let obj = { operation: 'authenticate', payload: { uid: sub } };
         const body = JSON.stringify(obj);
 
         const api2use = process.env.REACT_APP_MEETER_API + '/user';
-        const res = await axios.post(api2use, body, config);
+        const res = await axios.post(api2use, body, api_header_config);
         // now add response data location: res.data.body.x values
         // to the values already passed in from login (cognito)
         let user_data = {

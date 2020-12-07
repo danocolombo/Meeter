@@ -1,17 +1,11 @@
 import axios from 'axios';
+import { api_header_config } from './include/api_headers';
 import { SET_TMP_GROUP, CLEAR_TMP_GROUP, GROUP_ERROR } from './types.js';
 
 export const getGroup = (gid) => async (dispatch) => {
     console.log('inside smallGroups');
     try {
         dispatch({ type: CLEAR_TMP_GROUP });
-        const config = {
-            headers: {
-                'Access-Control-Allow-Headers':
-                    'Content-Type, x-auth-token, Access-Control-Allow-Headers',
-                'Content-Type': 'application/json',
-            },
-        };
         let obj = {
             operation: 'getGroupById',
             payload: {
@@ -21,7 +15,7 @@ export const getGroup = (gid) => async (dispatch) => {
         let body = JSON.stringify(obj);
 
         let api2use = process.env.REACT_APP_MEETER_API + '/groups';
-        let res = await axios.post(api2use, body, config);
+        let res = await axios.post(api2use, body, api_header_config);
 
         dispatch({
             type: SET_TMP_GROUP,
