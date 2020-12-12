@@ -13,6 +13,7 @@ import {
 import { deleteGroup } from '../../actions/group';
 import GroupListItem from './GroupListItem';
 import Spinner from '../layout/Spinner';
+import { FormatBoldTwoTone } from '@material-ui/icons';
 
 const initialState = {
     _id: '',
@@ -159,6 +160,8 @@ const EditGathering = ({
 
     const onSubmit = (e) => {
         e.preventDefault();
+        formData.meetingId = match.params.id;
+        formData.clientId = meeter.active.client;
         if (formData['meetingType'] === 'Testimony')
             delete formData['supportRole'];
         createGathering(formData, history, meeter.active.client, true);

@@ -237,39 +237,41 @@ export const createGathering = (formData, history, cid, edit = false) => async (
     dispatch
 ) => {
     try {
-        if (formData._id.length < 1) {
-            //this is an add, so delete _id and meetingId from formData
-            delete formData._id;
-            delete formData.meetingId;
-        } else {
-            formData.meetingId = formData._id;
-            //formData._id = '';
+        // let's cleanup formData, only send data with values
+        //delete formData.__proto__;
+        for (const property in formData) {
+            console.log(`${property}: ${formData[property]}`);
+            if (formData[property].length < 1) {
+                delete formData[property];
+            }
         }
-        //-----------------------------------------------
-        // need to add the tenantId to the data to put
-        //-----------------------------------------------
-        var client = 'meeting-' + cid;
-        formData.tenantId = client;
-
-        const config = {
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        };
-        const res = await axios.post('/api/meeting', formData, config);
-
-        dispatch({
-            type: GET_GATHERING,
-            payload: res.data,
-        });
-
-        dispatch(
-            setAlert(edit ? 'Meeting Updated' : 'Meeting Created', 'success')
-        );
-
-        if (!edit) {
-            history.push('/gatherings');
+        // if a numeric value is 0, remove it
+        for (const property in formData) {
+            console.log(`${property}: ${formData[property]}`);
+            if (formData[property] === 0) {
+                delete formData[property];
+            }
         }
+
+        console.log('DONE');
+        // const res = await axios.post(
+        //     '/api/meeting',
+        //     formData,
+        //     api_header_config
+        // );
+
+        // dispatch({
+        //     type: GET_GATHERING,
+        //     payload: res.data,
+        // });
+
+        // dispatch(
+        //     setAlert(edit ? 'Meeting Updated' : 'Meeting Created', 'success')
+        // );
+
+        // if (!edit) {
+        //     history.push('/gatherings');
+        // }
     } catch (err) {
         const errors = err.response.data.errors;
 
