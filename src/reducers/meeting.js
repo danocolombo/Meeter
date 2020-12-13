@@ -12,7 +12,7 @@ const initialState = {
     groups: [],
     tmpGroup: {},
     meetingLoading: true,
-    tmpGroupLoaded: false,
+    tmpGroupEmpty: true,
     error: {},
 };
 
@@ -51,7 +51,7 @@ export default function (state = initialState, action) {
             return {
                 ...state,
                 tmpGroup: payload,
-                tmpGroupLoaded: true,
+                tmpGroupEmpty: false,
             };
         // case SET_TMP_GROUP_FULL:
         //     return {
@@ -72,7 +72,7 @@ export default function (state = initialState, action) {
             return {
                 ...state,
                 tmpGroup: null,
-                tmpGroupLoaded: false,
+                tmpGroupEmpty: true,
             };
         default:
             return state;

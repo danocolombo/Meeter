@@ -18,7 +18,7 @@ const GroupListItem = ({
         <Fragment>
             <div className='GItem-Box'>
                 <div className={'GItem-Line1'}>
-                    <Link to={`/Groups/${meetingId}/${id}`}>
+                    <Link to={`/EditGroup/${meetingId}/${id}`}>
                         {get1Line(gender, title, location, facilitator)}
                     </Link>
                 </div>

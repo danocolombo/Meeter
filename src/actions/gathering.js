@@ -252,26 +252,40 @@ export const createGathering = (formData, history, cid, edit = false) => async (
                 delete formData[property];
             }
         }
-
-        console.log('DONE');
-        // const res = await axios.post(
-        //     '/api/meeting',
-        //     formData,
-        //     api_header_config
-        // );
+        let putData = {}
+        putData.operation = "putMeeting";
+        putData.payload = {};
+        putData.payload.Item = {};
+        for (const property in formData) {
+            putData.payload.Item[property] = formData[property];
+        }
+        let api2use = process.env.REACT_APP_MEETER_API + '/meetings';
+        const body = JSON.stringify(putData);
+        try{
+            const res = await axios.post(api2use, body, api_header_config);
+            console.log(res.length);
+        }catch(err){
+            dispatch({
+                type: GATHERING_ERROR,
+                payload: {
+                    msg: err.response.statusText,
+                    status: err.response.status,
+                },
+            });
+        }
 
         // dispatch({
         //     type: GET_GATHERING,
         //     payload: res.data,
         // });
 
-        // dispatch(
-        //     setAlert(edit ? 'Meeting Updated' : 'Meeting Created', 'success')
-        // );
+        dispatch(
+            setAlert(edit ? 'Meeting Updated' : 'Meeting Created', 'success')
+        );
 
-        // if (!edit) {
-        //     history.push('/gatherings');
-        // }
+        if (!edit) {
+            history.push('/gatherings');
+        }
     } catch (err) {
         const errors = err.response.data.errors;
 

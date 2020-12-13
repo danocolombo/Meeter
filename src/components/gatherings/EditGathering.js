@@ -160,7 +160,7 @@ const EditGathering = ({
 
     const onSubmit = (e) => {
         e.preventDefault();
-        formData.meetingId = match.params.id;
+        formData.id = match.params.id;
         formData.clientId = meeter.active.client;
         if (formData['meetingType'] === 'Testimony')
             delete formData['supportRole'];

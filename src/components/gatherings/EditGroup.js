@@ -20,20 +20,19 @@ const initialState = {
 };
 
 const EditGroup = ({
-    group: { tmpGroup, tmpGroupLoaded },
-    role,
-    deleteGroup,
+    meeting: { tmpGroup, tmpGroupEmpty },
     match,
     history,
 }) => {
     const [formData, setFormData] = useState(initialState);
     useEffect(() => {
-        if (typeof tmpGroup.id === 'undefined') {
+        // if (typeof tmpGroup.id === 'undefined') {
+        if (tmpGroup === null){
             if (match.params.gid !== 0) {
                 getGroup(match.params.gid);
             }
         }
-        if (tmpGroupLoaded) {
+        if (tmpGroupEmpty) {
             const groupData = { ...initialState };
             for (const key in tmpGroup) {
                 if (key in groupData) groupData[key] = tmpGroup[key];
@@ -55,7 +54,7 @@ const EditGroup = ({
         //     setFormData(groupData);
         //     setFormData({ ...formData, id: match.params.gid });
         // }
-    }, [tmpGroupLoaded]);
+    }, [tmpGroupEmpty]);
     // useEffect(() => {
     //     if (!group) {
     //         if (match.params.gid != 0) {
@@ -222,18 +221,18 @@ const EditGroup = ({
 };
 
 EditGroup.propTypes = {
-    group: PropTypes.object.isRequired,
-    auth: PropTypes.object.isRequired,
-    addGroup: PropTypes.func.isRequired,
+    meeting: PropTypes.object.isRequired,
+    // auth: PropTypes.object.isRequired,
+    // addGroup: PropTypes.func.isRequired,
     getGroup: PropTypes.func.isRequired,
-    deleteGroup: PropTypes.func.isRequired,
+    // deleteGroup: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({
-    group: state.meeting,
-    auth: state.auth,
+    meeting: state.meeting,
+    // auth: state.auth,
 });
 
-export default connect(mapStateToProps, { addGroup, getGroup, deleteGroup })(
+export default connect(mapStateToProps, { getGroup })(
     withRouter(EditGroup)
 );
