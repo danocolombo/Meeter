@@ -171,7 +171,7 @@ const EditGathering = ({
         //this is going to delete the selected request
         //and update the groups for the meeting
         // console.log('back in EditGathering');
-        deleteGroup(gid, meetingId);
+        deleteGroup(gid, meeter.active.client, turnout.id);
     };
 
     const addDefaultGroupsToMeeting = () => {

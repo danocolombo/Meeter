@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { api_header_config } from './include/api_headers';
 // const mongoose = require('mongoose');
 import { setAlert } from './alert';
 import {
@@ -11,8 +12,8 @@ import {
     GET_GROUP,
     SET_DEFAULT_GROUPS,
     // UPDATE_GROUP,
-    // CLEAR_GROUPS,
-    // SET_GROUP,
+    CLEAR_GROUPS,
+    SET_GROUPS,
 } from './types';
 // import { mongo, Mongoose } from 'mongoose';
 
@@ -60,26 +61,60 @@ export const clearGroup = () => async (dispatch) => {
     }
 };
 // Delete group
-export const deleteGroup = (groupId, mid) => async (dispatch) => {
+export const deleteGroup = (gid, client, mid) => async (dispatch) => {
     try {
-        await axios.delete(`/api/groups/${groupId}`);
-        dispatch({
-            type: DELETE_GROUP,
-            payload: groupId,
-        });
-        // reload the groups
-        const res = await axios.get(`/api/groups/meeting/${mid}`);
+        // we need the groupId and the clientId
+        let obj1 = {
+            operation: 'deleteGroup',
+            payload: {
+                id: gid,
+                clientId: client,
+            },
+        };
+        let body = JSON.stringify(obj1);
 
-        dispatch({
-            type: GET_GROUPS,
-            payload: res.data,
-        });
-        dispatch(setAlert('Group removed', 'success'));
+        let api2use = process.env.REACT_APP_MEETER_API + '/groups';
+        const res = await axios.post(api2use, body, api_header_config);
+        
+        if (res.status === 200){
+            // dispatch({
+            //     type: DELETE_GROUP,
+            //     payload: gid,
+            // });
+            dispatch({ type: CLEAR_GROUPS });
+            let groupQuery = {
+                operation: 'getGroupsByMeetingId',
+                payload: {
+                    meetingId: mid,
+                },
+            };
+            body = JSON.stringify(groupQuery);
+            api2use = process.env.REACT_APP_MEETER_API + '/groups';
+            res = await axios.post(api2use, body, api_header_config);
+            if (res.data.status === '200') {
+                dispatch({
+                    type: SET_GROUPS,
+                    payload: res.data.body,
+                });
+            }
+            // reload the groups
+            // const res = await axios.get(`/api/groups/meeting/${mid}`);
+
+            // dispatch({
+            //     type: GET_GROUPS,
+            //     payload: res.data,
+            // });
+            dispatch(setAlert('Group removed', 'success'));
+        }else{
+            dispatch(setAlert('Failure Deleting Group', 'danger'));
+        }
+        
+        
     } catch (err) {
-        console.log('actions/group.js deleteGroup');
-        console.log('DELETE /api/groups/' + groupId);
-        console.log('GET /api/groups/meeting/' + mid);
-        console.log('DISPATCH TO RELOAD GROUPS IN REDUX');
+        // console.log('actions/group.js deleteGroup');
+        // console.log('DELETE /api/groups/' + groupId);
+        // console.log('GET /api/groups/meeting/' + mid);
+        // console.log('DISPATCH TO RELOAD GROUPS IN REDUX');
         dispatch({
             //actions:deleteGroup
             type: GROUP_ERROR,
