@@ -2,18 +2,18 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { deleteGroup } from '../../actions/group';
+// import { deleteGroup } from '../../actions/group';
 
 const GroupListItem = ({
     group: { id, meetingId, gender, title, location, facilitator },
     role,
-    deleteGroup,
+    handleDelete,
 }) => {
-    // const handleDeleteRequest = () => {
-    //     // send key of entry to delete
-    //     console.log('delete click');
-    //     deleteGroup(id);
-    // };
+    const handleDeleteRequest = () => {
+        // send key of entry to delete
+        console.log('delete click');
+        handleDelete(id);
+    };
     return (
         <Fragment>
             <div className='GItem-Box'>
@@ -29,7 +29,7 @@ const GroupListItem = ({
                     {role !== 'guest' ? (
                         <i
                             className={'fa fa-trash my'}
-                            onClick={() => deleteGroup(id)}
+                            onClick={handleDeleteRequest}
                         ></i>
                     ) : null}
                 </div>
@@ -84,16 +84,12 @@ function get2Line(l, f) {
         </span>,
     ];
 }
-GroupListItem.propTypes = {
-    // group: PropTypes.object.isRequired,
-    auth: PropTypes.object.isRequired,
-    // mid: PropTypes.object.isRequired,
-    role: PropTypes.string.isRequired,
-    deleteGroup: PropTypes.func.isRequired,
-};
+// GroupListItem.propTypes = {
+//     // group: PropTypes.object.isRequired,
+//     auth: PropTypes.object.isRequired,
+//     // mid: PropTypes.object.isRequired,
+//     role: PropTypes.string.isRequired,
+//     // deleteGroup: PropTypes.func.isRequired,
+// };
 
-const mapStateToProps = (state) => ({
-    auth: state.auth,
-});
-
-export default connect(mapStateToProps, { deleteGroup })(GroupListItem);
+export default connect()(GroupListItem);

@@ -11,7 +11,7 @@ import Dashboard from '../dashboard/Dashboard';
 import People from '../people/People';
 // import Gathering from '../gatherings/Gathering';
 import Gatherings from '../gatherings/Gatherings';
-import Groups from '../gatherings/Groups';
+// import Groups from '../gatherings/Groups';
 import EditGathering from '../gatherings/EditGathering';
 import EditGroup from '../gatherings/EditGroup';
 import EditPerson from '../people/EditPerson';
@@ -67,11 +67,11 @@ const Routes = () => {
                     path='/EditGathering/:id'
                     component={EditGathering}
                 />
-                <PrivateRoute
+                {/* <PrivateRoute
                     exact
                     path='/Groups/:mid/:gid'
                     component={Groups}
-                />
+                /> */}
                 <PrivateRoute
                     exact
                     path='/EditGroup/:mid/:gid'

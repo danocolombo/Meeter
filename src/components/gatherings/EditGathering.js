@@ -10,10 +10,11 @@ import {
     createGathering,
     addDefaultGroups,
 } from '../../actions/gathering';
-import { deleteGroup } from '../../actions/group';
+import { deleteGroup, clearTmpGroup } from '../../actions/group';
 import GroupListItem from './GroupListItem';
 import Spinner from '../layout/Spinner';
 import { FormatBoldTwoTone } from '@material-ui/icons';
+import { CLEAR_TMP_GROUP } from '../../actions/types';
 
 const initialState = {
     _id: '',
@@ -90,10 +91,12 @@ const initialMtgState = {
 };
 const EditGathering = ({
     meeter,
-    meeting: { turnout, groups, meetingLoading },
+    meeting: { turnout, groups, meetingLoading, tmpGroupReady },
     createGathering,
     getMeeting,
     addDefaultGroups,
+    deleteGroup,
+    clearTmpGroup,
     match,
     history,
 }) => {
@@ -116,6 +119,12 @@ const EditGathering = ({
         meeter.active.client,
         match.params.id,
     ]);
+    useEffect(() => {
+        if (tmpGroupReady) {
+            // this should mean there is a tmpGroup loaded, remove it
+            clearTmpGroup();
+        }
+    }, []);
 
     const {
         _id,
@@ -167,11 +176,12 @@ const EditGathering = ({
         createGathering(formData, history, meeter.active.client, true);
         window.scrollTo(0, 0);
     };
-    const handleGroupDeleteRequest = (gid) => {
-        //this is going to delete the selected request
-        //and update the groups for the meeting
-        // console.log('back in EditGathering');
-        deleteGroup(gid, meeter.active.client, turnout.id);
+    const handleDeleteGroup = (gid) => {
+        console.log('back in EditGathering');
+        console.log('groupId: ' + gid);
+        console.log('client: ' + turnout.clientId);
+        console.log('meetingId: ' + turnout.id);
+        deleteGroup(gid, turnout.clientId, turnout.id);
     };
 
     const addDefaultGroupsToMeeting = () => {
@@ -819,7 +829,7 @@ const EditGathering = ({
                             key={group.id}
                             group={group}
                             role={meeter.active.role}
-                            deleteResponse={handleGroupDeleteRequest}
+                            handleDelete={handleDeleteGroup}
                         />
                     ))}
             </div>
@@ -951,6 +961,8 @@ EditGathering.propTypes = {
     addDefaultGroups: PropTypes.func.isRequired,
     getMeeting: PropTypes.func.isRequired,
     // gathering: PropTypes.object.isRequired,
+    deleteGroup: PropTypes.func.isRequired,
+    clearTmpGroup: PropTypes.func.isRequired,
     group: PropTypes.object.isRequired,
     auth: PropTypes.object.isRequired,
     meeter: PropTypes.object.isRequired,
@@ -970,4 +982,5 @@ export default connect(mapStateToProps, {
     getMeeting,
     addDefaultGroups,
     deleteGroup,
+    clearTmpGroup,
 })(withRouter(EditGathering));

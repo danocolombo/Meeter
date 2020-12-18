@@ -3,6 +3,8 @@ import { api_header_config } from './include/api_headers';
 // const mongoose = require('mongoose');
 import { setAlert } from './alert';
 import {
+    CLEAR_TMP_GROUP,
+    SET_TMP_GROUP,
     GET_GROUPS,
     GROUP_ERROR,
     DELETE_GROUP,
@@ -75,8 +77,8 @@ export const deleteGroup = (gid, client, mid) => async (dispatch) => {
 
         let api2use = process.env.REACT_APP_MEETER_API + '/groups';
         const res = await axios.post(api2use, body, api_header_config);
-        
-        if (res.status === 200){
+
+        if (res.status === 200) {
             // dispatch({
             //     type: DELETE_GROUP,
             //     payload: gid,
@@ -105,11 +107,9 @@ export const deleteGroup = (gid, client, mid) => async (dispatch) => {
             //     payload: res.data,
             // });
             dispatch(setAlert('Group removed', 'success'));
-        }else{
+        } else {
             dispatch(setAlert('Failure Deleting Group', 'danger'));
         }
-        
-        
     } catch (err) {
         // console.log('actions/group.js deleteGroup');
         // console.log('DELETE /api/groups/' + groupId);
@@ -223,15 +223,42 @@ export const deleteGroupsByMeeting = (mid) => async (dispatch) => {
 // Get group by groupId
 export const getGroup = (groupId) => async (dispatch) => {
     try {
-        // dispatch({ type: CLEAR_GROUP });
-        const res = await axios.get(`/api/groups/${groupId}`);
+        dispatch({ type: CLEAR_TMP_GROUP });
+        let obj = {
+            operation: 'getGroupById',
+            payload: {
+                groupId: groupId,
+            },
+        };
+        let body = JSON.stringify(obj);
+
+        let api2use = process.env.REACT_APP_MEETER_API + '/groups';
+        let res = await axios
+            .post(api2use, body, api_header_config)
+            .catch((error) => {
+                if (error.response) {
+                    console.log(error.response.data);
+                    console.log(error.response.status);
+                    console.log(error.response.headers);
+                } else if (error.response) {
+                    console.log(error.response);
+                } else {
+                    console.log('Error', error.message);
+                }
+            });
+        //const res = await axios.get(`/api/groups/group/${groupId}`);
+
         dispatch({
-            type: GET_GROUP,
-            payload: res.data,
+            type: SET_TMP_GROUP,
+            payload: res.data.body,
         });
+        // const res = await axios.get(`/api/groups/${groupId}`);
+        // dispatch({
+        //     type: GET_GROUP,
+        //     payload: res.data,
+        // });
     } catch (err) {
         console.log('actions/group.js getGroup');
-        console.log('DELETE /api/groups/' + groupId);
         dispatch({
             //getGroup
             type: GROUP_ERROR,
@@ -242,6 +269,11 @@ export const getGroup = (groupId) => async (dispatch) => {
             },
         });
     }
+};
+
+// clear the tmpGroup info from store
+export const clearTmpGroup = () => async (dispatch) => {
+    dispatch({ type: CLEAR_TMP_GROUP });
 };
 
 // Create or update Group

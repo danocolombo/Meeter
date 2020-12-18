@@ -6,6 +6,7 @@ import { TextField } from '@material-ui/core';
 import { Input } from '@material-ui/core';
 
 import { addGroup, getGroup, deleteGroup } from '../../actions/group';
+import Spinner from '../layout/Spinner';
 
 const initialState = {
     id: '',
@@ -20,19 +21,20 @@ const initialState = {
 };
 
 const EditGroup = ({
-    meeting: { tmpGroup, tmpGroupEmpty },
+    meeting: { tmpGroup, tmpGroupReady },
     match,
+    getGroup,
     history,
 }) => {
     const [formData, setFormData] = useState(initialState);
     useEffect(() => {
         // if (typeof tmpGroup.id === 'undefined') {
-        if (tmpGroup === null){
+        if (tmpGroup === null) {
             if (match.params.gid !== 0) {
                 getGroup(match.params.gid);
             }
         }
-        if (tmpGroupEmpty) {
+        if (!tmpGroupReady) {
             const groupData = { ...initialState };
             for (const key in tmpGroup) {
                 if (key in groupData) groupData[key] = tmpGroup[key];
@@ -54,7 +56,8 @@ const EditGroup = ({
         //     setFormData(groupData);
         //     setFormData({ ...formData, id: match.params.gid });
         // }
-    }, [tmpGroupEmpty]);
+    }, [tmpGroupReady]);
+    //}, [tmpGroupEmpty]);
     // useEffect(() => {
     //     if (!group) {
     //         if (match.params.gid != 0) {
@@ -106,7 +109,9 @@ const EditGroup = ({
         addGroup(formData, history, true);
         window.scrollTo(0, 0);
     };
-    return (
+    return !tmpGroupReady ? (
+        <Spinner />
+    ) : (
         <div>
             <form className='form' onSubmit={(e) => onSubmit(e)}>
                 <header className='grpHeader'>
@@ -233,6 +238,4 @@ const mapStateToProps = (state) => ({
     // auth: state.auth,
 });
 
-export default connect(mapStateToProps, { getGroup })(
-    withRouter(EditGroup)
-);
+export default connect(mapStateToProps, { getGroup })(withRouter(EditGroup));
