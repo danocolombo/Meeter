@@ -36,15 +36,12 @@ const Routes = () => {
                     exact
                     path='/create-profile'
                     component={CreateProfile}
-                />
-                <PrivateRoute
+                /> */}
+                {/* <PrivateRoute
                     exact
                     path='/edit-profile'
                     component={EditProfile}
-                />
-                {/* <PrivateRoute exact path='/posts' component={Posts} />
-                <PrivateRoute exact path='/posts/:id' component={Post} /> */}{' '}
-                */}
+                /> */}
                 <PrivateRoute exact path='/people' component={People} />
                 <PrivateRoute exact path='/gatherings' component={Gatherings} />
                 <PrivateRoute
@@ -52,7 +49,7 @@ const Routes = () => {
                     path='/gatherings/:options'
                     component={Gatherings}
                 />
-                {/* <PrivateRoute
+                {/* { <PrivateRoute
                     exact
                     path='/gatheringForm'
                     component={GatheringForm}

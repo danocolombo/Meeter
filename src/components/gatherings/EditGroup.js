@@ -7,18 +7,9 @@ import { Input } from '@material-ui/core';
 
 import { addGroup, getGroup, deleteGroup } from '../../actions/group';
 import Spinner from '../layout/Spinner';
+import { OpenShareGroup } from './OpenShareGroup';
 
-const initialState = {
-    id: '',
-    title: '',
-    meetingId: 0,
-    gender: 'x',
-    location: '',
-    facilitator: '',
-    cofacilitator: '',
-    attendance: 0,
-    notes: '',
-};
+const osg = new OpenShareGroup();
 
 const EditGroup = ({
     meeting: { tmpGroup, tmpGroupReady },
@@ -26,8 +17,9 @@ const EditGroup = ({
     getGroup,
     history,
 }) => {
-    const [formData, setFormData] = useState(initialState);
+    const [formData, setFormData] = useState(osg);
     useEffect(() => {
+        console.log('osg.gender: ' + osg.gender);
         // if (typeof tmpGroup.id === 'undefined') {
         if (tmpGroup === null) {
             if (match.params.gid !== 0) {
@@ -35,7 +27,7 @@ const EditGroup = ({
             }
         }
         if (!tmpGroupReady) {
-            const groupData = { ...initialState };
+            const groupData = { ...osg };
             for (const key in tmpGroup) {
                 if (key in groupData) groupData[key] = tmpGroup[key];
             }
