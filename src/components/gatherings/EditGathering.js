@@ -16,6 +16,7 @@ import Spinner from '../layout/Spinner';
 import { FormatBoldTwoTone } from '@material-ui/icons';
 import { CLEAR_TMP_GROUP } from '../../actions/types';
 import { GeneralMeetingNight } from './GeneralMeetingNight';
+import { OpenShareGroup } from './OpenShareGroup';
 
 const gmn = new GeneralMeetingNight();
 
@@ -136,7 +137,10 @@ const EditGathering = ({
         }
         addDefaultGroups(groupsToAdd);
     };
-
+    const ConsoleLog = ({ children }) => {
+        console.log('spinning: ' + children);
+        return false;
+    };
     //-----------------------------------------------------
     // this next couple of lines gives the ability to see configs
     // const util = require('util');
@@ -144,8 +148,12 @@ const EditGathering = ({
     //     'meeter.mtgConfigs: ' +
     //         util.inspect(meeter.mtgConfigs, { showHidden: false, depth: null })
     // );
-    return meetingLoading ? (
-        <Spinner />
+
+    return match.params.id !== '0' && meetingLoading ? (
+        <Fragment>
+            <Spinner />
+            <ConsoleLog>{match.params.id}</ConsoleLog>
+        </Fragment>
     ) : (
         // function inside(){
         //     console.log('inside');

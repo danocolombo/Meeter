@@ -101,6 +101,7 @@ export const getMeeting = (id, cid) => async (dispatch) => {
     //     });
     // }
 };
+
 //#########################
 //get gatherings
 //#########################
@@ -252,8 +253,8 @@ export const createGathering = (formData, history, cid, edit = false) => async (
                 delete formData[property];
             }
         }
-        let putData = {}
-        putData.operation = "putMeeting";
+        let putData = {};
+        putData.operation = 'putMeeting';
         putData.payload = {};
         putData.payload.Item = {};
         for (const property in formData) {
@@ -261,10 +262,10 @@ export const createGathering = (formData, history, cid, edit = false) => async (
         }
         let api2use = process.env.REACT_APP_MEETER_API + '/meetings';
         const body = JSON.stringify(putData);
-        try{
+        try {
             const res = await axios.post(api2use, body, api_header_config);
             console.log(res.length);
-        }catch(err){
+        } catch (err) {
             dispatch({
                 type: GATHERING_ERROR,
                 payload: {
