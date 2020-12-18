@@ -15,80 +15,10 @@ import GroupListItem from './GroupListItem';
 import Spinner from '../layout/Spinner';
 import { FormatBoldTwoTone } from '@material-ui/icons';
 import { CLEAR_TMP_GROUP } from '../../actions/types';
+import { GeneralMeetingNight } from './GeneralMeetingNight';
 
-const initialState = {
-    _id: '',
-    tenantId: '',
-    meetingId: '',
-    meetingDate: '',
-    facilitator: '',
-    meetingType: '',
-    supportRole: '',
-    title: '',
-    worship: '',
-    avContact: '',
-    attendance: 0,
-    newcomers: 0,
-    donations: 0,
-    meal: '',
-    mealCoordinator: 'TBD',
-    mealCnt: 0,
-    cafeCoordinator: 'TBD',
-    cafeCount: 0,
-    greeterContact1: '',
-    greeterContact2: '',
-    resourceContact: '',
-    announcementsContact: '',
-    closingContact: '',
-    securityContact: '',
-    setupContact: '',
-    cleanupContact: '',
-    transportationContact: '',
-    transportationCount: 0,
-    nurseryContact: '',
-    nursery: 0,
-    childrenContact: '',
-    children: 0,
-    youthContact: '',
-    youth: 0,
-    notes: '',
-};
-const initialMtgState = {
-    meetingId: '',
-    clientId: '',
-    meetingDate: '',
-    facilitator: '',
-    meetingType: '',
-    supportRole: '',
-    title: '',
-    worship: '',
-    avContact: '',
-    attendance: 0,
-    newcomers: 0,
-    donations: 0,
-    meal: '',
-    mealCoordinator: 'TBD',
-    mealCnt: 0,
-    cafeCoordinator: 'TBD',
-    cafeCount: 0,
-    greeterContact1: '',
-    greeterContact2: '',
-    resourceContact: '',
-    announcementsContact: '',
-    closingContact: '',
-    securityContact: '',
-    setupContact: '',
-    cleanupContact: '',
-    transportationContact: '',
-    transportationCount: 0,
-    nurseryContact: '',
-    nursery: 0,
-    childrenContact: '',
-    children: 0,
-    youthContact: '',
-    youth: 0,
-    notes: '',
-};
+const gmn = new GeneralMeetingNight();
+
 const EditGathering = ({
     meeter,
     meeting: { turnout, groups, meetingLoading, tmpGroupReady },
@@ -100,13 +30,13 @@ const EditGathering = ({
     match,
     history,
 }) => {
-    const [formData, setFormData] = useState(initialMtgState);
+    const [formData, setFormData] = useState(gmn);
     useEffect(() => {
         if (!turnout && match.params.id !== '0') {
             getMeeting(match.params.id, meeter.active.client);
         }
         if (!meetingLoading) {
-            const turnoutData = { ...initialState };
+            const turnoutData = { ...gmn };
             for (const key in turnout) {
                 if (key in turnoutData) turnoutData[key] = turnout[key];
             }
