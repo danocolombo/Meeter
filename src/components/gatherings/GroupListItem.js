@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 // import { deleteGroup } from '../../actions/group';
 
 const GroupListItem = ({
-    group: { id, meetingId, gender, title, location, facilitator },
+    group: { id, meetingId, gender, title, location, facilitator, attendance },
     role,
     handleDelete,
 }) => {
@@ -19,11 +19,11 @@ const GroupListItem = ({
             <div className='GItem-Box'>
                 <div className={'GItem-Line1'}>
                     <Link to={`/EditGroup/${meetingId}/${id}`}>
-                        {get1Line(gender, title, location, facilitator)}
+                        {get1Line(gender, title)}
                     </Link>
                 </div>
                 <div className={'GItem-Line2'}>
-                    {get2Line(location, facilitator)}
+                    {get2Line(location, facilitator, attendance)}
                 </div>
                 <div className={'GItem-Button'}>
                     {role !== 'guest' ? (
@@ -33,7 +33,8 @@ const GroupListItem = ({
                         ></i>
                     ) : null}
                 </div>
-                <div className={'GItem-Nutn'}></div>
+                <div className={'GItem-Attendance'}>{attendance}</div>
+                {/* <div className={'GItem-Nutn'}></div> */}
             </div>
         </Fragment>
     );
@@ -60,7 +61,7 @@ function get1Line(g, t) {
         </span>,
     ];
 }
-function get2Line(l, f) {
+function get2Line(l, f, a) {
     console.log(l + ' ' + l.length);
     console.log(f + ' ' + f.length);
     let line2 = '';
@@ -84,12 +85,5 @@ function get2Line(l, f) {
         </span>,
     ];
 }
-// GroupListItem.propTypes = {
-//     // group: PropTypes.object.isRequired,
-//     auth: PropTypes.object.isRequired,
-//     // mid: PropTypes.object.isRequired,
-//     role: PropTypes.string.isRequired,
-//     // deleteGroup: PropTypes.func.isRequired,
-// };
 
-export default connect()(GroupListItem);
+export default GroupListItem;
