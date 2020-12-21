@@ -4,9 +4,10 @@ import {
     SET_CLIENT_USERS,
     ADMIN_ERROR,
     REMOVE_CLIENT_USER,
-    TOGGLE_CONFIG,
+    SET_MTG_CONFIGS,
+    SET_DEFAULT_GROUPS,
 } from './types';
-
+import { api_header_config } from './include/api_headers';
 // GET CLIENT INFO
 
 export const getClientInfo = (cid) => async (dispatch) => {
@@ -21,7 +22,14 @@ export const getClientInfo = (cid) => async (dispatch) => {
     }
 };
 export const getClientUsers = (client) => async (dispatch) => {
+    //==================================================================
+    // header
+    // build request
+    // {"operation": "getConfigs", "payload": {"clientId": "wbc"}}
+    // call: /clients
+    //==================================================================
     console.log('getClientUsers(' + client + ')');
+
     console.log('/api/client/userstatus/' + client);
     try {
         const res = await axios.get(`/api/client/userstatus/${client}`);
@@ -40,7 +48,98 @@ export const getClientUsers = (client) => async (dispatch) => {
         });
     }
 };
+// export const getMtgConfigs = (cid) => async (dispatch) => {
+//this loads all the default groups for client
+//into meeter.defaultGroups
+// if (!cid) return;
 
+// try {
+//     //==================================================================
+//     // header
+//     // build request
+//     // {"operation": "getConfigs", "payload": {"clientId": "wbc"}}
+//     // call: /clients
+//     //==================================================================
+//     let obj = {
+//         operation: 'getGroupById',
+//         payload: {
+//             groupId: groupId,
+//         },
+//     };
+//     let body = JSON.stringify(obj);
+
+//     let api2use = process.env.REACT_APP_MEETER_API + '/groups';
+//     let res = await axios
+//         .post(api2use, body, api_header_config)
+//         .catch((error) => {
+//             if (error.response) {
+//                 console.log(error.response.data);
+//                 console.log(error.response.status);
+//                 console.log(error.response.headers);
+//             } else if (error.response) {
+//                 console.log(error.response);
+//             } else {
+//                 console.log('Error', error.message);
+//             }
+//         });
+
+// res should be the configs...
+
+// OLD STUFF
+// const res = await axios.get(`/api/client/mconfigs/${cid}`);
+// // const res = await axios.get(`/api/client/meetingConfigs/${cid}`);
+// if (res) {
+//     dispatch({
+//         type: SET_MTG_CONFIGS,
+//         payload: res.data,
+//     });
+// } else {
+//     console.log('NO CLIENT MEETING CONFIGS');
+// }
+//     } catch (err) {
+//         console.log('actions/admin.js getMtgConfigs ADMIN_ERROR');
+//         dispatch({
+//             type: ADMIN_ERROR,
+//             payload: {
+//                 msg: err.response.statusText ? err.response.statusText : '',
+//                 status: err.response.status,
+//             },
+//         });
+//     }
+// };
+export const getDefGroups = (cid) => async (dispatch) => {
+    //==================================================================
+    // header
+    // build request
+    // {"operation": "getDefaultGroups", "payload": {"clientId": "wbc"}}
+    // call: /clients
+    //==================================================================
+
+    //this loads all the default groups for cid
+    //into meeter.defaultGroups
+    // console.log('getDefGroups(' + cid + ')');
+    // console.log('/api/client/defaultgroups/' + cid);
+    try {
+        const res = await axios.get(`/api/client/defaultgroups/${cid}`);
+        if (res) {
+            dispatch({
+                type: SET_DEFAULT_GROUPS,
+                payload: res.data,
+            });
+        } else {
+            console.log('NO DEFAULT GROUPS RETURNED');
+        }
+    } catch (err) {
+        console.log('actions/admin.js getDefGroups ADMIN_ERROR');
+        dispatch({
+            type: ADMIN_ERROR,
+            // payload: {
+            //     msg: err.response.statusText ? err.response.statusText : '',
+            //     status: err.response.status,
+            // },
+        });
+    }
+};
 
 export const updateDefaultGroup = (revised) => async (dispatch) => {
     console.log('getting the work done.');
@@ -319,35 +418,90 @@ export const suspendClientUser = (id) => async (dispatch) => {
     //users in database to suspended and updates
     //meeter.clientUsers status
 };
-export const toggleConfig = (config, value, cid) => async (dispatch) => {
+export const toggleConfig = (configValue, newBoolValue, client) => async (
+    dispatch
+) => {
     // this gets the client and configuration value
     // if the value exists, we remove it, if it does
     // not exist, we add it.
-    let theChange = {};
-    theChange.cid = cid;
-    theChange.config = config;
-    theChange.value = value;
-    // console.table(theChange);
+    //=============================
+    // need to set value string based on boolean
+    let newValue = 'false';
+    if (newBoolValue) newValue = 'true';
     try {
-        const config = {
-            headers: {
-                'Content-Type': 'application/json',
+        let obj = {
+            operation: 'updateMeeterConfigs',
+            payload: {
+                clientId: client,
+                config: configValue,
+                setting: newValue,
             },
         };
-        const res = await axios.post(
-            '/api/client/toggleconfig',
-            theChange,
-            config
-        );
+        let body = JSON.stringify(obj);
 
+        let api2use = process.env.REACT_APP_MEETER_API + '/clients';
+        let res = await axios
+            .post(api2use, body, api_header_config)
+            .catch((error) => {
+                if (error.response) {
+                    console.log(error.response.data);
+                    console.log(error.response.status);
+                    console.log(error.response.headers);
+                } else if (error.response) {
+                    console.log(error.response);
+                } else {
+                    console.log('Error', error.message);
+                }
+            });
+        // now get all the current configs and reload
+        obj = {
+            operation: 'getConfigs',
+            payload: {
+                clientId: client,
+            },
+        };
+        body = JSON.stringify(obj);
+
+        api2use = process.env.REACT_APP_MEETER_API + '/clients';
+        res = await axios
+            .post(api2use, body, api_header_config)
+            .catch((error) => {
+                if (error.response) {
+                    console.log(error.response.data);
+                    console.log(error.response.status);
+                    console.log(error.response.headers);
+                } else if (error.response) {
+                    console.log(error.response);
+                } else {
+                    console.log('Error', error.message);
+                }
+            });
         dispatch({
-            type: TOGGLE_CONFIG,
-            payload: res,
+            type: SET_MTG_CONFIGS,
+            payload: res.data.body,
         });
+
+        //------------
+
+        // const config = {
+        //     headers: {
+        //         'Content-Type': 'application/json',
+        //     },
+        // };
+        // const res = await axios.post(
+        //     '/api/client/toggleconfig',
+        //     theChange,
+        //     config
+        // );
+
+        // dispatch({
+        //     type: TOGGLE_CONFIG,
+        //     payload: res,
+        // });
 
         dispatch(setAlert('System Configuration Updated', 'success'));
     } catch (err) {
-        console.log('actions/admin.js deleteClientUser ADMIN_ERROR');
+        console.log('actions/admin.js toggleConfig ADMIN_ERROR');
         dispatch({
             type: ADMIN_ERROR,
             payload: {

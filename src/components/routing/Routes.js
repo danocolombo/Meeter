@@ -20,6 +20,7 @@ import NotFound from '../layout/NotFound';
 import PrivateRoute from '../routing/PrivateRoute';
 import UserProfile from '../profile/UserProfile';
 // import PersonForm from '../people/PersonForm';
+import Security from '../admin/DisplaySecurity';
 
 const Routes = () => {
     return (
@@ -78,6 +79,11 @@ const Routes = () => {
                     exact
                     path='/EditPerson/:id'
                     component={EditPerson}
+                />
+                <PrivateRoute
+                    exact
+                    path='/DisplaySecurity'
+                    component={Security}
                 />
                 <Route component={NotFound} />
             </Switch>
