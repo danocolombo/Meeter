@@ -58,7 +58,7 @@ const EditGathering = ({
     }, []);
 
     const {
-        _id,
+        id,
         meetingId,
         meetingDate,
         facilitator,
@@ -698,7 +698,7 @@ const EditGathering = ({
 
                 {meeter.active.status === 'approved' &&
                 meeter.active.role !== 'guest' &&
-                _id ? (
+                id ? (
                     <Fragment>
                         <hr className='group-ruler my-1' />
                         <h2>Open-Share Groups</h2>
@@ -709,7 +709,7 @@ const EditGathering = ({
                                 size='small'
                                 // className={classes.button}
                                 startIcon={<PlaylistAddIcon />}
-                                href={`/EditGroup/${_id}/0`}
+                                href={`/EditGroup/${id}/0`}
                             >
                                 New Group
                             </Button>
@@ -743,7 +743,7 @@ const EditGathering = ({
                                     </Button>
                                 </span>
                             ) : null}
-                            {_id.length < 1 ? (
+                            {id.length < 1 ? (
                                 <div>
                                     Open-share groups can be added after the
                                     meeting is saved.
