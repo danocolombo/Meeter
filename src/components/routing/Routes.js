@@ -11,6 +11,7 @@ import Dashboard from '../dashboard/Dashboard';
 import People from '../people/People';
 // import Gathering from '../gatherings/Gathering';
 import Gatherings from '../gatherings/Gatherings';
+import Meeting from '../meeting-form/meeting-form.component';
 // import Groups from '../gatherings/Groups';
 import EditGathering from '../gatherings/EditGathering';
 import EditGroup from '../gatherings/EditGroup';
@@ -20,7 +21,7 @@ import NotFound from '../layout/NotFound';
 import PrivateRoute from '../routing/PrivateRoute';
 import UserProfile from '../profile/UserProfile';
 // import PersonForm from '../people/PersonForm';
-import Security from '../admin/DisplaySecurity';
+import Administration from '../admin/Administration';
 
 const Routes = () => {
     return (
@@ -82,9 +83,10 @@ const Routes = () => {
                 />
                 <PrivateRoute
                     exact
-                    path='/DisplaySecurity'
-                    component={Security}
+                    path='/Administration'
+                    component={Administration}
                 />
+                <PrivateRoute exact path='/Meeting' component={Meeting} />
                 <Route component={NotFound} />
             </Switch>
         </section>

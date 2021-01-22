@@ -92,7 +92,10 @@ const Gatherings = ({
                 //         </span>
                 //     </a>
                 // </Link>,
-                <Link key='futureLink' id='futureLink' to='/EditGathering/0'>
+                // <Link key='futureLink' id='futureLink' to='/EditGathering/0'>
+                //     <span className='meeterNavTextHighlight'>NEW</span>
+                // </Link>,
+                <Link key='futureLink' id='futureLink' to='/Meeting'>
                     <span className='meeterNavTextHighlight'>NEW</span>
                 </Link>,
             ];

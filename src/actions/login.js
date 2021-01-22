@@ -1,5 +1,10 @@
 import axios from 'axios';
-import { CognitoUser, AuthenticationDetails } from 'amazon-cognito-identity-js';
+import {
+    CognitoUserPool,
+    CognitoUserAttribute,
+    CognitoUser,
+    AuthenticationDetails,
+} from 'amazon-cognito-identity-js';
 import { api_header_config } from './include/api_headers';
 import { setAlert } from './alert';
 import {
@@ -21,9 +26,54 @@ import setAuthToken from '../utils/setAuthToken';
 import UserPool from './UserPool';
 // import { CollectionsOutlined, DateRange } from '@material-ui/icons';
 
+// check CognitoUserPool users
+//-------------------------------
+export const getUsersFromPool = () => async (dispatch) => {};
+
+// register a user
+//-------------------------------
+export const registerUserInPool = (registrar) => async (dispatch) => {
+    const {
+        firstName,
+        lastName,
+        email,
+        phone,
+        client,
+        login,
+        password,
+        role,
+    } = registrar.newUser;
+
+    var attributeList = [];
+    var dataEmail = {
+        Name: 'email',
+        Value: email,
+    };
+    var dataPhoneNumber = {
+        Name: 'phone_number',
+        Value: phone,
+    };
+    var attributeEmail = new CognitoUserAttribute(dataEmail);
+    var attributePhoneNumber = new CognitoUserAttribute(dataPhoneNumber);
+
+    UserPool.signUp(
+        login,
+        password,
+        attributeList,
+        null,
+        function (err, result) {
+            if (err) {
+                alert(err.message || JSON.stringify(err));
+                return;
+            }
+            var cognitoUser = result.user;
+            console.log('user name is ' + cognitoUser.getUsername());
+        }
+    );
+};
+
 // Login (Authenticate)
 //============================
-
 export const login = (email, password) => async (dispatch) => {
     const user = new CognitoUser({
         Username: email,
@@ -57,6 +107,25 @@ export const login = (email, password) => async (dispatch) => {
                 phone: data.idToken.payload.phone_number,
             };
 
+            //===================
+            // DANOTEST
+            //===================
+            try {
+                let newUser = {
+                    login: 'meeter.tester@wmogcolumbus.com',
+                    password: 'R0mans1212!',
+                    firstName: 'Meeter',
+                    lastName: 'Tester',
+                    phone: '+17066543210',
+                    email: 'meeter.tester@wmogcolumbus.com',
+                    role: 'guest', //superuser, owner, manager
+                    client: 'wbc',
+                };
+                dispatch(registerUserInPool({ newUser }));
+            } catch (regError) {
+                console.log('registerUserInPool FAILED');
+            }
+
             dispatch(loadUser({ uData }));
         },
         onFailure: (err) => {
@@ -84,7 +153,9 @@ export const login = (email, password) => async (dispatch) => {
 export const loadSystem = (cid) => async (dispatch) => {
     try {
         let client = cid.theClient;
-
+        //------------------------
+        // meeting configs
+        //========================
         let obj1 = {
             operation: 'getConfigs',
             payload: {
@@ -115,6 +186,9 @@ export const loadSystem = (cid) => async (dispatch) => {
         } else {
             console.log('NO CLIENT MEETING CONFIGS');
         }
+        //========================
+        // default groups for client
+        //========================
         let obj2 = {
             operation: 'getDefaultGroups',
             payload: {

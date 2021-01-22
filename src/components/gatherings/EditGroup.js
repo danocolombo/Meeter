@@ -5,7 +5,12 @@ import { connect } from 'react-redux';
 import { TextField } from '@material-ui/core';
 import { Input } from '@material-ui/core';
 
-import { addGroup, getGroup, deleteGroup } from '../../actions/group';
+import {
+    addGroup,
+    getGroup,
+    setNewTmpGroup,
+    deleteGroup,
+} from '../../actions/group';
 import Spinner from '../layout/Spinner';
 import { OpenShareGroup } from './OpenShareGroup';
 
@@ -15,39 +20,46 @@ const EditGroup = ({
     meeting: { tmpGroup, tmpGroupReady },
     match,
     getGroup,
+    setNewTmpGroup,
     history,
 }) => {
     const [formData, setFormData] = useState(osg);
     useEffect(() => {
         console.log('osg.gender: ' + osg.gender);
-        // if (typeof tmpGroup.id === 'undefined') {
-        if (tmpGroup === null) {
-            if (match.params.gid !== 0) {
-                getGroup(match.params.gid);
+        console.log('match.params.gid length: ' + match.params.gid.length);
+        if (match.params.gid.length > 1) {
+            // if (typeof tmpGroup.id === 'undefined') {
+            if (tmpGroup === null) {
+                if (match.params.gid !== 0) {
+                    getGroup(match.params.gid);
+                }
             }
-        }
-        if (!tmpGroupReady) {
-            const groupData = { ...osg };
-            for (const key in tmpGroup) {
-                if (key in groupData) groupData[key] = tmpGroup[key];
+            if (!tmpGroupReady) {
+                const groupData = { ...osg };
+                for (const key in tmpGroup) {
+                    if (key in groupData) groupData[key] = tmpGroup[key];
+                }
+                groupData['mid'] = match.params.mid;
+                setFormData(groupData);
             }
-            groupData['mid'] = match.params.mid;
-            setFormData(groupData);
+            if (match.params.gid > 0)
+                setFormData({ ...formData, groupId: match.params.gid });
+            // if (match.params.gid !== 0) {
+            //     getGroup(match.params.gid);
+            //     setFormData({ ...formData, id: match.params.gid });
+            //     setFormData({ ...formData, meetingId: match.params.mid });
+            //     const groupData = { ...initialState };
+            //     for (const key in tmpGroup) {
+            //         if (key in groupData) groupData[key] = tmpGroup[key];
+            //     }
+            //     groupData['meetingId'] = match.params.mid;
+            //     setFormData(groupData);
+            //     setFormData({ ...formData, id: match.params.gid });
+            // }
+        } else {
+            console.log('we got a new one');
+            setNewTmpGroup(match.params.mid);
         }
-        if (match.params.gid > 0)
-            setFormData({ ...formData, groupId: match.params.gid });
-        // if (match.params.gid !== 0) {
-        //     getGroup(match.params.gid);
-        //     setFormData({ ...formData, id: match.params.gid });
-        //     setFormData({ ...formData, meetingId: match.params.mid });
-        //     const groupData = { ...initialState };
-        //     for (const key in tmpGroup) {
-        //         if (key in groupData) groupData[key] = tmpGroup[key];
-        //     }
-        //     groupData['meetingId'] = match.params.mid;
-        //     setFormData(groupData);
-        //     setFormData({ ...formData, id: match.params.gid });
-        // }
     }, [tmpGroupReady]);
     //}, [tmpGroupEmpty]);
     // useEffect(() => {
@@ -222,6 +234,7 @@ EditGroup.propTypes = {
     // auth: PropTypes.object.isRequired,
     // addGroup: PropTypes.func.isRequired,
     getGroup: PropTypes.func.isRequired,
+    setNewTmpGroup: PropTypes.func.isRequired,
     // deleteGroup: PropTypes.func.isRequired,
 };
 
@@ -230,4 +243,6 @@ const mapStateToProps = (state) => ({
     // auth: state.auth,
 });
 
-export default connect(mapStateToProps, { getGroup })(withRouter(EditGroup));
+export default connect(mapStateToProps, { getGroup, setNewTmpGroup })(
+    withRouter(EditGroup)
+);

@@ -17,7 +17,7 @@ import { FormatBoldTwoTone } from '@material-ui/icons';
 import { CLEAR_TMP_GROUP } from '../../actions/types';
 import { GeneralMeetingNight } from './GeneralMeetingNight';
 import { OpenShareGroup } from './OpenShareGroup';
-
+import FormInput from './components/FormInput/form-input.component';
 const gmn = new GeneralMeetingNight();
 
 const EditGathering = ({
@@ -177,6 +177,15 @@ const EditGathering = ({
                         onChange={(e) => onChange(e)}
                     />
                 </div>
+                <FormInput
+                    type='text'
+                    name='displayName'
+                    value={facilitator}
+                    onChange={onChange}
+                    label='New Facilitator'
+                    required
+                />
+
                 <h4>Facilitator</h4>
                 <span className='medium-text'>medium text</span>
                 <input

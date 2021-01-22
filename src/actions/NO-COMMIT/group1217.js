@@ -1,8 +1,6 @@
 import axios from 'axios';
-import { api_header_config } from './include/api_headers';
-import { OpenShareGroup } from '../components/gatherings/OpenShareGroup';
-// const mongoose = require('mongoose');
 import { setAlert } from './alert';
+import { api_header_config } from './include/api_headers';
 import {
     CLEAR_TMP_GROUP,
     SET_TMP_GROUP,
@@ -18,8 +16,50 @@ import {
     CLEAR_GROUPS,
     SET_GROUPS,
 } from './types';
-// import { mongo, Mongoose } from 'mongoose';
 
+// Get group by groupId load in meeting.tmpGroup
+export const getGroup = (groupId) => async (dispatch) => {
+    try {
+        dispatch({ type: CLEAR_TMP_GROUP });
+
+        let obj = {
+            operation: 'getGroupById',
+            payload: {
+                groupId: groupId,
+            },
+        };
+        let body = JSON.stringify(obj);
+
+        let api2use = process.env.REACT_APP_MEETER_API + '/groups';
+        let res = await axios
+            .post(api2use, body, api_header_config)
+            .catch((error) => {
+                if (error.response) {
+                    console.log(error.response.data);
+                    console.log(error.response.status);
+                    console.log(error.response.headers);
+                } else if (error.response) {
+                    console.log(error.response);
+                } else {
+                    console.log('Error', error.message);
+                }
+            });
+        //const res = await axios.get(`/api/groups/group/${groupId}`);
+
+        dispatch({
+            type: SET_TMP_GROUP,
+            payload: res.data.body,
+        });
+    } catch (err) {
+        dispatch({
+            type: GROUP_ERROR,
+            payload: {
+                msg: err.response.statusText,
+                status: err.response.status,
+            },
+        });
+    }
+};
 // Get groups associated with meetingId
 export const getGroups = (mid) => async (dispatch) => {
     try {
@@ -221,75 +261,6 @@ export const deleteGroupsByMeeting = (mid) => async (dispatch) => {
 //         });
 //     }
 // };
-// Get group by groupId
-export const getGroup = (groupId) => async (dispatch) => {
-    try {
-        dispatch({ type: CLEAR_TMP_GROUP });
-        let obj = {
-            operation: 'getGroupById',
-            payload: {
-                groupId: groupId,
-            },
-        };
-        let body = JSON.stringify(obj);
-
-        let api2use = process.env.REACT_APP_MEETER_API + '/groups';
-        let res = await axios
-            .post(api2use, body, api_header_config)
-            .catch((error) => {
-                if (error.response) {
-                    console.log(error.response.data);
-                    console.log(error.response.status);
-                    console.log(error.response.headers);
-                } else if (error.response) {
-                    console.log(error.response);
-                } else {
-                    console.log('Error', error.message);
-                }
-            });
-        console.log('---------------');
-        console.log(res.data.body);
-        console.log('---------------');
-        dispatch({
-            type: SET_TMP_GROUP,
-            payload: res.data.body,
-        });
-    } catch (err) {
-        console.log('actions/group.js getGroup');
-        dispatch({
-            //getGroup
-            type: GROUP_ERROR,
-            //actions:getGroup
-            payload: {
-                msg: err.response.statusText,
-                status: err.response.status,
-            },
-        });
-    }
-};
-export const setNewTmpGroup = (mid) => async (dispatch) => {
-    //this function is to load an empty group in store to be
-    // used for the editGroup form when adding a new group
-    //---------------------------------------------------------
-    let newGroup = {};
-    newGroup.meetingId = mid;
-    newGroup.id = 'tbd';
-    newGroup.attendance = 0;
-    newGroup.cofacilitator = '';
-    newGroup.facilitator = '';
-    newGroup.location = '';
-    newGroup.notes = '';
-    newGroup.title = '';
-    dispatch({
-        type: SET_TMP_GROUP,
-        payload: newGroup,
-    });
-};
-
-// clear the tmpGroup info from store
-export const clearTmpGroup = () => async (dispatch) => {
-    dispatch({ type: CLEAR_TMP_GROUP });
-};
 
 // Create or update Group
 // the data will come in on formData and we will use history to
