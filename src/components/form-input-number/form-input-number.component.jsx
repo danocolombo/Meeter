@@ -8,14 +8,10 @@ const FormInputNumber = ({
     ...otherProps
 }) => (
     <div className='group'>
-        <input
-            type='number'
-            id='quantity'
-            name='quantity'
-            min='1'
-            max='300'
-            value={value}
-        />
+        <div className='numberInputArea'>
+        <input className='numberInput'
+        {...otherProps}
+        /></div>
         <span>{label}</span>
     </div>
 );

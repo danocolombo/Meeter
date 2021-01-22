@@ -28,11 +28,16 @@ class MeetingForm extends React.Component {
         const { name, value } = event.target;
         this.setState({ [name]: value });
     };
+    handleNumericClick = (event) => {
+        // this is used to increment or decrement int
+        const { name } = event.target;
+        console.log('component: ' + name);
+    }
     render() {
         const testString = '2021-01-11';
         return (
             <div className='mtg-page'>
-                <form clasName='meeting-form'>
+                <form className='meeting-form'>
                     <div className='title-block'>
                         <h2>Meeting</h2>
                     </div>
@@ -40,7 +45,7 @@ class MeetingForm extends React.Component {
                         // className='form-date'
                         name='mtg_date'
                         value={this.state.mtg_date}
-                        handleChange={this.handleChange}
+                        onChange={this.handleChange}
                         label='Meeting Date'
                     />
                     <FormInput
@@ -99,9 +104,12 @@ class MeetingForm extends React.Component {
                         required
                     />
                     <FormInputNumber
+                        type='number'
                         name='mtg_attendance'
                         value={this.state.mtg_attendance}
-                        onChange={this.handleChange}
+                        onChange={this.handleNumericClick}
+                        min='0'
+                        max='300'
                         label='Attendance'
                     />
 
