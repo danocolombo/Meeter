@@ -1,0 +1,25 @@
+$sub-color: grey;
+$main-color: black;
+
+.group {
+    position: relative;
+    margin: 1px 1px 1px 1px;
+
+    .mtg-type-select {
+        background: none;
+        background-color: white;
+        color: $sub-color;
+        font-size: 18px;
+        padding: 1px 1px 1px 1px;
+        display: block;
+        width: 100%;
+        border: none;
+        border-radius: 0;
+        border-bottom: 1px solid $sub-color;
+        margin: 15px 0;
+
+        &:focus {
+            outline: none;
+        }
+    }
+}
