@@ -9,7 +9,7 @@ const Login = ({ login, isAuthenticated }) => {
     // const meeter_id = process.env.MEETER_COGNITO_APPID;
     // console.log('meeter_id:' + meeter_id);
     const thisVersion = process.env.REACT_APP_MEETER_VERSION;
-    console.log(process.env);
+    // console.log(process.env);
     const [formData, setFormData] = useState({
         email: '',
         password: '',

@@ -13,6 +13,7 @@ import {
     SET_ACTIVES,
     SET_MTG_CONFIGS,
     SET_DEFAULT_GROUPS,
+    SET_CLIENT_USERS,
 } from './types';
 import setAuthToken from '../utils/setAuthToken';
 
@@ -130,6 +131,12 @@ export const loadClient = (cid) => async (dispatch) => {
                     dispatch({
                         type: SET_MTG_CONFIGS,
                         payload: clientInfo.clientConfigs,
+                    });
+                }
+                if (clientInfo.hasOwnProperty("clientUsers")){
+                    dispatch({
+                        type: SET_CLIENT_USERS,
+                        payload: clientInfo.clientUsers,
                     });
                 }
                 

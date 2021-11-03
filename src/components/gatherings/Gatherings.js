@@ -69,14 +69,14 @@ const Gatherings = ({
             ];
         } else {
             return [
-                <Link key='hitory' to='/gatherings/historyView'>HISTORY</Link>,
+                <Link key='history' to='/gatherings/historyView'>HISTORY</Link>,
                 <p className='lead'>List of upcoming meetings...</p>,
                 <Link key='future' to='/EditGathering/0'>
-                    <div className='waves-effect waves-light btn'>
-                        <i className='material-icons left green'>
+                    <div key='one' className='waves-effect waves-light btn'>
+                        <i key='two' className='material-icons left green'>
                             add_circle_outline
                         </i>
-                        <span className='meeterNavTextHighlight'>
+                        <span key='three'className='meeterNavTextHighlight'>
                             {'  '}NEW
                         </span>
                     </div>

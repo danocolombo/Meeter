@@ -3,6 +3,8 @@ import { setAlert } from './alert';
 import {
     SET_CLIENT_USERS,
     ADMIN_ERROR,
+    SET_DEFAULT_GROUPS,
+    SET_MTG_CONFIGS,
     REMOVE_CLIENT_USER,
     TOGGLE_CONFIG,
 } from './types';
@@ -41,7 +43,59 @@ export const getClientUsers = (client) => async (dispatch) => {
     }
 };
 
-
+export const getDefGroups = (cid) => async (dispatch) => {
+    //this loads all the default groups for cid
+    //into meeter.defaultGroups
+    console.log('getDefGroups(' + cid + ')');
+    console.log('/api/client/defaultgroups/' + cid);
+    try {
+        const res = await axios.get(`/api/client/defaultgroups/${cid}`);
+        if (res) {
+            dispatch({
+                type: SET_DEFAULT_GROUPS,
+                payload: res.data,
+            });
+        } else {
+            console.log('NO DEFAULT GROUPS RETURNED');
+        }
+    } catch (err) {
+        console.log('actions/admin.js getDefGroups ADMIN_ERROR');
+        dispatch({
+            type: ADMIN_ERROR,
+            // payload: {
+            //     msg: err.response.statusText ? err.response.statusText : '',
+            //     status: err.response.status,
+            // },
+        });
+    }
+};
+export const getMtgConfigs = (cid) => async (dispatch) => {
+    //this loads all the default groups for cid
+    //into meeter.defaultGroups
+    if (!cid) return;
+    console.log('getMtgConfigs(' + cid + ')');
+    console.log('/api/client/meetingConfigs/' + cid);
+    try {
+        const res = await axios.get(`/api/client/meetingConfigs/${cid}`);
+        if (res) {
+            dispatch({
+                type: SET_MTG_CONFIGS,
+                payload: res.data,
+            });
+        } else {
+            console.log('NO CLIENT MEETING CONFIGS');
+        }
+    } catch (err) {
+        console.log('actions/admin.js getMtgConfigs ADMIN_ERROR');
+        dispatch({
+            type: ADMIN_ERROR,
+            payload: {
+                msg: err.response.statusText ? err.response.statusText : '',
+                status: err.response.status,
+            },
+        });
+    }
+};
 export const updateDefaultGroup = (revised) => async (dispatch) => {
     console.log('getting the work done.');
     console.log('_id:' + revised._id);

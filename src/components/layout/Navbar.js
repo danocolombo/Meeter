@@ -40,7 +40,7 @@ const Navbar = ({ auth, meeter, logout }) => {
                 meeter.active.status === 'approved' ? (
                     <Fragment>
                         <li>
-                            <Link to='/DisplaySecurity'>
+                            <Link to='/Config'>
                                 <i className='fa fa-cog'></i>{' '}
                                 <span className='hide-sm'> Admin</span>
                             </Link>

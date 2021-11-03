@@ -4,7 +4,10 @@ import Register from '../auth/Register';
 import Login from '../auth/Login';
 import Alert from '../layout/Alert';
 import Dashboard from '../dashboard/Dashboard';
-
+// ====================
+// for config/admin
+//=====================
+import MeeterConfig from '../admin/Config';
 // import Profiles from '../profiles/Profiles';
 // import Profile from '../profile/UserProfile';
 
@@ -19,6 +22,10 @@ import NotFound from '../layout/NotFound';
 import PrivateRoute from '../routing/PrivateRoute';
 import UserProfile from '../profile/UserProfile';
 // import PersonForm from '../people/PersonForm';
+
+
+
+
 
 const Routes = () => {
     return (
@@ -42,7 +49,7 @@ const Routes = () => {
                     component={EditProfile}
                 />
                 {/* <PrivateRoute exact path='/posts' component={Posts} />
-                <PrivateRoute exact path='/posts/:id' component={Post} /> */}{' '}
+                <PrivateRoute exact path='/posts/:id' component={Post} /> }{' '}
                 */}
                 <PrivateRoute exact path='/people' component={People} />
                 <PrivateRoute exact path='/gatherings' component={Gatherings} />
@@ -75,6 +82,11 @@ const Routes = () => {
                     exact
                     path='/EditPerson/:id'
                     component={EditPerson}
+                />
+                <PrivateRoute
+                    exact
+                    path='/Config'
+                    component={MeeterConfig}
                 />
                 <Route component={NotFound} />
             </Switch>
