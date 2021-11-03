@@ -69,7 +69,6 @@ export const getMeeting = (meetingId, clientId) => async (dispatch) => {
 //get gatherings
 //#########################
 export const getGatherings = (clientId) => async (dispatch) => {
-    console.log('gathering.js :: getGatherings');
     try {
         //clear all the group related data
         // dispatch({ type: CLEAR_GROUPS });
@@ -95,12 +94,14 @@ export const getGatherings = (clientId) => async (dispatch) => {
         let res = await axios.post(api2use, body, config);
 
         if (res.status === 200) {
-            console.log('we have ' + res.data.count + ' meetings returned');
+            
             // dispatch({ type: CLEAR_GATHERING });
-            dispatch({
-                type: GET_GATHERINGS,
-                payload: res.data.body,
-            });
+            if (res.data.count > 0){
+                dispatch({
+                    type: GET_GATHERINGS,
+                    payload: res.data.body,
+                });
+            }
         } else {
             console.log('we got no meetings');
         }
@@ -118,14 +119,13 @@ export const getGatherings = (clientId) => async (dispatch) => {
         res = await axios.post(api2use, body, config);
 
         if (res.status === 200) {
-            console.log(
-                'we have ' + res.data.count + ' historical meetings returned'
-            );
-
-            dispatch({
-                type: GET_HATHERINGS,
-                payload: res.data.body,
-            });
+            
+            if (res.data.count > 0){
+                dispatch({
+                    type: GET_HATHERINGS,
+                    payload: res.data.body,
+                });
+            }
         } else {
             console.log('we got no history ');
         }

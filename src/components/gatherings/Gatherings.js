@@ -25,9 +25,6 @@ const Gatherings = ({
         // ) {
         //     return <Redirect to='/login' />;
         // }
-        console.log(
-            'GATHERINGS::useEffect, activeClient: ' + meeter.active.client
-        );
         getGatherings(meeter.active.client);
     }, []);
     return auth.loading || loading ? (
@@ -49,13 +46,13 @@ const Gatherings = ({
         if (match.params.options === 'historyView') {
             return [
                 hatherings.map((hathering) => (
-                    <GatheringItem key={hathering.id} gathering={hathering} />
+                    <GatheringItem key={hathering.meetingId} gathering={hathering} />
                 )),
             ];
         } else {
             return [
                 gatherings.map((gathering) => (
-                    <GatheringItem key={gathering.id} gathering={gathering} />
+                    <GatheringItem key={gathering.meetingId} gathering={gathering} />
                 )),
             ];
         }
@@ -72,17 +69,17 @@ const Gatherings = ({
             ];
         } else {
             return [
-                <Link to='/gatherings/historyView'>HISTORY</Link>,
+                <Link key='hitory' to='/gatherings/historyView'>HISTORY</Link>,
                 <p className='lead'>List of upcoming meetings...</p>,
-                <Link to='/EditGathering/0'>
-                    <a class='waves-effect waves-light btn'>
-                        <i class='material-icons left green'>
+                <Link key='future' to='/EditGathering/0'>
+                    <div className='waves-effect waves-light btn'>
+                        <i className='material-icons left green'>
                             add_circle_outline
                         </i>
                         <span className='meeterNavTextHighlight'>
                             {'  '}NEW
                         </span>
-                    </a>
+                    </div>
                 </Link>,
             ];
         }
