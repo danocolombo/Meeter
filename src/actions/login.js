@@ -75,16 +75,17 @@ export const login = (email, password) => async (dispatch) => {
     });
 };
 
-// Load System
-//---------------------------------------------------------
-// we want to load meeter mtgConfigs and defaultMeetings
-//---------------------------------------------------------
-export const loadSystem = (cid) => async (dispatch) => {
+// Load Client
+//---------------------------------------------------
+// this funciton saves the client configs and gets
+// the default groups.  This replaced the original 
+// loadSystem
+//----------------------------------------------------
+export const loadClient = (cid) => async (dispatch) => {
+    
     try {
+        // get the client info from database
         let client = cid.theClient;
-        //----------------------------------
-        // get client meeting configs
-        //----------------------------------
         const config = {
             headers: {
                 'Access-Control-Allow-Headers':
@@ -92,9 +93,8 @@ export const loadSystem = (cid) => async (dispatch) => {
                 'Content-Type': 'application/json',
             },
         };
-
         let obj1 = {
-            operation: 'getConfigs',
+            operation: 'getClientInfo',
             payload: {
                 clientId: client,
             },
@@ -111,41 +111,34 @@ export const loadSystem = (cid) => async (dispatch) => {
                 throw err;
             });
         } catch (err) {
-            console.log('logoin.js - loadSystem: getConfigs failed');
+            console.log('logoin.js - loadClient: getClientInfo failed');
         }
         if (res.status === 200) {
-            dispatch({
-                type: SET_MTG_CONFIGS,
-                payload: res.data.body,
-            });
-        } else {
-            console.log('NO CLIENT MEETING CONFIGS');
-        }
-        let obj2 = {
-            operation: 'getDefaultGroups',
-            payload: {
-                clientId: client,
-            },
-        };
-        body = JSON.stringify(obj2);
-
-        api2use = process.env.REACT_APP_MEETER_API + '/clients';
-        res = null;
-        try {
-            res = await axios.post(api2use, body, config).catch((err) => {
-                if (err.response.status === 404) {
-                    throw new Error(`${err.config.url} not found`);
+            // need to check if we got any body, then define the 
+            // defaultGroups and the configs.
+            if (Object.keys(res.data.body).length > 0) {
+                
+                let clientInfo = res.data.body.Items[0];
+                //confirm we have defaultGroups and save
+                if (clientInfo.hasOwnProperty("defaultGroups")) {
+                    dispatch({
+                        type: SET_DEFAULT_GROUPS,
+                        payload: clientInfo.defaultGroups,
+                    });
                 }
-                throw err;
-            });
-        } catch (err) {
-            console.log('logoin.js - loadSystem: getDefaultGroups failed');
-        }
-
-        if (res.status === 200) {
+                if (clientInfo.hasOwnProperty("clientConfigs")){
+                    dispatch({
+                        type: SET_MTG_CONFIGS,
+                        payload: clientInfo.clientConfigs,
+                    });
+                }
+                
+            }else{
+                console.log("NO RESPONSE DATA");
+            }
+        } else {
             dispatch({
-                type: SET_DEFAULT_GROUPS,
-                payload: res.data.body,
+                type: AUTH_ERROR,
             });
         }
     } catch (err) {
@@ -153,7 +146,9 @@ export const loadSystem = (cid) => async (dispatch) => {
             type: AUTH_ERROR,
         });
     }
+
 };
+
 // Load User
 export const loadUser = (userId) => async (dispatch) => {
     if (localStorage.token) {
@@ -206,7 +201,10 @@ export const loadUser = (userId) => async (dispatch) => {
         });
 
         let theClient = res.data.body.defaultClient;
-        dispatch(loadSystem({ theClient }));
+        //---------------------------------------
+        // now go get defaultGroups and configs
+        //---------------------------------------
+        dispatch(loadClient({ theClient }));
     } catch (err) {
         dispatch({
             type: AUTH_ERROR,
