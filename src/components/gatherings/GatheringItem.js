@@ -8,13 +8,13 @@ import { deleteGathering } from '../../actions/gathering';
 const GatheringItem = ({
     deleteGathering,
     gathering: {
-        id,
+        meetingId,
         meetingDate,
         title,
-        supportRole,
-        facilitator,
-        attendance,
-        newcomers,
+        supportContact,
+        facilitatorContact,
+        attendanceCount,
+        newcomersCount,
         meetingType,
     },
 }) => (
@@ -26,38 +26,38 @@ const GatheringItem = ({
                         id='deleteGathering'
                         title='-'
                         href='/#'
-                        onClick={() => deleteGathering(id)}
+                        onClick={() => deleteGathering(meetingId)}
                     >
                         <i className='fas fa-minus-circle'></i>
                     </a>
                 </div>
             </Fragment>
             <div>
-                <Link to={`/EditGathering/${id}`}>
+                <Link to={`/EditGathering/${meetingId}`}>
                     {moment.utc(meetingDate).format('ll')}
                 </Link>
                 <br />
                 {meetingType}: {title}
-                {supportRole && (
+                {supportContact && (
                     <Fragment>
                         <br />
-                        {supportRole}
+                        {supportContact}
                     </Fragment>
                 )}
-                {attendance > 0 && (
+                {attendanceCount > 0 && (
                     <Fragment>
                         <br />
-                        Attendance: {attendance}
+                        Attendance: {attendanceCount}
                     </Fragment>
                 )}
-                {newcomers > 0 && (
+                {newcomersCount > 0 && (
                     <Fragment>
                         <br />
-                        Newcomers: {newcomers}
+                        Newcomers: {newcomersCount}
                     </Fragment>
                 )}
                 <br />
-                <Link to={`/EditGathering/${id}`}>
+                <Link to={`/EditGathering/${meetingId}`}>
                     <i className='fas fa-pen'></i>
                 </Link>
             </div>

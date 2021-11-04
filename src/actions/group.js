@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { setAlert } from './alert';
 import {
-    //----Beta4---
+    //----Base5---
     CLEAR_GROUPS,
     SET_GROUPS,
     //------------
@@ -16,6 +16,7 @@ import {
 export const getGroups = (mid) => async (dispatch) => {
     try {
         dispatch({ type: CLEAR_GROUPS });
+
         const config = {
             headers: {
                 'Access-Control-Allow-Headers':
@@ -23,7 +24,6 @@ export const getGroups = (mid) => async (dispatch) => {
                 'Content-Type': 'application/json',
             },
         };
-
         let obj = {
             operation: 'getGroupsByMeetingId',
             payload: {
@@ -34,6 +34,7 @@ export const getGroups = (mid) => async (dispatch) => {
 
         let api2use = process.env.REACT_APP_MEETER_API + '/groups';
         let res = await axios.post(api2use, body, config);
+
         //=================================
         // now lets handle the response
         //=================================

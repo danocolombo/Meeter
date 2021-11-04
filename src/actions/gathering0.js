@@ -21,13 +21,12 @@ import {
     GET_GROUPS,
     CLEAR_GROUP,
 } from './types';
-export const getMeeting = (meetingId) => async (dispatch) => {
+export const getMeeting = (meetingId, clientId) => async (dispatch) => {
     //ensure that id is not null, if so return
-    console.log('INSIDE GET MEETING');
+
     // console.log('getGathering:IN');
     if (meetingId.length < 1) return;
     if (meetingId === 0) return;
-    
     try {
         //=====================================
         // get the meeting by ID for client
@@ -41,24 +40,17 @@ export const getMeeting = (meetingId) => async (dispatch) => {
             },
         };
         let obj = {
-            operation: 'getMeetingById',
+            operation: 'getMeetingByIdAndClient',
             payload: {
-                meetingId: meetingId
+                id: meetingId,
+                clientId: clientId,
             },
         };
-        
         let body = JSON.stringify(obj);
 
         let api2use = process.env.REACT_APP_MEETER_API + '/meetings';
         let res = await axios.post(api2use, body, config);
-        console.log('SETTING MEETING');
-        console.log('vvvvvvvvvvvvvvv');
-        const util = require('util');
-        console.log(
-            'res: ' +
-                util.inspect(res, { showHidden: false, depth: null })
-        );
-        console.log("^^^^^^^^^^^^^^");
+
         dispatch({
             type: SET_MEETING,
             payload: res.data.body,
