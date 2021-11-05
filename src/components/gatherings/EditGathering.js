@@ -71,6 +71,7 @@ const EditGathering = ({
     history,
 }) => {
     const [formData, setFormData] = useState(initialState);
+
     useEffect(() => {
         getGroups(match.params.id);
 
@@ -152,7 +153,7 @@ const EditGathering = ({
         e.preventDefault();
         if (formData['meetingType'] === 'Testimony')
             delete formData['supportRole'];
-        createGathering(formData, history, active.client, true);
+        createGathering(formData, groups, history, active.client, true);
         window.scrollTo(0, 0);
     };
     const handleGroupDeleteRequest = (gid) => {
@@ -232,11 +233,11 @@ const EditGathering = ({
     // console.log('donations: ' + mtgConfigs['donations']);
     // console.log('type of mtgConfigs: ' + typeof mtgConfigs);
     // console.table(mtgConfigs);
-    const util = require('util');
-    console.log(
-        'mtgConfigs: ' +
-            util.inspect(mtgConfigs, { showHidden: false, depth: null })
-    );
+    // const util = require('util');
+    // console.log(
+    //     'mtgConfigs: ' +
+    //         util.inspect(mtgConfigs, { showHidden: false, depth: null })
+    // );
     return meetingLoading ? (
         <Spinner />
     ) : (

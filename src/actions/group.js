@@ -49,8 +49,10 @@ export const getGroups = (mid) => async (dispatch) => {
         dispatch({
             type: GROUP_ERROR,
             payload: {
-                msg: err.response.statusText,
-                status: err.response.status,
+                // msg: err.response.statusText,
+                //status: err.response.status,
+                msg: 'that did not work',
+                status: err,
             },
         });
     }

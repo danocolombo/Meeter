@@ -57,21 +57,26 @@ function get1Line(g, t) {
     return [<span>{line1}</span>];
 }
 function get2Line(l, f) {
-    console.log(l + ' ' + l.length);
-    console.log(f + ' ' + f.length);
+    if (l) console.log(l + ' ' + l.length);
+    if (f) console.log(f + ' ' + f.length);
+    // console.log(l + ' ' + l.length);
+    //console.log(f + ' ' + f.length);
     let line2 = '';
     let tmp = '';
-    if (l.length > 0) {
-        line2 = l;
-    }
-
-    if (f.length > 0) {
-        if (line2.length > 0) {
-            tmp = line2.concat(' - ', f);
-            line2 = tmp;
+    if (l){
+        if (l.length > 0) {
+            line2 = l;
         }
-    } else {
-        line2 = f;
+    }
+    if (f){
+        if (f.length > 0) {
+            if (line2.length > 0) {
+                tmp = line2.concat(' - ', f);
+                line2 = tmp;
+            }
+        } else {
+            line2 = f;
+        }
     }
 
     return [<span>{line2}</span>];

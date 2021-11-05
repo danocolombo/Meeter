@@ -146,7 +146,7 @@ export const getGatherings = (clientId) => async (dispatch) => {
     }
 };
 // Create or update gathering
-export const createGathering = (formData, history, edit = false) => async (
+export const createGathering = (formData, groups = [], history, activeClient) => async (
     dispatch
 ) => {
     try {
@@ -169,67 +169,50 @@ export const createGathering = (formData, history, edit = false) => async (
                 }
             }
         */
-        let junk = window.prompt("WHAT?");
-        let Item = formData;
-        let obj = {
-            operation: 'addGroup',
-            payload: {
-                Item,
-            },
-        };
-        console.log('our humble attempt\n');
-        console.log(JSON.stringify(obj));
+        
+        //==========================================
+        // throw group information to database
+        //==========================================
+        if (groups) {
+            for ( let grp in groups){
+                console.log(grp["title"]);
+
+            
+            }
+        }
+
+        if (formData._id.length < 1) {
+            //this is an add, so delete _id and meetingId from formData
+            // delete formData._id;
+            delete formData.meetingId;
+        } else {
+            formData.meetingId = formData._id;
+            //formData._id = '';
+        }
+        //-----------------------------------------------
+        // need to add the tenantId to the data to put
+        //-----------------------------------------------
+        formData.clientId = activeClient;
 
         const config = {
             headers: {
                 'Content-Type': 'application/json',
             },
         };
+        const res = await axios.post('/api/meeting', formData, config);
 
-        let body = JSON.stringify(obj);
+        dispatch({
+            type: GET_GATHERING,
+            payload: res.data,
+        });
 
-        let api2use = process.env.REACT_APP_MEETER_API + '/groups';
-        let res = await axios.post(api2use, body, config);
+        dispatch(
+            setAlert((formData.meetingId > 0) ? 'Meeting Updated' : 'Meeting Created', 'success')
+        );
 
-        // console.log('in action/gatherings.js');
-        // console.log(JSON.stringify(formData));
-        console.table(formData);
-        console.log('that was from actions::gatherings::createGathering');
-        // console.log(typeof formData._id);
-        // console.log(formData._id.length);
-        if (formData.meetingId.length < 1) {
-            //this is an add, so delete _id and meetingId from formData
-            delete formData.meetingId;
-        } else {
-            formData.meetingId = formData.meetingId;
-            //formData._id = '';
+        if (formData.meetingId == 0) {
+            history.push('/gatherings');
         }
-        // if(formData._id) formData.push("meetingId", formData._id);
-        //delete formData._id;
-        // console.log('transformed formdata');
-        // console.log(JSON.stringify(formData));
-        // const config = {
-        //     headers: {
-        //         'Content-Type': 'application/json',
-        //     },
-        // };
-        // const res = await axios.post('/api/meeting', formData, config);
-
-        // dispatch({
-        //     type: GET_GATHERING,
-        //     payload: res.data,
-        // });
-
-        // dispatch(
-        //     setAlert(
-        //         edit ? 'Gathering Updated' : 'Gathering Created',
-        //         'success'
-        //     )
-        // );
-
-        // if (!edit) {
-        //     history.push('/gatherings');
-        // }
     } catch (err) {
         const errors = err.response.data.errors;
 
