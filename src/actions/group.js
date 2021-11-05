@@ -55,6 +55,21 @@ export const getGroups = (mid) => async (dispatch) => {
         });
     }
 };
+// clear groups
+export const clearGroups = () => async (dispatch) => {
+    try {
+        dispatch({ type: CLEAR_GROUP });
+    } catch (err) {
+        dispatch({
+            type: GROUP_ERROR,
+            payload: {
+                msg: err.response.statusText,
+                status: err.response.status,
+            },
+        });
+    }
+};
+
 // Get group by groupId
 export const getGroup = (groupId) => async (dispatch) => {
     try {

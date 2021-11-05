@@ -3,13 +3,17 @@ import { Link, withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Divider } from '@material-ui/core';
-import { createGathering, getMeeting } from '../../actions/gathering';
-import { getGroups } from '../../actions/group';
+import { createGathering, getMeeting, addDefaultGroups } from '../../actions/gathering';
+import { getGroups, clearGroups } from '../../actions/group';
 import GroupListItem from './GroupListItem';
+import { Button } from '@material-ui/core';
+import PlaylistAddIcon from '@material-ui/icons/PlaylistAdd';
+import SettingsIcon from '@material-ui/icons/Settings';
 import { getMtgConfigs } from '../../actions/admin';
 // import ServantSelect from './ServantSelect';
 // import GroupList from './GroupList';
 import Spinner from '../layout/Spinner';
+import { PhotoFilter } from '@material-ui/icons';
 
 const initialState = {
     meetingId: '',
@@ -52,12 +56,14 @@ const EditGathering = ({
     // gathering: { gathering, servants, loading, newGathering },
     auth: { activeClient, activeRole, activeStatus },
     //group: { groups, groupLoading },
-    meeter: { mtgConfigs },
+    meeter: { mtgConfigs, defaultGroups, active },
     meeting: { turnout, gathering, groups, meetingLoading},
     // mtgConfigs,
     createGathering,
     getMeeting,
     getGroups,
+    clearGroups,
+    addDefaultGroups,
     getMtgConfigs,
     match,
     history,
@@ -70,6 +76,8 @@ const EditGathering = ({
     useEffect(() => {
         if (!turnout) {
             getMeeting(match.params.id);
+            clearGroups();
+            getGroups(match.params.id);
         }
         if (!meetingLoading) {
             const gatheringData = { ...initialState };
@@ -137,6 +145,72 @@ const EditGathering = ({
             delete formData['supportRole'];
         createGathering(formData, history, activeClient, true);
         window.scrollTo(0, 0);
+    };
+    const addDefaultGroupsToMeeting = () => {
+        console.log('in EditGatherings :: addDefaultGroupsToMeeting');
+        // addDefaultGroups(defaultGroups);
+        // console.log(
+        //     'defaultGroups: ' +
+        //         util.inspect(defaultGroups, { showHidden: false, depth: null })
+        // );
+        //============================================
+        // this is sample of 3 default meetings in REDUX
+        // defaultGroups: [
+        //     { _id: '5efe35a12f948b40189671a6',
+        //         gender: 'f',
+        //         title: 'A-Z',
+        //         location: 'Library',
+        //         facilitator: 'Marie'
+        //     },
+        //     { _id: '5efe3dbb22c44e40f9775e06',
+        //         gender: 'm',
+        //         title: 'chem',
+        //         location: 'Library',
+        //         facilitator: 'Dale'
+        //     },
+        //     { _id: '5efe43400e4232414c2ee7e4',
+        //         gender: 'x',
+        //         title: 'remove me',
+        //         location: 'bathroom',
+        //         facilitator: 'Waldo'
+        //     }
+        // ]
+
+        let dgroups = defaultGroups;
+        let groupsToAdd = [];
+        // let newBatch = [];
+        let result = dgroups.map((g) => {
+            let aGroup = {};
+            aGroup._id = g._id;
+            aGroup.cid = activeClient;
+            aGroup.mid = match.params.id;
+            aGroup.gender = g.gender;
+            aGroup.title = g.title;
+            if (g.location) aGroup.location = g.location;
+            if (g.facilitator) aGroup.facilitator = g.facilitator;
+            groupsToAdd.push(aGroup);
+        });
+        addDefaultGroups(groupsToAdd);
+        // newGroup.push({
+        //     mid: match.params.id,
+        //     gender: g.gender,
+        //     title: g.title,
+
+        //     location: g.location,
+        //     facilitator: g.facilitator,
+        // });
+        // console.log(JSON.stringify(newGroup));
+        // newBatch.push({
+        //     newGroup,
+        // });
+        //     console.log('newBatch...');
+        //     console.log(JSON.stringify(newBatch));
+        //     // console.log('id: ' + g._id);
+        //     // console.log('gender: ' + g.gender);
+        //     // console.log('title: ' + g.title);
+        //     // console.log('location: ' + g.location);
+        //     // console.log('faciliator: ' + g.facilitator);
+        // });
     };
     // const util = require('util');
     // console.log(
@@ -691,23 +765,69 @@ const EditGathering = ({
                     </div>
                 </div>
                 {FormButtons()}
-                <hr />
-                <h2>
-                    Open-Share Groups
-                    {activeStatus === 'approved' && activeRole !== 'guest' ? (
-                        <Link to={`/EditGroup/${meetingId}/0`}>
-                            <div class='waves-effect waves-light btn'>
-                                <i class='material-icons left green'>
-                                    add_circle_outline
-                                </i>
-
-                                <span className='meeterNavTextHighlight'>
-                                    {'  '}NEW
+                {active.status === 'approved' &&
+                active.role !== 'guest' &&
+                meetingId ? (
+                    <Fragment>
+                        <hr className='group-ruler my-1' />
+                        <h2>Open-Share Groups</h2>
+                        <span className={'pl-2 my'}>
+                            <Button
+                                variant='contained'
+                                color='primary'
+                                size='small'
+                                // className={classes.button}
+                                startIcon={<PlaylistAddIcon />}
+                                href={`/EditGroup/${meetingId}/0`}
+                            >
+                                New Group
+                            </Button>
+                        </span>
+                        <span className={'pl-2'}>
+                            {defaultGroups.length > 0 &&
+                            activeRole !== 'guest' ? (
+                                <span>
+                                    <Button
+                                        variant='contained'
+                                        color='default'
+                                        size='small'
+                                        startIcon={<PlaylistAddIcon />}
+                                        onClick={addDefaultGroupsToMeeting}
+                                    >
+                                        DEFAULTS
+                                    </Button>
                                 </span>
-                            </div>
-                        </Link>
-                    ) : null}
-                </h2>
+                            ) : activeRole === 'owner' ||
+                              activeRole === 'superuser' ? (
+                                <span>
+                                    <Button
+                                        variant='contained'
+                                        color='secondary'
+                                        size='small'
+                                        // className={classes.button}
+                                        startIcon={<SettingsIcon />}
+                                        href='/DisplaySecurity'
+                                    >
+                                        CONFIGURE
+                                    </Button>
+                                </span>
+                            ) : null}
+                            {meetingId.length < 1 ? (
+                                <div>
+                                    Open-share groups can be added after the
+                                    meeting is saved.
+                                </div>
+                            ) : null}
+                        </span>
+                    </Fragment>
+                ) : (
+                    <Fragment>
+                        <hr className='group-ruler my-1' />
+                        <div>
+                            <h3>Open-share Groups</h3>
+                        </div>
+                    </Fragment>
+                )}
             </form>
             <div>
                 {groups &&
@@ -764,8 +884,8 @@ const EditGathering = ({
         var today = new Date();
         today.setHours(0, 0, 0, 0);
         var mDate = new Date(meetingDate.slice(0, 10));
-        // console.log('mDate:' + mDate);
-        // console.log('today:' + today);
+        console.log('mDate:' + mDate);
+        console.log('today:' + today);
         if (mDate >= today) {
             console.log('greater than or equal');
             if (activeStatus === 'approved' && activeRole !== 'guest') {
@@ -853,6 +973,8 @@ EditGathering.propTypes = {
     createGathering: PropTypes.func.isRequired,
     getMeeting: PropTypes.func.isRequired,
     getGroups: PropTypes.func.isRequired,
+    addDefaultGroups: PropTypes.func.isRequired,
+    clearGroups: PropTypes.func.isRequired,
     getMtgConfigs: PropTypes.func.isRequired,
     // gathering: PropTypes.object.isRequired,
     // group: PropTypes.object.isRequired,
@@ -876,5 +998,7 @@ export default connect(mapStateToProps, {
     createGathering,
     getMeeting,
     getGroups,
+    addDefaultGroups,
+    clearGroups,
     getMtgConfigs,
 })(withRouter(EditGathering));

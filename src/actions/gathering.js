@@ -51,14 +51,12 @@ export const getMeeting = (meetingId) => async (dispatch) => {
 
         let api2use = process.env.REACT_APP_MEETER_API + '/meetings';
         let res = await axios.post(api2use, body, config);
-        console.log('SETTING MEETING');
-        console.log('vvvvvvvvvvvvvvv');
-        const util = require('util');
-        console.log(
-            'res: ' +
-                util.inspect(res, { showHidden: false, depth: null })
-        );
-        console.log("^^^^^^^^^^^^^^");
+        
+        // const util = require('util');
+        // console.log(
+        //     'res: ' +
+        //         util.inspect(res, { showHidden: false, depth: null })
+        // );
         dispatch({
             type: SET_MEETING,
             payload: res.data.body,
