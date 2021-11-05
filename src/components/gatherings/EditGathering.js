@@ -2,18 +2,20 @@ import React, { Fragment, useState, useEffect } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Divider } from '@material-ui/core';
-import { createGathering, getMeeting, addDefaultGroups } from '../../actions/gathering';
-import { getGroups, clearGroups } from '../../actions/group';
-import GroupListItem from './GroupListItem';
-import { Button } from '@material-ui/core';
 import PlaylistAddIcon from '@material-ui/icons/PlaylistAdd';
 import SettingsIcon from '@material-ui/icons/Settings';
-import { getMtgConfigs } from '../../actions/admin';
+import { Button } from '@material-ui/core';
+import {
+    createGathering,
+    getMeeting,
+    addDefaultGroups,
+} from '../../actions/gathering';
+import { getGroups, clearGroups, deleteGroup } from '../../actions/group';
+import GroupListItem from './GroupListItem';
+import { getMtgConfigs, getDefGroups } from '../../actions/admin';
 // import ServantSelect from './ServantSelect';
 // import GroupList from './GroupList';
 import Spinner from '../layout/Spinner';
-import { PhotoFilter } from '@material-ui/icons';
 
 const initialState = {
     meetingId: '',
@@ -54,10 +56,10 @@ const initialState = {
 
 const EditGathering = ({
     // gathering: { gathering, servants, loading, newGathering },
-    auth: { activeClient, activeRole, activeStatus },
+    // auth: { activeClient, activeRole, activeStatus },
     //group: { groups, groupLoading },
     meeter: { mtgConfigs, defaultGroups, active },
-    meeting: { turnout, gathering, groups, meetingLoading},
+    meeting: { turnout, groups, meetingLoading},
     // mtgConfigs,
     createGathering,
     getMeeting,
@@ -72,13 +74,20 @@ const EditGathering = ({
     useEffect(() => {
         getGroups(match.params.id);
 
-    }, [activeClient, getGroups, match.params.id]);
+        // getMtgConfigs(activeClient);
+        // getDefGroups(activeClient);
+        // console.log('just ran getGroups');
+    }, [active.childrenCount, getGroups, getMtgConfigs, match.params.id]);
     useEffect(() => {
         if (!turnout) {
             getMeeting(match.params.id);
             clearGroups();
             getGroups(match.params.id);
         }
+        // if (!gathering && match.params.id !== '0') {
+        //     getMeeting(match.params.id);
+        //     // getGroups(match.params.id);
+        // }
         if (!meetingLoading) {
             const gatheringData = { ...initialState };
             for (const key in turnout) {
@@ -88,11 +97,11 @@ const EditGathering = ({
         }
 
         if (meetingId) setFormData({ ...formData, meetingId: meetingId });
-    }, [meetingLoading, turnout, activeClient]);
+    }, [meetingLoading, turnout, active.client]);
 
     const {
-        clientId,
         meetingId,
+        clientId,
         meetingDate,
         facilitatorContact,
         meetingType,
@@ -137,15 +146,22 @@ const EditGathering = ({
     const onServantChange = (servantSelected) => {
         //we are assuming Facilitator
         setFormData({ ...formData, [facilitatorContact]: servantSelected });
-        // console.log('back from servantSelect. value: ' + servantSelected);
+        console.log('back from servantSelect. value: ' + servantSelected);
     };
     const onSubmit = (e) => {
         e.preventDefault();
         if (formData['meetingType'] === 'Testimony')
             delete formData['supportRole'];
-        createGathering(formData, history, activeClient, true);
+        createGathering(formData, history, active.client, true);
         window.scrollTo(0, 0);
     };
+    const handleGroupDeleteRequest = (gid) => {
+        //this is going to delete the selected request
+        //and update the groups for the meeting
+        console.log('back in EditGathering');
+        deleteGroup(gid, meetingId);
+    };
+
     const addDefaultGroupsToMeeting = () => {
         console.log('in EditGatherings :: addDefaultGroupsToMeeting');
         // addDefaultGroups(defaultGroups);
@@ -182,7 +198,7 @@ const EditGathering = ({
         let result = dgroups.map((g) => {
             let aGroup = {};
             aGroup._id = g._id;
-            aGroup.cid = activeClient;
+            aGroup.cid = active.client;
             aGroup.mid = match.params.id;
             aGroup.gender = g.gender;
             aGroup.title = g.title;
@@ -212,16 +228,23 @@ const EditGathering = ({
         //     // console.log('faciliator: ' + g.facilitator);
         // });
     };
-    // const util = require('util');
-    // console.log(
-    //     'mtgConfigs: ' +
-    //         util.inspect(mtgConfigs, { showHidden: false, depth: null })
-    // );
+    // // DANO
+    // console.log('donations: ' + mtgConfigs['donations']);
+    // console.log('type of mtgConfigs: ' + typeof mtgConfigs);
+    // console.table(mtgConfigs);
+    const util = require('util');
+    console.log(
+        'mtgConfigs: ' +
+            util.inspect(mtgConfigs, { showHidden: false, depth: null })
+    );
     return meetingLoading ? (
         <Spinner />
     ) : (
+        // function inside(){
+        //     console.log('inside');
+        // }
         <Fragment>
-            <h1 className='large text-primary'>Your Meeting</h1>
+            <h1 className='standard-font text-primary'>Your Meeting</h1>
             {/* <p className='lead'>
                 <i className='fas fa-user' /> Have at it...
                 <br />
@@ -242,6 +265,7 @@ const EditGathering = ({
                 <h4>Facilitator</h4>
                 <input
                     type='text'
+                    class='x-large'
                     placeholder='Responsible party for meeting'
                     id='facilitatorContact'
                     name='facilitatorContact'
@@ -302,8 +326,8 @@ const EditGathering = ({
                         />
 
                         {/* <select
-                            value={supportContact}
-                            name='supportContact'
+                            value={supportRole}
+                            name='supportRole'
                             onChange={onChange}
                         >
                             {servants.map((s) => (
@@ -764,7 +788,8 @@ const EditGathering = ({
                         ></textarea>
                     </div>
                 </div>
-                {FormButtons()}
+                {FormButtons(meetingDate)}
+
                 {active.status === 'approved' &&
                 active.role !== 'guest' &&
                 meetingId ? (
@@ -785,7 +810,7 @@ const EditGathering = ({
                         </span>
                         <span className={'pl-2'}>
                             {defaultGroups.length > 0 &&
-                            activeRole !== 'guest' ? (
+                            active.role !== 'guest' ? (
                                 <span>
                                     <Button
                                         variant='contained'
@@ -797,8 +822,8 @@ const EditGathering = ({
                                         DEFAULTS
                                     </Button>
                                 </span>
-                            ) : activeRole === 'owner' ||
-                              activeRole === 'superuser' ? (
+                            ) : active.role === 'owner' ||
+                              active.role === 'superuser' ? (
                                 <span>
                                     <Button
                                         variant='contained'
@@ -829,13 +854,15 @@ const EditGathering = ({
                     </Fragment>
                 )}
             </form>
-            <div>
+            <div style={{ 'padding-top': 10 }}>
                 {groups &&
                     groups.map((group) => (
                         <GroupListItem
                             key={group._id}
                             mid={group.mid}
                             group={group}
+                            role={active.role}
+                            deleteResponse={handleGroupDeleteRequest}
                         />
                     ))}
             </div>
@@ -879,30 +906,61 @@ const EditGathering = ({
                 return 'Please provide a description of the event';
         }
     }
-    function FormButtons() {
+    function FormButtons(meetingDate) {
         var returnValue = [];
-        var today = new Date();
-        today.setHours(0, 0, 0, 0);
-        var mDate = new Date(meetingDate.slice(0, 10));
-        console.log('mDate:' + mDate);
-        console.log('today:' + today);
-        if (mDate >= today) {
+        // var today = new Date();
+        // today.setHours(0, 0, 0, 0);
+        // var mDate = new Date(meetingDate.slice(0, 10));
+        // // console.log('mDate:' + mDate);
+        // // console.log('today:' + today);
+        // need to create special date for today starting at T00:00:00.000Z
+        let mDate = new Date(meetingDate.slice(0, 10));
+        let tDate = new Date();
+        let numMonth = tDate.getMonth() + 1;
+        let tmpMonth = numMonth.toString();
+        let tmpDay = tDate.getDate().toString();
+        let tMonth = '';
+        let tDay = '';
+        if (tmpMonth.length < 2) {
+            tMonth = '0' + tmpMonth;
+        } else {
+            tMonth = tmpMonth;
+        }
+        if (tmpDay.length < 2) {
+            tDay = '0' + tmpDay;
+        } else {
+            tDay = tmpDay;
+        }
+        let tYear = tDate.getFullYear();
+        let target = tYear + '-' + tMonth + '-' + tDay + 'T00:00:00.000Z';
+
+        if (meetingDate >= target) {
             console.log('greater than or equal');
-            if (activeStatus === 'approved' && activeRole !== 'guest') {
+            if (active.status === 'approved' && active.role !== 'guest') {
                 returnValue = [
                     <>
                         <input type='submit' className='btn btn-primary my-1' />
-                        <Link className='btn btn-light my-1' to='/gatherings'>
+                        <Button className='btn-light' href='/gatherings'>
                             Go Back
-                        </Link>
+                        </Button>
+                        {/* <Link className='btn btn-light my-1' to='/gatherings'>
+                            Go Back
+                        </Link> */}
                     </>,
                 ];
             } else {
                 returnValue = [
                     <>
-                        <Link className='btn btn-light my-1' to='/gatherings'>
+                        <Button
+                            className='btn-light'
+                            href='/gatherings'
+                            variant='outlined'
+                        >
                             Go Back
-                        </Link>
+                        </Button>
+                        {/* <Link className='btn btn-light my-1' to='/gatherings'>
+                            Go Back
+                        </Link> */}
                     </>,
                 ];
             }
@@ -910,12 +968,12 @@ const EditGathering = ({
             returnValue = [
                 <>
                     <input type='submit' className='btn btn-primary my-1' />
-                    <Link
-                        className='btn btn-light my-1'
-                        to='/gatherings/historyView'
+                    <Button
+                        className='btn-light'
+                        href='/gatherings/historyView'
                     >
                         Go Back
-                    </Link>
+                    </Button>
                 </>,
             ];
         }
@@ -973,11 +1031,12 @@ EditGathering.propTypes = {
     createGathering: PropTypes.func.isRequired,
     getMeeting: PropTypes.func.isRequired,
     getGroups: PropTypes.func.isRequired,
-    addDefaultGroups: PropTypes.func.isRequired,
     clearGroups: PropTypes.func.isRequired,
     getMtgConfigs: PropTypes.func.isRequired,
-    // gathering: PropTypes.object.isRequired,
-    // group: PropTypes.object.isRequired,
+    getDefGroups: PropTypes.func.isRequired,
+    addDefaultGroups: PropTypes.func.isRequired,
+    gathering: PropTypes.object.isRequired,
+    group: PropTypes.object.isRequired,
     auth: PropTypes.object.isRequired,
     meeter: PropTypes.object.isRequired,
     meeting: PropTypes.object.isRequired,
@@ -985,9 +1044,9 @@ EditGathering.propTypes = {
 };
 
 const mapStateToProps = (state) => ({
-    // gathering: state.gathering,
+    gathering: state.gathering,
     servants: state.servants,
-    //group: state.group,
+    group: state.group,
     auth: state.auth,
     meeter: state.meeter,
     meeting: state.meeting,
@@ -998,7 +1057,9 @@ export default connect(mapStateToProps, {
     createGathering,
     getMeeting,
     getGroups,
-    addDefaultGroups,
     clearGroups,
     getMtgConfigs,
+    getDefGroups,
+    addDefaultGroups,
+    deleteGroup,
 })(withRouter(EditGathering));
