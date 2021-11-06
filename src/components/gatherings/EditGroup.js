@@ -11,9 +11,8 @@ import { RadioGroup } from '@material-ui/core';
 import { Radio } from '@material-ui/core';
 import { addGroup, getGroup, deleteGroup } from '../../actions/group';
 const initialState = {
-    _id: '',
+    groupId: '',
     title: '',
-    mid: 0,
     gender: 'x',
     location: '',
     facilitator: '',
@@ -35,7 +34,7 @@ const EditGroup = ({
     useEffect(() => {
         if (!group) {
             if (match.params.gid != 0) {
-                getGroup(match.params.gid);
+                getGroup(match.params.groupId);
             }
         }
         if (!loading) {
@@ -43,12 +42,13 @@ const EditGroup = ({
             for (const key in group) {
                 if (key in groupData) groupData[key] = group[key];
             }
-            groupData['mid'] = match.params.mid;
+            // groupData['mid'] = match.params.mid;
             setFormData(groupData);
         }
         if (match.params.gid > 0)
             setFormData({ ...formData, groupId: match.params.gid });
-    }, [loading, getGroup, group]);
+    },[]);
+    // }, [loading, getGroup, group]);
 
     const {
         groupId,

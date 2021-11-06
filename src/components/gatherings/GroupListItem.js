@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { deleteGroup } from '../../actions/group';
 
 const GroupListItem = ({
-    group: { id, gender, title, location, facilitator },
+    group: { groupId, gender, title, location, facilitator },
     role,
     deleteGroup,
 }) => {
@@ -18,7 +18,7 @@ const GroupListItem = ({
         <Fragment>
             <div className='GItem-Box'>
                 <div className={'GItem-Line1'}>
-                    <Link to={`/EditGroup/${id}`}>
+                    <Link to={`/EditGroup/${groupId}`}>
                         {get1Line(gender, title, location, facilitator)}
                     </Link>
                 </div>
@@ -29,7 +29,7 @@ const GroupListItem = ({
                     {role !== 'guest' ? (
                         <i
                             className={'fa fa-trash my'}
-                            onClick={() => deleteGroup(id)}
+                            onClick={() => deleteGroup(groupId)}
                         ></i>
                     ) : null}
                 </div>
@@ -84,7 +84,7 @@ function get2Line(l, f) {
 GroupListItem.propTypes = {
     group: PropTypes.object.isRequired,
     auth: PropTypes.object.isRequired,
-    mid: PropTypes.object.isRequired,
+    // mid: PropTypes.object.isRequired,
     role: PropTypes.string.isRequired,
     deleteGroup: PropTypes.func.isRequired,
 };

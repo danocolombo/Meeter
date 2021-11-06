@@ -75,7 +75,7 @@ const Routes = () => {
                 />
                 <PrivateRoute
                     exact
-                    path='/EditGroup/:mid/:gid'
+                    path='/EditGroup/:groupId'
                     component={EditGroup}
                 />
                 <PrivateRoute

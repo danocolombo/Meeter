@@ -860,8 +860,8 @@ const EditGathering = ({
                 {groups &&
                     groups.map((group) => (
                         <GroupListItem
-                            key={group._id}
-                            mid={group.mid}
+                            key={group.groupId}
+                            mid={group.meetingId}
                             group={group}
                             role={active.role}
                             deleteResponse={handleGroupDeleteRequest}
