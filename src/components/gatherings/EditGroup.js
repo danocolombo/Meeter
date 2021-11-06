@@ -51,9 +51,9 @@ const EditGroup = ({
     }, [loading, getGroup, group]);
 
     const {
-        _id,
+        groupId,
         title,
-        mid,
+        meetingId,
         gender,
         location,
         facilitator,

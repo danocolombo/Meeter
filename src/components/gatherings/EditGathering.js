@@ -72,17 +72,17 @@ const EditGathering = ({
 }) => {
     const [formData, setFormData] = useState(initialState);
 
-    useEffect(() => {
-        getGroups(match.params.id);
+    // useEffect(() => {
+    //     getGroups(match.params.id);
 
-        // getMtgConfigs(activeClient);
-        // getDefGroups(activeClient);
-        // console.log('just ran getGroups');
-    }, [active.childrenCount, getGroups, getMtgConfigs, match.params.id]);
+    //     // getMtgConfigs(activeClient);
+    //     // getDefGroups(activeClient);
+    //     // console.log('just ran getGroups');
+    // }, [active.childrenCount, getGroups, getMtgConfigs, match.params.id]);
     useEffect(() => {
         if (!turnout) {
             getMeeting(match.params.id);
-            clearGroups();
+            // clearGroups();
             getGroups(match.params.id);
         }
         // if (!gathering && match.params.id !== '0') {
@@ -98,7 +98,8 @@ const EditGathering = ({
         }
 
         if (meetingId) setFormData({ ...formData, meetingId: meetingId });
-    }, [meetingLoading, turnout, active.client]);
+    }, []);
+    // }, [meetingLoading, turnout, active.client]);
 
     const {
         meetingId,
