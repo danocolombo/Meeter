@@ -22,7 +22,7 @@ const initialState = {
 };
 
 const EditGroup = ({
-    group: { group, loading, newGroup },
+    group: { tmpGroup, loading, newGroup },
     addGroup,
     auth: { activeRole, activeStatus },
     getGroup,
@@ -32,15 +32,16 @@ const EditGroup = ({
     const [formData, setFormData] = useState(initialState);
 
     useEffect(() => {
-        if (!group) {
+        if (!tmpGroup) {
             if (match.params.groupId != 0) {
                 getGroup(match.params.groupId);
             }
         }
         if (!loading) {
             const groupData = { ...initialState };
-            for (const key in group) {
-                if (key in groupData) groupData[key] = group[key];
+            console.table(tmpGroup);
+            for (const key in tmpGroup) {
+                if (key in groupData) groupData[key] = tmpGroup[key];
             }
             // groupData['mid'] = match.params.mid;
             setFormData(groupData);

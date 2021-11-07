@@ -15,8 +15,11 @@ import {
 // Get groups associated with meetingId
 export const getGroups = (mid) => async (dispatch) => {
     try {
+        // this is called when gathering is loaded. 
+        // clear the groups array AND the temporary group
         dispatch({ type: CLEAR_GROUPS });
-
+        dispatch({ type: CLEAR_GROUP});
+        
         const config = {
             headers: {
                 'Access-Control-Allow-Headers':

@@ -6,12 +6,13 @@ import {
     // DELETE_GROUPS,
     // ADD_GROUP,
     GET_GROUP,
+    SET_TMP_GROUP,
     CLEAR_GROUP,
 } from '../actions/types';
 
 const initialState = {
     groups: [],
-    group: null,
+    tmpGroup: null,
     // loading: true,
     groupLoading: true,
     error: {},
@@ -31,7 +32,13 @@ export default function (state = initialState, action) {
         case GET_GROUP:
             return {
                 ...state,
-                group: payload,
+                tmpGroup: payload,
+                groupLoading: false,
+            };
+        case SET_TMP_GROUP:
+            return {
+                ...state,
+                tmpGroup: payload,
                 groupLoading: false,
             };
         // case ADD_GROUP:
@@ -43,7 +50,7 @@ export default function (state = initialState, action) {
         case CLEAR_GROUP:
             return {
                 ...state,
-                group: null,
+                tmpGroup: null,
                 groupLoading: false,
             };
         // case DELETE_GROUPS:
