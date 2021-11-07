@@ -10,7 +10,7 @@ import {
     getMeeting,
     addDefaultGroups,
 } from '../../actions/gathering';
-import { getGroups, clearGroups, deleteGroup } from '../../actions/group';
+import { getGroups, clearGroups, deleteGroup, clearTmpGroup } from '../../actions/group';
 import GroupListItem from './GroupListItem';
 import { getMtgConfigs, getDefGroups } from '../../actions/admin';
 // import ServantSelect from './ServantSelect';
@@ -60,10 +60,12 @@ const EditGathering = ({
     //group: { groups, groupLoading },
     meeter: { mtgConfigs, defaultGroups, active },
     meeting: { turnout, groups, meetingLoading},
+    group: { tmpGroup},
     // mtgConfigs,
     createGathering,
     getMeeting,
     getGroups,
+    clearTmpGroup,
     clearGroups,
     addDefaultGroups,
     getMtgConfigs,
@@ -89,6 +91,10 @@ const EditGathering = ({
         //     getMeeting(match.params.id);
         //     // getGroups(match.params.id);
         // }
+        if(tmpGroup){
+            console.log('NEED TO CLEAR tmpGroup');
+            clearTmpGroup();
+        }
         if (!meetingLoading) {
             const gatheringData = { ...initialState };
             for (const key in turnout) {
@@ -98,7 +104,7 @@ const EditGathering = ({
         }
 
         if (meetingId) setFormData({ ...formData, meetingId: meetingId });
-    }, [turnout]);
+    }, [turnout, tmpGroup]);
     // }, [meetingLoading, turnout, active.client]);
 
     const {
@@ -1036,6 +1042,7 @@ EditGathering.propTypes = {
     getMeeting: PropTypes.func.isRequired,
     getGroups: PropTypes.func.isRequired,
     clearGroups: PropTypes.func.isRequired,
+    clearTmpGroup: PropTypes.func.isRequired,
     getMtgConfigs: PropTypes.func.isRequired,
     getDefGroups: PropTypes.func.isRequired,
     addDefaultGroups: PropTypes.func.isRequired,
@@ -1062,6 +1069,7 @@ export default connect(mapStateToProps, {
     getMeeting,
     getGroups,
     clearGroups,
+    clearTmpGroup,
     getMtgConfigs,
     getDefGroups,
     addDefaultGroups,

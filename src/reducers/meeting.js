@@ -3,6 +3,7 @@ import {
     CLEAR_MEETING,
     SET_GROUPS,
     CLEAR_GROUPS,
+    REMOVE_GROUP,
 } from '../actions/types';
 
 const initialState = {
@@ -40,6 +41,12 @@ export default function (state = initialState, action) {
                 ...state,
                 groups: null,
                 meetingLoading: false,
+            };
+        case REMOVE_GROUP:
+            return {
+                ...state,
+                groups: state.groups.filter((group) => group.id !== payload),
+                groupLoading: false,
             };
         default:
             return state;

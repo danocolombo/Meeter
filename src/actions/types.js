@@ -44,6 +44,7 @@ export const DELETE_GROUP = 'DELETE_GROUP';
 export const GET_GROUPS = 'GET_GROUPS';
 export const GET_GROUP = 'GET_GROUP';
 export const SET_TMP_GROUP = 'SET_TMP_GROUP';
+export const CLEAR_TMP_GROUP = 'CLEAR_TMP_GROUP';
 export const CLEAR_GROUPS = 'CLEAR_GROUPS';
 export const GROUP_ERROR = 'GROUP_ERROR';
 export const ADMIN_ERROR = 'ADMIN_ERROR';

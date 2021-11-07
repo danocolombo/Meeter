@@ -7,6 +7,7 @@ import {
     // ADD_GROUP,
     GET_GROUP,
     SET_TMP_GROUP,
+    CLEAR_TMP_GROUP,
     CLEAR_GROUP,
 } from '../actions/types';
 
@@ -40,6 +41,12 @@ export default function (state = initialState, action) {
                 ...state,
                 tmpGroup: payload,
                 groupLoading: false,
+            };
+        case CLEAR_TMP_GROUP:
+            return {
+                ...state,
+                tmpGroup: null,
+                groupLoading: false
             };
         // case ADD_GROUP:
         //     return {

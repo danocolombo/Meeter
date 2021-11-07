@@ -4,6 +4,8 @@ import {
     //----Base5---
     CLEAR_GROUPS,
     SET_GROUPS,
+    SET_TMP_GROUP,
+    CLEAR_TMP_GROUP,
     //------------
     GET_GROUPS,
     GROUP_ERROR,
@@ -19,7 +21,7 @@ export const getGroups = (mid) => async (dispatch) => {
         // clear the groups array AND the temporary group
         dispatch({ type: CLEAR_GROUPS });
         dispatch({ type: CLEAR_GROUP});
-        
+
         const config = {
             headers: {
                 'Access-Control-Allow-Headers':
@@ -60,6 +62,22 @@ export const getGroups = (mid) => async (dispatch) => {
         });
     }
 };
+// clear tmp group
+export const clearTmpGroup = () => async (dispatch) => {
+    try {
+        dispatch({
+            type: CLEAR_TMP_GROUP,
+        });
+    } catch (err) {
+        dispatch({
+            type: GROUP_ERROR,
+            payload: {
+                msg: err.response.statusText,
+                status: err.response.status,
+            },
+        });
+    }
+}
 // clear groups
 export const clearGroups = () => async (dispatch) => {
     try {
@@ -98,6 +116,11 @@ export const getGroup = (groupId) => async (dispatch) => {
         let api2use = process.env.REACT_APP_MEETER_API + '/groups';
         let res = await axios.post(api2use, body, config);
         //const res = await axios.get(`/api/groups/group/${groupId}`);
+
+        dispatch({
+            type: SET_TMP_GROUP,
+            payload: res.data.body,
+        })
 
         dispatch({
             type: GET_GROUP,
