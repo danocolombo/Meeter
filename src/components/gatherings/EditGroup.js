@@ -33,7 +33,7 @@ const EditGroup = ({
 
     useEffect(() => {
         if (!group) {
-            if (match.params.gid != 0) {
+            if (match.params.groupId != 0) {
                 getGroup(match.params.groupId);
             }
         }
@@ -45,8 +45,8 @@ const EditGroup = ({
             // groupData['mid'] = match.params.mid;
             setFormData(groupData);
         }
-        if (match.params.gid > 0)
-            setFormData({ ...formData, groupId: match.params.gid });
+        if (match.params.groupId > 0)
+            setFormData({ ...formData, groupId: match.params.groupId });
     },[]);
     // }, [loading, getGroup, group]);
 

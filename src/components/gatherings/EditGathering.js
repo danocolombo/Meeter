@@ -264,6 +264,7 @@ const EditGathering = ({
                         onChange={(e) => onChange(e)}
                     />
                 </div>
+                <div className='form-group'>
                 <h4>Facilitator</h4>
                 <input
                     type='text'
@@ -274,6 +275,7 @@ const EditGathering = ({
                     value={facilitatorContact}
                     onChange={onChange}
                 />
+                </div>
                 {/* <select
                     value={facilitator}
                     name='facilitator'
