@@ -98,7 +98,7 @@ const EditGathering = ({
         }
 
         if (meetingId) setFormData({ ...formData, meetingId: meetingId });
-    }, []);
+    }, [turnout]);
     // }, [meetingLoading, turnout, active.client]);
 
     const {
