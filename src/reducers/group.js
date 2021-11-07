@@ -40,7 +40,7 @@ export default function (state = initialState, action) {
             return {
                 ...state,
                 tmpGroup: payload,
-                groupLoading: false,
+                groupLoading: true,
             };
         case CLEAR_TMP_GROUP:
             return {

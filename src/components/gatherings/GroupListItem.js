@@ -57,8 +57,8 @@ function get1Line(g, t) {
     return [<span>{line1}</span>];
 }
 function get2Line(l, f) {
-    if (l) console.log(l + ' ' + l.length);
-    if (f) console.log(f + ' ' + f.length);
+    // if (l) console.log(l + ' ' + l.length);
+    // if (f) console.log(f + ' ' + f.length);
     // console.log(l + ' ' + l.length);
     //console.log(f + ' ' + f.length);
     let line2 = '';

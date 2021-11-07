@@ -22,7 +22,7 @@ const initialState = {
 };
 
 const EditGroup = ({
-    group: { tmpGroup, loading, newGroup },
+    group: { tmpGroup, groupLoading, newGroup },
     addGroup,
     auth: { activeRole, activeStatus },
     getGroup,
@@ -36,10 +36,11 @@ const EditGroup = ({
             if (match.params.groupId != 0) {
                 getGroup(match.params.groupId);
             }
+            
         }
-        if (!loading) {
+        if (!groupLoading) {
             const groupData = { ...initialState };
-            console.table(tmpGroup);
+            
             for (const key in tmpGroup) {
                 if (key in groupData) groupData[key] = tmpGroup[key];
             }
@@ -48,7 +49,7 @@ const EditGroup = ({
         }
         if (match.params.groupId > 0)
             setFormData({ ...formData, groupId: match.params.groupId });
-    },[]);
+    },[tmpGroup, groupLoading]);
     // }, [loading, getGroup, group]);
 
     const {

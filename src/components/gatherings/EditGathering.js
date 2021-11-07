@@ -92,7 +92,6 @@ const EditGathering = ({
         //     // getGroups(match.params.id);
         // }
         if(tmpGroup){
-            console.log('NEED TO CLEAR tmpGroup');
             clearTmpGroup();
         }
         if (!meetingLoading) {
