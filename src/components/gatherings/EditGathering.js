@@ -103,7 +103,7 @@ const EditGathering = ({
         }
 
         if (meetingId) setFormData({ ...formData, meetingId: meetingId });
-    }, [turnout, tmpGroup]);
+    }, [turnout, tmpGroup, groups]);
     // }, [meetingLoading, turnout, active.client]);
 
     const {
@@ -162,11 +162,11 @@ const EditGathering = ({
         createGathering(formData, groups, history, active.client, true);
         window.scrollTo(0, 0);
     };
-    const handleGroupDeleteRequest = (gid) => {
+    const handleGroupDeleteRequest = (groupId2Delete) => {
         //this is going to delete the selected request
         //and update the groups for the meeting
         console.log('back in EditGathering');
-        deleteGroup(gid, meetingId);
+        deleteGroup(groupId2Delete, meetingId);
     };
 
     const addDefaultGroupsToMeeting = () => {
@@ -805,18 +805,45 @@ const EditGathering = ({
                     <Fragment>
                         <hr className='group-ruler my-1' />
                         <h2>Open-Share Groups</h2>
-                        <span className={'pl-2 my'}>
+                        <div>
+                            <Link to={`/EditGroup/0`}>
                             <Button
                                 variant='contained'
                                 color='primary'
                                 size='small'
                                 // className={classes.button}
                                 startIcon={<PlaylistAddIcon />}
-                                href={`/EditGroup/${meetingId}/0`}
+                                // href={`/EditGroup/0`}
                             >
                                 New Group
                             </Button>
+                            </Link>
+                        </div>
+                        {/* <span className={'pl-2 my'}>
+                            <Button
+                                variant='contained'
+                                color='primary'
+                                size='small'
+                                // className={classes.button}
+                                startIcon={<PlaylistAddIcon />}
+                                href={`/EditGroup/0`}
+                            >
+                                New Group
+                            </Button>
+                        </span> */}
+                        <span className={'pl-2 my'}>
+                            <button
+                                type="button"
+                                onClick={(e) => {
+                                e.preventDefault();
+                                window.location.href='/EditGroup/0';
+                                }}
+                            > Click here</button>
                         </span>
+
+
+
+
                         <span className={'pl-2'}>
                             {defaultGroups.length > 0 &&
                             active.role !== 'guest' ? (

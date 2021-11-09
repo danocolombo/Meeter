@@ -6,6 +6,8 @@ import {
     SET_GROUPS,
     SET_TMP_GROUP,
     CLEAR_TMP_GROUP,
+    ADD_GROUP,
+    REMOVE_GROUP,
     //------------
     GET_GROUPS,
     GROUP_ERROR,
@@ -140,12 +142,42 @@ export const getGroup = (groupId) => async (dispatch) => {
 // Delete group
 export const deleteGroup = (groupId) => async (dispatch) => {
     try {
-        const res = await axios.delete(`/api/groups/group/${groupId}`);
+        console.log("action/group::deleteGroup");
+        console.log("groupId: " + groupId);
+        const config = {
+            headers: {
+                'Access-Control-Allow-Headers':
+                    'Content-Type, x-auth-token, Access-Control-Allow-Headers',
+                'Content-Type': 'application/json',
+            },
+        };
+        //==========================================================
+        // note for delete, payload needs to be wrapped with Item
+        //==========================================================
+        let obj = { 
+            operation: 'deleteGroup',
+            payload: {
+                Key: {
+                    groupId: groupId
+                }
+            }
+        };
+        let body = JSON.stringify(obj);
 
-        dispatch({
-            type: DELETE_GROUP,
-            payload: res.data,
-        });
+        let api2use = process.env.REACT_APP_MEETER_API + '/groups';
+        let res = await axios.post(api2use, body, config);
+        // const util = require('util');
+        // console.log('res:  \n' + util.inspect(res, { showHidden: false, depth: null }));
+
+        // on delete, we don't get body back, so send obj to redux to remove
+        if (res.status == '200'){
+            dispatch({
+                type: REMOVE_GROUP,
+                payload: obj.payload.Key,
+            });
+
+        }
+        
     } catch (err) {
         dispatch({
             type: GROUP_ERROR,
@@ -182,63 +214,55 @@ export const addGroup = (formData, history, edit = false) => async (
     dispatch
 ) => {
     try {
-        if (!formData._id.length > 1) {
-            //this is an add
-            delete formData._id;
+        console.log('the length of groupId is ' + formData.groupId.length);
+        console.log('proof...>>>' + formData.groupId + "<<<");
+        console.table(formData);
+        if (!formData.groupId.length == 1) {
+            // we have groupId, it is edit
+            // delete formData._id;
+            edit = true;
+        }else{
+            edit = false;
         }
+        //============================================
+        // new call to AWS API gateway
+        //=============================================
         const config = {
             headers: {
+                'Access-Control-Allow-Headers':
+                    'Content-Type, x-auth-token, Access-Control-Allow-Headers',
                 'Content-Type': 'application/json',
             },
         };
-        let res = null;
-        if (formData._id) {
-            res = await axios.post(
-                `/api/groups/group/${formData._id}`,
-                formData,
-                config
-            );
-        } else {
-            res = await axios.post(`/api/groups/group/0`, formData, config);
+        
+        //==========================================================
+        // note for API, payload needs to be wrapped with Item
+        //==========================================================
+        let obj = { 
+            operation: 'addGroup',
+            payload: {
+                Item:  formData
+            }
+        };
+        let body = JSON.stringify(obj);
+
+        let api2use = process.env.REACT_APP_MEETER_API + '/groups';
+        let res = await axios.post(api2use, body, config);
+        
+
+        // send the object to get added to redux meeting.groups
+        if (res.status == '200'){
+            dispatch({
+                type: ADD_GROUP,
+                payload: res.data.Item,
+            });
+
         }
-        //=============================================
-        // we either added or updated. refresh redux
-        //=======================================------
-        const newGroupList = await axios.get(
-            `/api/groups/meeting/~{formData.mid}`
-        );
 
-        const rose = await axios.get(`/api/groups/meeting/${formData.mid}`);
+        dispatch(setAlert(edit ? 'Group Updated' : 'Group Added', 'success'));
 
-        dispatch({
-            type: GET_GROUPS,
-            payload: rose.data,
-        });
-
-        // await dispatch({
-        //     type: CLEAR_GROUP,
-        //     payload: 'Clear temp group info',
-        // });
-        // dispatch({
-        //     type: GET_GROUPS,
-        //     payload: res.data,
-        // });
-
-        //===========================
-        // dispatch({
-        //     type: ADD_GROUP,
-        //     payload: res.data,
-        // });
-        dispatch(setAlert(edit ? 'Group Updated' : 'Group Created', 'success'));
-
-        // if (!edit) {
-        //     const target = '/editGathering/' + formData.mid;
-        //     history.push(target);
-        // }
-        console.log('edit: ' + edit);
-        const target = '/editGathering/' + formData.mid;
+        const target = '/editGathering/' + formData.meetingId;
         history.push(target);
-        // history.push('/gatherings');
     } catch (err) {
         console.log('actions/group.js addGroup');
         return err;

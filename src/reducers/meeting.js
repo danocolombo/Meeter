@@ -2,6 +2,7 @@ import {
     SET_MEETING,
     CLEAR_MEETING,
     SET_GROUPS,
+    ADD_GROUP,
     CLEAR_GROUPS,
     REMOVE_GROUP,
 } from '../actions/types';
@@ -23,6 +24,12 @@ export default function (state = initialState, action) {
                 turnout: payload,
                 meetingLoading: false,
             };
+        case ADD_GROUP:
+            return {
+                ...state,
+                groups: [payload, ...state.groups],
+                groupLoading: false,
+            };
         case SET_GROUPS:
             return {
                 ...state,
@@ -43,9 +50,15 @@ export default function (state = initialState, action) {
                 meetingLoading: false,
             };
         case REMOVE_GROUP:
+            console.log('REMOVE_GROUP in meeting reducer');
+            console.log('table: state.groups');
+            console.table(state.groups);
+            const util = require('util');
+            console.log('payload:  \n' + util.inspect(payload, { showHidden: false, depth: null }));
+
             return {
                 ...state,
-                groups: state.groups.filter((group) => group.id !== payload),
+                groups: state.groups.filter((group) => group.groupId !== payload.groupId),
                 groupLoading: false,
             };
         default:

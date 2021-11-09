@@ -63,3 +63,4 @@ export const SET_ACTIVES = 'SET_ACTIVES';
 export const CLEAR_ACTIVES = 'CLEAR_ACTIVES';
 export const DELETE_GROUPS = 'DELETE_GROUPS';
 export const REMOVE_GROUP = 'REMOVE_GROUP';
+export const ADD_GROUP = 'ADD_GROUP';

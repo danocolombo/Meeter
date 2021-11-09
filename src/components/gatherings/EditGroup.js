@@ -23,6 +23,7 @@ const initialState = {
 
 const EditGroup = ({
     group: { tmpGroup, groupLoading, newGroup },
+    meeting: {turnout, groups},
     addGroup,
     auth: { activeRole, activeStatus },
     getGroup,
@@ -32,23 +33,48 @@ const EditGroup = ({
     const [formData, setFormData] = useState(initialState);
 
     useEffect(() => {
-        if (!tmpGroup) {
-            if (match.params.groupId != 0) {
-                getGroup(match.params.groupId);
-            }
+        if (!turnout){
+            console.log('we do not have turnout');
             
+        }else{
+            console.log('still have it');
+            const util = require('util');
+
+            console.log('turnout:  \n' + util.inspect(turnout, { showHidden: false, depth: null }));
+
         }
-        if (!groupLoading) {
+        if (match.params.groupId == 0) {
+            console.log('turnout.meetingId: ' + turnout.meetingId);
+            console.log('it is zero');
             const groupData = { ...initialState };
-            
-            for (const key in tmpGroup) {
-                if (key in groupData) groupData[key] = tmpGroup[key];
-            }
-            // groupData['mid'] = match.params.mid;
             setFormData(groupData);
+            
         }
-        if (match.params.groupId > 0)
-            setFormData({ ...formData, groupId: match.params.groupId });
+        else{
+            console.log('match.params.groupId: ' + match.params.groupId);
+        }
+    }, []);
+    useEffect(() => {
+        if(match.params.groupId != 0 ){
+            if (!tmpGroup) {
+                if (match.params.groupId != 0) {
+                    getGroup(match.params.groupId);
+                }
+                
+            }else{
+                console.log('no tmpGroup');
+            }
+            if (!groupLoading) {
+                const groupData = { ...initialState };
+                
+                for (const key in tmpGroup) {
+                    if (key in groupData) groupData[key] = tmpGroup[key];
+                }
+                setFormData(groupData);
+            }
+            if (match.params.groupId > 0)
+                setFormData({ ...formData, groupId: match.params.groupId });
+        }
     },[tmpGroup, groupLoading]);
     // }, [loading, getGroup, group]);
 
@@ -81,7 +107,10 @@ const EditGroup = ({
 
     const onSubmit = (e) => {
         e.preventDefault();
-        formData.mid = match.params.mid;
+        if (match.params.groupId == 0){
+            formData.groupId = "0";
+        }
+        formData.meetingId = turnout.meetingId;
         addGroup(formData, history, true);
         window.scrollTo(0, 0);
     };
@@ -191,7 +220,7 @@ const EditGroup = ({
                     <span className='pl-2'>
                     <Link
                             className='btn btn-light my-1'
-                            to={`/editGathering/${match.params.mid}`}
+                            to={`/editGathering/${turnout.meetingId}`}
                         >
                             Go Back
                         </Link>
@@ -219,6 +248,7 @@ const EditGroup = ({
 EditGroup.propTypes = {
     group: PropTypes.object.isRequired,
     auth: PropTypes.object.isRequired,
+    meeting: PropTypes.object.isRequired,
     addGroup: PropTypes.func.isRequired,
     getGroup: PropTypes.func.isRequired,
     deleteGroup: PropTypes.func.isRequired,
@@ -227,6 +257,7 @@ EditGroup.propTypes = {
 const mapStateToProps = (state) => ({
     group: state.group,
     auth: state.auth,
+    meeting: state.meeting,
 });
 
 export default connect(mapStateToProps, { addGroup, getGroup, deleteGroup })(
