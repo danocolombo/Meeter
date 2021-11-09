@@ -6,6 +6,7 @@ import {
     CLEAR_MEETING,
     SET_MEETING,
     CLEAR_GROUPS,
+    TURN_MEEETINGLOADING_OFF,
     //---
     GET_GATHERINGS,
     GATHERING_ERROR,
@@ -21,6 +22,7 @@ import {
     GET_GROUPS,
     CLEAR_GROUP,
 } from './types';
+
 export const getMeeting = (meetingId) => async (dispatch) => {
     //ensure that id is not null, if so return
     console.log('INSIDE GET MEETING');
@@ -74,6 +76,13 @@ export const getMeeting = (meetingId) => async (dispatch) => {
 //#########################
 //get gatherings
 //#########################
+export const turnoffMeetingLoading = () => async (dispatch) => {
+    dispatch({
+        type: TURN_MEEETINGLOADING_OFF,
+        payload: null
+    });
+
+}
 export const getGatherings = (clientId) => async (dispatch) => {
     try {
         //clear all the group related data
@@ -180,29 +189,57 @@ export const createGathering = (formData, groups = [], history, activeClient) =>
             
             }
         }
-
-        if (formData._id.length < 1) {
-            //this is an add, so delete _id and meetingId from formData
-            // delete formData._id;
-            delete formData.meetingId;
-        } else {
-            formData.meetingId = formData._id;
-            //formData._id = '';
-        }
         //-----------------------------------------------
         // need to add the tenantId to the data to put
         //-----------------------------------------------
         formData.clientId = activeClient;
+        console.log('==================================');
+        const util = require('util');
+        console.log('formData:  \n' + util.inspect(formData, { showHidden: false, depth: null }));
 
+
+        console.log('===========================');
+        if (formData.meetingId.length < 1) {
+            //this is an add, so delete _id and meetingId from formData
+            // delete formData._id;
+            // delete formData.meetingId;
+            formData.meetingId = "0";
+        // } else {
+        //     formData.meetingId = formData._id;
+        //     //formData._id = '';
+        }
+        
+
+        //==========================================
+        // new 5.5 AWS API call
+        //==========================================
         const config = {
             headers: {
+                'Access-Control-Allow-Headers':
+                    'Content-Type, x-auth-token, Access-Control-Allow-Headers',
                 'Content-Type': 'application/json',
             },
         };
-        const res = await axios.post('/api/meeting', formData, config);
+        let obj = {
+            operation: 'putMeeting',
+            payload: {
+                Item: formData,
+            },
+        };
+        let body = JSON.stringify(obj);
+
+        let api2use = process.env.REACT_APP_MEETER_API + '/meetings';
+        let res = await axios.post(api2use, body, config);
+
+        // const config = {
+        //     headers: {
+        //         'Content-Type': 'application/json',
+        //     },
+        // };
+        // const res = await axios.post('/api/meeting', formData, config);
 
         dispatch({
-            type: GET_GATHERING,
+            type: SET_MEETING,
             payload: res.data,
         });
 

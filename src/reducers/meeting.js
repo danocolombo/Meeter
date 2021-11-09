@@ -5,6 +5,7 @@ import {
     ADD_GROUP,
     CLEAR_GROUPS,
     REMOVE_GROUP,
+    TURN_MEEETINGLOADING_OFF,
 } from '../actions/types';
 
 const initialState = {
@@ -18,6 +19,11 @@ export default function (state = initialState, action) {
     const { type, payload } = action;
 
     switch (type) {
+        case TURN_MEEETINGLOADING_OFF:
+            return {
+                ...state,
+                meetingLoading: false,
+            };
         case SET_MEETING:
             return {
                 ...state,

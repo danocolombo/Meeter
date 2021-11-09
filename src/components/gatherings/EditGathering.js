@@ -9,6 +9,7 @@ import {
     createGathering,
     getMeeting,
     addDefaultGroups,
+    turnoffMeetingLoading,
 } from '../../actions/gathering';
 import { getGroups, clearGroups, deleteGroup, clearTmpGroup } from '../../actions/group';
 import GroupListItem from './GroupListItem';
@@ -66,6 +67,7 @@ const EditGathering = ({
     getMeeting,
     getGroups,
     clearTmpGroup,
+    turnoffMeetingLoading,
     clearGroups,
     addDefaultGroups,
     getMtgConfigs,
@@ -82,27 +84,35 @@ const EditGathering = ({
     //     // console.log('just ran getGroups');
     // }, [active.childrenCount, getGroups, getMtgConfigs, match.params.id]);
     useEffect(() => {
-        if (!turnout) {
-            getMeeting(match.params.id);
-            // clearGroups();
-            getGroups(match.params.id);
-        }
-        // if (!gathering && match.params.id !== '0') {
-        //     getMeeting(match.params.id);
-        //     // getGroups(match.params.id);
-        // }
-        if(tmpGroup){
-            clearTmpGroup();
-        }
-        if (!meetingLoading) {
-            const gatheringData = { ...initialState };
-            for (const key in turnout) {
-                if (key in gatheringData) gatheringData[key] = turnout[key];
+        // need to clear the redux meeting data
+        clearTmpGroup();
+    }, []);
+    useEffect(() => {
+        console.log('id: ' + match.params.id);
+        if (match.params.id != "0"){
+            if (!turnout) {
+                getMeeting(match.params.id);
+                // clearGroups();
+                getGroups(match.params.id);
             }
-            setFormData(gatheringData);
-        }
+            if(tmpGroup){
+                clearTmpGroup();
+            }
+            if (!meetingLoading && match.params.id != 0) {
+                const gatheringData = { ...initialState };
+                for (const key in turnout) {
+                    if (key in gatheringData) gatheringData[key] = turnout[key];
+                }
+                setFormData(gatheringData);
+            }
 
-        if (meetingId) setFormData({ ...formData, meetingId: meetingId });
+            if (meetingId) setFormData({ ...formData, meetingId: meetingId });
+        }else{
+            // this is new meeting
+            setFormData(initialState);
+            // there is no meeting to get, so need to flip meetingLoading to false
+            turnoffMeetingLoading();
+        }
     }, [turnout, tmpGroup, groups]);
     // }, [meetingLoading, turnout, active.client]);
 
@@ -1070,6 +1080,7 @@ EditGathering.propTypes = {
     clearGroups: PropTypes.func.isRequired,
     clearTmpGroup: PropTypes.func.isRequired,
     getMtgConfigs: PropTypes.func.isRequired,
+    turnoffMeetingLoading: PropTypes.func.isRequired,
     getDefGroups: PropTypes.func.isRequired,
     addDefaultGroups: PropTypes.func.isRequired,
     gathering: PropTypes.object.isRequired,
@@ -1100,4 +1111,5 @@ export default connect(mapStateToProps, {
     getDefGroups,
     addDefaultGroups,
     deleteGroup,
+    turnoffMeetingLoading,
 })(withRouter(EditGathering));
