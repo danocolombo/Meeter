@@ -4,7 +4,7 @@ import moment from 'moment';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { deleteGathering } from '../../actions/gathering';
-
+import './gathering.styles.scss';
 const GatheringItem = ({
     
     gathering: {
@@ -21,21 +21,18 @@ const GatheringItem = ({
     deleteGathering,
     presentView,
 }) => (
-    <Fragment>
-        {
-            console.log("inside gateringItem")
-        }
-        <div className={meetingType !== 'Other' ? 'PersonBox' : 'OtherBox'}>
-            <div>
-                <br />
-                <Fragment>
-                    <i
+        <div className="gather-component__wrapper">
+            <div className='gather-component__delete-row'>
+                <div className='gather-component__test-style'><i
                         className={'fa fa-trash my'}
                         onClick={() => deleteGathering(meetingId, presentView)}
                     ></i>
-                </Fragment>
-                {meetingType}: {title}
-                <h2>presentView:{presentView}</h2>
+                </div>
+            </div>
+            <div className="gather-component__gathering-info-box">
+                
+                    <div className="gather-component__type-testimony">{meetingType}:</div> {title}
+                
                 {supportContact && (
                     <Fragment>
                         <br />
@@ -59,8 +56,7 @@ const GatheringItem = ({
                     <i className='fas fa-pen'></i>
                 </Link>
             </div>
-        </div>
-    </Fragment>
+            </div>
 );
 
 GatheringItem.propTypes = {

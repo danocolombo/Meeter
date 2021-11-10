@@ -1,0 +1,67 @@
+hr {
+    margin: 10px 15px;
+}
+.flex-container {
+    /* We first create a flex layout context */
+    display: flex;
+    
+    /* Then we define the flow direction 
+       and if we allow the items to wrap 
+     * Remember this is the same as:
+     * flex-direction: row;
+     * flex-wrap: wrap;
+     */
+    //flex-flow: row wrap;
+    flex-flow: row;
+    
+    /* Then we define how is distributed the remaining space */
+    justify-content: space-around;
+    
+    padding: 0;
+    margin: 0;
+    list-style: none;
+  }
+  .flex-item {
+    background: tomato;
+    padding: 5px;
+    width: 200px;
+    height: 150px;
+    margin-top: 10px;
+    line-height: 150px;
+    color: white;
+    font-weight: bold;
+    font-size: 3em;
+    text-align: center;
+  }
+.gather-component__wrapper {
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+    border: green double 2px;
+    width: 450px;
+    margin-bottom: 15px;
+}
+.gather-component__delete-row {
+    display: flex;
+  flex-flow: row wrap;
+  /* This aligns items to the end line on main-axis */
+  justify-content: flex-end;
+}
+.gather-component__test-style {
+    color: blue;
+    font-weight: bold;
+    font-size: large;
+    justify-content: flex-end;
+}
+.gather-component__gathering-info-box {
+    border: black solid 1px;
+    display: flex;
+}
+.gather-component__type-title {
+    font-weight: normal;
+}
+.gather-component__type-testimony {
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size: large;
+    font-style: italic;
+    font-weight: bold;
+    color: green;
+}
