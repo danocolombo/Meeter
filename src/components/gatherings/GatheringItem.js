@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import { deleteGathering } from '../../actions/gathering';
 
 const GatheringItem = ({
-    deleteGathering,
+    
     gathering: {
         meetingId,
         meetingDate,
@@ -16,27 +16,20 @@ const GatheringItem = ({
         attendanceCount,
         newcomersCount,
         meetingType,
+        
     },
+    deleteGathering
 }) => (
     <Fragment>
         <div className={meetingType !== 'Other' ? 'PersonBox' : 'OtherBox'}>
-            <Fragment>
-                <div className='DeleteTarget'>
-                    <a
-                        id='deleteGathering'
-                        title='-'
-                        href='/#'
-                        onClick={() => deleteGathering(meetingId)}
-                    >
-                        <i className='fas fa-minus-circle'></i>
-                    </a>
-                </div>
-            </Fragment>
             <div>
-                <Link to={`/EditGathering/${meetingId}`}>
-                    {moment.utc(meetingDate).format('ll')}
-                </Link>
                 <br />
+                <Fragment>
+                    <i
+                        className={'fa fa-trash my'}
+                        onClick={() => deleteGathering(meetingId)}
+                    ></i>
+                </Fragment>
                 {meetingType}: {title}
                 {supportContact && (
                     <Fragment>

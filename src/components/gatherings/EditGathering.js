@@ -828,37 +828,7 @@ const EditGathering = ({
                                 New Group
                             </Button>
                             </Link>
-                        </div>
-                        {/* <span className={'pl-2 my'}>
                             <Button
-                                variant='contained'
-                                color='primary'
-                                size='small'
-                                // className={classes.button}
-                                startIcon={<PlaylistAddIcon />}
-                                href={`/EditGroup/0`}
-                            >
-                                New Group
-                            </Button>
-                        </span> */}
-                        <span className={'pl-2 my'}>
-                            <button
-                                type="button"
-                                onClick={(e) => {
-                                e.preventDefault();
-                                window.location.href='/EditGroup/0';
-                                }}
-                            > Click here</button>
-                        </span>
-
-
-
-
-                        <span className={'pl-2'}>
-                            {defaultGroups.length > 0 &&
-                            active.role !== 'guest' ? (
-                                <span>
-                                    <Button
                                         variant='contained'
                                         color='default'
                                         size='small'
@@ -867,29 +837,7 @@ const EditGathering = ({
                                     >
                                         DEFAULTS
                                     </Button>
-                                </span>
-                            ) : active.role === 'owner' ||
-                              active.role === 'superuser' ? (
-                                <span>
-                                    <Button
-                                        variant='contained'
-                                        color='secondary'
-                                        size='small'
-                                        // className={classes.button}
-                                        startIcon={<SettingsIcon />}
-                                        href='/DisplaySecurity'
-                                    >
-                                        CONFIGURE
-                                    </Button>
-                                </span>
-                            ) : null}
-                            {meetingId.length < 1 ? (
-                                <div>
-                                    Open-share groups can be added after the
-                                    meeting is saved.
-                                </div>
-                            ) : null}
-                        </span>
+                        </div>
                     </Fragment>
                 ) : (
                     <Fragment>

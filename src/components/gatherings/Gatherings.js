@@ -1,11 +1,11 @@
-import React, { Fragment, useEffect } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import { Link, Redirect } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Button from '@material-ui/core/Button';
 import Spinner from '../layout/Spinner';
 import GatheringItem from './GatheringItem';
-import { getGatherings } from '../../actions/gathering';
+import { getGatherings, deleteGathering } from '../../actions/gathering';
 
 const Gatherings = ({
     auth,
@@ -16,61 +16,21 @@ const Gatherings = ({
     historyView,
 }) => {
     useEffect(() => {
-        //we need to make sure that the system token is loaded and we don't have a cutter.
-        // also need the activeClient set.
-        // if (
-        //     !auth.token ||
-        //     auth.isAuthenticated !== true ||
-        //     !auth.user.acitveClient
-        // ) {
-        //     return <Redirect to='/login' />;
-        // }
         getGatherings(meeter.active.client);
     }, []);
+    const [viewDirection, setViewDirection] = useState(true);
+
+    const handleViewClick = () => {
+        setViewDirection(!viewDirection);
+    }
+    
     return auth.loading || loading ? (
         <Spinner />
     ) : (
         <Fragment>
-            <div>
-                <h2 className='large text-primary'>
-                    <i className='far fa-calendar-alt'></i> Meetings
-                </h2>
-
-                {offerView()}
-            </div>
-
-            <div className='posts'>{throwList()}</div>
-        </Fragment>
-    );
-    function throwList() {
-        if (match.params.options === 'historyView') {
-            return [
-                hatherings.map((hathering) => (
-                    <GatheringItem key={hathering.meetingId} gathering={hathering} />
-                )),
-            ];
-        } else {
-            return [
-                gatherings.map((gathering) => (
-                    <GatheringItem key={gathering.meetingId} gathering={gathering} />
-                )),
-            ];
-        }
-    }
-    function offerView() {
-        if (match.params.options === 'historyView') {
-            return [
-                <Link to='/gatherings'>
-                    <span className='meeterNavTextHighlight'>
-                        Active Meetings
-                    </span>
-                </Link>,
-                <p className='lead'>Your historical list of meetings...</p>,
-            ];
-        } else {
-            return [
-                <Link key='history' to='/gatherings/historyView'>HISTORY</Link>,
-                <p className='lead'>List of upcoming meetings...</p>,
+            {viewDirection == true ? (
+                <>
+                <h2>Current Meetings</h2>
                 <Link key='future' to='/EditGathering/0'>
                     <div key='one' className='waves-effect waves-light btn'>
                         <i key='two' className='material-icons left green'>
@@ -80,11 +40,23 @@ const Gatherings = ({
                             {'  '}NEW
                         </span>
                     </div>
-                </Link>,
-            ];
-        }
-        return null;
-    }
+                </Link>
+                </>
+            ) : ( <h2>Past Meetings</h2>)}
+            {viewDirection == true ? (
+                <div onClick={()=>handleViewClick()}>View past meetings</div>
+            ):(<div onClick={()=>handleViewClick()}>View upcoming meetings</div>)}
+            {viewDirection == true ? (
+                gatherings.map((gathering) => (
+                    <GatheringItem key={gathering.meetingId} gathering={gathering} />
+                ))
+            ) : (
+                hatherings.map((hathering) => (
+                    <GatheringItem key={hathering.meetingId} gathering={hathering} />
+                ))
+            )}
+        </Fragment>
+    );
 };
 
 Gatherings.defaultProps = {

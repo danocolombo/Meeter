@@ -314,14 +314,36 @@ export const getGathering = (mid) => async (dispatch) => {
         });
     }
 };
-// Delete GATHERING
-export const deleteGathering = (id) => async (dispatch) => {
+export const deleteGathering = (meeting2Delete) => async (dispatch) => {
+    dispatch(setAlert('testMe complete', 'success'));
     try {
-        await axios.delete(`/api/meeting/${id}`);
+        // 5.6 AWS API call...
+        const config = {
+            headers: {
+                'Access-Control-Allow-Headers':
+                    'Content-Type, x-auth-token, Access-Control-Allow-Headers',
+                'Content-Type': 'application/json',
+            },
+        };
+        let obj = {
+            operation: 'deleteMeeting',
+            payload: {
+                Key: {
+                    meetingId: meeting2Delete,
+                },
+            },
+        };
+        let body = JSON.stringify(obj);
+
+        let api2use = process.env.REACT_APP_MEETER_API + '/meetings';
+        let res = await axios.post(api2use, body, config);
+
+        //const res = await axios.get(`/api/meeting/${id}`);
+
 
         dispatch({
             type: DELETE_GATHERING,
-            payload: id,
+            payload: meeting2Delete,
         });
 
         dispatch(setAlert('Meeting Removed', 'success'));
@@ -334,7 +356,52 @@ export const deleteGathering = (id) => async (dispatch) => {
             },
         });
     }
+}
+// Delete GATHERING
+export const deleteGathering0 = (meeting2Delete) => async (dispatch) => {
+    try {
+        console.log("inside actions/gathering deleteGathering")
+        // // 5.6 AWS API call...
+        // const config = {
+        //     headers: {
+        //         'Access-Control-Allow-Headers':
+        //             'Content-Type, x-auth-token, Access-Control-Allow-Headers',
+        //         'Content-Type': 'application/json',
+        //     },
+        // };
+        // let obj = {
+        //     operation: 'deleteMeeting',
+        //     payload: {
+        //         Key: {
+        //             meetingId: meeting2Delete,
+        //         },
+        //     },
+        // };
+        // let body = JSON.stringify(obj);
+
+        // let api2use = process.env.REACT_APP_MEETER_API + '/meetings';
+        // let res = await axios.post(api2use, body, config);
+
+        // //const res = await axios.get(`/api/meeting/${id}`);
+
+
+        // dispatch({
+        //     type: DELETE_GATHERING,
+        //     payload: meeting2Delete,
+        // });
+
+        // dispatch(setAlert('Meeting Removed', 'success'));
+    } catch (err) {
+        dispatch({
+            type: GATHERING_ERROR,
+            payload: {
+                msg: err.response.statusText,
+                status: err.response.status,
+            },
+        });
+    }
 };
+
 // Delete group
 export const deleteGroup = (mtgId, groupId) => async (dispatch) => {
     try {
@@ -375,6 +442,7 @@ export const editGroup = (mtgId, groupId) => async (dispatch) => {
     //     });
     // }
 };
+
 export const createGroup = (formData, history, edit = false) => async (
     dispatch
 ) => {

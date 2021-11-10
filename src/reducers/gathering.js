@@ -6,6 +6,7 @@ import {
     CLEAR_SERVANTS,
     GET_HATHERINGS,
     CLEAR_HATHERINGS,
+    DELETE_GATHERING,
 } from '../actions/types';
 
 const initialState = {
@@ -31,6 +32,12 @@ export default function (state = initialState, action) {
                 hatherings: payload,
                 loading: false,
             };
+        case DELETE_GATHERING:
+            return {
+                ...state,
+                gatherings: state.gatherings.filter((gathering) => gathering.meetingId !== payload),
+                loading: false,
+            }
         // case GET_SERVANTS:
         //     //this inserts a blank row at the top of payload
         //     var newPayload = [];
