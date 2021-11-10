@@ -18,17 +18,17 @@ const Gatherings = ({
     useEffect(() => {
         getGatherings(meeter.active.client);
     }, []);
-    const [viewDirection, setViewDirection] = useState(true);
+    const [presentView, setPresentView] = useState(true);
 
     const handleViewClick = () => {
-        setViewDirection(!viewDirection);
+        setPresentView(!presentView);
     }
     
     return auth.loading || loading ? (
         <Spinner />
     ) : (
         <Fragment>
-            {viewDirection == true ? (
+            {presentView == true ? (
                 <>
                 <h2>Current Meetings</h2>
                 <Link key='future' to='/EditGathering/0'>
@@ -43,16 +43,16 @@ const Gatherings = ({
                 </Link>
                 </>
             ) : ( <h2>Past Meetings</h2>)}
-            {viewDirection == true ? (
+            {presentView == true ? (
                 <div onClick={()=>handleViewClick()}>View past meetings</div>
             ):(<div onClick={()=>handleViewClick()}>View upcoming meetings</div>)}
-            {viewDirection == true ? (
+            {presentView == true ? (
                 gatherings.map((gathering) => (
-                    <GatheringItem key={gathering.meetingId} gathering={gathering} />
+                    <GatheringItem key={gathering.meetingId} gathering={gathering} presentView={presentView}/>
                 ))
             ) : (
                 hatherings.map((hathering) => (
-                    <GatheringItem key={hathering.meetingId} gathering={hathering} />
+                    <GatheringItem key={hathering.meetingId} gathering={hathering} presentView={presentView}/>
                 ))
             )}
         </Fragment>

@@ -18,19 +18,24 @@ const GatheringItem = ({
         meetingType,
         
     },
-    deleteGathering
+    deleteGathering,
+    presentView,
 }) => (
     <Fragment>
+        {
+            console.log("inside gateringItem")
+        }
         <div className={meetingType !== 'Other' ? 'PersonBox' : 'OtherBox'}>
             <div>
                 <br />
                 <Fragment>
                     <i
                         className={'fa fa-trash my'}
-                        onClick={() => deleteGathering(meetingId)}
+                        onClick={() => deleteGathering(meetingId, presentView)}
                     ></i>
                 </Fragment>
                 {meetingType}: {title}
+                <h2>presentView:{presentView}</h2>
                 {supportContact && (
                     <Fragment>
                         <br />
@@ -60,6 +65,7 @@ const GatheringItem = ({
 
 GatheringItem.propTypes = {
     gathering: PropTypes.object.isRequired,
+    presentView: PropTypes.bool.isRequired,
     deleteGathering: PropTypes.func.isRequired,
 };
 

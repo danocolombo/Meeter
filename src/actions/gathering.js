@@ -7,6 +7,7 @@ import {
     SET_MEETING,
     CLEAR_GROUPS,
     TURN_MEEETINGLOADING_OFF,
+    DELETE_HATHERING,
     //---
     GET_GATHERINGS,
     GATHERING_ERROR,
@@ -314,7 +315,7 @@ export const getGathering = (mid) => async (dispatch) => {
         });
     }
 };
-export const deleteGathering = (meeting2Delete) => async (dispatch) => {
+export const deleteGathering = (meeting2Delete, view) => async (dispatch) => {
     try {
         // 5.6 AWS API call...
         const config = {
@@ -336,11 +337,17 @@ export const deleteGathering = (meeting2Delete) => async (dispatch) => {
 
         let api2use = process.env.REACT_APP_MEETER_API + '/meetings';
         let res = await axios.post(api2use, body, config);
-
-        dispatch({
-            type: DELETE_GATHERING,
-            payload: meeting2Delete,
-        });
+        if (view == true){
+            dispatch({
+                type: DELETE_GATHERING,
+                payload: meeting2Delete,
+            });
+        }else{
+            dispatch({
+                type: DELETE_HATHERING,
+                payload: meeting2Delete,
+            });
+        }
 
         dispatch(setAlert('Meeting Removed', 'success'));
     } catch (err) {
