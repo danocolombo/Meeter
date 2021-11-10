@@ -315,7 +315,6 @@ export const getGathering = (mid) => async (dispatch) => {
     }
 };
 export const deleteGathering = (meeting2Delete) => async (dispatch) => {
-    dispatch(setAlert('testMe complete', 'success'));
     try {
         // 5.6 AWS API call...
         const config = {
@@ -337,9 +336,6 @@ export const deleteGathering = (meeting2Delete) => async (dispatch) => {
 
         let api2use = process.env.REACT_APP_MEETER_API + '/meetings';
         let res = await axios.post(api2use, body, config);
-
-        //const res = await axios.get(`/api/meeting/${id}`);
-
 
         dispatch({
             type: DELETE_GATHERING,
