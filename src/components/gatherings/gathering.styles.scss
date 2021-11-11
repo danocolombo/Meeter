@@ -39,17 +39,51 @@ hr {
     width: 450px;
     margin-bottom: 15px;
 }
-.gather-component__delete-row {
+.gather-component__first-row {
     display: flex;
-  flex-flow: row wrap;
-  /* This aligns items to the end line on main-axis */
-  justify-content: flex-end;
+    // flex-flow: row wrap;
+    /* This aligns items to the end line on main-axis */
+    justify-content: flex-end;
+    // padding-right: 15px;
 }
-.gather-component__test-style {
-    color: blue;
+.gather-component__trash-style {
+    color: red;
     font-weight: bold;
+    // flex: 1;
     font-size: large;
     justify-content: flex-end;
+    padding-right: 10px;
+    padding-top: 0px;
+    padding-bottom: 0px;
+    margin: 0px;
+}
+.gather-component__second-row {
+    padding-left: 10px;
+}
+.gather-component__type-style {
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size: large;
+    font-style: italic;
+    font-weight: bold;
+    color: green;
+}
+.gather-component__edit-style{
+    color: green;
+    padding-left: 10px;
+    padding-bottom: 10px;
+}
+.gather-component__support-contact {
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size:medium;
+    font-weight: normal;
+    color: black;
+}
+.gather-component__title-style {
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size:medium;
+    font-weight: bold;
+    color: black;
+    padding-left: 10px;
 }
 .gather-component__gathering-info-box {
     border: black solid 1px;

@@ -21,42 +21,27 @@ const GatheringItem = ({
     deleteGathering,
     presentView,
 }) => (
-        <div className="gather-component__wrapper">
-            <div className='gather-component__delete-row'>
-                <div className='gather-component__test-style'><i
-                        className={'fa fa-trash my'}
-                        onClick={() => deleteGathering(meetingId, presentView)}
-                    ></i>
-                </div>
+    <div className="gather-component__wrapper">
+        <div className='gather-component__first-row'>
+            <div className='gather-component__trash-style'><i
+                    className={'fa fa-trash my'}
+                    onClick={() => deleteGathering(meetingId, presentView)}
+                ></i>
             </div>
-            <div className="gather-component__gathering-info-box">
-                
-                    <div className="gather-component__type-testimony">{meetingType}:</div> {title}
-                
-                {supportContact && (
-                    <Fragment>
-                        <br />
-                        {supportContact}
-                    </Fragment>
-                )}
-                {attendanceCount > 0 && (
-                    <Fragment>
-                        <br />
-                        Attendance: {attendanceCount}
-                    </Fragment>
-                )}
-                {newcomersCount > 0 && (
-                    <Fragment>
-                        <br />
-                        Newcomers: {newcomersCount}
-                    </Fragment>
-                )}
-                <br />
+        </div>
+        <div className='gather-component__second-row'>
+            <div className="gather-component__type-style">{meetingType}</div>
+            <div className='gather-component__title-style'>
+                {title}
+            </div>
+            <br />
+            <div className='gather-component__edit-style'>
                 <Link to={`/EditGathering/${meetingId}`}>
                     <i className='fas fa-pen'></i>
                 </Link>
             </div>
-            </div>
+        </div>
+    </div>
 );
 
 GatheringItem.propTypes = {
