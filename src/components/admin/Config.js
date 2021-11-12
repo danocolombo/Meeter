@@ -69,20 +69,27 @@ const SystemConfig = ({
                     <ExpansionPanelDetails>
                         <div className='posts'>
                             {defaultGroups ? (
-                                <table>
-                                    <tbody>
-                                    <tr>
-                                        <td>
-                                            {defaultGroups.map((dGroup) => (
-                                                <DefaultGroup
-                                                    key={dGroup.group_id}
-                                                    defGroup={dGroup}
-                                                />
-                                            ))}
-                                        </td>
-                                    </tr>
-                                    </tbody>
-                                </table>
+                                <>
+                                    <table>
+                                        <tbody>
+                                        <tr>
+                                            <td>
+                                                {defaultGroups.map((dGroup) => (
+                                                    <DefaultGroup
+                                                        key={dGroup.group_id}
+                                                        defGroup={dGroup}
+                                                    />
+                                                ))}
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                    <div className={"config-component__add-style"}>
+                                        <i key='two' className='material-icons left green'>
+                                            add_circle_outline
+                                        </i>Add New Default Group
+                                    </div>
+                                </>
                             ) : null}
                             {/* {activeRole === 'superuser' ? (
                                 <DefaultGroupForm />

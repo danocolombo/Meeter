@@ -3,31 +3,48 @@ import PropTypes from 'prop-types';
 // import Moment from 'react-moment';
 import { connect } from 'react-redux';
 import { deleteDefGroup } from '../../actions/admin';
-
+import './config.styles.scss';
 const DefaultGroups = ({
     deleteDefGroup,
     auth,
-    defGroup: { _id, gender, title, location, facilitator },
+    defGroup: { groupId, gender, group_title, location, facilitator },
     showActions,
 }) => (
-    <Fragment>
-        <div className={'adminDefaultGroupBox bg-white p my'}>
-            {gender === 'f' && <div>women</div>}
-            {gender === 'm' && <div>men</div>}
-            {gender === 'x' && <div>mixed</div>}
-            <div>{title}</div>
-            <div>{location}</div>
-            <div>{facilitator}</div>
-            <div>
-                {!auth.loading && (
-                    <button
-                        onClick={() => deleteDefGroup(_id)}
-                        type='button'
-                        className='btn btn-danger'
-                    >
-                        <i className='fas fa-times' />
-                    </button>
-                )}
+    <div className={'config-component__wrapper'}>
+            
+            {gender === 'f' && (
+                <div className={'config-component__first-row'}>
+                    <div className={'config-component__label-style'}>Women's </div>
+                    <div className={'config-component__value-style'}>{group_title}</div>
+                </div>
+                )
+            }
+            {gender === 'm' && (
+                <div className={'config-component__first-row'}>
+                    <div className={'config-component__label-style'}>Men's</div>
+                    <div className={'config-component__value-style'}>{group_title}</div>
+                </div>
+            )}
+            {gender === 'x' && (
+                <div className={'config-component__first-row'}>
+                    <div>{group_title}</div>
+                </div>
+            )}
+            <div className="config-component__first-row">
+                <div>{location}</div>
+            </div>
+            <div className="config-component__first-row">
+                <div>{facilitator}</div>
+            </div>
+            <div className={"config-component__icon-row"}>
+                <div className={"config-component__edit-style"}>
+                    <i className='fas fa-pen'></i>
+                </div>
+                <div className={"config-component__delete-style"}>
+                    <i className={'fa fa-trash'}
+                            onClick={() => deleteDefGroup(groupId)}
+                    ></i>
+                </div>
             </div>
             {/* <table>
                 <tr>
@@ -67,8 +84,8 @@ const DefaultGroups = ({
                     </Fragment>
                 )}
             </div> */}
+        
         </div>
-    </Fragment>
     // <div className='post bg-white p-1 my-1'>
     //   <div>
     //     <Link to={`/profile/${user}`}>

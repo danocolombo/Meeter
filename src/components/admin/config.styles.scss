@@ -1,0 +1,94 @@
+.config-component__wrapper {
+    // display: flex;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+    border: black solid 1px;
+    margin-bottom: 15px;
+    padding: 20px;
+}
+.config-component__first-row {
+    display: flex;
+    flex-flow: row wrap;
+    
+    /* This aligns items to the end line on main-axis */
+    
+    // padding-right: 15px;
+}
+.config-component__icon-row {
+    display: flex;
+    justify-content: space-between;
+    // flex-flow: row wrap;
+    
+}
+.config-compoment__gender {
+    color: blue;
+}
+.config-component__label-style {
+    font-size:large;
+    font-weight: bold;
+}
+.config-component__value-style {
+    font-size:large;
+    padding-left: 1ch;
+}
+.config-component__title {
+    color: red;
+}
+.config-component__trash-style {
+    color: red;
+    font-weight: bold;
+    // flex: 1;
+    font-size: large;
+    justify-content: flex-end;
+    padding-right: 10px;
+    padding-top: 0px;
+    padding-bottom: 0px;
+    margin: 0px;
+}
+.config-component__edit-style {
+    color: blue;
+}
+.config-component__trash-style {
+    color: red;
+}
+.config-component__second-row {
+    padding-left: 10px;
+}
+.gather-component__type-style {
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size: large;
+    font-style: italic;
+    font-weight: bold;
+    color: green;
+}
+.gather-component__edit-style{
+    color: green;
+    padding-left: 10px;
+    padding-bottom: 10px;
+}
+.gather-component__support-contact {
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size:medium;
+    font-weight: normal;
+    color: black;
+}
+.gather-component__title-style {
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size:medium;
+    font-weight: bold;
+    color: black;
+    padding-left: 10px;
+}
+.gather-component__gathering-info-box {
+    border: black solid 1px;
+    display: flex;
+}
+.gather-component__type-title {
+    font-weight: normal;
+}
+.gather-component__type-testimony {
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size: large;
+    font-style: italic;
+    font-weight: bold;
+    color: green;
+}
