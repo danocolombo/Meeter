@@ -129,27 +129,16 @@ export const updateDefaultGroup = (revised) => async (dispatch) => {
         dispatch(setAlert('Default Group Update Failed.', 'danger'));
     }
 };
-export const deleteDefaultGroup = (cid, gid) => async (dispatch) => {
-    // need to remove the default group from the client doc using
-    // the client id (cid) and the groups indicator (gid);
-   console.log("trying to delete");
-    try {
-        await axios.delete(`/api/client/defaultgroup/${cid}/${gid}`);
-        // then get the groups and reload redux
-        const res = await axios.get(`/api/client/defaultgroups/${cid}`);
-        if (res) {
-            dispatch({
-                type: 'SET_DEFAULT_GROUPS',
-                payload: res.data,
-            });
-        } else {
-            console.log('NO DEFAULT GROUPS RETURNED');
-        }
-        console.log('tried...');
-    } catch (error) {
-        console.log('CATCH....');
-    }
-};
+// export const deleteDefaultGroup = (groupId) => async (dispatch) => {
+//     // need to remove the default group from the client doc using
+//     // the client id (cid) and the groups indicator (gid);
+//     console.log("trying to delete");
+//     dispatch({
+//         type: 'REMOVE_DEFAULT_GROUP',
+//         payload: groupId,
+//     });
+    
+// };
 export const grantUserRegistration = (cid, id, role, email) => async (
     dispatch
 ) => {
@@ -284,48 +273,51 @@ export const rejectUserRegistration = (cid, id, email) => async (dispatch) => {
         });
     }
 };
-export const removeDefGroup = (cid, gid) => async (dispatch) => {
-    //this removes the user id from client users
-    // in database and removes from meeter.clientUsers
-    //-----
-    // uid is the reference in the users array in the client document
-    // need email to delate the user from user document.
-    try {
-        console.log('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
-        console.log('copied from another function that is called');
-        console.log('actions/admin :: removeDefGroup ' + cid + gid);
-        await axios.delete(`/api/client/defaultgroup/${cid}/${gid}`);
-        const res = await axios.get(`/api/client/defaultgroups/${cid}`);
-        if (res) {
-            dispatch({
-                type: 'SET_DEFAULT_GROUPS',
-                payload: res.data,
-            });
-        } else {
-            console.log('NO DEFAULT GROUPS RETURNED');
-        }
+// export const removeDefGroup = (cid, gid) => async (dispatch) => {
+//     //this removes the user id from client users
+//     // in database and removes from meeter.clientUsers
+//     //-----
+//     // uid is the reference in the users array in the client document
+//     // need email to delate the user from user document.
+//     try {
+//         console.log('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
+//         console.log('copied from another function that is called');
+//         console.log('actions/admin :: removeDefGroup ' + cid + gid);
+//         await axios.delete(`/api/client/defaultgroup/${cid}/${gid}`);
+//         const res = await axios.get(`/api/client/defaultgroups/${cid}`);
+//         if (res) {
+//             dispatch({
+//                 type: 'SET_DEFAULT_GROUPS',
+//                 payload: res.data,
+//             });
+//         } else {
+//             console.log('NO DEFAULT GROUPS RETURNED');
+//         }
 
-        dispatch(setAlert('Default Group Removed', 'success'));
-    } catch (err) {
-        console.log('actions/admin.js removeDefGroup ADMIN_ERROR');
-        dispatch({
-            type: ADMIN_ERROR,
-            payload: {
-                msg: err.response.statusText,
-                status: err.response.status,
-            },
-        });
-    }
-};
-export const deleteDefGroup = (id, meeterInfo) => async (dispatch) => {
+//         dispatch(setAlert('Default Group Removed', 'success'));
+//     } catch (err) {
+//         console.log('actions/admin.js removeDefGroup ADMIN_ERROR');
+//         dispatch({
+//             type: ADMIN_ERROR,
+//             payload: {
+//                 msg: err.response.statusText,
+//                 status: err.response.status,
+//             },
+//         });
+//     }
+// };
+export const deleteDefGroup = (groupId, clientInfo) => async (dispatch) => {
     //this removes the defGroup id from client
     //reference in database and updates meeter.defaultGroups
-    console.log('in deleteDefGroup, deleting default group: ' + id);
-    // need to update the client record. Get it, modify it,
-    // return it.
-    
-    // to ensure we only change the default group value,
-    // get the current client record.
+    dispatch({
+        type: 'REMOVE_DEFAULT_GROUP',
+        payload: groupId,
+    });
+    // now remove the group form the client object to send to AWS API
+    let newClient = {
+        ...clientInfo, 
+        defaultGroups: clientInfo.defaultGroups.filter((group) => group.groupId != groupId)};
+
     const config = {
         headers: {
             'Access-Control-Allow-Headers':
@@ -334,22 +326,20 @@ export const deleteDefGroup = (id, meeterInfo) => async (dispatch) => {
         },
     };
     let obj = {
-        operation: 'getClientInfo',
+        operation: 'updateClient',
         payload: {
-            clientId: meeterInfo.active.clientId,
+            Item: newClient,
         },
     };
-    
     let body = JSON.stringify(obj);
 
-    let api2use = process.env.REACT_APP_MEETER_API + '/client';
+    let api2use = process.env.REACT_APP_MEETER_API + '/clients';
     let res = await axios.post(api2use, body, config);
     
-    let currentClient = res.data.body.Items[0];
-
-    console.table(currentClient);
-
-
+    console.log('RESPONSE FROM AWS API')
+    const util = require('util');
+    console.log('res:  \n' + util.inspect(res, { showHidden: false, depth: null }));
+ 
 };
 export const deleteClientUser = (cid, uid) => async (dispatch) => {
     //this removes the user id from client users

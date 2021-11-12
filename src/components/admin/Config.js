@@ -1,12 +1,12 @@
-import React, { Fragment, useEffect } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Spinner from '../layout/Spinner';
 //--------------------------------------
 //these are for the  expansion panels
-import ExpansionPanel from '@material-ui/core/ExpansionPanel';
-import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
-import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
+import { Accordion } from '@material-ui/core';
+import {AccordionDetails} from '@material-ui/core';
+import {AccordionSummary} from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 //--------------------------------------
@@ -23,13 +23,23 @@ import {
 } from '../../actions/admin';
 
 const SystemConfig = ({
-    meeter: { active, defaultGroups, clientUsers, mtgConfigs, loading },
+    meeter: { active, loading },
+    //defaultGroups: { }
+    client: { clientId, clientName, clientCode, defaultGroups, clientUsers, clientConfigs},
     historyView,
 }) => {
-    useEffect (() => {
-        //this is on page load
-        // console.log("SystemConfig_useEffect (PL) (activeClient: " + active.client + ")");
-    },[]);
+    let theClient = [];
+    let theDefaultGroups = [];
+    // useEffect (() => {
+    //     //this is on page load
+    //     // console.log("SystemConfig_useEffect (PL) (activeClient: " + active.client + ")");
+        
+    // },[]);
+    // useEffect (() => {
+    //     //this is on page load
+    //     // console.log("SystemConfig_useEffect (PL) (activeClient: " + active.client + ")");
+
+    // },[client]);
     // useEffect(() => {
         
     //     // if (active.client) {
@@ -52,31 +62,33 @@ const SystemConfig = ({
                     <i className='fa fa-user-secret'></i>&nbsp;&nbsp;System Configuration
                 </h2>
             </div>
-            <p>This will be the security information for {active.client}</p>
+            <p>This will be the security information for {clientName}</p>
 
             <div className='medium'>
-                <ExpansionPanel
+                <Accordion
                     expanded={expanded === 'panel1'}
                     onChange={handleChange('panel1')}
                 >
-                    <ExpansionPanelSummary
+                    <AccordionSummary
                         aria-controls='panel1bh-content'
                         id='panel1bh-header'
                     >
                         <h1>Default Group Definitions</h1>
-                    </ExpansionPanelSummary>
+                    </AccordionSummary>
 
-                    <ExpansionPanelDetails>
+                    <AccordionDetails>
                         <div className='posts'>
+
                             {defaultGroups ? (
                                 <>
+                                    <h2>got groups</h2>
                                     <table>
                                         <tbody>
                                         <tr>
                                             <td>
                                                 {defaultGroups.map((dGroup) => (
                                                     <DefaultGroup
-                                                        key={dGroup.group_id}
+                                                        key={dGroup.groupId}
                                                         defGroup={dGroup}
                                                     />
                                                 ))}
@@ -101,20 +113,20 @@ const SystemConfig = ({
                                 </Fragment>
                             )} */}
                         </div>
-                    </ExpansionPanelDetails>
-                </ExpansionPanel>
+                    </AccordionDetails>
+                </Accordion>
 
-                <ExpansionPanel
+                <Accordion
                     expanded={expanded === 'panel2'}
                     onChange={handleChange('panel2')}
                 >
-                    <ExpansionPanelSummary
+                    <AccordionSummary
                         aria-controls='panel1bh-content'
                         id='panel1bh-header'
                     >
                         <h1>Registered Users</h1>
-                    </ExpansionPanelSummary>
-                    <ExpansionPanelDetails>
+                    </AccordionSummary>
+                    <AccordionDetails>
                         <div className='posts'>
                             {clientUsers ? (
                                 <table>
@@ -133,20 +145,20 @@ const SystemConfig = ({
                                 </table>
                             ) : null}
                         </div>
-                    </ExpansionPanelDetails>
-                </ExpansionPanel>
-                <ExpansionPanel
+                    </AccordionDetails>
+                </Accordion>
+                <Accordion
                     expanded={expanded === 'panel3'}
                     onChange={handleChange('panel3')}
                 >
-                    <ExpansionPanelSummary
+                    <AccordionSummary
                         aria-controls='panel1bh-content'
                         id='panel1bh-header'
                     >
                         <h1>Meeting Configurations</h1>
-                    </ExpansionPanelSummary>
+                    </AccordionSummary>
 
-                    <ExpansionPanelDetails>
+                    <AccordionDetails>
                         <div className='posts'>
                             {active.role === 'superuser' ||
                             active.role === 'owner' ? (
@@ -159,8 +171,8 @@ const SystemConfig = ({
                                 </Fragment>
                             )}
                         </div>
-                    </ExpansionPanelDetails>
-                </ExpansionPanel>
+                    </AccordionDetails>
+                </Accordion>
             </div>
         </Fragment>
     );
@@ -171,12 +183,16 @@ SystemConfig.defaultProps = {
 };
 SystemConfig.propTypes = {
     meeter: PropTypes.object.isRequired,
+    client: PropTypes.object.isRequired,
+    //defaultGroups: PropTypes.object.isRequired,
     getClientUsers: PropTypes.func.isRequired,
     getDefGroups: PropTypes.func.isRequired,
     getMtgConfigs: PropTypes.func.isRequired,
 };
 const mapStateToProps = (state) => ({
     meeter: state.meeter,
+    client: state.client,
+    //defaultGroups: state.client.defaultGroups,
 });
 export default connect(mapStateToProps, {
     getClientUsers,

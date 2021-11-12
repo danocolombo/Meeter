@@ -21,9 +21,7 @@ export default function (state = initialState, action) {
         case SET_CLIENT:
             //payload will be array of Items, but only using the first element
             let client = payload.Items[0];
-            const util = require('util');
-            console.log('payload:  \n' + util.inspect(payload, { showHidden: false, depth: null }));
-
+            
             return {
                 ...state,
                 clientId: client.clientId,
@@ -33,6 +31,13 @@ export default function (state = initialState, action) {
                 clientUsers: client.clientUsers,
                 clientConfigs: client.clientConfigs,
             };
+        case REMOVE_DEFAULT_GROUP:
+            console.log('REMOVE_DEFAULT_GROUP in client reducer');
+            console.log('payload request value: ' + payload);
+            return {
+                ...state,
+                defaultGroups: state.defaultGroups.filter((group) => group.groupId != payload),
+            };  
         case CLEAR_CLIENT:
             return {
                 ...state,

@@ -183,10 +183,7 @@ export const loadUser = (userId) => async (dispatch) => {
         const api2use = process.env.REACT_APP_MEETER_API + '/user';
         const res = await axios.post(api2use, body, config);
 
-        console.log("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
-        const util = require('util');
-        console.log('res:  \n' + util.inspect(res, { showHidden: false, depth: null }));
-        console.log("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
+        
         // now add response data location: res.data.body.x values
         // to the values already passed in from login (cognito)
         let user_data = {

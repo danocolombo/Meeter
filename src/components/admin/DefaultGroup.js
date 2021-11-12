@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 // import Moment from 'react-moment';
 import { connect } from 'react-redux';
@@ -7,28 +7,32 @@ import './config.styles.scss';
 const DefaultGroups = ({
     deleteDefGroup,
     auth,
-    defGroup: { groupId, gender, group_title, location, facilitator },
+    defGroup: { groupId, gender, groupTitle, location, facilitator },
     showActions,
-    meeter,
-}) => (
+    client,
+}) => {
+    const [clientInfo, setClientInfo] = useState(null);
+    
+
+    return (
     <div className={'config-component__wrapper'}>
             
             {gender === 'f' && (
                 <div className={'config-component__first-row'}>
                     <div className={'config-component__label-style'}>Women's </div>
-                    <div className={'config-component__value-style'}>{group_title}</div>
+                    <div className={'config-component__value-style'}>{groupTitle}</div>
                 </div>
                 )
             }
             {gender === 'm' && (
                 <div className={'config-component__first-row'}>
                     <div className={'config-component__label-style'}>Men's</div>
-                    <div className={'config-component__value-style'}>{group_title}</div>
+                    <div className={'config-component__value-style'}>{groupTitle}</div>
                 </div>
             )}
             {gender === 'x' && (
                 <div className={'config-component__first-row'}>
-                    <div>{group_title}</div>
+                    <div>{groupTitle}</div>
                 </div>
             )}
             <div className="config-component__first-row">
@@ -43,7 +47,7 @@ const DefaultGroups = ({
                 </div>
                 <div className={"config-component__delete-style"}>
                     <i className={'fa fa-trash'}
-                            onClick={() => deleteDefGroup(groupId, meeter)}
+                            onClick={() => deleteDefGroup(groupId, client)}
                     ></i>
                 </div>
             </div>
@@ -136,7 +140,8 @@ const DefaultGroups = ({
     //     )}
     //   </div>
     // </div>
-);
+    )
+        }
 
 DefaultGroups.defaultProps = {
     showActions: true,
@@ -145,14 +150,14 @@ DefaultGroups.defaultProps = {
 DefaultGroups.propTypes = {
     defGroup: PropTypes.object.isRequired,
     auth: PropTypes.object.isRequired,
-    meeter: PropTypes.object.isRequired,
+    client: PropTypes.object.isRequired,
     deleteDefGroup: PropTypes.func.isRequired,
     showActions: PropTypes.bool,
 };
 
 const mapStateToProps = (state) => ({
     auth: state.auth,
-    meeter: state.meeter,
+    client: state.client,
 });
 
 export default connect(mapStateToProps, { deleteDefGroup })(DefaultGroups);
