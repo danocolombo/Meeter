@@ -132,6 +132,7 @@ export const updateDefaultGroup = (revised) => async (dispatch) => {
 export const deleteDefaultGroup = (cid, gid) => async (dispatch) => {
     // need to remove the default group from the client doc using
     // the client id (cid) and the groups indicator (gid);
+   console.log("trying to delete");
     try {
         await axios.delete(`/api/client/defaultgroup/${cid}/${gid}`);
         // then get the groups and reload redux
@@ -316,9 +317,39 @@ export const removeDefGroup = (cid, gid) => async (dispatch) => {
         });
     }
 };
-export const deleteDefGroup = (id) => async (dispatch) => {
+export const deleteDefGroup = (id, meeterInfo) => async (dispatch) => {
     //this removes the defGroup id from client
     //reference in database and updates meeter.defaultGroups
+    console.log('in deleteDefGroup, deleting default group: ' + id);
+    // need to update the client record. Get it, modify it,
+    // return it.
+    
+    // to ensure we only change the default group value,
+    // get the current client record.
+    const config = {
+        headers: {
+            'Access-Control-Allow-Headers':
+                'Content-Type, x-auth-token, Access-Control-Allow-Headers',
+            'Content-Type': 'application/json',
+        },
+    };
+    let obj = {
+        operation: 'getClientInfo',
+        payload: {
+            clientId: meeterInfo.active.clientId,
+        },
+    };
+    
+    let body = JSON.stringify(obj);
+
+    let api2use = process.env.REACT_APP_MEETER_API + '/client';
+    let res = await axios.post(api2use, body, config);
+    
+    let currentClient = res.data.body.Items[0];
+
+    console.table(currentClient);
+
+
 };
 export const deleteClientUser = (cid, uid) => async (dispatch) => {
     //this removes the user id from client users

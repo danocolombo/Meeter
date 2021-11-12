@@ -9,6 +9,7 @@ const DefaultGroups = ({
     auth,
     defGroup: { groupId, gender, group_title, location, facilitator },
     showActions,
+    meeter,
 }) => (
     <div className={'config-component__wrapper'}>
             
@@ -42,7 +43,7 @@ const DefaultGroups = ({
                 </div>
                 <div className={"config-component__delete-style"}>
                     <i className={'fa fa-trash'}
-                            onClick={() => deleteDefGroup(groupId)}
+                            onClick={() => deleteDefGroup(groupId, meeter)}
                     ></i>
                 </div>
             </div>
@@ -144,12 +145,14 @@ DefaultGroups.defaultProps = {
 DefaultGroups.propTypes = {
     defGroup: PropTypes.object.isRequired,
     auth: PropTypes.object.isRequired,
+    meeter: PropTypes.object.isRequired,
     deleteDefGroup: PropTypes.func.isRequired,
     showActions: PropTypes.bool,
 };
 
 const mapStateToProps = (state) => ({
     auth: state.auth,
+    meeter: state.meeter,
 });
 
 export default connect(mapStateToProps, { deleteDefGroup })(DefaultGroups);

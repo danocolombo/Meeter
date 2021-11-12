@@ -14,6 +14,7 @@ import {
     SET_MTG_CONFIGS,
     SET_DEFAULT_GROUPS,
     SET_CLIENT_USERS,
+    SET_CLIENT,
 } from './types';
 import setAuthToken from '../utils/setAuthToken';
 
@@ -115,6 +116,10 @@ export const loadClient = (cid) => async (dispatch) => {
             console.log('logoin.js - loadClient: getClientInfo failed');
         }
         if (res.status === 200) {
+            dispatch({
+                type: SET_CLIENT,
+                payload: res.data.body,
+            });
             // need to check if we got any body, then define the 
             // defaultGroups and the configs.
             if (Object.keys(res.data.body).length > 0) {
@@ -177,6 +182,11 @@ export const loadUser = (userId) => async (dispatch) => {
 
         const api2use = process.env.REACT_APP_MEETER_API + '/user';
         const res = await axios.post(api2use, body, config);
+
+        console.log("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
+        const util = require('util');
+        console.log('res:  \n' + util.inspect(res, { showHidden: false, depth: null }));
+        console.log("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
         // now add response data location: res.data.body.x values
         // to the values already passed in from login (cognito)
         let user_data = {
@@ -186,6 +196,7 @@ export const loadUser = (userId) => async (dispatch) => {
             email: userId.uData.email,
             phone: userId.uData.phone,
             defaultClient: res.data.body.defaultClient,
+            defaultClientId: res.data.body.defaultClientId,
             defaultClientRole: res.data.body.role,
             defaultClientStatus: res.data.body.status,
             // activeClient: res.data.body.defaultClient,
@@ -194,6 +205,7 @@ export const loadUser = (userId) => async (dispatch) => {
         };
         let active_data = {
             client: res.data.body.defaultClient,
+            clientId: res.data.body.defaultClientId,
             role: res.data.body.role,
             status: res.data.body.status,
         };

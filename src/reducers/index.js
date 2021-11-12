@@ -8,10 +8,12 @@ import gathering from './gathering';
 import post from './post';
 import meeter from './meeter';
 import meeting from './meeting';
+import client from './client';
 
 export default combineReducers({
     alert,
     auth,
+    client,
     profile,
     group,
     person,
