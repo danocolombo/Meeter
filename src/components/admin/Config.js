@@ -30,29 +30,13 @@ const SystemConfig = ({
 }) => {
     let theClient = [];
     let theDefaultGroups = [];
-    // useEffect (() => {
-    //     //this is on page load
-    //     // console.log("SystemConfig_useEffect (PL) (activeClient: " + active.client + ")");
-        
-    // },[]);
-    // useEffect (() => {
-    //     //this is on page load
-    //     // console.log("SystemConfig_useEffect (PL) (activeClient: " + active.client + ")");
-
-    // },[client]);
-    // useEffect(() => {
-        
-    //     // if (active.client) {
-    //     //     getClientUsers(active.client);
-    //     //     getDefGroups(active.client);
-    //     //     getMtgConfigs(active.client);
-    //     // }
-    // }, [active, getClientUsers, getDefGroups, getMtgConfigs]);
-    // const classes = useStyles();
     const [expanded, setExpanded] = React.useState(false);
     const handleChange = (panel) => (event, isExpanded) => {
         setExpanded(isExpanded ? panel : false);
     };
+    const handleAddGroupClick = () => {
+        console.log("Please Add Group");
+    }
     return loading ? (
         <Spinner />
     ) : (
@@ -81,7 +65,6 @@ const SystemConfig = ({
 
                             {defaultGroups ? (
                                 <>
-                                    <h2>got groups</h2>
                                     <table>
                                         <tbody>
                                         <tr>
@@ -96,10 +79,15 @@ const SystemConfig = ({
                                         </tr>
                                         </tbody>
                                     </table>
-                                    <div className={"config-component__add-style"}>
-                                        <i key='two' className='material-icons left green'>
-                                            add_circle_outline
-                                        </i>Add New Default Group
+                                    <div className={"config-page__add-default-group-row"}
+                                        onClick={()=>handleAddGroupClick()}> 
+                                        <div className={"config-page__add-icon"}>
+                                            <i key='two' className='material-icons'>
+                                            add_circle_outline</i>
+                                        </div>
+                                        <div className={"config-page__add-words"}>
+                                            Add New Default Group
+                                        </div>
                                     </div>
                                 </>
                             ) : null}

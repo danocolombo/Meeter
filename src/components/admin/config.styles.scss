@@ -5,6 +5,22 @@
     margin-bottom: 15px;
     padding: 20px;
 }
+.config-page__add-default-group-row {
+    display: flex;
+    cursor: pointer;
+}
+.config-page__add-icon {
+    color: green;
+}
+.config-page__add-words {
+    color: green;
+    padding: 3px;
+}
+.config-page__add-style {
+    display: flex;
+    justify-content: space-between;
+
+}
 .config-component__first-row {
     display: flex;
     flex-flow: row wrap;
