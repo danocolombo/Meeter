@@ -8,6 +8,7 @@ import Dashboard from '../dashboard/Dashboard';
 // for config/admin
 //=====================
 import MeeterConfig from '../admin/Config';
+import EditDefaultGroups from '../admin/DefaultGroupForm';
 // import Profiles from '../profiles/Profiles';
 // import Profile from '../profile/UserProfile';
 
@@ -87,6 +88,11 @@ const Routes = () => {
                     exact
                     path='/Config'
                     component={MeeterConfig}
+                />
+                <PrivateRoute
+                    exact
+                    path='/EditDefaultGroups'
+                    component={EditDefaultGroups}
                 />
                 <Route component={NotFound} />
             </Switch>

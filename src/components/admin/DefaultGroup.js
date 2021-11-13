@@ -1,6 +1,5 @@
-import React, { Fragment, useEffect, useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
-// import Moment from 'react-moment';
 import { connect } from 'react-redux';
 import { deleteDefGroup } from '../../actions/admin';
 import './config.styles.scss';
@@ -11,7 +10,7 @@ const DefaultGroups = ({
     showActions,
     client,
 }) => {
-    const [clientInfo, setClientInfo] = useState(null);
+    // const [clientInfo, setClientInfo] = useState(null);
     
 
     return (

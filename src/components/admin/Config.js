@@ -1,5 +1,6 @@
-import React, { Fragment, useEffect, useState } from 'react';
+import React, { Fragment} from 'react';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import Spinner from '../layout/Spinner';
 //--------------------------------------
@@ -7,13 +8,11 @@ import Spinner from '../layout/Spinner';
 import { Accordion } from '@material-ui/core';
 import {AccordionDetails} from '@material-ui/core';
 import {AccordionSummary} from '@material-ui/core';
-import Typography from '@material-ui/core/Typography';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+
 //--------------------------------------
 
 import DefaultGroup from './DefaultGroup';
 import ClientUser from './ClientUser';
-import DefaultGroupForm from './DefaultGroupForm';
 import MeetingConfigForm from './MeetingConfigForm';
 
 import {
@@ -28,8 +27,8 @@ const SystemConfig = ({
     client: { clientId, clientName, clientCode, defaultGroups, clientUsers, clientConfigs},
     historyView,
 }) => {
-    let theClient = [];
-    let theDefaultGroups = [];
+    // let theClient = [];
+    // let theDefaultGroups = [];
     const [expanded, setExpanded] = React.useState(false);
     const handleChange = (panel) => (event, isExpanded) => {
         setExpanded(isExpanded ? panel : false);
@@ -79,15 +78,20 @@ const SystemConfig = ({
                                         </tr>
                                         </tbody>
                                     </table>
+
+                                    <Link to='/register'>Sign Up</Link>
+
                                     <div className={"config-page__add-default-group-row"}
                                         onClick={()=>handleAddGroupClick()}> 
-                                        <div className={"config-page__add-icon"}>
-                                            <i key='two' className='material-icons'>
-                                            add_circle_outline</i>
-                                        </div>
-                                        <div className={"config-page__add-words"}>
-                                            Add New Default Group
-                                        </div>
+                                        <Link to="/EditDefaultGroups">
+                                            <div className={"config-page__add-icon"}>
+                                                <i key='two' className='material-icons'>
+                                                add_circle_outline</i>
+                                            </div>
+                                            <div className={"config-page__add-words"}>
+                                                Add New Default Group
+                                            </div>
+                                        </Link>
                                     </div>
                                 </>
                             ) : null}

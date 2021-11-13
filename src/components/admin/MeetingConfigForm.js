@@ -9,7 +9,6 @@ import {
     getMtgConfigs,
     updateMeetingConfigs,
 } from '../../actions/admin';
-import { SET_DEFAULT_GROUPS } from '../../actions/types';
 
 const initialState = {
     setupContact: true,

@@ -9,9 +9,7 @@ import {
     ADD_GROUP,
     REMOVE_GROUP,
     //------------
-    GET_GROUPS,
     GROUP_ERROR,
-    DELETE_GROUP,
     GET_GROUP,
     CLEAR_GROUP,
 } from './types';
@@ -45,7 +43,7 @@ export const getGroups = (mid) => async (dispatch) => {
         //=================================
         // now lets handle the response
         //=================================
-        let proceed = false;
+        
         if (res.data.status === '200') {
             dispatch({
                 type: SET_GROUPS,
@@ -170,7 +168,7 @@ export const deleteGroup = (groupId) => async (dispatch) => {
         // console.log('res:  \n' + util.inspect(res, { showHidden: false, depth: null }));
 
         // on delete, we don't get body back, so send obj to redux to remove
-        if (res.status == '200'){
+        if (res.status === '200'){
             dispatch({
                 type: REMOVE_GROUP,
                 payload: obj.payload.Key,
@@ -217,7 +215,7 @@ export const addGroup = (formData, history, edit = false) => async (
         console.log('the length of groupId is ' + formData.groupId.length);
         console.log('proof...>>>' + formData.groupId + "<<<");
         console.table(formData);
-        if (!formData.groupId.length == 1) {
+        if (!formData.groupId.length === 1) {
             // we have groupId, it is edit
             // delete formData._id;
             edit = true;
@@ -251,7 +249,7 @@ export const addGroup = (formData, history, edit = false) => async (
         
 
         // send the object to get added to redux meeting.groups
-        if (res.status == '200'){
+        if (res.status === '200'){
             dispatch({
                 type: ADD_GROUP,
                 payload: res.data.Item,

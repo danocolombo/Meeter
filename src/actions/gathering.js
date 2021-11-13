@@ -13,15 +13,11 @@ import {
     GATHERING_ERROR,
     GET_GATHERING,
     DELETE_GATHERING,
-    CLEAR_GATHERINGS,
     CLEAR_GATHERING,
     UPDATE_GATHERING,
-    CLEAR_SERVANTS,
-    GET_SERVANTS,
     GET_HATHERINGS,
     CLEAR_HATHERINGS,
     GET_GROUPS,
-    CLEAR_GROUP,
 } from './types';
 
 export const getMeeting = (meetingId) => async (dispatch) => {
@@ -248,7 +244,7 @@ export const createGathering = (formData, groups = [], history, activeClient) =>
             setAlert((formData.meetingId > 0) ? 'Meeting Updated' : 'Meeting Created', 'success')
         );
 
-        if (formData.meetingId == 0) {
+        if (formData.meetingId === 0) {
             history.push('/gatherings');
         }
     } catch (err) {
@@ -337,7 +333,7 @@ export const deleteGathering = (meeting2Delete, view) => async (dispatch) => {
 
         let api2use = process.env.REACT_APP_MEETER_API + '/meetings';
         let res = await axios.post(api2use, body, config);
-        if (view == true){
+        if (view === true){
             dispatch({
                 type: DELETE_GATHERING,
                 payload: meeting2Delete,
@@ -462,7 +458,7 @@ export const addDefaultGroups = (grps2add, mid) => async (dispatch) => {
     );
 
     // going to need the meeting id. We will grab while rotating through...
-    let meetingId = mid;
+    
     // let axiosResponse = null;
     try {
         const config = {

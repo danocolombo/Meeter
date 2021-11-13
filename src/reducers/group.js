@@ -1,5 +1,4 @@
 import {
-    SET_GROUPS,
     // GET_GROUPS,
     GROUP_ERROR,
     DELETE_GROUP,

@@ -1,6 +1,5 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
-import moment from 'moment';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { deleteGathering } from '../../actions/gathering';

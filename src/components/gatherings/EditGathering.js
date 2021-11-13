@@ -3,7 +3,6 @@ import { Link, withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import PlaylistAddIcon from '@material-ui/icons/PlaylistAdd';
-import SettingsIcon from '@material-ui/icons/Settings';
 import { Button } from '@material-ui/core';
 import {
     createGathering,

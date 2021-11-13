@@ -36,7 +36,7 @@ export default function (state = initialState, action) {
             console.log('payload request value: ' + payload);
             return {
                 ...state,
-                defaultGroups: state.defaultGroups.filter((group) => group.groupId != payload),
+                defaultGroups: state.defaultGroups.filter((group) => group.groupId !== payload),
             };  
         case CLEAR_CLIENT:
             return {

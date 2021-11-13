@@ -11,16 +11,12 @@ const Dashboard = ({ auth, meeter }) => {
             return <Redirect to='/login' />;
         }
     }, []);
-    // useEffect(() => {
-    //     getCurrentProfile();
-    // }, [getCurrentProfile]);
 
     return auth.loading || meeter.loading ? (
         <Spinner />
     ) : (
         <Fragment>
-            {/* <h1 className="large text-primary">Dashboard</h1> */}
-            <img className='dashboardLogo' src={DashLogo} />
+            <img className='dashboardLogo' alt='logo' src={DashLogo} />
             <p className='lead'>
                 <i className='fas fa-user' /> Welcome{' '}
                 {auth.user && auth.user.firstName}

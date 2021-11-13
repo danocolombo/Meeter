@@ -1,8 +1,8 @@
 import React, { Fragment, useEffect, useState } from 'react';
-import { Link, Redirect } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import Button from '@material-ui/core/Button';
+
 import Spinner from '../layout/Spinner';
 import GatheringItem from './GatheringItem';
 import { getGatherings, deleteGathering } from '../../actions/gathering';
@@ -28,7 +28,7 @@ const Gatherings = ({
         <Spinner />
     ) : (
         <Fragment>
-            {presentView == true ? (
+            {presentView === true ? (
                 <>
                 <h2>Current Meetings</h2>
                 <Link key='future' to='/EditGathering/0'>
@@ -43,10 +43,10 @@ const Gatherings = ({
                 </Link>
                 </>
             ) : ( <h2>Past Meetings</h2>)}
-            {presentView == true ? (
+            {presentView === true ? (
                 <div onClick={()=>handleViewClick()}>View past meetings</div>
             ):(<div onClick={()=>handleViewClick()}>View upcoming meetings</div>)}
-            {presentView == true ? (
+            {presentView === true ? (
                 gatherings.map((gathering) => (
                     <GatheringItem key={gathering.meetingId} gathering={gathering} presentView={presentView}/>
                 ))
