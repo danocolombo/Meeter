@@ -1,6 +1,6 @@
 import React, { Fragment} from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import { connect } from 'react-redux';
 import Spinner from '../layout/Spinner';
 //--------------------------------------
@@ -78,12 +78,9 @@ const SystemConfig = ({
                                         </tr>
                                         </tbody>
                                     </table>
-
-                                    <Link to='/register'>Sign Up</Link>
-
                                     <div className={"config-page__add-default-group-row"}
                                         onClick={()=>handleAddGroupClick()}> 
-                                        <Link to="/EditDefaultGroups">
+                                        <NavLink to="/EditDefaultGroups" className={'config-page__new-group-nav-link'}>
                                             <div className={"config-page__add-icon"}>
                                                 <i key='two' className='material-icons'>
                                                 add_circle_outline</i>
@@ -91,7 +88,7 @@ const SystemConfig = ({
                                             <div className={"config-page__add-words"}>
                                                 Add New Default Group
                                             </div>
-                                        </Link>
+                                        </NavLink>
                                     </div>
                                 </>
                             ) : null}
