@@ -76,35 +76,20 @@
     font-weight: bold;
     color: green;
 }
-.gather-component__edit-style{
-    color: green;
-    padding-left: 10px;
-    padding-bottom: 10px;
-}
-.gather-component__support-contact {
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
-    font-size:medium;
-    font-weight: normal;
-    color: black;
-}
-.gather-component__title-style {
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
-    font-size:medium;
-    font-weight: bold;
-    color: black;
-    padding-left: 10px;
-}
-.gather-component__gathering-info-box {
+.config-new-group__wrapper {
+    // display: flex;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
     border: black solid 1px;
+    margin-bottom: 15px;
+    max-width: 500px;
+    padding: 20px;
+}
+.config-new-group__group-detail-box {
     display: flex;
+    flex-direction: column;
+    max-width: 500px;
+    gap: 10px;
 }
-.gather-component__type-title {
-    font-weight: normal;
-}
-.gather-component__type-testimony {
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
-    font-size: large;
-    font-style: italic;
-    font-weight: bold;
-    color: green;
+.config-new-group__gender-select {
+    padding-left: 10px;
 }

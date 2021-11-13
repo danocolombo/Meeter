@@ -21,10 +21,8 @@ const PostForm = ({ addPost }) => {
 };
 
   return (
-    <div className='post-form'>
-      <div className='bg-primary p'>
-        <h3>Add A Default Group</h3>
-      </div>
+    <div className='config-component__wrapper'>
+      
       <form
         className='form my-1'
         onSubmit={e => {
@@ -36,10 +34,13 @@ const PostForm = ({ addPost }) => {
           facilitator('');
         }}
       >
-        <div className='DefaultGroupFormBox'>
+        <div className={'config-new-group__group-detail-box'}>
+            <div className='bg-primary p'>
+              <h3>Add A Default Group</h3>
+            </div>
             <select
                 key='2'
-                className='DGF-Gender'
+                className='config-new-group__gender-selectr'
                 name='gender'
                 value={gender}
                 onChange={(e) => onChange(e)}>
