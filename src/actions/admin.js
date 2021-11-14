@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { setAlert } from './alert';
-import { randomBytes } from 'crypto';
+import { randomBytes, createCipheriv } from 'crypto';
 import {
     SET_CLIENT_USERS,
     ADMIN_ERROR,
@@ -435,9 +435,27 @@ export const toggleConfig = (config, value, cid) => async (dispatch) => {
     }
     
 };
+function getUniqueId() {
+    //this generates a unique ID based on this specific time
+    // Difining algorithm
+    const algorithm = 'aes-256-cbc';
+    // Defining key
+    const key = randomBytes(32);
+    // Defining iv
+    const iv = randomBytes(16);
+    let cipher = createCipheriv('aes-256-cbc', Buffer.from(key), iv);
+    //get the current time...
+    let n = Date.now();
+    let encrypted = cipher.update(n.toString());
+    // Using concatenation
+    encrypted = Buffer.concat([encrypted, cipher.final()]);
+    return encrypted.toString('hex');
+}
+
 export const addDefaultGroup = (request, clientId) => async dispatch => {
     dispatch(setAlert("addDefaultGroup clicked", 'success'));
-    let groupId = randomBytes(16).toString('base64');
+    // let groupId = randomBytes(16).toString('base64');
+    let groupId = getUniqueId();
     //add default group to client entry in AWS dynamodb
     let newGroup = request.formData;
     // newGroup.clientId = clientId;
