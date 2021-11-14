@@ -1,6 +1,7 @@
 import {
     SET_CLIENT,
     REMOVE_DEFAULT_GROUP,
+    ADD_DEFAULT_GROUP,
     CLEAR_CLIENT,
 } from '../actions/types';
 
@@ -38,6 +39,11 @@ export default function (state = initialState, action) {
                 ...state,
                 defaultGroups: state.defaultGroups.filter((group) => group.groupId !== payload),
             };  
+        case ADD_DEFAULT_GROUP:
+            return {
+                ...state,
+                defaultGroups: [...state.defaultGroups, payload],
+            };
         case CLEAR_CLIENT:
             return {
                 ...state,

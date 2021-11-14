@@ -1,9 +1,11 @@
 import axios from 'axios';
 import { setAlert } from './alert';
+import { randomBytes } from 'crypto';
 import {
     SET_CLIENT_USERS,
     ADMIN_ERROR,
     SET_DEFAULT_GROUPS,
+    ADD_DEFAULT_GROUP,
     SET_MTG_CONFIGS,
     REMOVE_CLIENT_USER,
     TOGGLE_CONFIG,
@@ -431,4 +433,17 @@ export const toggleConfig = (config, value, cid) => async (dispatch) => {
             },
         });
     }
+    
+};
+export const addDefaultGroup = (request, clientId) => async dispatch => {
+    dispatch(setAlert("addDefaultGroup clicked", 'success'));
+    let groupId = randomBytes(16).toString('base64');
+    //add default group to client entry in AWS dynamodb
+    let newGroup = request.formData;
+    // newGroup.clientId = clientId;
+    newGroup.groupId = groupId;
+    dispatch({
+        type: ADD_DEFAULT_GROUP,
+        payload: newGroup,
+    });
 };

@@ -38,12 +38,12 @@ export default function (state = initialState, action) {
                 gatherings: state.gatherings.filter((gathering) => gathering.meetingId !== payload),
                 loading: false,
             };
-            case DELETE_HATHERING:
-                return {
-                    ...state,
-                    hatherings: state.hatherings.filter((hathering) => hathering.meetingId !== payload),
-                    loading: false,
-                };
+        case DELETE_HATHERING:
+            return {
+                ...state,
+                hatherings: state.hatherings.filter((hathering) => hathering.meetingId !== payload),
+                loading: false,
+            };
         // case GET_SERVANTS:
         //     //this inserts a blank row at the top of payload
         //     var newPayload = [];

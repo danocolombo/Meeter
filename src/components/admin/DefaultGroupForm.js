@@ -1,20 +1,25 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { addPost } from '../../actions/post';
+import { addDefaultGroup } from '../../actions/admin';
 const initialState = {
   gender: '',
-  title: '',
+  groupTitle: '',
   location: '',
   facilitator: '',
+  clientId: '',
 };
-const PostForm = ({ addPost }) => {
+const NewDefaultGroup = ({ 
+  addDefaultGroup, 
+  client,
+}) => {
   const [formData, setFormData] = useState(initialState);
   const {
     gender,
-    title,
+    groupTitle,
     location,
     facilitator,
+    clientId,
   } = formData;
   const onChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -27,11 +32,12 @@ const PostForm = ({ addPost }) => {
         className='form my-1'
         onSubmit={e => {
           e.preventDefault();
-          addPost({ formData });
-          gender('');
-          title('');
-          location('');
-          facilitator('');
+          formData.clientId = client.clientId;
+          addDefaultGroup({ formData });
+          // gender('');
+          // title('');
+          // location('');
+          // facilitator('');
         }}
       >
         <div className={'config-new-group__group-detail-box'}>
@@ -52,9 +58,9 @@ const PostForm = ({ addPost }) => {
             <input
                 type='text'
                 className='DGF-Title'
-                placeholder='Title'
-                name='title'
-                value={title}
+                placeholder='groupTitle'
+                name='groupTitle'
+                value={groupTitle}
                 onChange={onChange}
                 required
             />
@@ -81,11 +87,14 @@ const PostForm = ({ addPost }) => {
   );
 };
 
-PostForm.propTypes = {
-  addPost: PropTypes.func.isRequired
+NewDefaultGroup.propTypes = {
+  addDefaultGroup: PropTypes.func.isRequired,
+  client: PropTypes.object.isRequired,
 };
-
+const mapStateToProps = (state) => ({
+  client: state.client,
+});
 export default connect(
-  null,
-  { addPost }
-)(PostForm);
+  mapStateToProps,
+  { addDefaultGroup }
+)(NewDefaultGroup);
