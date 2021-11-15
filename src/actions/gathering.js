@@ -5,6 +5,7 @@ import {
     MEETING_ERROR,
     CLEAR_MEETING,
     SET_MEETING,
+    ADD_GROUP,
     CLEAR_GROUPS,
     TURN_MEEETINGLOADING_OFF,
     DELETE_HATHERING,
@@ -448,73 +449,118 @@ export const createGroup = (formData, history, edit = false) => async (
     try {
     } catch (err) {}
 };
-export const addDefaultGroups = (grps2add, mid) => async (dispatch) => {
-    console.log('in actions/gatherings :: addDefaultGroups');
-    console.log('typeof grps2add: ' + typeof grps2add);
-    const util = require('util');
-    console.log(
-        'defaultGroups: ' +
-            util.inspect(grps2add, { showHidden: false, depth: null })
-    );
-
-    // going to need the meeting id. We will grab while rotating through...
+export const addDefaultGroups = (meetingId, defGroups ) => async (dispatch) => {
+    //===================================
+    // for each default group, add it
+    //===================================
     
-    // let axiosResponse = null;
-    try {
-        const config = {
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        };
-        for (let i = 0; i < grps2add.length; i++) {
-            //add each group to database
-            let obj = {
-                operation: 'addGroup',
-                payload: {
-                    Item: {
-                        clientId: grps2add[i].clientId,
-                        meetingId: mid,
-                        facilitator: grps2add[i].facilitator,
-                        gender: grps2add[i].gender,
-                        location: grps2add[i].location,
-                        title: grps2add[i].title,
-                    },
-                },
-            };
-            let body = JSON.stringify(obj);
-
-            let api2use = process.env.REACT_APP_MEETER_API + '/groups';
-            let res = await axios.post(api2use, body, config);
+    const config = {
+        headers: {
+            'Access-Control-Allow-Headers':
+                'Content-Type, x-auth-token, Access-Control-Allow-Headers',
+            'Content-Type': 'application/json',
+        },
+    };
+    defGroups.map(async (group) => {
+        // 1. add group to groups table in DDB
+        // API requires that we send "title", not "groupTitle"
+        // and we need to add meetingsId
+        let defGroup = {};
+        for (var key in group) {
+            if (group.hasOwnProperty(key)) {
+                if (key === "groupTitle"){
+                    defGroup.title = group[key];
+                }else{
+                    defGroup[key] = group[key];
+                }
+            }
         }
-        // now get the groups for the meeting and load in REDUX
-
+        defGroup.meetingId = meetingId;
         let obj = {
-            operation: 'getGroupsByMeetingId',
+            operation: 'addGroup',
             payload: {
-                meetingId: mid,
+                Item: defGroup
             },
         };
         let body = JSON.stringify(obj);
-
         let api2use = process.env.REACT_APP_MEETER_API + '/groups';
         let res = await axios.post(api2use, body, config);
 
-        dispatch({ type: CLEAR_GROUPS });
-        dispatch({
-            type: GET_GROUPS,
-            payload: res.data,
-            body,
-        });
-    } catch (err) {
-        console.log('actions/gatherings.js addDefaultGroups');
-        console.error(err);
-        // dispatch({
-        //     //actions:getGroups
-        //     type: GROUP_ERROR,
-        //     payload: {
-        //         msg: err.response.statusText,
-        //         status: err.response.status,
-        //     },
-        // });
-    }
+        if (res.status === 200) {
+            //=========================================
+            // 2. add the group to redux
+            //=========================================
+            dispatch({
+                type: ADD_GROUP,
+                payload: res.data.Item
+            });
+        } else {
+            console.log('error adding default group to meeting');
+        }
+        
+    });
+    dispatch(setAlert('Default Groups Added', 'success'));
+};
+export const addDefaultGroupsOLD = (mid, defGroups) => async (dispatch) => {
+    
+    // going to need the meeting id. We will grab while rotating through...
+    
+    // // let axiosResponse = null;
+    // try {
+    //     const config = {
+    //         headers: {
+    //             'Content-Type': 'application/json',
+    //         },
+    //     };
+    //     for (let i = 0; i < defGroups.length; i++) {
+    //         //add each group to database
+    //         let obj = {
+    //             operation: 'addGroup',
+    //             payload: {
+    //                 Item: {
+    //                     clientId: grps2add[i].clientId,
+    //                     meetingId: mid,
+    //                     facilitator: grps2add[i].facilitator,
+    //                     gender: grps2add[i].gender,
+    //                     location: grps2add[i].location,
+    //                     title: grps2add[i].title,
+    //                 },
+    //             },
+    //         };
+    //         let body = JSON.stringify(obj);
+
+    //         let api2use = process.env.REACT_APP_MEETER_API + '/groups';
+    //         let res = await axios.post(api2use, body, config);
+    //     }
+    //     // now get the groups for the meeting and load in REDUX
+
+    //     let obj = {
+    //         operation: 'getGroupsByMeetingId',
+    //         payload: {
+    //             meetingId: mid,
+    //         },
+    //     };
+    //     let body = JSON.stringify(obj);
+
+    //     let api2use = process.env.REACT_APP_MEETER_API + '/groups';
+    //     let res = await axios.post(api2use, body, config);
+
+    //     dispatch({ type: CLEAR_GROUPS });
+    //     dispatch({
+    //         type: GET_GROUPS,
+    //         payload: res.data,
+    //         body,
+    //     });
+    // } catch (err) {
+    //     console.log('actions/gatherings.js addDefaultGroups');
+    //     console.error(err);
+    //     // dispatch({
+    //     //     //actions:getGroups
+    //     //     type: GROUP_ERROR,
+    //     //     payload: {
+    //     //         msg: err.response.statusText,
+    //     //         status: err.response.status,
+    //     //     },
+    //     // });
+    // }
 };

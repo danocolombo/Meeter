@@ -58,9 +58,10 @@ const EditGathering = ({
     // gathering: { gathering, servants, loading, newGathering },
     // auth: { activeClient, activeRole, activeStatus },
     //group: { groups, groupLoading },
-    meeter: { mtgConfigs, defaultGroups, active },
+    meeter: { mtgConfigs, active },
     meeting: { turnout, groups, meetingLoading},
     group: { tmpGroup},
+    client: { defaultGroups },
     // mtgConfigs,
     createGathering,
     getMeeting,
@@ -179,7 +180,8 @@ const EditGathering = ({
     };
 
     const addDefaultGroupsToMeeting = () => {
-        console.log('in EditGatherings :: addDefaultGroupsToMeeting');
+        
+        addDefaultGroups(turnout.meetingId, defaultGroups);
         // addDefaultGroups(defaultGroups);
         // console.log(
         //     'defaultGroups: ' +
@@ -208,21 +210,21 @@ const EditGathering = ({
         //     }
         // ]
 
-        let dgroups = defaultGroups;
-        let groupsToAdd = [];
-        // let newBatch = [];
-        let result = dgroups.map((g) => {
-            let aGroup = {};
-            aGroup._id = g._id;
-            aGroup.cid = active.client;
-            aGroup.mid = match.params.id;
-            aGroup.gender = g.gender;
-            aGroup.title = g.title;
-            if (g.location) aGroup.location = g.location;
-            if (g.facilitator) aGroup.facilitator = g.facilitator;
-            groupsToAdd.push(aGroup);
-        });
-        addDefaultGroups(groupsToAdd);
+        // let dgroups = defaultGroups;
+        // let groupsToAdd = [];
+        // // let newBatch = [];
+        // let result = dgroups.map((g) => {
+        //     let aGroup = {};
+        //     aGroup._id = g._id;
+        //     aGroup.cid = active.client;
+        //     aGroup.mid = match.params.id;
+        //     aGroup.gender = g.gender;
+        //     aGroup.title = g.title;
+        //     if (g.location) aGroup.location = g.location;
+        //     if (g.facilitator) aGroup.facilitator = g.facilitator;
+        //     groupsToAdd.push(aGroup);
+        // });
+        // addDefaultGroups(match.params.id, defaultGroups);
         // newGroup.push({
         //     mid: match.params.id,
         //     gender: g.gender,
@@ -832,7 +834,7 @@ const EditGathering = ({
                                         color='default'
                                         size='small'
                                         startIcon={<PlaylistAddIcon />}
-                                        onClick={addDefaultGroupsToMeeting}
+                                        onClick={() => addDefaultGroupsToMeeting()}
                                     >
                                         DEFAULTS
                                     </Button>
@@ -936,9 +938,6 @@ const EditGathering = ({
                         <Button className='btn-light' href='/gatherings'>
                             Go Back
                         </Button>
-                        {/* <Link className='btn btn-light my-1' to='/gatherings'>
-                            Go Back
-                        </Link> */}
                     </>,
                 ];
             } else {
@@ -951,9 +950,6 @@ const EditGathering = ({
                         >
                             Go Back
                         </Button>
-                        {/* <Link className='btn btn-light my-1' to='/gatherings'>
-                            Go Back
-                        </Link> */}
                     </>,
                 ];
             }
@@ -977,47 +973,6 @@ const EditGathering = ({
         ];
     }
 
-    // function displayTeacher() {
-    //     if (meetingType === 'Lesson') {
-    //         return [
-    //             <h4>Teacher</h4>,
-    //             <input
-    //                 type='text'
-    //                 placeholder='teacher...'
-    //                 name='title'
-    //                 value={supportRole}
-    //                 onChange={onChange}
-    //             />,
-    //             <small className='form-text'>Who taught the lesson?</small>,
-    //         ];
-    //     }
-    //     return null;
-    // }
-    // function displayFacilitator() {
-    //     {
-    //         console.log(servants.length);
-    //         var peeps = '';
-    //         servants.forEach((peep) => {
-    //             peeps = peeps + peep;
-    //         });
-    //         const sample =
-    //             "<option value='Junior Developer'>Junior Developer</option>";
-    //         console.log(peeps);
-    //         return [
-    //             <div className='form-group'>
-    //                 ,
-    //                 <select name='status' value='{status}' onChange={onChange}>
-    //                     ,<option>* Select Professional Status</option>,{sample},
-    //                 </select>
-    //                 ,
-    //                 <small className='form-text'>
-    //                     , 'Give us an idea of where you are at in your career',
-    //                 </small>
-    //                 ,
-    //             </div>,
-    //         ];
-    //     }
-    // }
 };
 
 EditGathering.propTypes = {
@@ -1031,6 +986,7 @@ EditGathering.propTypes = {
     getDefGroups: PropTypes.func.isRequired,
     addDefaultGroups: PropTypes.func.isRequired,
     gathering: PropTypes.object.isRequired,
+    client: PropTypes.object.isRequired,
     group: PropTypes.object.isRequired,
     auth: PropTypes.object.isRequired,
     meeter: PropTypes.object.isRequired,
@@ -1041,6 +997,7 @@ EditGathering.propTypes = {
 const mapStateToProps = (state) => ({
     gathering: state.gathering,
     servants: state.servants,
+    client: state.client,
     group: state.group,
     auth: state.auth,
     meeter: state.meeter,
