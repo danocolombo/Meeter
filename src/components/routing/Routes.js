@@ -22,6 +22,8 @@ import EditPerson from '../people/EditPerson';
 import NotFound from '../layout/NotFound';
 import PrivateRoute from '../routing/PrivateRoute';
 import UserProfile from '../profile/UserProfile';
+import Landing from '../layout/Landing';
+import ErrorPage from '../layout/Error';
 // import PersonForm from '../people/PersonForm';
 
 
@@ -94,7 +96,8 @@ const Routes = () => {
                     path='/EditDefaultGroups'
                     component={EditDefaultGroups}
                 />
-                <Route component={NotFound} />
+                <Route path='*' component={ErrorPage}/>
+                {/* <Route component={NotFound} /> */}
             </Switch>
         </section>
     );
