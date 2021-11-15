@@ -2,6 +2,7 @@ import React, { Fragment, useState, useEffect } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { randomBytes, createCipheriv } from 'crypto';
 import PlaylistAddIcon from '@material-ui/icons/PlaylistAdd';
 import { Button } from '@material-ui/core';
 import {
@@ -75,7 +76,23 @@ const EditGathering = ({
     history,
 }) => {
     const [formData, setFormData] = useState(initialState);
-
+    let groupUniqueId = null;
+    function getUniqueId() {
+        //this generates a unique ID based on this specific time
+        // Difining algorithm
+        const algorithm = 'aes-256-cbc';
+        // Defining key
+        const key = randomBytes(32);
+        // Defining iv
+        const iv = randomBytes(16);
+        let cipher = createCipheriv('aes-256-cbc', Buffer.from(key), iv);
+        //get the current time...
+        let n = Date.now();
+        let encrypted = cipher.update(n.toString());
+        // Using concatenation
+        encrypted = Buffer.concat([encrypted, cipher.final()]);
+        return encrypted.toString('hex');
+    }
     // useEffect(() => {
     //     getGroups(match.params.id);
 
@@ -88,7 +105,6 @@ const EditGathering = ({
         clearTmpGroup();
     }, []);
     useEffect(() => {
-        console.log('id: ' + match.params.id);
         if (match.params.id != "0"){
             if (!turnout) {
                 getMeeting(match.params.id);
@@ -182,79 +198,9 @@ const EditGathering = ({
     const addDefaultGroupsToMeeting = () => {
         
         addDefaultGroups(turnout.meetingId, defaultGroups);
-        // addDefaultGroups(defaultGroups);
-        // console.log(
-        //     'defaultGroups: ' +
-        //         util.inspect(defaultGroups, { showHidden: false, depth: null })
-        // );
-        //============================================
-        // this is sample of 3 default meetings in REDUX
-        // defaultGroups: [
-        //     { _id: '5efe35a12f948b40189671a6',
-        //         gender: 'f',
-        //         title: 'A-Z',
-        //         location: 'Library',
-        //         facilitator: 'Marie'
-        //     },
-        //     { _id: '5efe3dbb22c44e40f9775e06',
-        //         gender: 'm',
-        //         title: 'chem',
-        //         location: 'Library',
-        //         facilitator: 'Dale'
-        //     },
-        //     { _id: '5efe43400e4232414c2ee7e4',
-        //         gender: 'x',
-        //         title: 'remove me',
-        //         location: 'bathroom',
-        //         facilitator: 'Waldo'
-        //     }
-        // ]
-
-        // let dgroups = defaultGroups;
-        // let groupsToAdd = [];
-        // // let newBatch = [];
-        // let result = dgroups.map((g) => {
-        //     let aGroup = {};
-        //     aGroup._id = g._id;
-        //     aGroup.cid = active.client;
-        //     aGroup.mid = match.params.id;
-        //     aGroup.gender = g.gender;
-        //     aGroup.title = g.title;
-        //     if (g.location) aGroup.location = g.location;
-        //     if (g.facilitator) aGroup.facilitator = g.facilitator;
-        //     groupsToAdd.push(aGroup);
-        // });
-        // addDefaultGroups(match.params.id, defaultGroups);
-        // newGroup.push({
-        //     mid: match.params.id,
-        //     gender: g.gender,
-        //     title: g.title,
-
-        //     location: g.location,
-        //     facilitator: g.facilitator,
-        // });
-        // console.log(JSON.stringify(newGroup));
-        // newBatch.push({
-        //     newGroup,
-        // });
-        //     console.log('newBatch...');
-        //     console.log(JSON.stringify(newBatch));
-        //     // console.log('id: ' + g._id);
-        //     // console.log('gender: ' + g.gender);
-        //     // console.log('title: ' + g.title);
-        //     // console.log('location: ' + g.location);
-        //     // console.log('faciliator: ' + g.facilitator);
-        // });
+        
     };
-    // // DANO
-    // console.log('donations: ' + mtgConfigs['donations']);
-    // console.log('type of mtgConfigs: ' + typeof mtgConfigs);
-    // console.table(mtgConfigs);
-    // const util = require('util');
-    // console.log(
-    //     'mtgConfigs: ' +
-    //         util.inspect(mtgConfigs, { showHidden: false, depth: null })
-    // );
+    
     return meetingLoading ? (
         <Spinner />
     ) : (
@@ -284,7 +230,7 @@ const EditGathering = ({
                 <h4>Facilitator</h4>
                 <input
                     type='text'
-                    class='x-large'
+                    className='x-large'
                     placeholder='Responsible party for meeting'
                     id='facilitatorContact'
                     name='facilitatorContact'
@@ -292,17 +238,6 @@ const EditGathering = ({
                     onChange={onChange}
                 />
                 </div>
-                {/* <select
-                    value={facilitator}
-                    name='facilitator'
-                    onChange={onChange}
-                >
-                    {servants.map((s) => (
-                        <option key={s.name} value={s.name}>
-                            {s.name}
-                        </option>
-                    ))}
-                </select> */}
                 <div className='form-group'>
                     <h4>Meeting Type **</h4>
                     <select
@@ -311,12 +246,12 @@ const EditGathering = ({
                         value={meetingType}
                         onChange={(e) => onChange(e)}
                     >
-                        <option value='0'>** Select the type of meeting</option>
-                        <option value='Lesson'>Lesson</option>
-                        <option value='Testimony'>Testimony</option>
-                        <option value='Special'>Special</option>
-                        <option value='Teaching'>Teaching</option>
-                        <option value='Other'>Other</option>
+                        <option key='0' value='0'>** Select the type of meeting</option>
+                        <option key='1' value='Lesson'>Lesson</option>
+                        <option key='2' value='Testimony'>Testimony</option>
+                        <option key='3' value='Special'>Special</option>
+                        <option key='4' value='Teaching'>Teaching</option>
+                        <option key='5' value='Other'>Other</option>
                     </select>
                     <small className='form-text'>
                         What kind of meeting is this?
@@ -344,18 +279,6 @@ const EditGathering = ({
                             value={supportContact}
                             onChange={onChange}
                         />
-
-                        {/* <select
-                            value={supportRole}
-                            name='supportRole'
-                            onChange={onChange}
-                        >
-                            {servants.map((s) => (
-                                <option key={s.name} value={s.name}>
-                                    {s.name}
-                                </option>
-                            ))}
-                        </select> */}
                         <small className='form-text'>
                             Who is teaching the lesson?
                         </small>
@@ -849,9 +772,10 @@ const EditGathering = ({
                     </Fragment>
                 )}
             </form>
-            <div style={{ 'padding-top': 10 }}>
+            <div>
                 {groups &&
                     groups.map((group) => (
+                        
                         <GroupListItem
                             key={group.groupId}
                             mid={group.meetingId}
@@ -859,11 +783,11 @@ const EditGathering = ({
                             role={active.role}
                             deleteResponse={handleGroupDeleteRequest}
                         />
-                    ))}
+    ))}
             </div>
         </Fragment>
     );
-
+    
     function displayTitle() {
         switch (meetingType) {
             case 'Lesson':
@@ -968,7 +892,7 @@ const EditGathering = ({
         }
         return [
             <>
-                <table>{returnValue}</table>
+                <div>{returnValue}</div>
             </>,
         ];
     }

@@ -56,15 +56,9 @@ export default function (state = initialState, action) {
                 meetingLoading: false,
             };
         case REMOVE_GROUP:
-            console.log('REMOVE_GROUP in meeting reducer');
-            console.log('table: state.groups');
-            console.table(state.groups);
-            const util = require('util');
-            console.log('payload:  \n' + util.inspect(payload, { showHidden: false, depth: null }));
-
             return {
                 ...state,
-                groups: state.groups.filter((group) => group.groupId !== payload.groupId),
+                groups: state.groups.filter((group) => group.groupId !== payload),
                 groupLoading: false,
             };
         default:

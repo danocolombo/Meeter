@@ -54,7 +54,7 @@ function get1Line(g, t) {
     if (t.length > 0) {
         line1 = line1.concat(' ', t);
     }
-    return [<span>{line1}</span>];
+    return [<span key='{line1}'>{line1}</span>];
 }
 function get2Line(l, f) {
     // if (l) console.log(l + ' ' + l.length);
@@ -78,8 +78,7 @@ function get2Line(l, f) {
             line2 = f;
         }
     }
-
-    return [<span>{line2}</span>];
+    return line2;
 }
 GroupListItem.propTypes = {
     group: PropTypes.object.isRequired,

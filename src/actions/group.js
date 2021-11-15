@@ -140,8 +140,6 @@ export const getGroup = (groupId) => async (dispatch) => {
 // Delete group
 export const deleteGroup = (groupId) => async (dispatch) => {
     try {
-        console.log("action/group::deleteGroup");
-        console.log("groupId: " + groupId);
         const config = {
             headers: {
                 'Access-Control-Allow-Headers':
@@ -166,14 +164,14 @@ export const deleteGroup = (groupId) => async (dispatch) => {
         let res = await axios.post(api2use, body, config);
         // const util = require('util');
         // console.log('res:  \n' + util.inspect(res, { showHidden: false, depth: null }));
-
-        // on delete, we don't get body back, so send obj to redux to remove
-        if (res.status === '200'){
+        if (res.status === 200){
+            // send the groupId to remove from redux
             dispatch({
                 type: REMOVE_GROUP,
-                payload: obj.payload.Key,
+                payload: obj.payload.Key.groupId,
             });
-
+        }else{
+            console.log('FAILURE');
         }
         
     } catch (err) {

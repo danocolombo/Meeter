@@ -22,9 +22,6 @@ import {
 } from './types';
 
 export const getMeeting = (meetingId) => async (dispatch) => {
-    //ensure that id is not null, if so return
-    console.log('INSIDE GET MEETING');
-    // console.log('getGathering:IN');
     if (meetingId.length < 1) return;
     if (meetingId === 0) return;
     
