@@ -39,12 +39,15 @@ hr {
     width: 450px;
     margin-bottom: 15px;
 }
-.gather-component__first-row {
+.gather-component__header-row {
     display: flex;
-    // flex-flow: row wrap;
-    /* This aligns items to the end line on main-axis */
-    justify-content: flex-end;
-    // padding-right: 15px;
+    justify-content: space-between;
+}
+.gather-component__date {
+    padding-top: .5em;
+    padding-left: .5em;
+    font-size: large;
+    color: blue;
 }
 .gather-component__trash-style {
     color: red;
@@ -57,6 +60,15 @@ hr {
     padding-bottom: 0px;
     margin: 0px;
 }
+.gather-component__first-row {
+    display: flex;
+    // flex-flow: row wrap;
+    /* This aligns items to the end line on main-axis */
+    justify-content: flex-end;
+    // padding-right: 15px;
+}
+
+
 .gather-component__second-row {
     padding-left: 10px;
 }

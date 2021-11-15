@@ -21,7 +21,8 @@ const GatheringItem = ({
     presentView,
 }) => (
     <div className="gather-component__wrapper">
-        <div className='gather-component__first-row'>
+        <div className='gather-component__header-row'>
+            <div className='gather-component__date'>{meetingDate}</div>
             <div className='gather-component__trash-style'><i
                     className={'fa fa-trash my'}
                     onClick={() => deleteGathering(meetingId, presentView)}
