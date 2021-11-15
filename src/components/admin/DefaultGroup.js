@@ -9,6 +9,7 @@ const DefaultGroups = ({
     defGroup: { groupId, gender, groupTitle, location, facilitator },
     showActions,
     client,
+    history,
 }) => {
     // const [clientInfo, setClientInfo] = useState(null);
     
@@ -46,7 +47,7 @@ const DefaultGroups = ({
                 </div>
                 <div className={"config-component__delete-style"}>
                     <i className={'fa fa-trash'}
-                            onClick={() => deleteDefGroup(groupId, client)}
+                            onClick={() => deleteDefGroup(groupId, client, history)}
                     ></i>
                 </div>
             </div>

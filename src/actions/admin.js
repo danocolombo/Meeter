@@ -3,6 +3,7 @@ import { setAlert } from './alert';
 import { randomBytes, createCipheriv } from 'crypto';
 import {
     SET_CLIENT_USERS,
+    // SET_CLIENT,
     ADMIN_ERROR,
     SET_DEFAULT_GROUPS,
     ADD_DEFAULT_GROUP,
@@ -319,7 +320,7 @@ export const deleteDefGroup = (groupId, clientInfo) => async (dispatch) => {
     let newClient = {
         ...clientInfo, 
         defaultGroups: clientInfo.defaultGroups.filter((group) => group.groupId != groupId)};
-
+    // now wrap the newClient with Item
     const config = {
         headers: {
             'Access-Control-Allow-Headers':
@@ -334,14 +335,14 @@ export const deleteDefGroup = (groupId, clientInfo) => async (dispatch) => {
         },
     };
     let body = JSON.stringify(obj);
-
+    // console.log('sending to /clients api\n\n' + body);
     let api2use = process.env.REACT_APP_MEETER_API + '/clients';
     let res = await axios.post(api2use, body, config);
     
-    console.log('RESPONSE FROM AWS API')
-    const util = require('util');
-    console.log('res:  \n' + util.inspect(res, { showHidden: false, depth: null }));
- 
+    // console.log('\n\nRESPONSE FROM AWS API')
+    // const util = require('util');
+    // console.log('res:  \n' + util.inspect(res, { showHidden: false, depth: null }));
+
 };
 export const deleteClientUser = (cid, uid) => async (dispatch) => {
     //this removes the user id from client users
@@ -460,8 +461,47 @@ export const addDefaultGroup = (request, clientId) => async dispatch => {
     let newGroup = request.formData;
     // newGroup.clientId = clientId;
     newGroup.groupId = groupId;
-    dispatch({
-        type: ADD_DEFAULT_GROUP,
-        payload: newGroup,
-    });
+
+    //send the new default group to AWS API
+    try {
+        const config = {
+            headers: {
+                'Access-Control-Allow-Headers':
+                    'Content-Type, x-auth-token, Access-Control-Allow-Headers',
+                'Content-Type': 'application/json',
+            },
+        };
+        let obj = {
+            operation: 'addNewDefaultGroup',
+            payload: newGroup,
+        };
+        
+        let body = JSON.stringify(obj);
+
+        let api2use = process.env.REACT_APP_MEETER_API + '/clients';
+        let res = await axios.post(api2use, body, config);
+        // console.log('res:' + JSON.stringify(res.data));
+        if (res.status === 200) {
+            //     dispatch({
+            //         type: SET_CLIENT,
+            //         payload: res.data,
+            //     });
+            // }
+            dispatch({
+                type: ADD_DEFAULT_GROUP,
+                payload: newGroup,
+            });
+            dispatch(setAlert("client updated", 'success'));
+            
+        }
+    } catch (err) {
+        dispatch({
+            type: ADMIN_ERROR,
+            payload: {
+                msg: err.response.statusText,
+                status: err.response.status,
+            },
+        });
+    }
+    
 };
