@@ -59,11 +59,11 @@ const EditGathering = ({
     // gathering: { gathering, servants, loading, newGathering },
     // auth: { activeClient, activeRole, activeStatus },
     //group: { groups, groupLoading },
-    meeter: { mtgConfigs, active },
+    meeter: {active },
     meeting: { turnout, groups, meetingLoading},
     group: { tmpGroup},
-    client: { defaultGroups },
-    // mtgConfigs,
+    client: { defaultGroups, clientConfigs },
+    // clientConfigs,
     createGathering,
     getMeeting,
     getGroups,
@@ -71,7 +71,7 @@ const EditGathering = ({
     turnoffMeetingLoading,
     clearGroups,
     addDefaultGroups,
-    getMtgConfigs,
+    getclientConfigs,
     match,
     history,
 }) => {
@@ -96,10 +96,10 @@ const EditGathering = ({
     // useEffect(() => {
     //     getGroups(match.params.id);
 
-    //     // getMtgConfigs(activeClient);
+    //     // getclientConfigs(activeClient);
     //     // getDefGroups(activeClient);
     //     // console.log('just ran getGroups');
-    // }, [active.childrenCount, getGroups, getMtgConfigs, match.params.id]);
+    // }, [active.childrenCount, getGroups, getclientConfigs, match.params.id]);
     useEffect(() => {
         // need to clear the redux meeting data
         clearTmpGroup();
@@ -286,7 +286,7 @@ const EditGathering = ({
                 )}
                 {/* SHOW AVContact TEXTBOX IF CONFIGURED        */}
                 {/* --- ???????????????????????????? ----- */}
-                {mtgConfigs['avContact'] === true ? (
+                {clientConfigs['avContact'] === true ? (
                     <div className='form-group'>
                         <h4>Audio/Visual Contact</h4>
                         <input
@@ -340,7 +340,7 @@ const EditGathering = ({
                 <small className='form-text'>Number of newcomers?</small>
                 {/* SHOW DONATIONS IF CONFIGURED        */}
                 {/* --- ???????????????????????????? ----- */}
-                {mtgConfigs['donations'] === true ? (
+                {clientConfigs['donations'] === true ? (
                     <div className='form-group'>
                         <h4>Donations</h4>
                         <input
@@ -360,7 +360,7 @@ const EditGathering = ({
                 ) : null}
                 {/* SHOW MEAL DESCRIPTION IF CONFIGURED        */}
                 {/* --- ???????????????????????????? ----- */}
-                {mtgConfigs['meal'] === true ? (
+                {clientConfigs['meal'] === true ? (
                     <div className='form-group'>
                         <h4>Meal</h4>
                         <input
@@ -376,7 +376,7 @@ const EditGathering = ({
                 ) : null}
                 {/* SHOW MEAL COORDINATOR IF CONFIGURED        */}
                 {/* --- ???????????????????????????? ----- */}
-                {mtgConfigs['mealCoordinator'] === true ? (
+                {clientConfigs['mealCoordinator'] === true ? (
                     <div className='form-group'>
                         <h4>Meal Contact</h4>
                         <input
@@ -391,7 +391,7 @@ const EditGathering = ({
                 ) : null}
                 {/* SHOW MEAL COUNT IF CONFIGURED        */}
                 {/* --- ???????????????????????????? ----- */}
-                {mtgConfigs['mealCnt'] === true ? (
+                {clientConfigs['mealCnt'] === true ? (
                     <div className='form-group'>
                         <h4>Meal Count</h4>
                         <input
@@ -410,7 +410,7 @@ const EditGathering = ({
                 ) : null}
                 {/* SHOW CAFE COORDINATOR IF CONFIGURED        */}
                 {/* --- ???????????????????????????? ----- */}
-                {mtgConfigs['cafeCoordinator'] === true ? (
+                {clientConfigs['cafeCoordinator'] === true ? (
                     <div className='form-group'>
                         <h4>Cafe Coordinator</h4>
                         <input
@@ -426,7 +426,7 @@ const EditGathering = ({
                 ) : null}
                 {/* SHOW CAFE COUNT IF CONFIGURED        */}
                 {/* --- ???????????????????????????? ----- */}
-                {mtgConfigs['cafeCount'] === true ? (
+                {clientConfigs['cafeCount'] === true ? (
                     <div className='form-group'>
                         <h4>Cafe Attendees</h4>
                         <input
@@ -445,7 +445,7 @@ const EditGathering = ({
                 ) : null}
                 {/* SHOW GREETER 1 IF CONFIGURED        */}
                 {/* --- ???????????????????????????? ----- */}
-                {mtgConfigs['greeterContact1'] === true ? (
+                {clientConfigs['greeterContact1'] === true ? (
                     <div className='form-group'>
                         <h4>Greeter</h4>
                         <input
@@ -461,7 +461,7 @@ const EditGathering = ({
                 ) : null}
                 {/* SHOW GREETER 2 IF CONFIGURED        */}
                 {/* --- ???????????????????????????? ----- */}
-                {mtgConfigs['greeterContact2'] === true ? (
+                {clientConfigs['greeterContact2'] === true ? (
                     <div className='form-group'>
                         <h4>Greeter</h4>
                         <input
@@ -477,7 +477,7 @@ const EditGathering = ({
                 ) : null}
                 {/* SHOW RESOURCES CONTACT IF CONFIGURED        */}
                 {/* --- ???????????????????????????? ----- */}
-                {mtgConfigs['resourceContact'] === true ? (
+                {clientConfigs['resourceContact'] === true ? (
                     <div className='form-group'>
                         <h4>Resources Contact</h4>
                         <input
@@ -493,7 +493,7 @@ const EditGathering = ({
                 ) : null}
                 {/* SHOW ANNOUNCEMENTS CONTACT IF CONFIGURED        */}
                 {/* --- ???????????????????????????? ----- */}
-                {mtgConfigs['announcementsContact'] === true ? (
+                {clientConfigs['announcementsContact'] === true ? (
                     <div className='form-group'>
                         <h4>Announcements Contact</h4>
                         <input
@@ -511,7 +511,7 @@ const EditGathering = ({
                 ) : null}
                 {/* SHOW CLOSING CONTACT IF CONFIGURED        */}
                 {/* --- ???????????????????????????? ----- */}
-                {mtgConfigs['closingContact'] === true ? (
+                {clientConfigs['closingContact'] === true ? (
                     <div className='form-group'>
                         <h4>Closing Contact</h4>
                         <input
@@ -527,7 +527,7 @@ const EditGathering = ({
                 ) : null}
                 {/* SHOW SECURITY IF CONFIGURED        */}
                 {/* --- ???????????????????????????? ----- */}
-                {mtgConfigs['securityContact'] === true ? (
+                {clientConfigs['securityContact'] === true ? (
                     <div className='form-group'>
                         <h4>Security Coordinator</h4>
                         <input
@@ -546,7 +546,7 @@ const EditGathering = ({
                 <hr className='group-ruler' />
                 {/* SHOW NURSERY COORDINATOR IF CONFIGURED        */}
                 {/* --- ???????????????????????????? ----- */}
-                {mtgConfigs['nurseryContact'] === true ? (
+                {clientConfigs['nurseryContact'] === true ? (
                     <div className='form-group'>
                         <h4>Nursery Contact</h4>
                         <input
@@ -562,7 +562,7 @@ const EditGathering = ({
                 ) : null}
                 {/* SHOW NURSERY COUNT IF CONFIGURED        */}
                 {/* --- ???????????????????????????? ----- */}
-                {mtgConfigs['nursery'] === true ? (
+                {clientConfigs['nursery'] === true ? (
                     <div className='form-group'>
                         <h4>Nursery Count</h4>
                         <input
@@ -581,7 +581,7 @@ const EditGathering = ({
                 ) : null}
                 {/* SHOW CHILDREN COORDINATOR IF CONFIGURED        */}
                 {/* --- ???????????????????????????? ----- */}
-                {mtgConfigs['childrenContact'] === true ? (
+                {clientConfigs['childrenContact'] === true ? (
                     <div className='form-group'>
                         <h4>Childern Contact</h4>
                         <input
@@ -597,7 +597,7 @@ const EditGathering = ({
                 ) : null}
                 {/* SHOW CHILDREN COUNT IF CONFIGURED        */}
                 {/* --- ???????????????????????????? ----- */}
-                {mtgConfigs['children'] === true ? (
+                {clientConfigs['children'] === true ? (
                     <div className='form-group'>
                         <h4>Children Count</h4>
                         <input
@@ -616,7 +616,7 @@ const EditGathering = ({
                 ) : null}
                 {/* SHOW YOUTH COORDINATOR IF CONFIGURED        */}
                 {/* --- ???????????????????????????? ----- */}
-                {mtgConfigs['youthContact'] === true ? (
+                {clientConfigs['youthContact'] === true ? (
                     <div className='form-group'>
                         <h4>Youth Contact</h4>
                         <input
@@ -632,7 +632,7 @@ const EditGathering = ({
                 ) : null}
                 {/* SHOW YOUTH COUNT IF CONFIGURED        */}
                 {/* --- ???????????????????????????? ----- */}
-                {mtgConfigs['youth'] === true ? (
+                {clientConfigs['youth'] === true ? (
                     <div className='form-group'>
                         <h4>Youth Count</h4>
                         <input
@@ -651,7 +651,7 @@ const EditGathering = ({
                 ) : null}
                 {/* SHOW SETUP IF CONFIGURED        */}
                 {/* --- ???????????????????????????? ----- */}
-                {mtgConfigs['setupContact'] === true ? (
+                {clientConfigs['setupContact'] === true ? (
                     <div className='form-group'>
                         <h4>Setup Coordinator</h4>
                         <input
@@ -667,7 +667,7 @@ const EditGathering = ({
                 ) : null}
                 {/* SHOW CLEANUP IF CONFIGURED        */}
                 {/* --- ???????????????????????????? ----- */}
-                {mtgConfigs['cleanupContact'] === true ? (
+                {clientConfigs['cleanupContact'] === true ? (
                     <div className='form-group'>
                         <h4>Clean-up Coordinator</h4>
                         <input
@@ -685,7 +685,7 @@ const EditGathering = ({
                 ) : null}
                 {/* SHOW TRANSPORTATION IF CONFIGURED        */}
                 {/* --- ???????????????????????????? ----- */}
-                {mtgConfigs['transportationContact'] === true ? (
+                {clientConfigs['transportationContact'] === true ? (
                     <div className='form-group'>
                         <h4>Transportation Coordinator</h4>
                         <input
@@ -701,7 +701,7 @@ const EditGathering = ({
                 ) : null}
                 {/* SHOW YOUTH COUNT IF CONFIGURED        */}
                 {/* --- ???????????????????????????? ----- */}
-                {mtgConfigs['transportationCount'] === true ? (
+                {clientConfigs['transportationCount'] === true ? (
                     <div className='form-group'>
                         <h4>Transportation Guests</h4>
                         <input
@@ -905,7 +905,7 @@ EditGathering.propTypes = {
     getGroups: PropTypes.func.isRequired,
     clearGroups: PropTypes.func.isRequired,
     clearTmpGroup: PropTypes.func.isRequired,
-    getMtgConfigs: PropTypes.func.isRequired,
+    getclientConfigs: PropTypes.func.isRequired,
     turnoffMeetingLoading: PropTypes.func.isRequired,
     getDefGroups: PropTypes.func.isRequired,
     addDefaultGroups: PropTypes.func.isRequired,
@@ -915,7 +915,7 @@ EditGathering.propTypes = {
     auth: PropTypes.object.isRequired,
     meeter: PropTypes.object.isRequired,
     meeting: PropTypes.object.isRequired,
-    // mtgConfigs: PropTypes.object.isRequired,
+    // clientConfigs: PropTypes.object.isRequired,
 };
 
 const mapStateToProps = (state) => ({
@@ -926,7 +926,7 @@ const mapStateToProps = (state) => ({
     auth: state.auth,
     meeter: state.meeter,
     meeting: state.meeting,
-    // mtgConfigs: state.meeter.mtgConfigs,
+    // clientConfigs: state.meeter.clientConfigs,
 });
 
 export default connect(mapStateToProps, {

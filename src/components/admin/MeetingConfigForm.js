@@ -37,11 +37,12 @@ const initialState = {
 };
 const MeetingConfig = ({
     toggleConfig,
-    getMtgConfigs,
+    getclientConfigs,
     updateMeetingConfigs,
     auth: { activeClient },
-    meeter: { mtgConfigs, loading },
+    meeter: { clientConfigs, loading },
     history,
+    client,
 }) => {
     const [formData, setFormData] = useState(initialState);
     useEffect(() => {
@@ -49,31 +50,31 @@ const MeetingConfig = ({
         //now update formData from redux
         setFormData({
             ...formData,
-            setupContact: mtgConfigs.setupContact ? true : false,
-            transportationContact: mtgConfigs.transportationContact ? true : false,
-            transportationCnt: mtgConfigs.transportationCnt ? true : false,
-            avContact: mtgConfigs.avContact ? true : false,
-            greeterContact1: mtgConfigs.greeterContact1 ? true : false,
-            greeterContact2: mtgConfigs.greeterContact2 ? true : false,
-            resourceContact: mtgConfigs.resourceContact ? true : false,
-            announcementsContact: mtgConfigs.announcementsContact ? true : false,
-            closingContact: mtgConfigs.closingContact ? true : false,
-            mealCnt: mtgConfigs.mealCnt ? true : false,
-            meal: mtgConfigs.meal ? true : false,
-            mealCoordinator: mtgConfigs.mealCoordinator ? true : false,
-            cafeCnt: mtgConfigs.cafeCnt ? true : false,
-            cafeCoordinator: mtgConfigs.cafeCoordinator ? true : false,
-            nursery: mtgConfigs.nursery ? true : false,
-            nurseryContact: mtgConfigs.nurseryContact ? true : false,
-            children: mtgConfigs.children ? true : false,
-            childrenContact: mtgConfigs.childrenContact ? true : false,
-            youth: mtgConfigs.youth ? true : false,
-            youthContact: mtgConfigs.youthContact ? true : false,
-            donations: mtgConfigs.donations ? true : false,
-            securityContact: mtgConfigs.securityContact ? true : false,
-            cleanupContact: mtgConfigs.cleanupContact ? true : false,
+            setupContact: client.clientConfigs.setupContact ? true : false,
+            transportationContact: client.clientConfigs.transportationContact ? true : false,
+            transportationCnt: client.clientConfigs.transportationCnt ? true : false,
+            avContact: client.clientConfigs.avContact ? true : false,
+            greeterContact1: client.clientConfigs.greeterContact1 ? true : false,
+            greeterContact2: client.clientConfigs.greeterContact2 ? true : false,
+            resourceContact: client.clientConfigs.resourceContact ? true : false,
+            announcementsContact: client.clientConfigs.announcementsContact ? true : false,
+            closingContact: client.clientConfigs.closingContact ? true : false,
+            mealCnt: client.clientConfigs.mealCnt ? true : false,
+            meal: client.clientConfigs.meal ? true : false,
+            mealCoordinator: client.clientConfigs.mealCoordinator ? true : false,
+            cafeCnt: client.clientConfigs.cafeCnt ? true : false,
+            cafeCoordinator: client.clientConfigs.cafeCoordinator ? true : false,
+            nursery: client.clientConfigs.nursery ? true : false,
+            nurseryContact: client.clientConfigs.nurseryContact ? true : false,
+            children: client.clientConfigs.children ? true : false,
+            childrenContact: client.clientConfigs.childrenContact ? true : false,
+            youth: client.clientConfigs.youth ? true : false,
+            youthContact: client.clientConfigs.youthContact ? true : false,
+            donations: client.clientConfigs.donations ? true : false,
+            securityContact: client.clientConfigs.securityContact ? true : false,
+            cleanupContact: client.clientConfigs.cleanupContact ? true : false,
         });
-    }, [loading, getMtgConfigs, mtgConfigs]);
+    }, [loading, getclientConfigs, client.clientConfigs]);
     // const [formData, setFormData] = useState(initialState);
     // const { donations, cafe, cafeFac } = formData;
 
@@ -109,7 +110,8 @@ const MeetingConfig = ({
     // };
     const handleChange = (event) => {
         setFormData({ ...formData, [event.target.name]: event.target.checked });
-        toggleConfig(event.target.name, event.target.checked, activeClient);
+        // the call to update is passing, configname, and value to be, along with clientId
+        toggleConfig(event.target.name, event.target.checked, client);
         alert('changing ' + event.target.name + ':' + event.target.checked);
     };
     const onSubmit = (e) => {
@@ -407,10 +409,12 @@ MeetingConfig.propTypes = {
     toggleConfig: PropTypes.func.isRequired,
     getMtgConfigs: PropTypes.func.isRequired,
     updateMeetingConfigs: PropTypes.func.isRequired,
+    client: PropTypes.object.isRequired,
 };
 const mapStateToProps = (state) => ({
     auth: state.auth,
     meeter: state.meeter,
+    client: state.client,
 });
 
 export default connect(mapStateToProps, {

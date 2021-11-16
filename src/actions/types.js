@@ -60,6 +60,7 @@ export const SET_MEETING = 'SET_MEETING';
 export const CLEAR_MEETING = 'CLEAR_MEETING';
 export const SET_GROUPS = 'SET_GROUPS';
 export const CLEAR_GROUP = 'CLEAR_GROUP';
+export const UPDATE_GROUP = 'UPDATE_GROUP';
 export const SET_ACTIVES = 'SET_ACTIVES';
 export const CLEAR_ACTIVES = 'CLEAR_ACTIVES';
 export const DELETE_GROUPS = 'DELETE_GROUPS';

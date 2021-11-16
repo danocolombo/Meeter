@@ -4,14 +4,17 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Spinner from '../layout/Spinner';
 import DashLogo from '../../img/MMeeterLogo.png';
-
+import Moment from 'react-moment';
+import moment from 'moment';
 const Dashboard = ({ auth, meeter }) => {
     useEffect(() => {
         if (!auth.token || auth.isAuthenticated === null) {
             return <Redirect to='/login' />;
         }
+        const start = moment().format('YYYY-MM-DD');
+        console.log('start: ' + start);
     }, []);
-
+    
     return auth.loading || meeter.loading ? (
         <Spinner />
     ) : (
@@ -24,6 +27,7 @@ const Dashboard = ({ auth, meeter }) => {
             {auth.user !== null ? (
                 <Fragment>
                     <h2>Now the fun begins</h2>
+                    
                 </Fragment>
             ) : (
                 <Fragment>

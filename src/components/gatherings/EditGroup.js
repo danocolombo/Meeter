@@ -10,6 +10,7 @@ import { Input } from '@material-ui/core';
 import { RadioGroup } from '@material-ui/core';
 import { Radio } from '@material-ui/core';
 import { addGroup, getGroup, deleteGroup } from '../../actions/group';
+import meeting from '../../reducers/meeting';
 const initialState = {
     groupId: '',
     title: '',
@@ -51,7 +52,7 @@ const EditGroup = ({
             
         }
         else{
-            console.log('match.params.groupId: ' + match.params.groupId);
+            console.log('EditGroup.js - match.params.groupId: ' + match.params.groupId);
         }
     }, []);
     useEffect(() => {
@@ -90,6 +91,14 @@ const EditGroup = ({
         notes,
     } = formData;
 
+    const loadGroupFromRedux = (gid) => {
+        groups.map ((grp) => {
+            if (grp.groupId === gid){
+                return grp;
+            }
+        })
+
+    }
     const handleGenderChange = (e) => {
         console.log('btnValue:' + e.target.value);
         setFormData({ ...formData, gender: e.target.value });
@@ -112,6 +121,7 @@ const EditGroup = ({
         }
         formData.meetingId = turnout.meetingId;
         addGroup(formData, history, true);
+
         window.scrollTo(0, 0);
     };
     return (

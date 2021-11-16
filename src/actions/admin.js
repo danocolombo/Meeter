@@ -397,35 +397,51 @@ export const suspendClientUser = (id) => async (dispatch) => {
     //users in database to suspended and updates
     //meeter.clientUsers status
 };
-export const toggleConfig = (config, value, cid) => async (dispatch) => {
+export const toggleConfig = (config, value, client) => async (dispatch) => {
     // this gets the client and configuration value
     // if the value exists, we remove it, if it does
     // not exist, we add it.
     let theChange = {};
-    theChange.cid = cid;
+    theChange.clientId = client.clientCode;
     theChange.config = config;
-    theChange.value = value;
-    // console.table(theChange);
+    if (value){
+        theChange.setting = "true";
+    }else{
+        theChange.setting = "false";
+    }
+    
+    console.log('in toggleConfig function...');
+    console.log('config:' + config);
+    console.log('value: ' + value);
+    console.log('theChange:\n' + JSON.stringify(theChange));
     try {
         const config = {
             headers: {
+                'Access-Control-Allow-Headers':
+                    'Content-Type, x-auth-token, Access-Control-Allow-Headers',
                 'Content-Type': 'application/json',
             },
         };
-        const res = await axios.post(
-            '/api/client/toggleconfig',
-            theChange,
-            config
-        );
-
-        dispatch({
-            type: TOGGLE_CONFIG,
-            payload: res,
-        });
-
-        dispatch(setAlert('System Configuration Updated', 'success'));
+        let obj = {
+            operation: 'updateMeeterConfigs',
+            payload: theChange,
+        };
+        
+        let body = JSON.stringify(obj);
+        console.log('body: \n ' + body);
+        let api2use = process.env.REACT_APP_MEETER_API + '/clients';
+        let res = await axios.post(api2use, body, config);
+        
+        if (res.status === 200) {
+            
+            // dispatch({
+            //     type: SET_MTG_CONFIGS,
+            //     payload: theChange,
+            // });
+            dispatch(setAlert("client updated", 'success'));
+            
+        }
     } catch (err) {
-        console.log('actions/admin.js deleteClientUser ADMIN_ERROR');
         dispatch({
             type: ADMIN_ERROR,
             payload: {
@@ -434,6 +450,9 @@ export const toggleConfig = (config, value, cid) => async (dispatch) => {
             },
         });
     }
+
+
+
     
 };
 function getUniqueId() {

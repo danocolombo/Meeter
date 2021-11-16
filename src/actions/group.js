@@ -7,6 +7,7 @@ import {
     SET_TMP_GROUP,
     CLEAR_TMP_GROUP,
     ADD_GROUP,
+    UPDATE_GROUP,
     REMOVE_GROUP,
     //------------
     GROUP_ERROR,
@@ -210,15 +211,13 @@ export const addGroup = (formData, history, edit = false) => async (
     dispatch
 ) => {
     try {
-        console.log('the length of groupId is ' + formData.groupId.length);
-        console.log('proof...>>>' + formData.groupId + "<<<");
         console.table(formData);
         if (!formData.groupId.length === 1) {
             // we have groupId, it is edit
-            // delete formData._id;
-            edit = true;
-        }else{
+            
             edit = false;
+        }else{
+            edit = true;
         }
         //============================================
         // new call to AWS API gateway
@@ -247,12 +246,22 @@ export const addGroup = (formData, history, edit = false) => async (
         
 
         // send the object to get added to redux meeting.groups
-        if (res.status === '200'){
-            dispatch({
-                type: ADD_GROUP,
-                payload: res.data.Item,
-            });
-
+        if (res.status == 200){
+            console.log('edit: ' + edit);
+            if (edit){
+                console.log('action/group.js UPDATE_GROUP called');
+                console.log(res);
+                console.log('^^^^^^^^^^^^^^^^^^^^^^^^^^^');
+                dispatch({
+                    type: UPDATE_GROUP,
+                    payload: res.data.Item,
+                });
+            }else{
+                dispatch({
+                    type: ADD_GROUP,
+                    payload: res.data.Item,
+                });
+            }
         }
 
         dispatch(setAlert(edit ? 'Group Updated' : 'Group Added', 'success'));

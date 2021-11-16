@@ -3,6 +3,8 @@ import {
     REMOVE_DEFAULT_GROUP,
     ADD_DEFAULT_GROUP,
     CLEAR_CLIENT,
+    SET_MTG_CONFIGS,
+    TOGGLE_CONFIG,
 } from '../actions/types';
 
 const initialState = {
@@ -44,6 +46,16 @@ export default function (state = initialState, action) {
                 ...state,
                 defaultGroups: [...state.defaultGroups, payload],
             };
+        case SET_MTG_CONFIGS:
+            return {
+                ...state,
+                clientConfigs: payload,
+                loading: false,
+            };
+        case TOGGLE_CONFIG:
+            console.log('TOGGLE_CONFIG: NOT IMPLEMENTED YET')
+            console.log('payload : ' + payload);
+            return state;
         case CLEAR_CLIENT:
             return {
                 ...state,
