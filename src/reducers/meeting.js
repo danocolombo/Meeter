@@ -32,11 +32,20 @@ export default function (state = initialState, action) {
                 meetingLoading: false,
             };
         case ADD_GROUP:
-            return {
-                ...state,
-                groups: [payload, ...state.groups],
-                groupLoading: false,
-            };
+            console.log('length of groups: ' + state.groups.length);
+            if (state.groups.length > 0) {
+                return {
+                    ...state,
+                    groups: [payload, ...state.groups],
+                    groupLoading: false,
+                } 
+            } else {
+                return {
+                    ...state,
+                    groups: payload,
+                    groupLoading: false,
+                }
+            }
         case SET_GROUPS:
             return {
                 ...state,

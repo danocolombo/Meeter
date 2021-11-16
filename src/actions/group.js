@@ -244,7 +244,7 @@ export const addGroup = (formData, history, edit = false) => async (
         let api2use = process.env.REACT_APP_MEETER_API + '/groups';
         let res = await axios.post(api2use, body, config);
         
-
+console.log('YEP, this is where we go...');
         // send the object to get added to redux meeting.groups
         if (res.status == 200){
             console.log('edit: ' + edit);
@@ -253,7 +253,7 @@ export const addGroup = (formData, history, edit = false) => async (
                 console.log(res);
                 console.log('^^^^^^^^^^^^^^^^^^^^^^^^^^^');
                 dispatch({
-                    type: UPDATE_GROUP,
+                    type: ADD_GROUP,
                     payload: res.data.Item,
                 });
             }else{
