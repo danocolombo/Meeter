@@ -13,6 +13,7 @@ import {
 } from '../../actions/gathering';
 import { getGroups, clearGroups, deleteGroup, clearTmpGroup } from '../../actions/group';
 import GroupListItem from './GroupListItem';
+import GatheringGroupListItem from './GatheringGroupListItem';
 import { getMtgConfigs, getDefGroups } from '../../actions/admin';
 // import ServantSelect from './ServantSelect';
 // import GroupList from './GroupList';
@@ -775,14 +776,14 @@ const EditGathering = ({
             <div>
                 {groups &&
                     groups.map((group) => (
-                        
-                        <GroupListItem
-                            key={group.groupId}
-                            mid={group.meetingId}
-                            group={group}
-                            role={active.role}
-                            deleteResponse={handleGroupDeleteRequest}
-                        />
+                        <GatheringGroupListItem key={group.groupId} group={group}/>
+                        // <GroupListItem
+                        //     key={group.groupId}
+                        //     mid={group.meetingId}
+                        //     group={group}
+                        //     role={active.role}
+                        //     deleteResponse={handleGroupDeleteRequest}
+                        // />
     ))}
             </div>
         </Fragment>

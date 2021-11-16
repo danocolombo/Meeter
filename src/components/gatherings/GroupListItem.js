@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { deleteGroup } from '../../actions/group';
 
 const GroupListItem = ({
-    group: { groupId, gender, title, location, facilitator },
+    group: { groupId, gender, title, location, facilitator, attendance },
     role,
     deleteGroup,
 }) => {
@@ -19,7 +19,7 @@ const GroupListItem = ({
             <div className='GItem-Box'>
                 <div className={'GItem-Line1'}>
                     <Link to={`/EditGroup/${groupId}`}>
-                        {get1Line(gender, title, location, facilitator)}
+                        {get1Line(gender, title, attendance, location, facilitator)}
                     </Link>
                 </div>
                 <div className={'GItem-Line2'}>
@@ -39,7 +39,7 @@ const GroupListItem = ({
     );
     // <p style={{ 'padding-left': 10 }}>
 };
-function get1Line(g, t) {
+function get1Line(g, t, a) {
     let line1 = '';
     switch (g) {
         case 'f':
@@ -53,6 +53,9 @@ function get1Line(g, t) {
     }
     if (t.length > 0) {
         line1 = line1.concat(' ', t);
+    }
+    if (a > 0){
+        line1 = line1.concat(' ', a);
     }
     return [<span key='{line1}'>{line1}</span>];
 }

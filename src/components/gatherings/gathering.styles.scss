@@ -111,11 +111,56 @@ hr {
     font-weight: bold;
     color: green;
 }
+.group-list-component__wrapper {
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+    border: green double 2px;
+    width: 450px;
+    margin-top: 10px;
+    margin-bottom: 15px;
+    padding: 1ch 0 1ch 0;
+}
+.group-list-component__row {
+    display: flex;
+    justify-content: space-between;
+    margin: 0 1ch 0 1ch;
+}
+.group-list-compoment__nav-link {
+    text-decoration: none;
+    a:visited a:link {
+        color: blueviolet;
+    }
+    color: blueviolet;
+}
+.group-list-component__definitions {
+    font-size: 1em;
+    display: flex;
+}
+.group-list-component__gender {
+    font-size: 1em;
+    
+}
+.group-list-component__title {
+    font-size: 1em;
+}
+.group-list-component__attendance {
+    font-size: 1em;
+    padding: 0 1ch 0 1ch;
+    margin-left: 3ch;
+    background-color: green;
+    color: white;
+    border-radius: 10px;
+}
+.group-list-component__location {
+    font-size: 1em;
+}
 @media only screen and (min-width: 320px) and (max-width: 767px) {
     .gather-component__wrapper {
         box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
         border: green double 2px;
         width: 310px;
         margin-bottom: 15px;
+    }
+    .group-list-component__wrapper {
+        width: 310px;
     }
 }
