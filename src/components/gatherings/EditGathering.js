@@ -17,6 +17,7 @@ import GatheringGroupListItem from './GatheringGroupListItem';
 import { getMtgConfigs, getDefGroups } from '../../actions/admin';
 // import ServantSelect from './ServantSelect';
 // import GroupList from './GroupList';
+import moment from 'moment';
 import Spinner from '../layout/Spinner';
 
 const initialState = {
@@ -732,8 +733,8 @@ const EditGathering = ({
                         ></textarea>
                     </div>
                 </div>
-                {FormButtons(meetingDate)}
-
+                
+                <input type='submit' className='btn btn-primary my-1' />
                 {active.status === 'approved' &&
                 active.role !== 'guest' &&
                 meetingId ? (
@@ -825,77 +826,6 @@ const EditGathering = ({
             default:
                 return 'Please provide a description of the event';
         }
-    }
-    function FormButtons(meetingDate) {
-        var returnValue = [];
-        // var today = new Date();
-        // today.setHours(0, 0, 0, 0);
-        // var mDate = new Date(meetingDate.slice(0, 10));
-        // // console.log('mDate:' + mDate);
-        // // console.log('today:' + today);
-        // need to create special date for today starting at T00:00:00.000Z
-        let mDate = new Date(meetingDate.slice(0, 10));
-        let tDate = new Date();
-        let numMonth = tDate.getMonth() + 1;
-        let tmpMonth = numMonth.toString();
-        let tmpDay = tDate.getDate().toString();
-        let tMonth = '';
-        let tDay = '';
-        if (tmpMonth.length < 2) {
-            tMonth = '0' + tmpMonth;
-        } else {
-            tMonth = tmpMonth;
-        }
-        if (tmpDay.length < 2) {
-            tDay = '0' + tmpDay;
-        } else {
-            tDay = tmpDay;
-        }
-        let tYear = tDate.getFullYear();
-        let target = tYear + '-' + tMonth + '-' + tDay + 'T00:00:00.000Z';
-
-        if (meetingDate >= target) {
-            console.log('greater than or equal');
-            if (active.status === 'approved' && active.role !== 'guest') {
-                returnValue = [
-                    <>
-                        <input type='submit' className='btn btn-primary my-1' />
-                        <Button className='btn-light' href='/gatherings'>
-                            Go Back
-                        </Button>
-                    </>,
-                ];
-            } else {
-                returnValue = [
-                    <>
-                        <Button
-                            className='btn-light'
-                            href='/gatherings'
-                            variant='outlined'
-                        >
-                            Go Back
-                        </Button>
-                    </>,
-                ];
-            }
-        } else {
-            returnValue = [
-                <>
-                    <input type='submit' className='btn btn-primary my-1' />
-                    <Button
-                        className='btn-light'
-                        href='/gatherings/historyView'
-                    >
-                        Go Back
-                    </Button>
-                </>,
-            ];
-        }
-        return [
-            <>
-                <div>{returnValue}</div>
-            </>,
-        ];
     }
 
 };

@@ -63,9 +63,6 @@ export default function (state = initialState, action) {
                 groupLoading: false,
             };
         case UPDATE_GROUP:
-            console.log('in meeting reducer, UPDATE_GROUP\npayload: ' + JSON.stringify(payload));
-            // return state;
-        
             return {
                 ...state,
                 groups: state.groups.map((group) => 
