@@ -12,12 +12,9 @@ import {
     turnoffMeetingLoading,
 } from '../../actions/gathering';
 import { getGroups, clearGroups, deleteGroup, clearTmpGroup } from '../../actions/group';
-import GroupListItem from './GroupListItem';
 import GatheringGroupListItem from './GatheringGroupListItem';
 import { getMtgConfigs, getDefGroups } from '../../actions/admin';
-// import ServantSelect from './ServantSelect';
-// import GroupList from './GroupList';
-import moment from 'moment';
+
 import Spinner from '../layout/Spinner';
 
 const initialState = {
@@ -78,30 +75,7 @@ const EditGathering = ({
     history,
 }) => {
     const [formData, setFormData] = useState(initialState);
-    let groupUniqueId = null;
-    function getUniqueId() {
-        //this generates a unique ID based on this specific time
-        // Difining algorithm
-        const algorithm = 'aes-256-cbc';
-        // Defining key
-        const key = randomBytes(32);
-        // Defining iv
-        const iv = randomBytes(16);
-        let cipher = createCipheriv('aes-256-cbc', Buffer.from(key), iv);
-        //get the current time...
-        let n = Date.now();
-        let encrypted = cipher.update(n.toString());
-        // Using concatenation
-        encrypted = Buffer.concat([encrypted, cipher.final()]);
-        return encrypted.toString('hex');
-    }
-    // useEffect(() => {
-    //     getGroups(match.params.id);
-
-    //     // getclientConfigs(activeClient);
-    //     // getDefGroups(activeClient);
-    //     // console.log('just ran getGroups');
-    // }, [active.childrenCount, getGroups, getclientConfigs, match.params.id]);
+    
     useEffect(() => {
         // need to clear the redux meeting data
         clearTmpGroup();
@@ -116,7 +90,7 @@ const EditGathering = ({
             if(tmpGroup){
                 clearTmpGroup();
             }
-            if (!meetingLoading && match.params.id != 0) {
+            if (!meetingLoading && match.params.id !== 0) {
                 const gatheringData = { ...initialState };
                 for (const key in turnout) {
                     if (key in gatheringData) gatheringData[key] = turnout[key];
@@ -178,11 +152,6 @@ const EditGathering = ({
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
-    const onServantChange = (servantSelected) => {
-        //we are assuming Facilitator
-        setFormData({ ...formData, [facilitatorContact]: servantSelected });
-        console.log('back from servantSelect. value: ' + servantSelected);
-    };
     const onSubmit = (e) => {
         e.preventDefault();
         if (formData['meetingType'] === 'Testimony')
@@ -190,17 +159,9 @@ const EditGathering = ({
         createGathering(formData, groups, history, active.client, true);
         window.scrollTo(0, 0);
     };
-    const handleGroupDeleteRequest = (groupId2Delete) => {
-        //this is going to delete the selected request
-        //and update the groups for the meeting
-        console.log('back in EditGathering');
-        deleteGroup(groupId2Delete, meetingId);
-    };
 
-    const addDefaultGroupsToMeeting = () => {
-        
+    const addDefaultGroupsToMeeting = () => { 
         addDefaultGroups(turnout.meetingId, defaultGroups);
-        
     };  
     
     return meetingLoading ? (
@@ -778,14 +739,9 @@ const EditGathering = ({
                 {groups &&
                     groups.map((group) => (
                         <GatheringGroupListItem key={group.groupId} group={group}/>
-                        // <GroupListItem
-                        //     key={group.groupId}
-                        //     mid={group.meetingId}
-                        //     group={group}
-                        //     role={active.role}
-                        //     deleteResponse={handleGroupDeleteRequest}
-                        // />
-    ))}
+                        
+                    ))
+                }
             </div>
         </Fragment>
     );

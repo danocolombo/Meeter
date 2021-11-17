@@ -48,6 +48,7 @@ const MeetingConfig = ({
     useEffect(() => {
         getMtgConfigs();
         //now update formData from redux
+
         setFormData({
             ...formData,
             setupContact: client.clientConfigs.setupContact ? true : false,
@@ -73,8 +74,8 @@ const MeetingConfig = ({
             donations: client.clientConfigs.donations ? true : false,
             securityContact: client.clientConfigs.securityContact ? true : false,
             cleanupContact: client.clientConfigs.cleanupContact ? true : false,
-        });
-    }, [loading, getclientConfigs, client.clientConfigs]);
+        })
+    }, [ loading, getclientConfigs, client.clientConfigs]);
     // const [formData, setFormData] = useState(initialState);
     // const { donations, cafe, cafeFac } = formData;
 

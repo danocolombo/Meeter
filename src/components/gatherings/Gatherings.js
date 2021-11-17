@@ -5,15 +5,13 @@ import { connect } from 'react-redux';
 
 import Spinner from '../layout/Spinner';
 import GatheringItem from './GatheringItem';
-import { getGatherings, deleteGathering } from '../../actions/gathering';
+import { getGatherings } from '../../actions/gathering';
 
 const Gatherings = ({
     auth,
     getGatherings,
     gathering: { gatherings, hatherings, loading },
     meeter,
-    match,
-    historyView,
 }) => {
     useEffect(() => {
         getGatherings(meeter.active.client);

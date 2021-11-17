@@ -1,12 +1,10 @@
 import axios from 'axios';
 import { setAlert } from './alert';
 import {
-    //--- Beta5 updates
+    
     MEETING_ERROR,
     CLEAR_MEETING,
     SET_MEETING,
-    ADD_GROUP,
-    CLEAR_GROUPS,
     TURN_MEEETINGLOADING_OFF,
     DELETE_HATHERING,
     //---
@@ -18,7 +16,6 @@ import {
     UPDATE_GATHERING,
     GET_HATHERINGS,
     CLEAR_HATHERINGS,
-    GET_GROUPS,
 } from './types';
 
 export const getMeeting = (meetingId) => async (dispatch) => {
