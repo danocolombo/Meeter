@@ -2,7 +2,7 @@ import React, { Fragment, useState, useEffect } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { randomBytes, createCipheriv } from 'crypto';
+
 import PlaylistAddIcon from '@material-ui/icons/PlaylistAdd';
 import { Button } from '@material-ui/core';
 import {
@@ -81,7 +81,7 @@ const EditGathering = ({
         clearTmpGroup();
     }, []);
     useEffect(() => {
-        if (match.params.id != "0"){
+        if (match.params.id !== "0"){
             if (!turnout) {
                 getMeeting(match.params.id);
                 // clearGroups();

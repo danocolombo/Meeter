@@ -35,11 +35,18 @@ export default function (state = initialState, action) {
             if (state.groups.length > 0) {
                 // see if payload is existing
                 let positive = false;
+                // for (let i = 0; i < state.groups.length; i++){
+                //     if (state.groups[i].groupId === payload.groupId){
+                //         positive = true;
+                //         i = state.groups.length;
+                //     }
+                // }
                 state.groups.map( g => {
-                    if (g.groupId == payload.groupId) {
+                    if (g.groupId === payload.groupId) {
                         positive = true;
                     }
                 });
+
                 if (positive) {
                     //need to update exising redux
                     return {
@@ -62,14 +69,14 @@ export default function (state = initialState, action) {
             } else {
                 return {
                     ...state,
-                    groups: payload,
+                    groups: [payload],
                     groupLoading: false,
                 }
             }
-            return {
-                ...state,
-                defaultGroups: [...state.defaultGroups, payload],
-            };
+            // return {
+            //     ...state,
+            //     defaultGroups: [...state.defaultGroups, payload],
+            // };
         case SET_GROUPS:
             return {
                 ...state,

@@ -1,6 +1,6 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
-import { Link, NavLink } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { deleteGroup } from '../../actions/group';
 
@@ -47,14 +47,12 @@ const GatheringGroupListItem = ({
 
 GatheringGroupListItem.propTypes = {
     group: PropTypes.object.isRequired,
-    // auth: PropTypes.object.isRequired,
-    // // mid: PropTypes.object.isRequired,
     role: PropTypes.string.isRequired,
     deleteGroup: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({
-    // auth: state.auth,
+    
 });
 
 export default connect(mapStateToProps, { deleteGroup })(GatheringGroupListItem);

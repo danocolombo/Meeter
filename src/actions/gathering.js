@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { setAlert } from './alert';
 import {
-    
+    ADD_GROUP,
     MEETING_ERROR,
     CLEAR_MEETING,
     SET_MEETING,
@@ -484,10 +484,12 @@ export const addDefaultGroups = (meetingId, defGroups ) => async (dispatch) => {
             //=========================================
             // 2. add the group to redux
             //=========================================
-            // dispatch({
-            //     type: ADD_GROUP,
-            //     payload: res.data.Item
-            // });
+            // console.log('res\n' + JSON.stringify(res));
+            // console.log("DDDDDDDDDDDDDDDDDDDD");
+            dispatch({
+                type: ADD_GROUP,
+                payload: res.data.Item
+            });
         } else {
             console.log('error adding default group to meeting');
         }

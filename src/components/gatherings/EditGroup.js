@@ -2,15 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { FormLabel } from '@material-ui/core';
-import { FormControlLabel } from '@material-ui/core';
 import { TextField } from '@material-ui/core';
-import { Button } from '@material-ui/core';
 import { Input } from '@material-ui/core';
-import { RadioGroup } from '@material-ui/core';
-import { Radio } from '@material-ui/core';
 import { addGroup, getGroup, deleteGroup } from '../../actions/group';
-import meeting from '../../reducers/meeting';
 const initialState = {
     groupId: '',
     title: '',
@@ -37,7 +31,7 @@ const EditGroup = ({
         if (!turnout){
             console.log('we do not have turnout');   
         }
-        if (match.params.groupId == 0) {
+        if (match.params.groupId === "0") {
             const groupData = { ...initialState };
             setFormData(groupData);
             
@@ -45,9 +39,9 @@ const EditGroup = ({
         
     }, []);
     useEffect(() => {
-        if(match.params.groupId != 0 ){
+        if(match.params.groupId !== "0" ){
             if (!tmpGroup) {
-                if (match.params.groupId != 0) {
+                if (match.params.groupId !== "0") {
                     getGroup(match.params.groupId);
                 }
                 
@@ -66,12 +60,9 @@ const EditGroup = ({
                 setFormData({ ...formData, groupId: match.params.groupId });
         }
     },[tmpGroup, groupLoading]);
-    // }, [loading, getGroup, group]);
 
     const {
-        groupId,
         title,
-        meetingId,
         gender,
         location,
         facilitator,
@@ -80,22 +71,11 @@ const EditGroup = ({
         notes,
     } = formData;
 
-    const loadGroupFromRedux = (gid) => {
-        groups.map ((grp) => {
-            if (grp.groupId === gid){
-                return grp;
-            }
-        })
-
-    }
     const handleGenderChange = (e) => {
         console.log('btnValue:' + e.target.value);
         setFormData({ ...formData, gender: e.target.value });
     };
-    const handleChange = (event) => {
-        console.log('event:' + event);
-        setFormData({ ...formData, [event.target.name]: event.target.value });
-    };
+    
     const onChange = (e) => {
         setFormData({
             ...formData,
@@ -105,7 +85,7 @@ const EditGroup = ({
 
     const onSubmit = (e) => {
         e.preventDefault();
-        if (match.params.groupId == 0){
+        if (match.params.groupId === "0"){
             formData.groupId = "0";
         }
         formData.meetingId = turnout.meetingId;
@@ -228,20 +208,6 @@ const EditGroup = ({
             </form>
         </div>
     );
-    function getGroups() {
-        // return [<div>GROUP:{match.params.gid}</div>];
-        return 'T';
-    }
-    // function giveRequestDetails() {
-    //     return [
-    //         <div>
-    //             BURP
-    //             {/* Meeting:{match.params.mid}
-    //             <br />
-    //             Group: {match.params.gid} */}
-    //         </div>,
-    //     ];
-    // }
 };
 
 EditGroup.propTypes = {
