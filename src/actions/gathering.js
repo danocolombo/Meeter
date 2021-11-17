@@ -487,10 +487,10 @@ export const addDefaultGroups = (meetingId, defGroups ) => async (dispatch) => {
             //=========================================
             // 2. add the group to redux
             //=========================================
-            dispatch({
-                type: ADD_GROUP,
-                payload: res.data.Item
-            });
+            // dispatch({
+            //     type: ADD_GROUP,
+            //     payload: res.data.Item
+            // });
         } else {
             console.log('error adding default group to meeting');
         }

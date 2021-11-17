@@ -35,25 +35,14 @@ const EditGroup = ({
 
     useEffect(() => {
         if (!turnout){
-            console.log('we do not have turnout');
-            
-        }else{
-            console.log('still have it');
-            const util = require('util');
-
-            console.log('turnout:  \n' + util.inspect(turnout, { showHidden: false, depth: null }));
-
+            console.log('we do not have turnout');   
         }
         if (match.params.groupId == 0) {
-            console.log('turnout.meetingId: ' + turnout.meetingId);
-            console.log('it is zero');
             const groupData = { ...initialState };
             setFormData(groupData);
             
         }
-        else{
-            console.log('EditGroup.js - match.params.groupId: ' + match.params.groupId);
-        }
+        
     }, []);
     useEffect(() => {
         if(match.params.groupId != 0 ){

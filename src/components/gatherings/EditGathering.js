@@ -201,7 +201,7 @@ const EditGathering = ({
         
         addDefaultGroups(turnout.meetingId, defaultGroups);
         
-    };
+    };  
     
     return meetingLoading ? (
         <Spinner />

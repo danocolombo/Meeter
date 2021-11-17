@@ -21,7 +21,7 @@ const GatheringGroupListItem = ({
                             // gender === 'x' ? '' : null
                             )}
                         </NavLink>
-                        <div className={'group-list-component__attendance'}>{attendance}</div>
+                        <div className={ parseInt(attendance) > 0 ? 'group-list-component__attendance' : null}>{parseInt(attendance) > 0 ? attendance : null}</div>
                     </div>
                     <div>
                     {role !== 'guest' ? (

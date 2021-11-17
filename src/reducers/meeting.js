@@ -32,13 +32,33 @@ export default function (state = initialState, action) {
                 meetingLoading: false,
             };
         case ADD_GROUP:
-            console.log('length of groups: ' + state.groups.length);
             if (state.groups.length > 0) {
-                return {
-                    ...state,
-                    groups: [payload, ...state.groups],
-                    groupLoading: false,
-                } 
+                // see if payload is existing
+                let positive = false;
+                state.groups.map( g => {
+                    if (g.groupId == payload.groupId) {
+                        positive = true;
+                    }
+                });
+                if (positive) {
+                    //need to update exising redux
+                    return {
+                        ...state,
+                        groups: state.groups.map(g =>
+                          g.groupId === payload.groupId ? payload : g
+                        ),
+                        loading: false
+                      };
+                }else{
+                    // group just needs to be added to redux array
+                    return {
+                        ...state,
+                        groups: [...state.groups, payload],
+                        groupLoading: false,
+                    } 
+                }
+                
+                
             } else {
                 return {
                     ...state,
@@ -46,6 +66,10 @@ export default function (state = initialState, action) {
                     groupLoading: false,
                 }
             }
+            return {
+                ...state,
+                defaultGroups: [...state.defaultGroups, payload],
+            };
         case SET_GROUPS:
             return {
                 ...state,

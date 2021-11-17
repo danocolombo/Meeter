@@ -1,7 +1,7 @@
 import {
     // GET_GROUPS,
     GROUP_ERROR,
-    DELETE_GROUP,
+    // DELETE_GROUP,
     // DELETE_GROUPS,
     // ADD_GROUP,
     GET_GROUP,
@@ -11,7 +11,7 @@ import {
 } from '../actions/types';
 
 const initialState = {
-    groups: [],
+    // groups: [],
     tmpGroup: null,
     // loading: true,
     groupLoading: true,
@@ -65,12 +65,12 @@ export default function (state = initialState, action) {
         //         // groups: state.groups.filter((group) => group.id !== payload),
         //         groupLoading: false,
         //     };   
-        case DELETE_GROUP:
-            return {
-                ...state,
-                groups: state.groups.filter((group) => group.id !== payload),
-                groupLoading: false,
-            };
+        // case DELETE_GROUP:
+        //     return {
+        //         ...state,
+        //         groups: state.groups.filter((group) => group.id !== payload),
+        //         groupLoading: false,
+        //     };
         case GROUP_ERROR:
             //reducers:group
             return {
