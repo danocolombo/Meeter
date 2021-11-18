@@ -211,6 +211,74 @@ export const addGroup = (formData, history, edit = false) => async (
     dispatch
 ) => {
     try {
+        console.table(formData);
+        if (!formData.groupId.length === 1) {
+            // we have groupId, it is edit
+            
+            edit = false;
+        }else{
+            edit = true;
+        }
+        //============================================
+        // new call to AWS API gateway
+        //=============================================
+        const config = {
+            headers: {
+                'Access-Control-Allow-Headers':
+                    'Content-Type, x-auth-token, Access-Control-Allow-Headers',
+                'Content-Type': 'application/json',
+            },
+        };
+        
+        //==========================================================
+        // note for API, payload needs to be wrapped with Item
+        //==========================================================
+        let obj = { 
+            operation: 'addGroup',
+            payload: {
+                Item:  formData
+            }
+        };
+        let body = JSON.stringify(obj);
+
+        let api2use = process.env.REACT_APP_MEETER_API + '/groups';
+        let res = await axios.post(api2use, body, config);
+        
+
+        // send the object to get added to redux meeting.groups
+        if (res.status == 200){
+            console.log('edit: ' + edit);
+            if (edit){
+                console.log('action/group.js UPDATE_GROUP called');
+                console.log(res);
+                console.log('^^^^^^^^^^^^^^^^^^^^^^^^^^^');
+                dispatch({
+                    type: UPDATE_GROUP,
+                    payload: res.data.Item,
+                });
+            }else{
+                dispatch({
+                    type: ADD_GROUP,
+                    payload: res.data.Item,
+                });
+            }
+        }
+
+        dispatch(setAlert(edit ? 'Group Updated' : 'Group Added', 'success'));
+
+        const target = '/editGathering/' + formData.meetingId;
+        history.push(target);
+    } catch (err) {
+        console.log('actions/group.js addGroup');
+        return err;
+    }
+};
+
+
+export const addGroup57 = (formData, history, edit = false) => async (
+    dispatch
+) => {
+    try {
         // console.table(formData);
         // console.log('testing the length of groupIf: ' + formData.groupId.length);
         if (!formData.groupId.length === 1) {

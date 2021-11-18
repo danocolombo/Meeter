@@ -32,21 +32,27 @@ export default function (state = initialState, action) {
                 meetingLoading: false,
             };
         case ADD_GROUP:
+            // return {
+            //     ...state,
+            //     groups: [payload, ...state.groups],
+            //     groupLoading: false,
+            // };
+        // case WAS_ADD_GROUP:
             console.log('reducter/meeting -ADD_GROUP');
-            if (!state.groups === null && state.groups.length > 0) {
+            if (state.groups.length > 0) {
                 // see if payload is existing
                 let positive = false;
-                // for (let i = 0; i < state.groups.length; i++){
-                //     if (state.groups[i].groupId === payload.groupId){
-                //         positive = true;
-                //         i = state.groups.length;
-                //     }
-                // }
-                state.groups.map( g => {
-                    if (g.groupId === payload.groupId) {
+                for (let i = 0; i < state.groups.length; i++){
+                    if (state.groups[i].groupId === payload.groupId){
                         positive = true;
+                        i = state.groups.length;
                     }
-                });
+                }
+                // state.groups.map( g => {
+                //     if (g.groupId === payload.groupId) {
+                //         positive = true;
+                //     }
+                // });
 
                 if (positive) {
                     //need to update exising redux
@@ -59,9 +65,10 @@ export default function (state = initialState, action) {
                       };
                 }else{
                     // group just needs to be added to redux array
+                    // NOTE: this will overwrite all groups and only add payload
                     return {
                         ...state,
-                        groups: [...state.groups, payload],
+                        groups: {...state.groups, payload},
                         groupLoading: false,
                     } 
                 }
@@ -71,7 +78,7 @@ export default function (state = initialState, action) {
                 console.log('reducter/meeting; ADD_GROUP, no existing values');
                 return {
                     ...state,
-                    groups: [payload],
+                    groups: {payload},
                     groupLoading: false,
                 }
             }
