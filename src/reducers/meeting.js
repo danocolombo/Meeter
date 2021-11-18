@@ -32,7 +32,8 @@ export default function (state = initialState, action) {
                 meetingLoading: false,
             };
         case ADD_GROUP:
-            if (state.groups.length > 0) {
+            console.log('reducter/meeting -ADD_GROUP');
+            if (!state.groups === null && state.groups.length > 0) {
                 // see if payload is existing
                 let positive = false;
                 // for (let i = 0; i < state.groups.length; i++){
@@ -67,6 +68,7 @@ export default function (state = initialState, action) {
                 
                 
             } else {
+                console.log('reducter/meeting; ADD_GROUP, no existing values');
                 return {
                     ...state,
                     groups: [payload],
@@ -78,11 +80,26 @@ export default function (state = initialState, action) {
             //     defaultGroups: [...state.defaultGroups, payload],
             // };
         case SET_GROUPS:
-            return {
-                ...state,
-                groups: payload,
-                meetingLoading: false,
-            };
+            console.log('999999999999999999999');
+            console.log('inside meeting reducer / SET_GROUPS');
+            console.log(JSON.stringify(payload));
+            console.log('999999999999999999999');
+            // if (state.groups.length > 1){
+                state = {
+                    ...state,
+                    groups: payload.sort((a,b) => (a.gender > b.gender) ? 1 : ((b.gender > a.gender) ? -1 : 0)),
+                    meetingsLoading: false
+                }
+            // }else{
+            //     //cannot sort if just one value, so send back generic entry
+            //     state = {
+            //         ...state,
+            //         groups: [payload],
+            //         meetingsLoading: false
+            //     }
+
+            // }
+            return state;
         case CLEAR_MEETING:
             return {
                 ...state,

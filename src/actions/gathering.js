@@ -1,5 +1,7 @@
 import axios from 'axios';
+import moment from 'moment';
 import { setAlert } from './alert';
+
 import {
     ADD_GROUP,
     MEETING_ERROR,
@@ -89,10 +91,18 @@ export const getGatherings = (clientId) => async (dispatch) => {
             },
         };
         let client = clientId;
+        // let obj = {
+        //     operation: 'getFutureMeetings',
+        //     payload: {
+        //         clientId: client,
+        //     },
+        // };
+        let dateToday = moment().format("YYYY-MM-DD");
         let obj = {
-            operation: 'getFutureMeetings',
+            operation: 'getActiveMeetings',
             payload: {
                 clientId: client,
+                testDate: dateToday,
             },
         };
         let body = JSON.stringify(obj);
