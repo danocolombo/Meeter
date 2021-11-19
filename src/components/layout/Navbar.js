@@ -63,7 +63,7 @@ const Navbar = ({ auth, meeter, logout }) => {
                     </Fragment>
                 )}
                 <li>
-                    <a onClick={logout} href='/login'>
+                    <a onClick={logout} href='/'>
                         <i className='fas fa-sign-out-alt' />{' '}
                         <span className='hide-sm'>Logout</span>
                     </a>
