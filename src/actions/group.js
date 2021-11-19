@@ -248,45 +248,73 @@ export const addGroup = (formData, currentGroups, history, edit = false) => asyn
         let api2use = process.env.REACT_APP_MEETER_API + '/groups';
         let res = await axios.post(api2use, body, config);
         
-        //=========================================
-        // if there are no groups in REDUX insert
-        //=========================================
-        if (currentGroups.length < 1) {
-            console.log('THERE ARE NO EXISTING GROUPS IN REDUX');
+        //--------------------------------------------
+        // now get the current groups from ddb
+        //--------------------------------------------
+        // const config = {
+        //     headers: {
+        //         'Access-Control-Allow-Headers':
+        //             'Content-Type, x-auth-token, Access-Control-Allow-Headers',
+        //         'Content-Type': 'application/json',
+        //     },
+        // };
+        obj = {
+            operation: 'getGroupsByMeetingId',
+            payload: {
+                meetingId: formData.meetingId,
+            },
+        };
+        body = JSON.stringify(obj);
+
+        //let api2use = process.env.REACT_APP_MEETER_API + '/groups';
+        res = await axios.post(api2use, body, config);
+        if (res.data.status === '200') {
             dispatch({
-                type: MEETING_GROUP_INITIATE,
-                payload: res.data.Item,
+                type: SET_GROUPS,
+                payload: res.data.body,
             });
-        }else{
-            //=============================
-            // there are existing groups
-            //=============================
-            let existing = false;
-            for (let i = 0; i < currentGroups.length; i++){
-                console.log(formData.groupId + " vs " + currentGroups[i].groupId);
-                if (formData.groupId === currentGroups[i].groupId) {
-                    existing=true;
-                }
-            }
-            // currentGroups.map(grp => {
-            //     console.log(formData.groupId + " vs " + grp.groupId);
-            //     if (formData.groupId === grp.groupId) {existing=true}
-            // });
-            console.log(existing ? "UPDATE GROUP ENTRY" : "NEW ENTRY TO EXISTING GROUPS");
-            if (existing){
-                dispatch({
-                    type: MEETING_GROUP_UPDATE,
-                    payload: res.data.Item,
-                });
-            }else {
-                dispatch({
-                    
-                    type: MEETING_GROUP_INSERT,
-                    payload: res.data.Item,
-                });
-            }
-            
         }
+
+
+        // //=========================================
+        // // if there are no groups in REDUX insert
+        // //=========================================
+        // if (currentGroups.length < 1) {
+        //     console.log('THERE ARE NO EXISTING GROUPS IN REDUX');
+        //     dispatch({
+        //         type: MEETING_GROUP_INITIATE,
+        //         payload: res.data.Item,
+        //     });
+        // }else{
+        //     //=============================
+        //     // there are existing groups
+        //     //=============================
+        //     let existing = false;
+        //     for (let i = 0; i < currentGroups.length; i++){
+        //         console.log(formData.groupId + " vs " + currentGroups[i].groupId);
+        //         if (formData.groupId === currentGroups[i].groupId) {
+        //             existing=true;
+        //         }
+        //     }
+        //     // currentGroups.map(grp => {
+        //     //     console.log(formData.groupId + " vs " + grp.groupId);
+        //     //     if (formData.groupId === grp.groupId) {existing=true}
+        //     // });
+        //     console.log(existing ? "UPDATE GROUP ENTRY" : "NEW ENTRY TO EXISTING GROUPS");
+        //     if (existing){
+        //         dispatch({
+        //             type: MEETING_GROUP_UPDATE,
+        //             payload: res.data.Item,
+        //         });
+        //     }else {
+        //         dispatch({
+                    
+        //             type: MEETING_GROUP_INSERT,
+        //             payload: res.data.Item,
+        //         });
+        //     }
+            
+        // }
         // // send the object to get added to redux meeting.groups
         // if (res.status == 200){
         //     console.log('edit: ' + edit);

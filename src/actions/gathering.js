@@ -9,6 +9,7 @@ import {
     SET_MEETING,
     TURN_MEEETINGLOADING_OFF,
     DELETE_HATHERING,
+    SET_GROUPS,
     //---
     GET_GATHERINGS,
     GATHERING_ERROR,
@@ -496,10 +497,31 @@ export const addDefaultGroups = (meetingId, defGroups, existingGroups ) => async
             //=========================================
             // console.log('res\n' + JSON.stringify(res));
             // console.log("DDDDDDDDDDDDDDDDDDDD");
-            dispatch({
-                type: ADD_GROUP,
-                payload: res.data.Item
-            });
+            // dispatch({
+            //     type: ADD_GROUP,
+            //     payload: res.data.Item
+            // });
+            //-------------------------------------
+            // get resulting groups from ddb
+            //-------------------------------------
+            obj = {
+                operation: 'getGroupsByMeetingId',
+                payload: {
+                    meetingId: meetingId,
+                },
+            };
+            body = JSON.stringify(obj);
+    
+            //let api2use = process.env.REACT_APP_MEETER_API + '/groups';
+            res = await axios.post(api2use, body, config);
+            if (res.data.status === '200') {
+                dispatch({
+                    type: SET_GROUPS,
+                    payload: res.data.body,
+                });
+            }
+
+
         } else {
             console.log('error adding default group to meeting');
         }
