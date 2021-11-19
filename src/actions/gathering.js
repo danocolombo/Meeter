@@ -162,26 +162,6 @@ export const createGathering = (formData, groups = [], history, activeClient) =>
     dispatch
 ) => {
     try {
-        //================================================
-        // this will add (create) a new meeting
-        //================================================
-        // We don't always know what data we are going to
-        // get, but we will require certain fields
-        //================================================
-        /*
-            {'operation': 'createMeeting',
-               'payload': {
-                  'Item': {
-                    'clientId': 'test',
-                    'meetingDate': '2020-11-15',
-                    'meetingType': 'TEST',
-                    'supportRole': 
-                    'Dano','title': 'addTestMeeting'
-                  }
-                }
-            }
-        */
-        
         //==========================================
         // throw group information to database
         //==========================================
@@ -362,50 +342,7 @@ export const deleteGathering = (meeting2Delete, view) => async (dispatch) => {
         });
     }
 }
-// Delete GATHERING
-export const deleteGathering0 = (meeting2Delete) => async (dispatch) => {
-    try {
-        console.log("inside actions/gathering deleteGathering")
-        // // 5.6 AWS API call...
-        // const config = {
-        //     headers: {
-        //         'Access-Control-Allow-Headers':
-        //             'Content-Type, x-auth-token, Access-Control-Allow-Headers',
-        //         'Content-Type': 'application/json',
-        //     },
-        // };
-        // let obj = {
-        //     operation: 'deleteMeeting',
-        //     payload: {
-        //         Key: {
-        //             meetingId: meeting2Delete,
-        //         },
-        //     },
-        // };
-        // let body = JSON.stringify(obj);
 
-        // let api2use = process.env.REACT_APP_MEETER_API + '/meetings';
-        // let res = await axios.post(api2use, body, config);
-
-        // //const res = await axios.get(`/api/meeting/${id}`);
-
-
-        // dispatch({
-        //     type: DELETE_GATHERING,
-        //     payload: meeting2Delete,
-        // });
-
-        // dispatch(setAlert('Meeting Removed', 'success'));
-    } catch (err) {
-        dispatch({
-            type: GATHERING_ERROR,
-            payload: {
-                msg: err.response.statusText,
-                status: err.response.status,
-            },
-        });
-    }
-};
 
 // Delete group
 export const deleteGroup = (mtgId, groupId) => async (dispatch) => {
@@ -428,25 +365,7 @@ export const deleteGroup = (mtgId, groupId) => async (dispatch) => {
         });
     }
 };
-// Edit group
-export const editGroup = (mtgId, groupId) => async (dispatch) => {
-    // try {
-    //     const res = await axios.delete(`/api/meeting/${mtgId}/${groupId}`);
-    //     dispatch({
-    //         type: UPDATE_GATHERING,
-    //         payload: res.data
-    //     });
-    //     dispatch(setAlert('Group Removed', 'success'));
-    // } catch (err) {
-    //     dispatch({
-    //         type: GATHERING_ERROR,
-    //         payload: {
-    //             msg: err.response.statusText,
-    //             status: err.response.status
-    //         }
-    //     });
-    // }
-};
+
 
 export const createGroup = (formData, history, edit = false) => async (
     dispatch
@@ -492,15 +411,6 @@ export const addDefaultGroups = (meetingId, defGroups, existingGroups ) => async
         let res = await axios.post(api2use, body, config);
 
         if (res.status === 200) {
-            //=========================================
-            // 2. add the group to redux
-            //=========================================
-            // console.log('res\n' + JSON.stringify(res));
-            // console.log("DDDDDDDDDDDDDDDDDDDD");
-            // dispatch({
-            //     type: ADD_GROUP,
-            //     payload: res.data.Item
-            // });
             //-------------------------------------
             // get resulting groups from ddb
             //-------------------------------------
@@ -529,66 +439,4 @@ export const addDefaultGroups = (meetingId, defGroups, existingGroups ) => async
     });
     dispatch(setAlert('Default Groups Added', 'success'));
 };
-export const addDefaultGroupsOLD = (mid, defGroups) => async (dispatch) => {
-    
-    // going to need the meeting id. We will grab while rotating through...
-    
-    // // let axiosResponse = null;
-    // try {
-    //     const config = {
-    //         headers: {
-    //             'Content-Type': 'application/json',
-    //         },
-    //     };
-    //     for (let i = 0; i < defGroups.length; i++) {
-    //         //add each group to database
-    //         let obj = {
-    //             operation: 'addGroup',
-    //             payload: {
-    //                 Item: {
-    //                     clientId: grps2add[i].clientId,
-    //                     meetingId: mid,
-    //                     facilitator: grps2add[i].facilitator,
-    //                     gender: grps2add[i].gender,
-    //                     location: grps2add[i].location,
-    //                     title: grps2add[i].title,
-    //                 },
-    //             },
-    //         };
-    //         let body = JSON.stringify(obj);
 
-    //         let api2use = process.env.REACT_APP_MEETER_API + '/groups';
-    //         let res = await axios.post(api2use, body, config);
-    //     }
-    //     // now get the groups for the meeting and load in REDUX
-
-    //     let obj = {
-    //         operation: 'getGroupsByMeetingId',
-    //         payload: {
-    //             meetingId: mid,
-    //         },
-    //     };
-    //     let body = JSON.stringify(obj);
-
-    //     let api2use = process.env.REACT_APP_MEETER_API + '/groups';
-    //     let res = await axios.post(api2use, body, config);
-
-    //     dispatch({ type: CLEAR_GROUPS });
-    //     dispatch({
-    //         type: GET_GROUPS,
-    //         payload: res.data,
-    //         body,
-    //     });
-    // } catch (err) {
-    //     console.log('actions/gatherings.js addDefaultGroups');
-    //     console.error(err);
-    //     // dispatch({
-    //     //     //actions:getGroups
-    //     //     type: GROUP_ERROR,
-    //     //     payload: {
-    //     //         msg: err.response.statusText,
-    //     //         status: err.response.status,
-    //     //     },
-    //     // });
-    // }
-};
