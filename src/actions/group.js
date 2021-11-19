@@ -1,3 +1,4 @@
+import { ExitToAppSharp } from '@material-ui/icons';
 import axios from 'axios';
 import { setAlert } from './alert';
 import {
@@ -9,6 +10,9 @@ import {
     ADD_GROUP,
     UPDATE_GROUP,
     REMOVE_GROUP,
+    MEETING_GROUP_INITIATE,
+    MEETING_GROUP_UPDATE,
+    MEETING_GROUP_INSERT,
     //------------
     GROUP_ERROR,
     GET_GROUP,
@@ -207,7 +211,7 @@ export const clearGroup = () => async (dispatch) => {
 // redirect to the meeting after adding the group. The edit
 // flag will define if it is new group or updating existing. We
 // default to false, which means new, insert the group
-export const addGroup = (formData, history, edit = false) => async (
+export const addGroup = (formData, currentGroups, history, edit = false) => async (
     dispatch
 ) => {
     try {
@@ -244,25 +248,63 @@ export const addGroup = (formData, history, edit = false) => async (
         let api2use = process.env.REACT_APP_MEETER_API + '/groups';
         let res = await axios.post(api2use, body, config);
         
-
-        // send the object to get added to redux meeting.groups
-        if (res.status == 200){
-            console.log('edit: ' + edit);
-            if (edit){
-                console.log('action/group.js UPDATE_GROUP called');
-                console.log(res);
-                console.log('^^^^^^^^^^^^^^^^^^^^^^^^^^^');
+        //=========================================
+        // if there are no groups in REDUX insert
+        //=========================================
+        if (currentGroups.length < 1) {
+            console.log('THERE ARE NO EXISTING GROUPS IN REDUX');
+            dispatch({
+                type: MEETING_GROUP_INITIATE,
+                payload: res.data.Item,
+            });
+        }else{
+            //=============================
+            // there are existing groups
+            //=============================
+            let existing = false;
+            for (let i = 0; i < currentGroups.length; i++){
+                console.log(formData.groupId + " vs " + currentGroups[i].groupId);
+                if (formData.groupId === currentGroups[i].groupId) {
+                    existing=true;
+                }
+            }
+            // currentGroups.map(grp => {
+            //     console.log(formData.groupId + " vs " + grp.groupId);
+            //     if (formData.groupId === grp.groupId) {existing=true}
+            // });
+            console.log(existing ? "UPDATE GROUP ENTRY" : "NEW ENTRY TO EXISTING GROUPS");
+            if (existing){
                 dispatch({
-                    type: UPDATE_GROUP,
+                    type: MEETING_GROUP_UPDATE,
                     payload: res.data.Item,
                 });
-            }else{
+            }else {
                 dispatch({
-                    type: ADD_GROUP,
+                    
+                    type: MEETING_GROUP_INSERT,
                     payload: res.data.Item,
                 });
             }
+            
         }
+        // // send the object to get added to redux meeting.groups
+        // if (res.status == 200){
+        //     console.log('edit: ' + edit);
+        //     if (edit){
+        //         console.log('action/group.js UPDATE_GROUP called');
+        //         console.log(res);
+        //         console.log('^^^^^^^^^^^^^^^^^^^^^^^^^^^');
+        //         dispatch({
+        //             type: UPDATE_GROUP,
+        //             payload: res.data.Item,
+        //         });
+        //     }else{
+        //         dispatch({
+        //             type: ADD_GROUP,
+        //             payload: res.data.Item,
+        //         });
+        //     }
+        // }
 
         dispatch(setAlert(edit ? 'Group Updated' : 'Group Added', 'success'));
 

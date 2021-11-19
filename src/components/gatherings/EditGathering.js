@@ -161,7 +161,7 @@ const EditGathering = ({
     };
 
     const addDefaultGroupsToMeeting = () => { 
-        addDefaultGroups(turnout.meetingId, defaultGroups);
+        addDefaultGroups(turnout.meetingId, defaultGroups, groups);
     };  
     
     return meetingLoading ? (

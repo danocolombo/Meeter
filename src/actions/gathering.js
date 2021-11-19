@@ -453,7 +453,7 @@ export const createGroup = (formData, history, edit = false) => async (
     try {
     } catch (err) {}
 };
-export const addDefaultGroups = (meetingId, defGroups ) => async (dispatch) => {
+export const addDefaultGroups = (meetingId, defGroups, existingGroups ) => async (dispatch) => {
     //===================================
     // for each default group, add it
     //===================================

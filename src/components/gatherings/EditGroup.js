@@ -89,7 +89,7 @@ const EditGroup = ({
             formData.groupId = "0";
         }
         formData.meetingId = turnout.meetingId;
-        addGroup(formData, history, true);
+        addGroup(formData, groups, history, true);
 
         window.scrollTo(0, 0);
     };

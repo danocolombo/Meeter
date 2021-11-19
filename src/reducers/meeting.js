@@ -7,6 +7,9 @@ import {
     REMOVE_GROUP,
     TURN_MEEETINGLOADING_OFF,
     UPDATE_GROUP,
+    MEETING_GROUP_INITIATE,
+    MEETING_GROUP_UPDATE,
+    MEETING_GROUP_INSERT
 } from '../actions/types';
 
 const initialState = {
@@ -20,6 +23,20 @@ export default function (state = initialState, action) {
     const { type, payload } = action;
 
     switch (type) {
+        case MEETING_GROUP_INSERT:
+            console.log('MEETING_GROUP_INSERT');
+            return state;
+        case MEETING_GROUP_UPDATE:
+            console.log('MEETING_GROUP_UPDATE');
+            return state;
+        case MEETING_GROUP_INITIATE:
+            console.log('MEETING_GROUP_INITIATE');
+            return {
+                ...state,
+                groups: payload,
+                groupLoading: false,
+            };
+
         case TURN_MEEETINGLOADING_OFF:
             return {
                 ...state,
