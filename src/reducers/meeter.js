@@ -1,8 +1,6 @@
 import {
     SET_ACTIVES,
-    CLEAR_ACTIVES,
     SET_CLIENT_USERS,
-    CLEAR_CLIENT_USERS,
     SET_DEFAULT_GROUPS,
     REMOVE_CLIENT_USER,
     ADMIN_ERROR,
@@ -30,13 +28,6 @@ export default function (state = initialState, action) {
                 active: payload,
                 loading: false,
             };
-        case CLEAR_ACTIVES:
-            return {
-                ...state,
-                active: null,
-                loading: false,
-            };
-        
         case SET_CLIENT_USERS:
             return {
                 ...state,
@@ -51,7 +42,6 @@ export default function (state = initialState, action) {
                 ),
                 loading: false,
             };
-        case CLEAR_CLIENT_USERS:
         case ADMIN_ERROR:
             return {
                 ...state,

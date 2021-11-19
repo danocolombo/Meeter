@@ -2,18 +2,11 @@ import { ExitToAppSharp } from '@material-ui/icons';
 import axios from 'axios';
 import { setAlert } from './alert';
 import {
-    //----Base5---
-    CLEAR_GROUPS,
     SET_GROUPS,
     SET_TMP_GROUP,
+    CLEAR_GROUPS,
     CLEAR_TMP_GROUP,
-    ADD_GROUP,
-    UPDATE_GROUP,
     REMOVE_GROUP,
-    MEETING_GROUP_INITIATE,
-    MEETING_GROUP_UPDATE,
-    MEETING_GROUP_INSERT,
-    //------------
     GROUP_ERROR,
     GET_GROUP,
     CLEAR_GROUP,
@@ -268,78 +261,6 @@ export const addGroup = (formData, currentGroups, history, edit = false) => asyn
                 payload: res.data.body,
             });
         }
-        dispatch(setAlert(edit ? 'Group Updated' : 'Group Added', 'success'));
-
-        const target = '/editGathering/' + formData.meetingId;
-        history.push(target);
-    } catch (err) {
-        console.log('actions/group.js addGroup');
-        return err;
-    }
-};
-
-
-export const addGroup57 = (formData, history, edit = false) => async (
-    dispatch
-) => {
-    try {
-        // console.table(formData);
-        // console.log('testing the length of groupIf: ' + formData.groupId.length);
-        if (!formData.groupId.length === 1) {
-            // groupId is longer than 1 character
-            edit = true;
-        }else{
-            edit = false;
-        }
-        //============================================
-        // new call to AWS API gateway
-        //=============================================
-        const config = {
-            headers: {
-                'Access-Control-Allow-Headers':
-                    'Content-Type, x-auth-token, Access-Control-Allow-Headers',
-                'Content-Type': 'application/json',
-            },
-        };
-        
-        //==========================================================
-        // note for API, payload needs to be wrapped with Item
-        //==========================================================
-        let obj = { 
-            operation: 'addGroup',
-            payload: {
-                Item:  formData
-            }
-        };
-        let body = JSON.stringify(obj);
-
-        let api2use = process.env.REACT_APP_MEETER_API + '/groups';
-        let res = await axios.post(api2use, body, config);
-        dispatch({
-            type: ADD_GROUP,
-            payload: res.data.Item,
-        });
-        
-// console.log('YEP, this is where we go...');
-//         // send the object to get added to redux meeting.groups
-//         if (res.status == 200){
-//             console.log('edit: ' + edit);
-//             if (edit){
-//                 console.log('action/group.js UPDATE_GROUP called');
-//                 console.log(res);
-//                 console.log('^^^^^^^^^^^^^^^^^^^^^^^^^^^');
-//                 dispatch({
-//                     type: ADD_GROUP,
-//                     payload: res.data.Item,
-//                 });
-//             }else{
-//                 dispatch({
-//                     type: ADD_GROUP,
-//                     payload: res.data.Item,
-//                 });
-//             }
-//         }
-
         dispatch(setAlert(edit ? 'Group Updated' : 'Group Added', 'success'));
 
         const target = '/editGathering/' + formData.meetingId;
