@@ -1,72 +1,52 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
-import moment from 'moment';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { deleteGathering } from '../../actions/gathering';
-
+import './gathering.styles.scss';
 const GatheringItem = ({
-    deleteGathering,
+    
     gathering: {
-        id,
+        meetingId,
         meetingDate,
         title,
-        supportRole,
-        facilitator,
-        attendance,
-        newcomers,
+        supportContact,
+        facilitatorContact,
+        attendanceCount,
+        newcomersCount,
         meetingType,
+        
     },
+    deleteGathering,
+    presentView,
 }) => (
-    <Fragment>
-        <div className={meetingType !== 'Other' ? 'PersonBox' : 'OtherBox'}>
-            <Fragment>
-                <div className='DeleteTarget'>
-                    <a
-                        id='deleteGathering'
-                        title='-'
-                        href='/#'
-                        onClick={() => deleteGathering(id)}
-                    >
-                        <i className='fas fa-minus-circle'></i>
-                    </a>
-                </div>
-            </Fragment>
-            <div>
-                <Link to={`/EditGathering/${id}`}>
-                    {moment.utc(meetingDate).format('ll')}
-                </Link>
-                <br />
-                {meetingType}: {title}
-                {supportRole && (
-                    <Fragment>
-                        <br />
-                        {supportRole}
-                    </Fragment>
-                )}
-                {attendance > 0 && (
-                    <Fragment>
-                        <br />
-                        Attendance: {attendance}
-                    </Fragment>
-                )}
-                {newcomers > 0 && (
-                    <Fragment>
-                        <br />
-                        Newcomers: {newcomers}
-                    </Fragment>
-                )}
-                <br />
-                <Link to={`/EditGathering/${id}`}>
+    <div className="gather-component__wrapper">
+        <div className='gather-component__header-row'>
+            <div className='gather-component__date'>{meetingDate}</div>
+            <div className='gather-component__trash-style'><i
+                    className={'fa fa-trash my'}
+                    onClick={() => deleteGathering(meetingId, presentView)}
+                ></i>
+            </div>
+        </div>
+        <div className='gather-component__second-row'>
+            <div className="gather-component__type-style">{meetingType}</div>
+            <div className='gather-component__title-style'>
+                {title}
+            </div>
+            <br />
+            <div className='gather-component__edit-style'>
+                <Link to={`/EditGathering/${meetingId}`}>
                     <i className='fas fa-pen'></i>
                 </Link>
             </div>
         </div>
-    </Fragment>
+    </div>
 );
 
 GatheringItem.propTypes = {
     gathering: PropTypes.object.isRequired,
+    presentView: PropTypes.bool.isRequired,
     deleteGathering: PropTypes.func.isRequired,
 };
 

@@ -1,74 +1,39 @@
 import React, { Fragment, useState, useEffect } from 'react';
-import { withRouter } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+
 import PlaylistAddIcon from '@material-ui/icons/PlaylistAdd';
-import SettingsIcon from '@material-ui/icons/Settings';
 import { Button } from '@material-ui/core';
 import {
     createGathering,
-    getGathering,
+    getMeeting,
     addDefaultGroups,
-} from '../../actions/gathering4';
-import { deleteGroup } from '../../actions/group4';
-import GroupListItem from './GroupListItem';
-import { getMtgConfigs, getDefGroups } from '../../actions/admin4';
+    turnoffMeetingLoading,
+} from '../../actions/gathering';
+import { getGroups, clearGroups, deleteGroup, clearTmpGroup } from '../../actions/group';
+import GatheringGroupListItem from './GatheringGroupListItem';
+import { getMtgConfigs, getDefGroups } from '../../actions/admin';
+
 import Spinner from '../layout/Spinner';
 
 const initialState = {
-    _id: '',
-    tenantId: '',
-    meetingId: '',
-    meetingDate: '',
-    facilitator: '',
-    meetingType: '',
-    supportRole: '',
-    title: '',
-    worship: '',
-    avContact: '',
-    attendance: 0,
-    newcomers: 0,
-    donations: 0,
-    meal: '',
-    mealCoordinator: 'TBD',
-    mealCnt: 0,
-    cafeCoordinator: 'TBD',
-    cafeCount: 0,
-    greeterContact1: '',
-    greeterContact2: '',
-    resourceContact: '',
-    announcementsContact: '',
-    closingContact: '',
-    securityContact: '',
-    setupContact: '',
-    cleanupContact: '',
-    transportationContact: '',
-    transportationCount: 0,
-    nurseryContact: '',
-    nursery: 0,
-    childrenContact: '',
-    children: 0,
-    youthContact: '',
-    youth: 0,
-    notes: '',
-};
-const initialMtgState = {
     meetingId: '',
     clientId: '',
     meetingDate: '',
-    facilitator: '',
+    facilitatorContact: '',
     meetingType: '',
-    supportRole: '',
+    supportContact: '',
     title: '',
     worship: '',
     avContact: '',
-    attendance: 0,
-    newcomers: 0,
+    attendanceCount: 0,
+    newcomersCount: 0,
     donations: 0,
     meal: '',
-    mealCoordinator: 'TBD',
-    mealCnt: 0,
-    cafeCoordinator: 'TBD',
+    mealContact: 'TBD',
+    mealCount: 0,
+    cafeContact: 'TBD',
     cafeCount: 0,
     greeterContact1: '',
     greeterContact2: '',
@@ -81,61 +46,85 @@ const initialMtgState = {
     transportationContact: '',
     transportationCount: 0,
     nurseryContact: '',
-    nursery: 0,
+    nurseryCount: 0,
     childrenContact: '',
-    children: 0,
+    childrenCount: 0,
     youthContact: '',
-    youth: 0,
+    youthCount: 0,
     notes: '',
 };
+
 const EditGathering = ({
     // gathering: { gathering, servants, loading, newGathering },
-    meeter,
-    meeting: { turnout, groups, meetingLoading },
+    // auth: { activeClient, activeRole, activeStatus },
+    //group: { groups, groupLoading },
+    meeter: {active },
+    meeting: { turnout, groups, meetingLoading},
+    group: { tmpGroup},
+    client: { defaultGroups, clientConfigs },
+    // clientConfigs,
     createGathering,
-    getGathering,
-    getMtgConfigs,
-    getDefGroups,
+    getMeeting,
+    getGroups,
+    clearTmpGroup,
+    turnoffMeetingLoading,
+    clearGroups,
     addDefaultGroups,
+    getclientConfigs,
     match,
     history,
 }) => {
-    const [formData, setFormData] = useState(initialMtgState);
+    const [formData, setFormData] = useState(initialState);
+    
     useEffect(() => {
-        getMtgConfigs(meeter.active.client);
-        getDefGroups(meeter.active.client);
-    }, [meeter.active.client, getMtgConfigs, getDefGroups, match.params.id]);
+        // need to clear the redux meeting data
+        clearTmpGroup();
+    }, []);
     useEffect(() => {
-        if (!turnout && match.params.id !== '0') {
-            getGathering(match.params.id, meeter.active.client);
-        }
-        if (!meetingLoading) {
-            const turnoutData = { ...initialState };
-            for (const key in turnout) {
-                if (key in turnoutData) turnoutData[key] = turnout[key];
+        if (match.params.id !== "0"){
+            if (!turnout) {
+                getMeeting(match.params.id);
+                // clearGroups();
+                getGroups(match.params.id);
             }
-            setFormData(turnoutData);
+            if(tmpGroup){
+                clearTmpGroup();
+            }
+            if (!meetingLoading && match.params.id !== 0) {
+                const gatheringData = { ...initialState };
+                for (const key in turnout) {
+                    if (key in gatheringData) gatheringData[key] = turnout[key];
+                }
+                setFormData(gatheringData);
+            }
+
+            if (meetingId) setFormData({ ...formData, meetingId: meetingId });
+        }else{
+            // this is new meeting
+            setFormData(initialState);
+            // there is no meeting to get, so need to flip meetingLoading to false
+            turnoffMeetingLoading();
         }
-    }, [meetingLoading, turnout, meeter.active.client]);
+    }, [turnout, tmpGroup, groups]);
+    // }, [meetingLoading, turnout, active.client]);
 
     const {
-        _id,
-        tenantId,
         meetingId,
+        clientId,
         meetingDate,
-        facilitator,
+        facilitatorContact,
         meetingType,
-        supportRole,
+        supportContact,
         title,
         worship,
         avContact,
-        attendance,
-        newcomers,
+        attendanceCount,
+        newcomersCount,
         donations,
         meal,
-        mealCoordinator,
-        mealCnt,
-        cafeCoordinator,
+        mealContact,
+        mealCount,
+        cafeContact,
         cafeCount,
         greeterContact1,
         greeterContact2,
@@ -148,64 +137,33 @@ const EditGathering = ({
         transportationContact,
         transportationCount,
         nurseryContact,
-        nursery,
+        nurseryCount,
         childrenContact,
-        children,
+        childrenCount,
         youthContact,
-        youth,
+        youthCount,
         notes,
     } = formData;
 
     const onChange = (e) => {
+        if (e.target === 'phone') {
+            console.log('phonephonephonephone');
+        }
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
-    const onServantChange = (servantSelected) => {
-        //we are assuming Facilitator
-        setFormData({ ...formData, [facilitator]: servantSelected });
-        // console.log('back from servantSelect. value: ' + servantSelected);
-    };
     const onSubmit = (e) => {
         e.preventDefault();
         if (formData['meetingType'] === 'Testimony')
             delete formData['supportRole'];
-        createGathering(formData, history, meeter.active.client, true);
+        createGathering(formData, groups, history, active.client, true);
         window.scrollTo(0, 0);
     };
-    const handleGroupDeleteRequest = (gid) => {
-        //this is going to delete the selected request
-        //and update the groups for the meeting
-        // console.log('back in EditGathering');
-        deleteGroup(gid, meetingId);
-    };
 
-    const addDefaultGroupsToMeeting = () => {
-        // console.log('in EditGatherings :: addDefaultGroupsToMeeting');
-
-        let dgroups = meeter.defaultGroups;
-        let groupsToAdd = [];
-        // let newBatch = [];
-        let result = dgroups.map((g) => {
-            let aGroup = {};
-            aGroup._id = g._id;
-            aGroup.cid = meeter.active.client;
-            aGroup.mid = match.params.id;
-            aGroup.gender = g.gender;
-            aGroup.title = g.title;
-            if (g.location) aGroup.location = g.location;
-            if (g.facilitator) aGroup.facilitator = g.facilitator;
-            groupsToAdd.push(aGroup);
-        });
-        addDefaultGroups(groupsToAdd);
-    };
-
-    //-----------------------------------------------------
-    // this next couple of lines gives the ability to see configs
-    // const util = require('util');
-    // console.log(
-    //     'meeter.mtgConfigs: ' +
-    //         util.inspect(meeter.mtgConfigs, { showHidden: false, depth: null })
-    // );
+    const addDefaultGroupsToMeeting = () => { 
+        addDefaultGroups(turnout.meetingId, defaultGroups, groups);
+    };  
+    
     return meetingLoading ? (
         <Spinner />
     ) : (
@@ -231,17 +189,18 @@ const EditGathering = ({
                         onChange={(e) => onChange(e)}
                     />
                 </div>
+                <div className='form-group'>
                 <h4>Facilitator</h4>
-                <span className='medium-text'>medium text</span>
                 <input
                     type='text'
-                    className='medium-text'
+                    className='x-large'
                     placeholder='Responsible party for meeting'
-                    id='facilitator'
-                    name='facilitator'
-                    value={facilitator}
+                    id='facilitatorContact'
+                    name='facilitatorContact'
+                    value={facilitatorContact}
                     onChange={onChange}
                 />
+                </div>
                 <div className='form-group'>
                     <h4>Meeting Type **</h4>
                     <select
@@ -250,12 +209,12 @@ const EditGathering = ({
                         value={meetingType}
                         onChange={(e) => onChange(e)}
                     >
-                        <option value='0'>** Select the type of meeting</option>
-                        <option value='Lesson'>Lesson</option>
-                        <option value='Testimony'>Testimony</option>
-                        <option value='Special'>Special</option>
-                        <option value='Teaching'>Teaching</option>
-                        <option value='Other'>Other</option>
+                        <option key='0' value='0'>** Select the type of meeting</option>
+                        <option key='1' value='Lesson'>Lesson</option>
+                        <option key='2' value='Testimony'>Testimony</option>
+                        <option key='3' value='Special'>Special</option>
+                        <option key='4' value='Teaching'>Teaching</option>
+                        <option key='5' value='Other'>Other</option>
                     </select>
                     <small className='form-text'>
                         What kind of meeting is this?
@@ -265,7 +224,6 @@ const EditGathering = ({
                     {displayTitle()}
                     <input
                         type='text'
-                        className='standard-text'
                         placeholder={diplayTitleHint()}
                         id='title'
                         name='title'
@@ -279,23 +237,11 @@ const EditGathering = ({
                         <input
                             type='text'
                             placeholder=''
-                            id='supportRole'
-                            name='supportRole'
-                            value={supportRole}
+                            id='supportContact'
+                            name='supportContact'
+                            value={supportContact}
                             onChange={onChange}
                         />
-
-                        {/* <select
-                            value={supportRole}
-                            name='supportRole'
-                            onChange={onChange}
-                        >
-                            {servants.map((s) => (
-                                <option key={s.name} value={s.name}>
-                                    {s.name}
-                                </option>
-                            ))}
-                        </select> */}
                         <small className='form-text'>
                             Who is teaching the lesson?
                         </small>
@@ -303,7 +249,7 @@ const EditGathering = ({
                 )}
                 {/* SHOW AVContact TEXTBOX IF CONFIGURED        */}
                 {/* --- ???????????????????????????? ----- */}
-                {meeter.mtgConfigs['avContact'] === true ? (
+                {clientConfigs['avContact'] === true ? (
                     <div className='form-group'>
                         <h4>Audio/Visual Contact</h4>
                         <input
@@ -333,9 +279,9 @@ const EditGathering = ({
                     <h4>Attendance</h4>
                     <input
                         type='number'
-                        id='attendance'
-                        name='attendance'
-                        value={attendance}
+                        id='attendanceCount'
+                        name='attendanceCount'
+                        value={attendanceCount}
                         min='0'
                         max='200'
                         onChange={(e) => onChange(e)}
@@ -347,9 +293,9 @@ const EditGathering = ({
                 <h4>Newcomers</h4>
                 <input
                     type='number'
-                    id='newcomers'
-                    name='newcomers'
-                    value={newcomers}
+                    id='newcomersCount'
+                    name='newcomersCount'
+                    value={newcomersCount}
                     min='0'
                     max='200'
                     onChange={(e) => onChange(e)}
@@ -357,7 +303,7 @@ const EditGathering = ({
                 <small className='form-text'>Number of newcomers?</small>
                 {/* SHOW DONATIONS IF CONFIGURED        */}
                 {/* --- ???????????????????????????? ----- */}
-                {meeter.mtgConfigs['donations'] === true ? (
+                {clientConfigs['donations'] === true ? (
                     <div className='form-group'>
                         <h4>Donations</h4>
                         <input
@@ -377,7 +323,7 @@ const EditGathering = ({
                 ) : null}
                 {/* SHOW MEAL DESCRIPTION IF CONFIGURED        */}
                 {/* --- ???????????????????????????? ----- */}
-                {meeter.mtgConfigs['meal'] === true ? (
+                {clientConfigs['meal'] === true ? (
                     <div className='form-group'>
                         <h4>Meal</h4>
                         <input
@@ -393,29 +339,29 @@ const EditGathering = ({
                 ) : null}
                 {/* SHOW MEAL COORDINATOR IF CONFIGURED        */}
                 {/* --- ???????????????????????????? ----- */}
-                {meeter.mtgConfigs['mealCoordinator'] === true ? (
+                {clientConfigs['mealCoordinator'] === true ? (
                     <div className='form-group'>
                         <h4>Meal Contact</h4>
                         <input
                             type='text'
                             placeholder=''
-                            id='mealCoordinator'
-                            name='mealCoordinator'
-                            value={mealCoordinator}
+                            id='mealContact'
+                            name='mealContact'
+                            value={mealContact}
                             onChange={onChange}
                         />
                     </div>
                 ) : null}
                 {/* SHOW MEAL COUNT IF CONFIGURED        */}
                 {/* --- ???????????????????????????? ----- */}
-                {meeter.mtgConfigs['mealCnt'] === true ? (
+                {clientConfigs['mealCnt'] === true ? (
                     <div className='form-group'>
                         <h4>Meal Count</h4>
                         <input
                             type='number'
-                            id='mealCnt'
-                            name='mealCnt'
-                            value={mealCnt}
+                            id='mealCount'
+                            name='mealCount'
+                            value={mealCount}
                             min='0'
                             max='200'
                             onChange={(e) => onChange(e)}
@@ -427,15 +373,15 @@ const EditGathering = ({
                 ) : null}
                 {/* SHOW CAFE COORDINATOR IF CONFIGURED        */}
                 {/* --- ???????????????????????????? ----- */}
-                {meeter.mtgConfigs['cafeCoordinator'] === true ? (
+                {clientConfigs['cafeCoordinator'] === true ? (
                     <div className='form-group'>
                         <h4>Cafe Coordinator</h4>
                         <input
                             type='text'
                             placeholder=''
-                            id='cafeCoordinator'
-                            name='cafeCoordinator'
-                            value={cafeCoordinator}
+                            id='cafeContact'
+                            name='cafeContact'
+                            value={cafeContact}
                             onChange={onChange}
                         />
                         <small className='form-text'>Cafe coordinator</small>
@@ -443,7 +389,7 @@ const EditGathering = ({
                 ) : null}
                 {/* SHOW CAFE COUNT IF CONFIGURED        */}
                 {/* --- ???????????????????????????? ----- */}
-                {meeter.mtgConfigs['cafeCount'] === true ? (
+                {clientConfigs['cafeCount'] === true ? (
                     <div className='form-group'>
                         <h4>Cafe Attendees</h4>
                         <input
@@ -462,7 +408,7 @@ const EditGathering = ({
                 ) : null}
                 {/* SHOW GREETER 1 IF CONFIGURED        */}
                 {/* --- ???????????????????????????? ----- */}
-                {meeter.mtgConfigs['greeterContact1'] === true ? (
+                {clientConfigs['greeterContact1'] === true ? (
                     <div className='form-group'>
                         <h4>Greeter</h4>
                         <input
@@ -478,7 +424,7 @@ const EditGathering = ({
                 ) : null}
                 {/* SHOW GREETER 2 IF CONFIGURED        */}
                 {/* --- ???????????????????????????? ----- */}
-                {meeter.mtgConfigs['greeterContact2'] === true ? (
+                {clientConfigs['greeterContact2'] === true ? (
                     <div className='form-group'>
                         <h4>Greeter</h4>
                         <input
@@ -494,7 +440,7 @@ const EditGathering = ({
                 ) : null}
                 {/* SHOW RESOURCES CONTACT IF CONFIGURED        */}
                 {/* --- ???????????????????????????? ----- */}
-                {meeter.mtgConfigs['resourceContact'] === true ? (
+                {clientConfigs['resourceContact'] === true ? (
                     <div className='form-group'>
                         <h4>Resources Contact</h4>
                         <input
@@ -510,7 +456,7 @@ const EditGathering = ({
                 ) : null}
                 {/* SHOW ANNOUNCEMENTS CONTACT IF CONFIGURED        */}
                 {/* --- ???????????????????????????? ----- */}
-                {meeter.mtgConfigs['announcementsContact'] === true ? (
+                {clientConfigs['announcementsContact'] === true ? (
                     <div className='form-group'>
                         <h4>Announcements Contact</h4>
                         <input
@@ -528,7 +474,7 @@ const EditGathering = ({
                 ) : null}
                 {/* SHOW CLOSING CONTACT IF CONFIGURED        */}
                 {/* --- ???????????????????????????? ----- */}
-                {meeter.mtgConfigs['closingContact'] === true ? (
+                {clientConfigs['closingContact'] === true ? (
                     <div className='form-group'>
                         <h4>Closing Contact</h4>
                         <input
@@ -544,7 +490,7 @@ const EditGathering = ({
                 ) : null}
                 {/* SHOW SECURITY IF CONFIGURED        */}
                 {/* --- ???????????????????????????? ----- */}
-                {meeter.mtgConfigs['securityContact'] === true ? (
+                {clientConfigs['securityContact'] === true ? (
                     <div className='form-group'>
                         <h4>Security Coordinator</h4>
                         <input
@@ -563,7 +509,7 @@ const EditGathering = ({
                 <hr className='group-ruler' />
                 {/* SHOW NURSERY COORDINATOR IF CONFIGURED        */}
                 {/* --- ???????????????????????????? ----- */}
-                {meeter.mtgConfigs['nurseryContact'] === true ? (
+                {clientConfigs['nurseryContact'] === true ? (
                     <div className='form-group'>
                         <h4>Nursery Contact</h4>
                         <input
@@ -579,14 +525,14 @@ const EditGathering = ({
                 ) : null}
                 {/* SHOW NURSERY COUNT IF CONFIGURED        */}
                 {/* --- ???????????????????????????? ----- */}
-                {meeter.mtgConfigs['nursery'] === true ? (
+                {clientConfigs['nursery'] === true ? (
                     <div className='form-group'>
                         <h4>Nursery Count</h4>
                         <input
                             type='number'
-                            id='nursery'
-                            name='nursery'
-                            value={nursery}
+                            id='nurseryCount'
+                            name='nurseryCount'
+                            value={nurseryCount}
                             min='0'
                             max='200'
                             onChange={(e) => onChange(e)}
@@ -598,7 +544,7 @@ const EditGathering = ({
                 ) : null}
                 {/* SHOW CHILDREN COORDINATOR IF CONFIGURED        */}
                 {/* --- ???????????????????????????? ----- */}
-                {meeter.mtgConfigs['childrenContact'] === true ? (
+                {clientConfigs['childrenContact'] === true ? (
                     <div className='form-group'>
                         <h4>Childern Contact</h4>
                         <input
@@ -614,14 +560,14 @@ const EditGathering = ({
                 ) : null}
                 {/* SHOW CHILDREN COUNT IF CONFIGURED        */}
                 {/* --- ???????????????????????????? ----- */}
-                {meeter.mtgConfigs['children'] === true ? (
+                {clientConfigs['children'] === true ? (
                     <div className='form-group'>
                         <h4>Children Count</h4>
                         <input
                             type='number'
-                            id='children'
-                            name='children'
-                            value={children}
+                            id='childrenCount'
+                            name='childrenCount'
+                            value={childrenCount}
                             min='0'
                             max='200'
                             onChange={(e) => onChange(e)}
@@ -633,7 +579,7 @@ const EditGathering = ({
                 ) : null}
                 {/* SHOW YOUTH COORDINATOR IF CONFIGURED        */}
                 {/* --- ???????????????????????????? ----- */}
-                {meeter.mtgConfigs['youthContact'] === true ? (
+                {clientConfigs['youthContact'] === true ? (
                     <div className='form-group'>
                         <h4>Youth Contact</h4>
                         <input
@@ -649,14 +595,14 @@ const EditGathering = ({
                 ) : null}
                 {/* SHOW YOUTH COUNT IF CONFIGURED        */}
                 {/* --- ???????????????????????????? ----- */}
-                {meeter.mtgConfigs['youth'] === true ? (
+                {clientConfigs['youth'] === true ? (
                     <div className='form-group'>
                         <h4>Youth Count</h4>
                         <input
                             type='number'
-                            id='youth'
-                            name='youth'
-                            value={youth}
+                            id='youthCount'
+                            name='youthCount'
+                            value={youthCount}
                             min='0'
                             max='200'
                             onChange={(e) => onChange(e)}
@@ -668,7 +614,7 @@ const EditGathering = ({
                 ) : null}
                 {/* SHOW SETUP IF CONFIGURED        */}
                 {/* --- ???????????????????????????? ----- */}
-                {meeter.mtgConfigs['setupContact'] === true ? (
+                {clientConfigs['setupContact'] === true ? (
                     <div className='form-group'>
                         <h4>Setup Coordinator</h4>
                         <input
@@ -684,7 +630,7 @@ const EditGathering = ({
                 ) : null}
                 {/* SHOW CLEANUP IF CONFIGURED        */}
                 {/* --- ???????????????????????????? ----- */}
-                {meeter.mtgConfigs['cleanupContact'] === true ? (
+                {clientConfigs['cleanupContact'] === true ? (
                     <div className='form-group'>
                         <h4>Clean-up Coordinator</h4>
                         <input
@@ -702,7 +648,7 @@ const EditGathering = ({
                 ) : null}
                 {/* SHOW TRANSPORTATION IF CONFIGURED        */}
                 {/* --- ???????????????????????????? ----- */}
-                {meeter.mtgConfigs['transportationContact'] === true ? (
+                {clientConfigs['transportationContact'] === true ? (
                     <div className='form-group'>
                         <h4>Transportation Coordinator</h4>
                         <input
@@ -718,7 +664,7 @@ const EditGathering = ({
                 ) : null}
                 {/* SHOW YOUTH COUNT IF CONFIGURED        */}
                 {/* --- ???????????????????????????? ----- */}
-                {meeter.mtgConfigs['transportationCount'] === true ? (
+                {clientConfigs['transportationCount'] === true ? (
                     <div className='form-group'>
                         <h4>Transportation Guests</h4>
                         <input
@@ -748,62 +694,37 @@ const EditGathering = ({
                         ></textarea>
                     </div>
                 </div>
-                {FormButtons(meetingDate)}
-
-                {meeter.active.status === 'approved' &&
-                meeter.active.role !== 'guest' &&
-                _id ? (
+                
+                <input type='submit' className='btn btn-primary my-1' />
+                {active.status === 'approved' &&
+                active.role !== 'guest' &&
+                meetingId ? (
                     <Fragment>
                         <hr className='group-ruler my-1' />
                         <h2>Open-Share Groups</h2>
-                        <span className={'pl-2 my'}>
+                        <div>
+                            <Link to={`/EditGroup/0`}>
                             <Button
                                 variant='contained'
                                 color='primary'
                                 size='small'
                                 // className={classes.button}
                                 startIcon={<PlaylistAddIcon />}
-                                href={`/EditGroup/${_id}/0`}
+                                // href={`/EditGroup/0`}
                             >
                                 New Group
                             </Button>
-                        </span>
-                        <span className={'pl-2'}>
-                            {meeter.defaultGroups.length > 0 &&
-                            meeter.active.role !== 'guest' ? (
-                                <span>
-                                    <Button
+                            </Link>
+                            <Button
                                         variant='contained'
                                         color='default'
                                         size='small'
                                         startIcon={<PlaylistAddIcon />}
-                                        onClick={addDefaultGroupsToMeeting}
+                                        onClick={() => addDefaultGroupsToMeeting()}
                                     >
                                         DEFAULTS
                                     </Button>
-                                </span>
-                            ) : meeter.active.role === 'owner' ||
-                              meeter.active.role === 'superuser' ? (
-                                <span>
-                                    <Button
-                                        variant='contained'
-                                        color='secondary'
-                                        size='small'
-                                        // className={classes.button}
-                                        startIcon={<SettingsIcon />}
-                                        href='/DisplaySecurity'
-                                    >
-                                        CONFIGURE
-                                    </Button>
-                                </span>
-                            ) : null}
-                            {_id.length < 1 ? (
-                                <div>
-                                    Open-share groups can be added after the
-                                    meeting is saved.
-                                </div>
-                            ) : null}
-                        </span>
+                        </div>
                     </Fragment>
                 ) : (
                     <Fragment>
@@ -814,21 +735,17 @@ const EditGathering = ({
                     </Fragment>
                 )}
             </form>
-            <div style={{ paddingTop: 10 }}>
+            <div>
                 {groups &&
                     groups.map((group) => (
-                        <GroupListItem
-                            key={group._id}
-                            mid={group.mid}
-                            group={group}
-                            role={meeter.active.role}
-                            deleteResponse={handleGroupDeleteRequest}
-                        />
-                    ))}
+                        <GatheringGroupListItem key={group.groupId} group={group}/>
+                        
+                    ))
+                }
             </div>
         </Fragment>
     );
-
+    
     function displayTitle() {
         switch (meetingType) {
             case 'Lesson':
@@ -866,117 +783,48 @@ const EditGathering = ({
                 return 'Please provide a description of the event';
         }
     }
-    function FormButtons(meetingDate) {
-        var returnValue = [];
-        // var today = new Date();
-        // today.setHours(0, 0, 0, 0);
-        // var mDate = new Date(meetingDate.slice(0, 10));
-        // // console.log('mDate:' + mDate);
-        // // console.log('today:' + today);
-        // need to create special date for today starting at T00:00:00.000Z
-        let mDate = new Date(meetingDate.slice(0, 10));
-        let tDate = new Date();
-        let numMonth = tDate.getMonth() + 1;
-        let tmpMonth = numMonth.toString();
-        let tmpDay = tDate.getDate().toString();
-        let tMonth = '';
-        let tDay = '';
-        if (tmpMonth.length < 2) {
-            tMonth = '0' + tmpMonth;
-        } else {
-            tMonth = tmpMonth;
-        }
-        if (tmpDay.length < 2) {
-            tDay = '0' + tmpDay;
-        } else {
-            tDay = tmpDay;
-        }
-        let tYear = tDate.getFullYear();
-        let target = tYear + '-' + tMonth + '-' + tDay + 'T00:00:00.000Z';
 
-        if (meetingDate >= target) {
-            // console.log('greater than or equal');
-            if (
-                meeter.active.status === 'approved' &&
-                meeter.active.role !== 'guest'
-            ) {
-                returnValue = [
-                    <>
-                        <input type='submit' className='btn btn-primary my-1' />
-                        <Button className='btn-light' href='/gatherings'>
-                            Go Back
-                        </Button>
-                        {/* <Link className='btn btn-light my-1' to='/gatherings'>
-                            Go Back
-                        </Link> */}
-                    </>,
-                ];
-            } else {
-                returnValue = [
-                    <>
-                        <Button
-                            className='btn-light'
-                            href='/gatherings'
-                            variant='outlined'
-                        >
-                            Go Back
-                        </Button>
-                        {/* <Link className='btn btn-light my-1' to='/gatherings'>
-                            Go Back
-                        </Link> */}
-                    </>,
-                ];
-            }
-        } else {
-            returnValue = [
-                <>
-                    <input type='submit' className='btn btn-primary my-1' />
-                    <Button
-                        className='btn-light'
-                        href='/gatherings/historyView'
-                    >
-                        Go Back
-                    </Button>
-                </>,
-            ];
-        }
-        return [
-            <>
-                <div>{returnValue}</div>
-            </>,
-        ];
-    }
 };
 
 EditGathering.propTypes = {
     createGathering: PropTypes.func.isRequired,
-    getGathering: PropTypes.func.isRequired,
-    getMtgConfigs: PropTypes.func.isRequired,
+    getMeeting: PropTypes.func.isRequired,
+    getGroups: PropTypes.func.isRequired,
+    clearGroups: PropTypes.func.isRequired,
+    clearTmpGroup: PropTypes.func.isRequired,
+    getclientConfigs: PropTypes.func.isRequired,
+    turnoffMeetingLoading: PropTypes.func.isRequired,
     getDefGroups: PropTypes.func.isRequired,
     addDefaultGroups: PropTypes.func.isRequired,
     gathering: PropTypes.object.isRequired,
+    client: PropTypes.object.isRequired,
     group: PropTypes.object.isRequired,
     auth: PropTypes.object.isRequired,
     meeter: PropTypes.object.isRequired,
     meeting: PropTypes.object.isRequired,
-    // mtgConfigs: PropTypes.object.isRequired,
+    // clientConfigs: PropTypes.object.isRequired,
 };
 
 const mapStateToProps = (state) => ({
-    // gathering: state.gathering,
+    gathering: state.gathering,
     servants: state.servants,
+    client: state.client,
     group: state.group,
     auth: state.auth,
     meeter: state.meeter,
     meeting: state.meeting,
-    // mtgConfigs: state.meeter.mtgConfigs,
+    // clientConfigs: state.meeter.clientConfigs,
 });
 
 export default connect(mapStateToProps, {
     createGathering,
-    getGathering,
+    getMeeting,
+    getGroups,
+    clearGroups,
+    clearTmpGroup,
     getMtgConfigs,
     getDefGroups,
     addDefaultGroups,
     deleteGroup,
+    turnoffMeetingLoading,
 })(withRouter(EditGathering));

@@ -4,7 +4,11 @@ import Register from '../auth/Register';
 import Login from '../auth/Login';
 import Alert from '../layout/Alert';
 import Dashboard from '../dashboard/Dashboard';
-
+// ====================
+// for config/admin
+//=====================
+import MeeterConfig from '../admin/Config';
+import EditDefaultGroups from '../admin/DefaultGroupForm';
 // import Profiles from '../profiles/Profiles';
 // import Profile from '../profile/UserProfile';
 
@@ -18,7 +22,13 @@ import EditPerson from '../people/EditPerson';
 import NotFound from '../layout/NotFound';
 import PrivateRoute from '../routing/PrivateRoute';
 import UserProfile from '../profile/UserProfile';
+import Landing from '../layout/Landing';
+import ErrorPage from '../layout/Error';
 // import PersonForm from '../people/PersonForm';
+
+
+
+
 
 const Routes = () => {
     return (
@@ -42,7 +52,7 @@ const Routes = () => {
                     component={EditProfile}
                 />
                 {/* <PrivateRoute exact path='/posts' component={Posts} />
-                <PrivateRoute exact path='/posts/:id' component={Post} /> */}{' '}
+                <PrivateRoute exact path='/posts/:id' component={Post} /> }{' '}
                 */}
                 <PrivateRoute exact path='/people' component={People} />
                 <PrivateRoute exact path='/gatherings' component={Gatherings} />
@@ -68,7 +78,7 @@ const Routes = () => {
                 />
                 <PrivateRoute
                     exact
-                    path='/EditGroup/:mid/:gid'
+                    path='/EditGroup/:groupId'
                     component={EditGroup}
                 />
                 <PrivateRoute
@@ -76,7 +86,18 @@ const Routes = () => {
                     path='/EditPerson/:id'
                     component={EditPerson}
                 />
-                <Route component={NotFound} />
+                <PrivateRoute
+                    exact
+                    path='/Config'
+                    component={MeeterConfig}
+                />
+                <PrivateRoute
+                    exact
+                    path='/EditDefaultGroups'
+                    component={EditDefaultGroups}
+                />
+                <Route path='*' component={ErrorPage}/>
+                {/* <Route component={NotFound} /> */}
             </Switch>
         </section>
     );

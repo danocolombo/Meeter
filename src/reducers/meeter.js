@@ -1,13 +1,11 @@
 import {
     SET_ACTIVES,
-    CLEAR_ACTIVES,
     SET_CLIENT_USERS,
-    CLEAR_CLIENT_USERS,
     SET_DEFAULT_GROUPS,
     REMOVE_CLIENT_USER,
     ADMIN_ERROR,
-    SET_MTG_CONFIGS,
-    TOGGLE_CONFIG,
+    
+    
 } from '../actions/types';
 
 const initialState = {
@@ -15,7 +13,7 @@ const initialState = {
     clientUsers: [],
     clientUser: null,
     defaultGroups: [],
-    mtgConfigs: [],
+    // mtgConfigs: [],
     loading: true,
     error: {},
 };
@@ -28,18 +26,6 @@ export default function (state = initialState, action) {
             return {
                 ...state,
                 active: payload,
-                loading: false,
-            };
-        case CLEAR_ACTIVES:
-            return {
-                ...state,
-                active: null,
-                loading: false,
-            };
-        case SET_MTG_CONFIGS:
-            return {
-                ...state,
-                mtgConfigs: payload,
                 loading: false,
             };
         case SET_CLIENT_USERS:
@@ -56,7 +42,6 @@ export default function (state = initialState, action) {
                 ),
                 loading: false,
             };
-        case CLEAR_CLIENT_USERS:
         case ADMIN_ERROR:
             return {
                 ...state,
@@ -71,9 +56,7 @@ export default function (state = initialState, action) {
                 defaultGroups: payload,
                 loading: false,
             };
-        case TOGGLE_CONFIG:
-            console.log('payload: ' + payload);
-            return state;
+        
         // return {
         //     ...state,
         //     mtgConfigs: state.mtgConfigs.filter(

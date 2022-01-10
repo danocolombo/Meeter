@@ -5,21 +5,21 @@ import { connect } from 'react-redux';
 import { deleteGroup } from '../../actions/group';
 
 const GroupListItem = ({
-    group: { id, gender, title, location, facilitator },
+    group: { groupId, gender, title, location, facilitator, attendance },
     role,
     deleteGroup,
 }) => {
-    const handleDeleteRequest = () => {
-        // send key of entry to delete
-        console.log('delete click');
-        deleteGroup(id);
-    };
+    // const handleDeleteRequest = () => {
+    //     // send key of entry to delete
+    //     console.log('delete click');
+    //     deleteGroup(id);
+    // };
     return (
         <Fragment>
             <div className='GItem-Box'>
                 <div className={'GItem-Line1'}>
-                    <Link to={`/EditGroup/${id}`}>
-                        {get1Line(gender, title, location, facilitator)}
+                    <Link to={`/EditGroup/${groupId}`}>
+                        {get1Line(gender, title, attendance, location, facilitator)}
                     </Link>
                 </div>
                 <div className={'GItem-Line2'}>
@@ -29,7 +29,7 @@ const GroupListItem = ({
                     {role !== 'guest' ? (
                         <i
                             className={'fa fa-trash my'}
-                            onClick={() => deleteGroup(id)}
+                            onClick={() => deleteGroup(groupId)}
                         ></i>
                     ) : null}
                 </div>
@@ -39,7 +39,7 @@ const GroupListItem = ({
     );
     // <p style={{ 'padding-left': 10 }}>
 };
-function get1Line(g, t) {
+function get1Line(g, t, a) {
     let line1 = '';
     switch (g) {
         case 'f':
@@ -47,38 +47,46 @@ function get1Line(g, t) {
             break;
         case 'm':
             line1 = "Men's - ";
+            break;
         default:
             break;
     }
     if (t.length > 0) {
         line1 = line1.concat(' ', t);
     }
-    return [<span>{line1}</span>];
+    if (a > 0){
+        line1 = line1.concat(' ', a);
+    }
+    return [<span key='{line1}'>{line1}</span>];
 }
 function get2Line(l, f) {
-    console.log(l + ' ' + l.length);
-    console.log(f + ' ' + f.length);
+    // if (l) console.log(l + ' ' + l.length);
+    // if (f) console.log(f + ' ' + f.length);
+    // console.log(l + ' ' + l.length);
+    //console.log(f + ' ' + f.length);
     let line2 = '';
     let tmp = '';
-    if (l.length > 0) {
-        line2 = l;
-    }
-
-    if (f.length > 0) {
-        if (line2.length > 0) {
-            tmp = line2.concat(' - ', f);
-            line2 = tmp;
+    if (l){
+        if (l.length > 0) {
+            line2 = l;
         }
-    } else {
-        line2 = f;
     }
-
-    return [<span>{line2}</span>];
+    if (f){
+        if (f.length > 0) {
+            if (line2.length > 0) {
+                tmp = line2.concat(' - ', f);
+                line2 = tmp;
+            }
+        } else {
+            line2 = f;
+        }
+    }
+    return line2;
 }
 GroupListItem.propTypes = {
     group: PropTypes.object.isRequired,
     auth: PropTypes.object.isRequired,
-    mid: PropTypes.object.isRequired,
+    // mid: PropTypes.object.isRequired,
     role: PropTypes.string.isRequired,
     deleteGroup: PropTypes.func.isRequired,
 };

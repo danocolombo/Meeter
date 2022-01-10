@@ -1,10 +1,13 @@
 import axios from 'axios';
 import { setAlert } from './alert';
+import { randomBytes, createCipheriv } from 'crypto';
 import {
     SET_CLIENT_USERS,
     ADMIN_ERROR,
+    SET_DEFAULT_GROUPS,
+    ADD_DEFAULT_GROUP,
+    SET_MTG_CONFIGS,
     REMOVE_CLIENT_USER,
-    TOGGLE_CONFIG,
 } from './types';
 
 // GET CLIENT INFO
@@ -41,7 +44,59 @@ export const getClientUsers = (client) => async (dispatch) => {
     }
 };
 
-
+export const getDefGroups = (cid) => async (dispatch) => {
+    //this loads all the default groups for cid
+    //into meeter.defaultGroups
+    console.log('getDefGroups(' + cid + ')');
+    console.log('/api/client/defaultgroups/' + cid);
+    try {
+        const res = await axios.get(`/api/client/defaultgroups/${cid}`);
+        if (res) {
+            dispatch({
+                type: SET_DEFAULT_GROUPS,
+                payload: res.data,
+            });
+        } else {
+            console.log('NO DEFAULT GROUPS RETURNED');
+        }
+    } catch (err) {
+        console.log('actions/admin.js getDefGroups ADMIN_ERROR');
+        dispatch({
+            type: ADMIN_ERROR,
+            // payload: {
+            //     msg: err.response.statusText ? err.response.statusText : '',
+            //     status: err.response.status,
+            // },
+        });
+    }
+};
+export const getMtgConfigs = (cid) => async (dispatch) => {
+    //this loads all the default groups for cid
+    //into meeter.defaultGroups
+    if (!cid) return;
+    console.log('getMtgConfigs(' + cid + ')');
+    console.log('/api/client/meetingConfigs/' + cid);
+    try {
+        const res = await axios.get(`/api/client/meetingConfigs/${cid}`);
+        if (res) {
+            dispatch({
+                type: SET_MTG_CONFIGS,
+                payload: res.data,
+            });
+        } else {
+            console.log('NO CLIENT MEETING CONFIGS');
+        }
+    } catch (err) {
+        console.log('actions/admin.js getMtgConfigs ADMIN_ERROR');
+        dispatch({
+            type: ADMIN_ERROR,
+            payload: {
+                msg: err.response.statusText ? err.response.statusText : '',
+                status: err.response.status,
+            },
+        });
+    }
+};
 export const updateDefaultGroup = (revised) => async (dispatch) => {
     console.log('getting the work done.');
     console.log('_id:' + revised._id);
@@ -75,26 +130,7 @@ export const updateDefaultGroup = (revised) => async (dispatch) => {
         dispatch(setAlert('Default Group Update Failed.', 'danger'));
     }
 };
-export const deleteDefaultGroup = (cid, gid) => async (dispatch) => {
-    // need to remove the default group from the client doc using
-    // the client id (cid) and the groups indicator (gid);
-    try {
-        await axios.delete(`/api/client/defaultgroup/${cid}/${gid}`);
-        // then get the groups and reload redux
-        const res = await axios.get(`/api/client/defaultgroups/${cid}`);
-        if (res) {
-            dispatch({
-                type: 'SET_DEFAULT_GROUPS',
-                payload: res.data,
-            });
-        } else {
-            console.log('NO DEFAULT GROUPS RETURNED');
-        }
-        console.log('tried...');
-    } catch (error) {
-        console.log('CATCH....');
-    }
-};
+
 export const grantUserRegistration = (cid, id, role, email) => async (
     dispatch
 ) => {
@@ -229,42 +265,41 @@ export const rejectUserRegistration = (cid, id, email) => async (dispatch) => {
         });
     }
 };
-export const removeDefGroup = (cid, gid) => async (dispatch) => {
-    //this removes the user id from client users
-    // in database and removes from meeter.clientUsers
-    //-----
-    // uid is the reference in the users array in the client document
-    // need email to delate the user from user document.
-    try {
-        console.log('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
-        console.log('copied from another function that is called');
-        console.log('actions/admin :: removeDefGroup ' + cid + gid);
-        await axios.delete(`/api/client/defaultgroup/${cid}/${gid}`);
-        const res = await axios.get(`/api/client/defaultgroups/${cid}`);
-        if (res) {
-            dispatch({
-                type: 'SET_DEFAULT_GROUPS',
-                payload: res.data,
-            });
-        } else {
-            console.log('NO DEFAULT GROUPS RETURNED');
-        }
 
-        dispatch(setAlert('Default Group Removed', 'success'));
-    } catch (err) {
-        console.log('actions/admin.js removeDefGroup ADMIN_ERROR');
-        dispatch({
-            type: ADMIN_ERROR,
-            payload: {
-                msg: err.response.statusText,
-                status: err.response.status,
-            },
-        });
-    }
-};
-export const deleteDefGroup = (id) => async (dispatch) => {
+export const deleteDefGroup = (groupId, clientInfo) => async (dispatch) => {
     //this removes the defGroup id from client
     //reference in database and updates meeter.defaultGroups
+    dispatch({
+        type: 'REMOVE_DEFAULT_GROUP',
+        payload: groupId,
+    });
+    // now remove the group form the client object to send to AWS API
+    let newClient = {
+        ...clientInfo, 
+        defaultGroups: clientInfo.defaultGroups.filter((group) => group.groupId != groupId)};
+    // now wrap the newClient with Item
+    const config = {
+        headers: {
+            'Access-Control-Allow-Headers':
+                'Content-Type, x-auth-token, Access-Control-Allow-Headers',
+            'Content-Type': 'application/json',
+        },
+    };
+    let obj = {
+        operation: 'updateClient',
+        payload: {
+            Item: newClient,
+        },
+    };
+    let body = JSON.stringify(obj);
+    // console.log('sending to /clients api\n\n' + body);
+    let api2use = process.env.REACT_APP_MEETER_API + '/clients';
+    let res = await axios.post(api2use, body, config);
+    
+    // console.log('\n\nRESPONSE FROM AWS API')
+    // const util = require('util');
+    // console.log('res:  \n' + util.inspect(res, { showHidden: false, depth: null }));
+
 };
 export const deleteClientUser = (cid, uid) => async (dispatch) => {
     //this removes the user id from client users
@@ -319,35 +354,51 @@ export const suspendClientUser = (id) => async (dispatch) => {
     //users in database to suspended and updates
     //meeter.clientUsers status
 };
-export const toggleConfig = (config, value, cid) => async (dispatch) => {
+export const toggleConfig = (config, value, client) => async (dispatch) => {
     // this gets the client and configuration value
     // if the value exists, we remove it, if it does
     // not exist, we add it.
     let theChange = {};
-    theChange.cid = cid;
+    theChange.clientId = client.clientCode;
     theChange.config = config;
-    theChange.value = value;
-    // console.table(theChange);
+    if (value){
+        theChange.setting = "true";
+    }else{
+        theChange.setting = "false";
+    }
+    
+    console.log('in toggleConfig function...');
+    console.log('config:' + config);
+    console.log('value: ' + value);
+    console.log('theChange:\n' + JSON.stringify(theChange));
     try {
         const config = {
             headers: {
+                'Access-Control-Allow-Headers':
+                    'Content-Type, x-auth-token, Access-Control-Allow-Headers',
                 'Content-Type': 'application/json',
             },
         };
-        const res = await axios.post(
-            '/api/client/toggleconfig',
-            theChange,
-            config
-        );
-
-        dispatch({
-            type: TOGGLE_CONFIG,
-            payload: res,
-        });
-
-        dispatch(setAlert('System Configuration Updated', 'success'));
+        let obj = {
+            operation: 'updateMeeterConfigs',
+            payload: theChange,
+        };
+        
+        let body = JSON.stringify(obj);
+        console.log('body: \n ' + body);
+        let api2use = process.env.REACT_APP_MEETER_API + '/clients';
+        let res = await axios.post(api2use, body, config);
+        
+        if (res.status === 200) {
+            
+            // dispatch({
+            //     type: SET_MTG_CONFIGS,
+            //     payload: theChange,
+            // });
+            dispatch(setAlert("client updated", 'success'));
+            
+        }
     } catch (err) {
-        console.log('actions/admin.js deleteClientUser ADMIN_ERROR');
         dispatch({
             type: ADMIN_ERROR,
             payload: {
@@ -356,4 +407,72 @@ export const toggleConfig = (config, value, cid) => async (dispatch) => {
             },
         });
     }
+
+
+
+    
+};
+function getUniqueId() {
+    //this generates a unique ID based on this specific time
+    // Difining algorithm
+    const algorithm = 'aes-256-cbc';
+    // Defining key
+    const key = randomBytes(32);
+    // Defining iv
+    const iv = randomBytes(16);
+    let cipher = createCipheriv('aes-256-cbc', Buffer.from(key), iv);
+    //get the current time...
+    let n = Date.now();
+    let encrypted = cipher.update(n.toString());
+    // Using concatenation
+    encrypted = Buffer.concat([encrypted, cipher.final()]);
+    return encrypted.toString('hex');
+}
+
+export const addDefaultGroup = (request, clientId) => async dispatch => {
+    dispatch(setAlert("addDefaultGroup clicked", 'success'));
+    // let groupId = randomBytes(16).toString('base64');
+    let groupId = getUniqueId();
+    //add default group to client entry in AWS dynamodb
+    let newGroup = request.formData;
+    // newGroup.clientId = clientId;
+    newGroup.groupId = groupId;
+
+    //send the new default group to AWS API
+    try {
+        const config = {
+            headers: {
+                'Access-Control-Allow-Headers':
+                    'Content-Type, x-auth-token, Access-Control-Allow-Headers',
+                'Content-Type': 'application/json',
+            },
+        };
+        let obj = {
+            operation: 'addNewDefaultGroup',
+            payload: newGroup,
+        };
+        
+        let body = JSON.stringify(obj);
+
+        let api2use = process.env.REACT_APP_MEETER_API + '/clients';
+        let res = await axios.post(api2use, body, config);
+        // console.log('res:' + JSON.stringify(res.data));
+        if (res.status === 200) {
+            dispatch({
+                type: ADD_DEFAULT_GROUP,
+                payload: newGroup,
+            });
+            dispatch(setAlert("client updated", 'success'));
+            
+        }
+    } catch (err) {
+        dispatch({
+            type: ADMIN_ERROR,
+            payload: {
+                msg: err.response.statusText,
+                status: err.response.status,
+            },
+        });
+    }
+    
 };

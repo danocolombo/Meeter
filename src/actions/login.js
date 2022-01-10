@@ -11,14 +11,15 @@ import {
     LOGOUT,
     CLEAR_PROFILE,
     SET_ACTIVES,
-    SET_AUTH_ACTIVES,
     SET_MTG_CONFIGS,
     SET_DEFAULT_GROUPS,
+    SET_CLIENT_USERS,
+    SET_CLIENT,
 } from './types';
 import setAuthToken from '../utils/setAuthToken';
 
 import UserPool from './UserPool';
-import { CollectionsOutlined, DateRange } from '@material-ui/icons';
+// import { CollectionsOutlined, DateRange } from '@material-ui/icons';
 
 // Login (Authenticate)
 //============================
@@ -76,16 +77,17 @@ export const login = (email, password) => async (dispatch) => {
     });
 };
 
-// Load System
-//---------------------------------------------------------
-// we want to load meeter mtgConfigs and defaultMeetings
-//---------------------------------------------------------
-export const loadSystem = (cid) => async (dispatch) => {
+// Load Client
+//---------------------------------------------------
+// this funciton saves the client configs and gets
+// the default groups.  This replaced the original 
+// loadSystem
+//----------------------------------------------------
+export const loadClient = (cid) => async (dispatch) => {
+    
     try {
+        // get the client info from database
         let client = cid.theClient;
-        //----------------------------------
-        // get client meeting configs
-        //----------------------------------
         const config = {
             headers: {
                 'Access-Control-Allow-Headers':
@@ -93,9 +95,8 @@ export const loadSystem = (cid) => async (dispatch) => {
                 'Content-Type': 'application/json',
             },
         };
-
         let obj1 = {
-            operation: 'getConfigs',
+            operation: 'getClientInfo',
             payload: {
                 clientId: client,
             },
@@ -112,41 +113,44 @@ export const loadSystem = (cid) => async (dispatch) => {
                 throw err;
             });
         } catch (err) {
-            console.log('logoin.js - loadSystem: getConfigs failed');
+            console.log('logoin.js - loadClient: getClientInfo failed');
         }
         if (res.status === 200) {
             dispatch({
-                type: SET_MTG_CONFIGS,
+                type: SET_CLIENT,
                 payload: res.data.body,
             });
-        } else {
-            console.log('NO CLIENT MEETING CONFIGS');
-        }
-        let obj2 = {
-            operation: 'getDefaultGroups',
-            payload: {
-                clientId: client,
-            },
-        };
-        body = JSON.stringify(obj2);
-
-        api2use = process.env.REACT_APP_MEETER_API + '/clients';
-        res = null;
-        try {
-            res = await axios.post(api2use, body, config).catch((err) => {
-                if (err.response.status === 404) {
-                    throw new Error(`${err.config.url} not found`);
+            // need to check if we got any body, then define the 
+            // defaultGroups and the configs.
+            if (Object.keys(res.data.body).length > 0) {
+                
+                let clientInfo = res.data.body.Items[0];
+                //confirm we have defaultGroups and save
+                if (clientInfo.hasOwnProperty("defaultGroups")) {
+                    dispatch({
+                        type: SET_DEFAULT_GROUPS,
+                        payload: clientInfo.defaultGroups,
+                    });
                 }
-                throw err;
-            });
-        } catch (err) {
-            console.log('logoin.js - loadSystem: getDefaultGroups failed');
-        }
-
-        if (res.status === 200) {
+                if (clientInfo.hasOwnProperty("clientConfigs")){
+                    dispatch({
+                        type: SET_MTG_CONFIGS,
+                        payload: clientInfo.clientConfigs,
+                    });
+                }
+                if (clientInfo.hasOwnProperty("clientUsers")){
+                    dispatch({
+                        type: SET_CLIENT_USERS,
+                        payload: clientInfo.clientUsers,
+                    });
+                }
+                
+            }else{
+                console.log("NO RESPONSE DATA");
+            }
+        } else {
             dispatch({
-                type: SET_DEFAULT_GROUPS,
-                payload: res.data.body,
+                type: AUTH_ERROR,
             });
         }
     } catch (err) {
@@ -154,7 +158,9 @@ export const loadSystem = (cid) => async (dispatch) => {
             type: AUTH_ERROR,
         });
     }
+
 };
+
 // Load User
 export const loadUser = (userId) => async (dispatch) => {
     if (localStorage.token) {
@@ -176,6 +182,8 @@ export const loadUser = (userId) => async (dispatch) => {
 
         const api2use = process.env.REACT_APP_MEETER_API + '/user';
         const res = await axios.post(api2use, body, config);
+
+        
         // now add response data location: res.data.body.x values
         // to the values already passed in from login (cognito)
         let user_data = {
@@ -185,17 +193,17 @@ export const loadUser = (userId) => async (dispatch) => {
             email: userId.uData.email,
             phone: userId.uData.phone,
             defaultClient: res.data.body.defaultClient,
+            defaultClientId: res.data.body.defaultClientId,
             defaultClientRole: res.data.body.role,
             defaultClientStatus: res.data.body.status,
-            // activeClient: res.data.body.defaultClient,
-            // activeRole: res.data.body.role,
-            // activeStatus: res.data.body.status,
         };
         let active_data = {
             client: res.data.body.defaultClient,
+            clientId: res.data.body.defaultClientId,
             role: res.data.body.role,
             status: res.data.body.status,
         };
+        // this next dispatch does nothing...??
         dispatch({
             type: SET_ACTIVES,
             payload: active_data,
@@ -204,18 +212,12 @@ export const loadUser = (userId) => async (dispatch) => {
             type: USER_LOADED,
             payload: user_data,
         });
-        // now set the active client, role and status from default vales
-        let active_values = {
-            activeClient: userId.uData.defaultClient,
-            activeRole: userId.uData.defaultClientRole,
-            activeStatus: userId.uData.defaultClientStatus,
-        };
-        dispatch({
-            type: SET_AUTH_ACTIVES,
-            payload: active_values,
-        });
+
         let theClient = res.data.body.defaultClient;
-        dispatch(loadSystem({ theClient }));
+        //---------------------------------------
+        // now go get defaultGroups and configs
+        //---------------------------------------
+        dispatch(loadClient({ theClient }));
     } catch (err) {
         dispatch({
             type: AUTH_ERROR,
@@ -254,38 +256,6 @@ export const register = ({ name, email, password }) => async (dispatch) => {
         });
     }
 };
-
-// Login User
-// export const login = (email, password) => async dispatch => {
-//   const config = {
-//     headers: {
-//       'Content-Type': 'application/json'
-//     }
-//   };
-
-//   const body = JSON.stringify({ email, password });
-
-//   try {
-//     const res = await axios.post('/api/auth', body, config);
-
-//     dispatch({
-//       type: LOGIN_SUCCESS,
-//       payload: res.data
-//     });
-
-//     dispatch(loadUser());
-//   } catch (err) {
-//     const errors = err.response.data.errors;
-
-//     if (errors) {
-//       errors.forEach(error => dispatch(setAlert(error.msg, 'danger')));
-//     }
-
-//     dispatch({
-//       type: LOGIN_FAIL
-//     });
-//   }
-// };
 
 // Logout / Clear Profile
 export const logout = () => (dispatch) => {

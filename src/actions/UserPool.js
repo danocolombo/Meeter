@@ -5,6 +5,6 @@ const poolData = {
     UserPoolId: 'us-east-1_ekSObpH41',
     ClientId: '2qaroev40htl0fdsc1ccr8194v',
 };
-const UserPool = new CognitoUserPool(poolData);
+// const UserPool = new CognitoUserPool(poolData);
 
 export default new CognitoUserPool(poolData);

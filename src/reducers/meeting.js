@@ -3,6 +3,10 @@ import {
     CLEAR_MEETING,
     SET_GROUPS,
     CLEAR_GROUPS,
+    REMOVE_GROUP,
+    TURN_MEEETINGLOADING_OFF,
+    
+    
 } from '../actions/types';
 
 const initialState = {
@@ -16,6 +20,11 @@ export default function (state = initialState, action) {
     const { type, payload } = action;
 
     switch (type) {
+        case TURN_MEEETINGLOADING_OFF:
+            return {
+                ...state,
+                meetingLoading: false,
+            };
         case SET_MEETING:
             return {
                 ...state,
@@ -23,11 +32,12 @@ export default function (state = initialState, action) {
                 meetingLoading: false,
             };
         case SET_GROUPS:
-            return {
+            state = {
                 ...state,
-                groups: payload,
-                meetingLoading: false,
-            };
+                groups: payload.sort((a,b) => (a.gender > b.gender) ? 1 : ((b.gender > a.gender) ? -1 : 0)),
+                meetingsLoading: false
+            }
+            return state;
         case CLEAR_MEETING:
             return {
                 ...state,
@@ -41,6 +51,12 @@ export default function (state = initialState, action) {
                 groups: null,
                 meetingLoading: false,
             };
+        case REMOVE_GROUP:
+            return {
+                ...state,
+                groups: state.groups.filter((group) => group.groupId !== payload),
+                groupLoading: false,
+            };  
         default:
             return state;
     }

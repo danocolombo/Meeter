@@ -1,0 +1,166 @@
+hr {
+    margin: 10px 15px;
+}
+.flex-container {
+    /* We first create a flex layout context */
+    display: flex;
+    
+    /* Then we define the flow direction 
+       and if we allow the items to wrap 
+     * Remember this is the same as:
+     * flex-direction: row;
+     * flex-wrap: wrap;
+     */
+    //flex-flow: row wrap;
+    flex-flow: row;
+    
+    /* Then we define how is distributed the remaining space */
+    justify-content: space-around;
+    
+    padding: 0;
+    margin: 0;
+    list-style: none;
+  }
+  .flex-item {
+    background: tomato;
+    padding: 5px;
+    width: 200px;
+    height: 150px;
+    margin-top: 10px;
+    line-height: 150px;
+    color: white;
+    font-weight: bold;
+    font-size: 3em;
+    text-align: center;
+  }
+.gather-component__wrapper {
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+    border: green double 2px;
+    width: 450px;
+    margin-bottom: 15px;
+}
+.gather-component__header-row {
+    display: flex;
+    justify-content: space-between;
+}
+.gather-component__date {
+    padding-top: .5em;
+    padding-left: .5em;
+    font-size: large;
+    color: blue;
+}
+.gather-component__trash-style {
+    color: red;
+    font-weight: bold;
+    // flex: 1;
+    font-size: large;
+    justify-content: flex-end;
+    padding-right: 10px;
+    padding-top: 0px;
+    padding-bottom: 0px;
+    margin: 0px;
+}
+.gather-component__first-row {
+    display: flex;
+    // flex-flow: row wrap;
+    /* This aligns items to the end line on main-axis */
+    justify-content: flex-end;
+    // padding-right: 15px;
+}
+
+
+.gather-component__second-row {
+    padding-left: 10px;
+}
+.gather-component__type-style {
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size: large;
+    font-style: italic;
+    font-weight: bold;
+    color: green;
+}
+.gather-component__edit-style{
+    color: green;
+    padding-left: 10px;
+    padding-bottom: 10px;
+}
+.gather-component__support-contact {
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size:medium;
+    font-weight: normal;
+    color: black;
+}
+.gather-component__title-style {
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size:medium;
+    font-weight: bold;
+    color: black;
+    padding-left: 10px;
+}
+.gather-component__gathering-info-box {
+    border: black solid 1px;
+    display: flex;
+}
+.gather-component__type-title {
+    font-weight: normal;
+}
+.gather-component__type-testimony {
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size: large;
+    font-style: italic;
+    font-weight: bold;
+    color: green;
+}
+.group-list-component__wrapper {
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+    border: green double 2px;
+    width: 450px;
+    margin-top: 10px;
+    margin-bottom: 15px;
+    padding: 1ch 0 1ch 0;
+}
+.group-list-component__row {
+    display: flex;
+    justify-content: space-between;
+    margin: 0 1ch 0 1ch;
+}
+.group-list-compoment__nav-link {
+    text-decoration: none;
+    a:visited a:link {
+        color: blueviolet;
+    }
+    color: blueviolet;
+}
+.group-list-component__definitions {
+    font-size: 1em;
+    display: flex;
+}
+.group-list-component__gender {
+    font-size: 1em;
+    
+}
+.group-list-component__title {
+    font-size: 1em;
+}
+.group-list-component__attendance {
+    font-size: 1em;
+    padding: 0 1ch 0 1ch;
+    margin-left: 3ch;
+    background-color: green;
+    color: white;
+    border-radius: 10px;
+}
+.group-list-component__location {
+    font-size: 1em;
+}
+@media only screen and (min-width: 320px) and (max-width: 767px) {
+    .gather-component__wrapper {
+        box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+        border: green double 2px;
+        width: 310px;
+        margin-bottom: 15px;
+    }
+    .group-list-component__wrapper {
+        width: 310px;
+    }
+}
