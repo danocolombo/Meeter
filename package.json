@@ -8,6 +8,7 @@
         "amazon-cognito-identity-js": "^4.5.3",
         "axios": "^0.21.2",
         "crypto": "^1.0.1",
+        "follow-redirects": "1.14.7",
         "materialize-css": "^1.0.0",
         "moment": "^2.29.1",
         "node-sass": "4.14.1",
