@@ -97,6 +97,11 @@ hr {
     color: black;
     padding-left: 10px;
 }
+.gather-component__teacher {
+    margin-left: 10px;
+    font-weight: bold;
+    font-style: italic;
+}
 .gather-component__gathering-info-box {
     border: black solid 1px;
     display: flex;
@@ -111,6 +116,7 @@ hr {
     font-weight: bold;
     color: green;
 }
+
 .group-list-component__wrapper {
     box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
     border: green double 2px;

@@ -34,6 +34,7 @@ const GatheringItem = ({
             <div className='gather-component__title-style'>
                 {title}
             </div>
+            { meetingType === "Lesson" ? <div className="gather-component__teacher">{supportContact}</div> : null}
             <br />
             <div className='gather-component__edit-style'>
                 <Link to={`/EditGathering/${meetingId}`}>
