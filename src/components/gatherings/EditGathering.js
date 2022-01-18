@@ -11,10 +11,15 @@ import {
     addDefaultGroups,
     turnoffMeetingLoading,
 } from '../../actions/gathering';
-import { getGroups, clearGroups, deleteGroup, clearTmpGroup } from '../../actions/group';
+import {
+    getGroups,
+    clearGroups,
+    deleteGroup,
+    clearTmpGroup,
+} from '../../actions/group';
 import GatheringGroupListItem from './GatheringGroupListItem';
-import { getMtgConfigs, getDefGroups } from '../../actions/admin';
-
+import { getDefGroups } from '../../actions/admin';
+import { getMtgConfigs } from '../../actions/administration';
 import Spinner from '../layout/Spinner';
 
 const initialState = {
@@ -58,9 +63,9 @@ const EditGathering = ({
     // gathering: { gathering, servants, loading, newGathering },
     // auth: { activeClient, activeRole, activeStatus },
     //group: { groups, groupLoading },
-    meeter: {active },
-    meeting: { turnout, groups, meetingLoading},
-    group: { tmpGroup},
+    meeter: { active },
+    meeting: { turnout, groups, meetingLoading },
+    group: { tmpGroup },
     client: { defaultGroups, clientConfigs },
     // clientConfigs,
     createGathering,
@@ -75,19 +80,19 @@ const EditGathering = ({
     history,
 }) => {
     const [formData, setFormData] = useState(initialState);
-    
+
     useEffect(() => {
         // need to clear the redux meeting data
         clearTmpGroup();
     }, []);
     useEffect(() => {
-        if (match.params.id !== "0"){
+        if (match.params.id !== '0') {
             if (!turnout) {
                 getMeeting(match.params.id);
                 // clearGroups();
                 getGroups(match.params.id);
             }
-            if(tmpGroup){
+            if (tmpGroup) {
                 clearTmpGroup();
             }
             if (!meetingLoading && match.params.id !== 0) {
@@ -99,7 +104,7 @@ const EditGathering = ({
             }
 
             if (meetingId) setFormData({ ...formData, meetingId: meetingId });
-        }else{
+        } else {
             // this is new meeting
             setFormData(initialState);
             // there is no meeting to get, so need to flip meetingLoading to false
@@ -160,10 +165,10 @@ const EditGathering = ({
         window.scrollTo(0, 0);
     };
 
-    const addDefaultGroupsToMeeting = () => { 
+    const addDefaultGroupsToMeeting = () => {
         addDefaultGroups(turnout.meetingId, defaultGroups, groups);
-    };  
-    
+    };
+
     return meetingLoading ? (
         <Spinner />
     ) : (
@@ -190,16 +195,16 @@ const EditGathering = ({
                     />
                 </div>
                 <div className='form-group'>
-                <h4>Facilitator</h4>
-                <input
-                    type='text'
-                    className='x-large'
-                    placeholder='Responsible party for meeting'
-                    id='facilitatorContact'
-                    name='facilitatorContact'
-                    value={facilitatorContact}
-                    onChange={onChange}
-                />
+                    <h4>Facilitator</h4>
+                    <input
+                        type='text'
+                        className='x-large'
+                        placeholder='Responsible party for meeting'
+                        id='facilitatorContact'
+                        name='facilitatorContact'
+                        value={facilitatorContact}
+                        onChange={onChange}
+                    />
                 </div>
                 <div className='form-group'>
                     <h4>Meeting Type **</h4>
@@ -209,12 +214,24 @@ const EditGathering = ({
                         value={meetingType}
                         onChange={(e) => onChange(e)}
                     >
-                        <option key='0' value='0'>** Select the type of meeting</option>
-                        <option key='1' value='Lesson'>Lesson</option>
-                        <option key='2' value='Testimony'>Testimony</option>
-                        <option key='3' value='Special'>Special</option>
-                        <option key='4' value='Teaching'>Teaching</option>
-                        <option key='5' value='Other'>Other</option>
+                        <option key='0' value='0'>
+                            ** Select the type of meeting
+                        </option>
+                        <option key='1' value='Lesson'>
+                            Lesson
+                        </option>
+                        <option key='2' value='Testimony'>
+                            Testimony
+                        </option>
+                        <option key='3' value='Special'>
+                            Special
+                        </option>
+                        <option key='4' value='Teaching'>
+                            Teaching
+                        </option>
+                        <option key='5' value='Other'>
+                            Other
+                        </option>
                     </select>
                     <small className='form-text'>
                         What kind of meeting is this?
@@ -694,7 +711,7 @@ const EditGathering = ({
                         ></textarea>
                     </div>
                 </div>
-                
+
                 <input type='submit' className='btn btn-primary my-1' />
                 {active.status === 'approved' &&
                 active.role !== 'guest' &&
@@ -704,26 +721,26 @@ const EditGathering = ({
                         <h2>Open-Share Groups</h2>
                         <div>
                             <Link to={`/EditGroup/0`}>
-                            <Button
-                                variant='contained'
-                                color='primary'
-                                size='small'
-                                // className={classes.button}
-                                startIcon={<PlaylistAddIcon />}
-                                // href={`/EditGroup/0`}
-                            >
-                                New Group
-                            </Button>
+                                <Button
+                                    variant='contained'
+                                    color='primary'
+                                    size='small'
+                                    // className={classes.button}
+                                    startIcon={<PlaylistAddIcon />}
+                                    // href={`/EditGroup/0`}
+                                >
+                                    New Group
+                                </Button>
                             </Link>
                             <Button
-                                        variant='contained'
-                                        color='default'
-                                        size='small'
-                                        startIcon={<PlaylistAddIcon />}
-                                        onClick={() => addDefaultGroupsToMeeting()}
-                                    >
-                                        DEFAULTS
-                                    </Button>
+                                variant='contained'
+                                color='default'
+                                size='small'
+                                startIcon={<PlaylistAddIcon />}
+                                onClick={() => addDefaultGroupsToMeeting()}
+                            >
+                                DEFAULTS
+                            </Button>
                         </div>
                     </Fragment>
                 ) : (
@@ -738,14 +755,15 @@ const EditGathering = ({
             <div>
                 {groups &&
                     groups.map((group) => (
-                        <GatheringGroupListItem key={group.groupId} group={group}/>
-                        
-                    ))
-                }
+                        <GatheringGroupListItem
+                            key={group.groupId}
+                            group={group}
+                        />
+                    ))}
             </div>
         </Fragment>
     );
-    
+
     function displayTitle() {
         switch (meetingType) {
             case 'Lesson':
@@ -783,7 +801,6 @@ const EditGathering = ({
                 return 'Please provide a description of the event';
         }
     }
-
 };
 
 EditGathering.propTypes = {
