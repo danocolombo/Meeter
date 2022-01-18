@@ -1,4 +1,4 @@
-import React, { Fragment} from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { NavLink } from 'react-router-dom';
 import { connect } from 'react-redux';
@@ -6,8 +6,8 @@ import Spinner from '../layout/Spinner';
 //--------------------------------------
 //these are for the  expansion panels
 import { Accordion } from '@material-ui/core';
-import {AccordionDetails} from '@material-ui/core';
-import {AccordionSummary} from '@material-ui/core';
+import { AccordionDetails } from '@material-ui/core';
+import { AccordionSummary } from '@material-ui/core';
 
 //--------------------------------------
 
@@ -15,16 +15,20 @@ import DefaultGroup from './DefaultGroup';
 import ClientUser from './ClientUser';
 import MeetingConfigForm from './MeetingConfigForm';
 
-import {
-    getClientUsers,
-    getDefGroups,
-    getMtgConfigs,
-} from '../../actions/admin';
+import { getClientUsers, getDefGroups } from '../../actions/admin';
+import { getMtgConfigs } from '../../actions/administration';
 
 const SystemConfig = ({
     meeter: { active, loading },
     //defaultGroups: { }
-    client: { clientId, clientName, clientCode, defaultGroups, clientUsers, clientConfigs},
+    client: {
+        clientId,
+        clientName,
+        clientCode,
+        defaultGroups,
+        clientUsers,
+        clientConfigs,
+    },
     historyView,
 }) => {
     // let theClient = [];
@@ -34,15 +38,16 @@ const SystemConfig = ({
         setExpanded(isExpanded ? panel : false);
     };
     const handleAddGroupClick = () => {
-        console.log("Please Add Group");
-    }
+        console.log('Please Add Group');
+    };
     return loading ? (
         <Spinner />
     ) : (
         <Fragment>
             <div>
                 <h2 className='large text-primary'>
-                    <i className='fa fa-user-secret'></i>&nbsp;&nbsp;System Configuration
+                    <i className='fa fa-user-secret'></i>&nbsp;&nbsp;System
+                    Configuration
                 </h2>
             </div>
             <p>This will be the security information for {clientName}</p>
@@ -61,31 +66,57 @@ const SystemConfig = ({
 
                     <AccordionDetails>
                         <div className='posts'>
-
                             {defaultGroups ? (
                                 <>
                                     <table>
                                         <tbody>
-                                        <tr>
-                                            <td>
-                                                {defaultGroups.map((dGroup) => (
-                                                    <DefaultGroup
-                                                        key={dGroup.groupId}
-                                                        defGroup={dGroup}
-                                                    />
-                                                ))}
-                                            </td>
-                                        </tr>
+                                            <tr>
+                                                <td>
+                                                    {defaultGroups.map(
+                                                        (dGroup) => (
+                                                            <DefaultGroup
+                                                                key={
+                                                                    dGroup.groupId
+                                                                }
+                                                                defGroup={
+                                                                    dGroup
+                                                                }
+                                                            />
+                                                        )
+                                                    )}
+                                                </td>
+                                            </tr>
                                         </tbody>
                                     </table>
-                                    <div className={"config-page__add-default-group-row"}
-                                        onClick={()=>handleAddGroupClick()}> 
-                                        <NavLink to="/EditDefaultGroups" className={'config-page__new-group-nav-link'}>
-                                            <div className={"config-page__add-icon"}>
-                                                <i key='two' className='material-icons'>
-                                                add_circle_outline</i>
+                                    <div
+                                        className={
+                                            'config-page__add-default-group-row'
+                                        }
+                                        onClick={() => handleAddGroupClick()}
+                                    >
+                                        <NavLink
+                                            to='/EditDefaultGroups'
+                                            className={
+                                                'config-page__new-group-nav-link'
+                                            }
+                                        >
+                                            <div
+                                                className={
+                                                    'config-page__add-icon'
+                                                }
+                                            >
+                                                <i
+                                                    key='two'
+                                                    className='material-icons'
+                                                >
+                                                    add_circle_outline
+                                                </i>
                                             </div>
-                                            <div className={"config-page__add-words"}>
+                                            <div
+                                                className={
+                                                    'config-page__add-words'
+                                                }
+                                            >
                                                 Add New Default Group
                                             </div>
                                         </NavLink>
@@ -120,16 +151,16 @@ const SystemConfig = ({
                             {clientUsers ? (
                                 <table>
                                     <tbody>
-                                    <tr>
-                                        <td>
-                                            {clientUsers.map((user) => (
-                                                <ClientUser
-                                                    key={user.userId}
-                                                    user={user}
-                                                />
-                                            ))}
-                                        </td>
-                                    </tr>
+                                        <tr>
+                                            <td>
+                                                {clientUsers.map((user) => (
+                                                    <ClientUser
+                                                        key={user.userId}
+                                                        user={user}
+                                                    />
+                                                ))}
+                                            </td>
+                                        </tr>
                                     </tbody>
                                 </table>
                             ) : null}
