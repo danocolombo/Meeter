@@ -80,7 +80,6 @@ const EditGathering = ({
     history,
 }) => {
     const [formData, setFormData] = useState(initialState);
-    console.log('EditGathering');
     useEffect(() => {
         // need to clear the redux meeting data
         clearTmpGroup();
