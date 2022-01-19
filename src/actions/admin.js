@@ -6,7 +6,6 @@ import {
     ADMIN_ERROR,
     SET_DEFAULT_GROUPS,
     ADD_DEFAULT_GROUP,
-    SET_MTG_CONFIGS,
     REMOVE_CLIENT_USER,
 } from './types';
 

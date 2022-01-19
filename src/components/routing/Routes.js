@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route, Switch } from 'react-router-dom';
+import { Route, Switch, Redirect } from 'react-router-dom';
 import Register from '../auth/Register';
 import Login from '../auth/Login';
 import Alert from '../layout/Alert';
@@ -96,7 +96,13 @@ const Routes = () => {
                     path='/EditDefaultGroups'
                     component={EditDefaultGroups}
                 />
-                <Route path='*' component={ErrorPage}/>
+                <Route
+                        exact
+                        path='/404'
+                        render={(props) => <ErrorPage />}
+                    />
+                <Redirect to='/404' />
+                {/* <Route path='*' component={ErrorPage}/> */}
                 {/* <Route component={NotFound} /> */}
             </Switch>
         </section>

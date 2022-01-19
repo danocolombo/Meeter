@@ -96,7 +96,7 @@ const MeetingConfig = ({
                 : false,
             cleanupContact: client.clientConfigs.cleanupContact ? true : false,
         });
-    }, [loading, getclientConfigs, client.clientConfigs]);
+    }, [loading, getclientConfigs, client.clientConfigs, activeClient]);
     // const [formData, setFormData] = useState(initialState);
     // const { donations, cafe, cafeFac } = formData;
 
