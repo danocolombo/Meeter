@@ -27,6 +27,10 @@ const Login = ({ login, isAuthenticated }) => {
     };
 
     if (isAuthenticated) {
+        //-----------------------------------------------------
+        // if the user is authenticated, redirect to dashboard
+        // otherwise stay on login page, error if necessary
+        //-----------------------------------------------------
         return <Redirect to='/dashboard' />;
     }
 
