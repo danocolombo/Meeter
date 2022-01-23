@@ -95,12 +95,16 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: "#f1f1f1",
   },
   passwordInput: {
-    // border: "1px solid blue",
     backgroundColor: "#ffffff",
     marginBottom: "10px",
   },
   passwordLabel: { paddingRight: "1em" },
   breakLineWrapper: {
+    marginBottom: "1em",
+  },
+  optionalWrapper: {
+    border: "2px double blue",
+    padding: "3px",
     marginBottom: "1em",
   },
   breakLine: {
@@ -127,20 +131,31 @@ const useStyles = makeStyles((theme) => ({
   phoneWrapper: {
     // border: "1px solid blue",
     backgroundColor: "#f1f1f1",
+    marginRight: "1em",
+    marginBottom: "1em",
   },
   phoneLabel: {
+    // paddingRight: "1em",
+  },
+  birthdayLabel: {
     paddingRight: "1em",
   },
   birthdayWrapper: {
     // border: "1px solid blue",
     backgroundColor: "#f1f1f1",
+    paddingRight: "1em",
+    marginBottom: "1em",
     // marginTop: "1em",
   },
   shirtWrapper: {
     // border: "1px solid blue",
     backgroundColor: "#f1f1f1",
+    paddingLeft: "2px",
+    // marginLeft: "1em",
     // marginTop: ".5em",
   },
+  shirtLabel: {margin: 0, padding: 0},
+  shirtInput: {margin: 0, padding: 0, textAlign: "right"},
 }));
 
 const Signup = ({ props, onChange }) => {
@@ -279,62 +294,67 @@ const Signup = ({ props, onChange }) => {
           </div>
         </div>
         {/* //    OPTIONAL SEPARATOR  */}
+
         <div className={classes.breakLineWrapper}>
           <hr className={classes.breakLine} />
           <div className={classes.optionalLabel}>OPTIONAL INFORMATION</div>
           <hr className={classes.breakLine} />
         </div>
-        <div className={classes.tRow}>
-          <div className={classes.addressLabel}>Address</div>
-          <div>
-            <input
-              type="text"
-              placeholder="123 Main St."
-              name="address"
-              value={address}
-              // onChange={(e) => onChange(e)}
-              className={classes.addressInput}
-            />
-          </div>
-        </div>
-        <div className={classes.regRow}>
-          <div className={classes.phoneWrapper}>
-            <div className={classes.phoneLabel}>Phone</div>
+        <div className={classes.optionalWrapper}>
+          <div className={classes.tRow}>
+            <div className={classes.addressLabel}>Address</div>
             <div>
               <input
                 type="text"
-                placeholder="(208) 340-1234"
-                name="phone"
-                value=""
+                placeholder="123 Main St."
+                name="address"
+                value={address}
                 // onChange={(e) => onChange(e)}
-                className={classes.phoneInput}
+                className={classes.addressInput}
               />
             </div>
           </div>
-          <div className={classes.birthdayWrapper}>
-            <BasicDatePicker dateLabel="Birthday" theDate={birthday} />
-          </div>
-          <div>
-            <div className={classes.shirtWrapper}>
-              Shirt Size
-              <br />
-              <NativeSelect
-                defaultValue={"?"}
-                className={classes.shirtInput}
-                inputProps={{
-                  name: "shirt",
-                  id: "uncontrolled-native",
-                }}
-              >
-                <option value={""}>?</option>
-                <option value={"s"}>S</option>
-                <option value={"m"}>M</option>
-                <option value={"l"}>L</option>
-                <option value={"xl"}>XL</option>
-                <option value={"xxl"}>2 XL</option>
-                <option value={"xxxl"}>3 XL</option>
-                <option value={"xxxl"}>4 XL</option>
-              </NativeSelect>
+          <div className={classes.regRow}>
+            <div className={classes.phoneWrapper}>
+              <div className={classes.phoneLabel}>Phone</div>
+              <div>
+                <input
+                  type="text"
+                  placeholder="(208) 340-1234"
+                  name="phone"
+                  value=""
+                  // onChange={(e) => onChange(e)}
+                  className={classes.phoneInput}
+                />
+              </div>
+            </div>
+            <div className={classes.birthdayWrapper}>
+              <div className={classes.birthdayLabel}>Birthday</div>
+              <BasicDatePicker dateLabel="Birthday" theDate={birthday} />
+            </div>
+            <div>
+              <div className={classes.shirtWrapper}>
+                <div className={classes.shirtLabel}>Shirt Size</div>
+                <div className={classes.shirtInput}>
+                  <NativeSelect
+                    defaultValue={"?"}
+                    className={classes.shirtInput}
+                    inputProps={{
+                      name: "shirt",
+                      id: "uncontrolled-native",
+                    }}
+                  >
+                    <option value={""}>?</option>
+                    <option value={"s"}>S</option>
+                    <option value={"m"}>M</option>
+                    <option value={"l"}>L</option>
+                    <option value={"xl"}>XL</option>
+                    <option value={"xxl"}>2 XL</option>
+                    <option value={"xxxl"}>3 XL</option>
+                    <option value={"xxxl"}>4 XL</option>
+                  </NativeSelect>
+                </div>
+              </div>
             </div>
           </div>
         </div>
