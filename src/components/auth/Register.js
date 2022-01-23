@@ -4,7 +4,7 @@ import { Link, Redirect } from "react-router-dom";
 import { setAlert } from "../../actions/alert";
 import { register } from "../../actions/login";
 import PropTypes from "prop-types";
-import SignupRequired from "./signup.required";
+import Signup from "./component.register";
 import RegisterOptionalInfo from "./component.register.optional";
 import RegisterRequiredInfo from "./component.register.required";
 
@@ -23,6 +23,7 @@ const Register = ({ setAlert, register, isAuthenticated }) => {
 
   const onSubmit = async (e) => {
     e.preventDefault();
+    console.log(`firstName:${document.regForm.firstName}`);
     if (password !== password2) {
       setAlert("Passwords do not match", "danger");
     } else {
@@ -40,11 +41,10 @@ const Register = ({ setAlert, register, isAuthenticated }) => {
       <p className="lead">
         <i className="fas fa-user" /> Create Your Account
       </p>
-      <form className="form" onSubmit={(e) => onSubmit(e)}>
-       <SignupRequired/>
-        <input type="submit" className="btn btn-primary" value="Register" />
+       <Signup/>
+        
         {/* <RegisterOptionalInfo /> */}
-      </form>
+      
       <p className="my-1">
         Already have an account? <Link to="/login">Sign In</Link>
       </p>

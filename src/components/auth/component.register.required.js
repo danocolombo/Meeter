@@ -1,7 +1,7 @@
 import React, {Fragment} from "react";
 
 import "./component.register.css";
-import SignupRequired from "./signup.required";
+import SignupRequired from "./component.register";
 const RegisterRequiredInfo = ({ name, email, password, password2, children, onChange, ...otherProps }) => (
   <Fragment>
       <SignupRequired name={name}/>
