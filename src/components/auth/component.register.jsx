@@ -7,6 +7,7 @@ import { Paper } from "@material-ui/core";
 import { NativeSelect } from "@material-ui/core";
 import { FormControlLabel } from "@material-ui/core";
 import { Checkbox } from "@material-ui/core";
+import { TextField } from "@material-ui/core";
 import { Link } from "react-router-dom";
 import Button from "@material-ui/core/Button";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
@@ -14,6 +15,7 @@ import { StylesContext } from "@material-ui/styles";
 import { red } from "@material-ui/core/colors";
 import { FormHelperText } from "@material-ui/core";
 import BasicDatePicker from "../utils/basicDatePicker";
+// import PhoneComponent from "../utils/phoneNumberInput";
 
 const useStyles = makeStyles((theme) => ({
   mainContainer: {
@@ -175,7 +177,6 @@ const Signup = ({ props, onChange }) => {
   const [phone, setPhone] = useState("");
   const [birthday, setBirthday] = useState("");
   const [shirt, setShirt] = useState("");
-  const [nickname, setNickname] = useState("");
 
   //   const theme = useTheme();
   const matchesSM = useMediaQuery("(min-width:400px)");
@@ -187,6 +188,13 @@ const Signup = ({ props, onChange }) => {
     this.setState({
       [e.target.name]: e.target.value,
     });
+  };
+  const handleBirthdayChange = (e) => {
+    setBirthday(e.target.value);
+  };
+  const handleDateChange = (event) => {
+    setBirthday(event.target.value);
+    // alert("Birthday:" + birthday);
   };
   const onSubmit = (e) => {
     e.preventDefault();
@@ -232,30 +240,62 @@ const Signup = ({ props, onChange }) => {
       window.scrollTo(0, 0);
       return;
     }
-    if(password1 !== password2){
-      alert(
-        "your passwords need to match"
-      );
+    if (password1 !== password2) {
+      alert("your passwords need to match");
       window.scrollTo(0, 0);
       return;
     }
     let passwordRegex =
       /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[\^$*.\[\]{}\(\)?\-\"!@#%&\/,><\':;|_~`])\S{8,99}$/;
-    if(passwordRegex.test(password1) == false){
+    if (passwordRegex.test(password1) == false) {
       alert(
-        'Password requirements:\n' +
-        '  minimum length of 8\n' +
-        '  at lease one number\n' +
-        '  at least one special character\n' +
-        '  at least one upper case character\n' +
-        '  at least one lower case cahracter'
+        "Password requirements:\n" +
+          "  minimum length of 8\n" +
+          "  at lease one number\n" +
+          "  at least one special character\n" +
+          "  at least one upper case character\n" +
+          "  at least one lower case cahracter"
       );
       window.scrollTo(0, 0);
       return;
     }
+    const theRequest = {
+      email: email,
+      password: password1,
+      firstName: firstName,
+      lastName: lastName,
+      gender: gender,
+    };
+    if (userNameIsVisible) {
+      //------------------------------------
+      // want to use email as userName
+      //------------------------------------
+      theRequest.preferred_username = email;
+    } else {
+      theRequest.preferred_username = userName;
+    }
+    // check for optional information
+    if (address) {
+      theRequest.address = address;
+    }
+    if (phone) {
+      const phoneRegex = /^([+]?[\s0-9]+)?(\d{3}|[(]?[0-9]+[)])?([-]?[\s]?[0-9])+$/i;
+      if (phoneRegex.test(phone) == false ){
+        alert("Phone number is invalid");
+        window.scrollTo(0, 0);
+        return;
+      }
+      theRequest.phone = phone;
+    }
+    if (birthday) {
+      theRequest.birthday = birthday;
+    }
+    if (shirt) {
+      theRequest.shirt = shirt;
+    }
+    alert("see console log");
+    console.log(theRequest);
 
-    alert("proceed to submit");
-    
     window.scrollTo(0, 0);
   };
   return (
@@ -381,7 +421,7 @@ const Signup = ({ props, onChange }) => {
               <div>
                 <input
                   type="text"
-                  placeholder="123 Main St."
+                  placeholder="Street, City, State, Postal Code"
                   name="address"
                   value={address}
                   onChange={(e) => setAddress(e.target.value)}
@@ -391,7 +431,7 @@ const Signup = ({ props, onChange }) => {
             </div>
             <div className={classes.regRow}>
               <div className={classes.phoneWrapper}>
-                <div className={classes.phoneLabel}>Phone</div>
+                {/* <div className={classes.phoneLabel}>Phone</div>
                 <div>
                   <input
                     type="text"
@@ -401,11 +441,30 @@ const Signup = ({ props, onChange }) => {
                     onChange={(e) => setPhone(e.target.value)}
                     className={classes.phoneInput}
                   />
-                </div>
+                </div> */}
+                <input
+                  type="phone"
+                  name="phone"
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
+                  className="phoneInput"
+                />
               </div>
               <div className={classes.birthdayWrapper}>
                 <div className={classes.birthdayLabel}>Birthday</div>
-                <BasicDatePicker dateLabel="Birthday" theDate={birthday} />
+                {/* <BasicDatePicker dateLabel="Birthday" theDate={birthday} onChange={(e) => setBirthday(e.target.value)}/> */}
+                <TextField
+                  id="date"
+                  label="Select Date"
+                  type="date"
+                  defaultValue={birthday}
+                  value={birthday}
+                  format="MM/dd/yyyy"
+                  onChange={handleDateChange}
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                />
               </div>
               <div>
                 <div className={classes.shirtWrapper}>
@@ -415,6 +474,7 @@ const Signup = ({ props, onChange }) => {
                       defaultValue={"?"}
                       className={classes.shirtInput}
                       // onChange={(e) => setShirt(value)}
+                      onChange={(e) => setShirt(e.target.value)}
                       inputProps={{
                         name: "shirt",
                         id: "uncontrolled-native",
@@ -437,6 +497,32 @@ const Signup = ({ props, onChange }) => {
           <input type="submit" className="btn btn-primary" value="Register" />
         </div>
       </form>
+      <div>
+        firstName: {firstName}
+        <br />
+        lastName: {lastName}
+        <br />
+        gender: {gender}
+        <br />
+        email: {email}
+        <br />
+        userNameIsVisible: {userNameIsVisible}
+        <br />
+        userName: {userName}
+        <br />
+        password1: {password1}
+        <br />
+        password2: {password2}
+        <br />
+        address: {address}
+        <br />
+        phone: {phone}
+        <br />
+        birthday: {birthday}
+        <br />
+        shirt: {shirt}
+        <br />
+      </div>
     </>
   );
 };
