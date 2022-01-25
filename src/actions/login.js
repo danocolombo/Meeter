@@ -237,131 +237,77 @@ export const loadUser = (userId) => async (dispatch) => {
 
 // Register User
 export const register =
-  ({ name, email, password }) =>
+  (theRequest) =>
   async (dispatch) => {
-    //-----------------------------------------------------
-    // new function to use cognito
-    //-----------------------------------------------------
-    let poolData = {
-      UserPoolId: process.env.REACT_APP_COGNITO_USERPOOLID,
-      ClientId: process.env.REACT_APP_COGNITO_CLIENTID,
+    //==========================================
+    // flush the request to variables
+    //==========================================
+    // required
+    let firstName = theRequest.firstName;
+    let lastName = theRequest.lastName;
+    let gender = theRequest.gender;
+    let email = theRequest.email;
+    let password = theRequest.password;
+    let preferred_username = theRequest.preferred_username;
+    //----------------------------------------
+    // optional reg info
+    let userName = null;
+    let address = null;
+    let phone = null;
+    let birthday = null;
+    let shirt = null;
 
-      // values before are the test cognito pool
-      //   UserPoolId: "us-east-1_4UwI8s8MM",
-      //   ClientId: "5j6s4cvhqj0nm3k6qn73j4humt",
-    };
-    let userPool = new CognitoUserPool(poolData);
-
-    // let attributeList = [];
-    // let dataEmail = {
-    //     Name: 'email',
-    //     Value: email,
-    // };
-    // // we don't require phone number when first registering, but
-    // // cognito requires, so we set generic value
-    // // let dataPhoneNumber = {
-    // //     Name: 'phone_number',
-    // //     Value: '+15555555555',
-    // // };
-    // let attributeEmail = new CognitoUserAttribute(dataEmail);
-    // let attributePhoneNumber = new CognitoUserAttribute(dataPhoneNumber);
-    // attributeList.push(attributeEmail);
-    // attributeList.push(attributePhoneNumber);
+    //now see if there is other registration info provided
+    if (theRequest?.userName){
+      userName = theRequest.userName;
+    }
+    if (theRequest?.address){
+      address = theRequest.address;
+    }
+    if (theRequest?.phone){
+      phone = theRequest.phone;
+    }
+    if (theRequest?.birthday){
+      birthday = theRequest.birthday;
+    }
+    if (theRequest?.shirt){
+      shirt = theRequest.shirt;
+    }
+    //   build attributeList
     let attributeList = [
+      {
+        Name: "given_name",
+        Value: firstName,
+      },
+      {
+        Name: "family_name",
+        Value: lastName,
+      },
+      {
+        Name: "gender",
+        Value: gender,
+      },
       {
         Name: "email",
         Value: email,
       },
       {
-        Name: "phone_number",
-        Value: "+15555555555",
-      },
-      {
-        Name: "nickname",
-        Value: "NICKNAME",
-      },
-      {
-        Name: "address",
-        Value: "ADDRESS",
-      },
-      {
-        Name: "birthdate",
-        Value: "09/10/1963",
-      },
-      {
-        Name: "family_name",
-        Value: "LAST_NAME",
-      },
-      {
-        Name: "gender",
-        Value: "GENDER",
-      },
-      {
-        Name: "given_name",
-        Value: "GIVEN_NAME",
-      },
-      {
-          Name: "preferred_username",
-          Value: "PREFERRED_USERNAME",
-      },
-    ];
-    // var params2 = {
-    //   ClientId: "5j6s4cvhqj0nm3k6qn73j4humt" /* required */,
-    //   Password: password /* required */,
-    //   Username: name /* required */,
-    //   UserAttributes: [
-    //     {
-    //       Name: "custom:clientId" /* required */,
-    //       Value: "TBD",
-    //     },
-    //     /* more items */
-    //   ],
-    //   ValidationData: [
-    //     {
-    //       Name: "email" /* required */,
-    //       Value: email,
-    //     },
-    //     /* more items */
-    //   ],
-    // };
-    // const client = new CognitoIdentityProviderClient({ region: "us-east-1" });
+        Name: "preferred_username",
+        Value: preferred_username,
+      }
+    ]; 
+    //   add optional reg info
+    if(address){
+      attributeList.push({Name: "address", Value: address});
+    }
+    if(phone){
+      attributeList.push({Name: "phone", Value: phone});
+    }
+    if(birthday){
+      attributeList.push({Name: "birthday", Value: birthday});
+    }
 
-    // client.signUp(params2, function (err, data) {
-    //   if (err) console.log(err, err.stack);
-    //   // an error occurred
-    //   else console.log(data); // successful response
-    // });
-    // let params = {
-    //   Username: email,
-    //   Password: password,
-    //   email: email,
-    //   phone_number: "+15555555555",
-    //   UserAttributes: [
-    //     {
-    //       Name: "custom:clientId" /* required */,
-    //       Value: "TBD",
-    //     },
-    //   ],
-    // };
-    // userPool.signUp(params, function(err, data) {
-    //     if (err) console.log(err, err.stack); // an error occurred
-    //     else     console.log(data);           // successful response
-    //   });
 
-    // userPool.signUp(params, function(
-    // userPool.signUp(email, password, attributeList, null, function(
-    // userPool.signUp(params2, function(
-    // let attList = {
-    //   phone_number: "+11234567890",
-    //   email: email,
-    //   preferred_username: email,
-    //   UserAttributes: [
-    //     {
-    //       Name: "clientId" /* required */,
-    //       Value: "TBD",
-    //     },
-    //   ],
-    // };
     userPool.signUp(
       email,
       password,
@@ -378,38 +324,7 @@ export const register =
       }
     );
   };
-export const OLDregister =
-  ({ name, email, password }) =>
-  async (dispatch) => {
-    const config = {
-      headers: {
-        "Content-Type": "application/json",
-      },
-    };
 
-    const body = JSON.stringify({ name, email, password });
-
-    try {
-      const res = await axios.post("/api/users", body, config);
-
-      dispatch({
-        type: REGISTER_SUCCESS,
-        payload: res.data,
-      });
-
-      dispatch(loadUser());
-    } catch (err) {
-      const errors = err.response.data.errors;
-
-      if (errors) {
-        errors.forEach((error) => dispatch(setAlert(error.msg, "danger")));
-      }
-
-      dispatch({
-        type: REGISTER_FAIL,
-      });
-    }
-  };
 
 // Logout / Clear Profile
 export const logout = () => (dispatch) => {

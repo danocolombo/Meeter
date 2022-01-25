@@ -16,6 +16,7 @@ import { red } from "@material-ui/core/colors";
 import { FormHelperText } from "@material-ui/core";
 import BasicDatePicker from "../utils/basicDatePicker";
 // import PhoneComponent from "../utils/phoneNumberInput";
+import { register } from "../../actions/login";
 
 const useStyles = makeStyles((theme) => ({
   mainContainer: {
@@ -293,10 +294,11 @@ const Signup = ({ props, onChange }) => {
     if (shirt) {
       theRequest.shirt = shirt;
     }
-    alert("see console log");
-    console.log(theRequest);
+    register(theRequest);
+    // alert("see console log");
+    // console.log(theRequest);
 
-    window.scrollTo(0, 0);
+    // window.scrollTo(0, 0);
   };
   return (
     <>
@@ -497,32 +499,7 @@ const Signup = ({ props, onChange }) => {
           <input type="submit" className="btn btn-primary" value="Register" />
         </div>
       </form>
-      <div>
-        firstName: {firstName}
-        <br />
-        lastName: {lastName}
-        <br />
-        gender: {gender}
-        <br />
-        email: {email}
-        <br />
-        userNameIsVisible: {userNameIsVisible}
-        <br />
-        userName: {userName}
-        <br />
-        password1: {password1}
-        <br />
-        password2: {password2}
-        <br />
-        address: {address}
-        <br />
-        phone: {phone}
-        <br />
-        birthday: {birthday}
-        <br />
-        shirt: {shirt}
-        <br />
-      </div>
+      
     </>
   );
 };
