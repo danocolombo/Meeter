@@ -3,7 +3,7 @@ import { CognitoUserPool } from 'amazon-cognito-identity-js';
 const poolData = {
     // this information defines the Amazon cognito user pool definitions
     UserPoolId: 'us-east-1_ekSObpH41',
-    ClientId: '2qaroev40htl0fdsc1ccr8194v',
+    ClientId: '25gavn3c4tkbas0gov5onmdta4',
 };
 // const UserPool = new CognitoUserPool(poolData);
 
