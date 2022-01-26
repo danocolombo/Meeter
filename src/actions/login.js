@@ -2,10 +2,11 @@ import axios from "axios";
 import {
   CognitoUser,
   AuthenticationDetails,
+  CognitoIdentityServiceProvider,
   CognitoUserAttribute,
   CognitoUserPool,
 } from "amazon-cognito-identity-js";
-import { CognitoIdentityProviderClient } from "@aws-sdk/client-cognito-identity-provider";
+import { CognitoIdentityProviderClient, CognitoIdentityProvider } from "@aws-sdk/client-cognito-identity-provider";
 import { setAlert } from "./alert";
 import {
   REGISTER_SUCCESS,
@@ -23,7 +24,7 @@ import {
   SET_CLIENT,
 } from "./types";
 import setAuthToken from "../utils/setAuthToken";
-
+import crypto from 'crypto';
 import UserPool from "./UserPool";
 
 // import { CollectionsOutlined, DateRange } from '@material-ui/icons';
@@ -236,95 +237,151 @@ export const loadUser = (userId) => async (dispatch) => {
 };
 
 // Register User
-export const register =
-  (theRequest) =>
-  async (dispatch) => {
-    //==========================================
-    // flush the request to variables
-    //==========================================
-    // required
-    let firstName = theRequest.firstName;
-    let lastName = theRequest.lastName;
-    let gender = theRequest.gender;
-    let email = theRequest.email;
-    let password = theRequest.password;
-    let preferred_username = theRequest.preferred_username;
-    //----------------------------------------
-    // optional reg info
-    let userName = null;
-    let address = null;
-    let phone = null;
-    let birthday = null;
-    let shirt = null;
+export const register = (theRequest) => async (dispatch) => {
+  //==========================================
+  // flush the request to variables
+  //==========================================
+  // required
+  let firstName = theRequest.firstName;
+  let lastName = theRequest.lastName;
+  let gender = theRequest.gender;
+  let email = theRequest.email;
+  let password = theRequest.password;
+  let preferred_username = theRequest.preferred_username;
+  //----------------------------------------
+  // optional reg info
+  let userName = null;
+  let address = null;
+  let phone = null;
+  let birthday = null;
+  let shirt = null;
 
-    //now see if there is other registration info provided
-    if (theRequest?.userName){
-      userName = theRequest.userName;
-    }
-    if (theRequest?.address){
-      address = theRequest.address;
-    }
-    if (theRequest?.phone){
-      phone = theRequest.phone;
-    }
-    if (theRequest?.birthday){
-      birthday = theRequest.birthday;
-    }
-    if (theRequest?.shirt){
-      shirt = theRequest.shirt;
-    }
-    //   build attributeList
-    let attributeList = [
+  //now see if there is other registration info provided
+  if (theRequest?.userName) {
+    userName = theRequest.userName;
+  }
+  if (theRequest?.address) {
+    address = theRequest.address;
+  }
+  if (theRequest?.phone) {
+    phone = theRequest.phone;
+  }
+  if (theRequest?.birthday) {
+    birthday = theRequest.birthday;
+  }
+  if (theRequest?.shirt) {
+    shirt = theRequest.shirt;
+  }
+  //   build attributeList
+  let attributeList = [
+    {
+      Name: "given_name",
+      Value: firstName,
+    },
+    {
+      Name: "family_name",
+      Value: lastName,
+    },
+    {
+      Name: "gender",
+      Value: gender,
+    },
+    {
+      Name: "email",
+      Value: email,
+    },
+    {
+      Name: "preferred_username",
+      Value: preferred_username,
+    },
+  ];
+  //   add optional reg info
+  if (address) {
+    attributeList.push({ Name: "address", Value: address });
+  }
+  if (phone) {
+    attributeList.push({ Name: "phone", Value: phone });
+  }
+  if (birthday) {
+    attributeList.push({ Name: "birthday", Value: birthday });
+  }
+  //    this is new code
+  var originalParams = {
+    ClientId:
+      process.env.REACT_APP_COGNITO_CLIENTID /* 'STRING_VALUE', /* required */,
+    Password: password /* 'STRING_VALUE', /* required */,
+    Username: "dcolombo" /* 'STRING_VALUE', /* required */,
+
+    SecretHash: "5dDa/mgbrIIaOdAet+xIJIJEOIh8+iZWSjL7fZrh+S0=",
+    UserAttributes: attributeList,
+    ValidationData: [
       {
-        Name: "given_name",
-        Value: firstName,
-      },
-      {
-        Name: "family_name",
-        Value: lastName,
-      },
-      {
-        Name: "gender",
-        Value: gender,
-      },
-      {
-        Name: "email",
+        Name: "email" /* 'STRING_VALUE', /* required */,
         Value: email,
       },
-      {
-        Name: "preferred_username",
-        Value: preferred_username,
-      }
-    ]; 
-    //   add optional reg info
-    if(address){
-      attributeList.push({Name: "address", Value: address});
-    }
-    if(phone){
-      attributeList.push({Name: "phone", Value: phone});
-    }
-    if(birthday){
-      attributeList.push({Name: "birthday", Value: birthday});
-    }
-
-
-    userPool.signUp(
-      email,
-      password,
-      attributeList,
-      null,
-      function (err, result) {
-        if (err) {
-          alert(err.message || JSON.stringify(err));
-          return;
-        }
-        var cognitoUser = result.user;
-        alert("user name is " + cognitoUser.getUsername());
-        console.log("user name is " + cognitoUser.getUsername());
-      }
-    );
+      /* more items */
+    ],
   };
+  
+  const clientId = process.env.REACT_APP_COGNITO_CLIENTID;
+  const clientSecret = process.env.REACT_APP_COGNITO_CLIENT_SECRET;
 
+  (async () => {
+    var params = {
+      ClientId: clientId,
+      Password: password,
+      Username: userName,
+      
+      SecretHash: hashSecret(clientSecret, userName, clientId),
+      UserAttributes: [
+        {
+          Name: 'given_name',
+          Value: firstName,
+        },
+        {
+          Name: 'gender',
+          Value: gender,
+        },
+        {
+          Name: 'family_name',
+          Value: lastName,
+        },
+        { Name: 'email',
+          Value: email,
+        }
+      ],
+    }
+    let res = null;
+    const provider = new CognitoIdentityProvider({ region: 'us-east-1' })
+    try {
+      res = await provider.signUp(params)
+      const util = require('util');
+      console.log('res:  \n' + util.inspect(res, { showHidden: false, depth: null }));
+      
+    } catch (e) {
+      const util = require('util');
+      console.log('e:  \n' + util.inspect(e, { showHidden: false, depth: null }));
+      switch (e.name) {
+        case "UsernameExistsException":
+          dispatch(setAlert(e.message, "danger"));
+          break;
+      
+        default:
+          console.log('DEFAULT was caught');
+          dispatch(setAlert(e.message, "danger"));
+          break;
+      }
+      console.log('\nvvvvvvvvvvvvvvvvvvvvvvv\nSignup fail. Error: ', e)
+    }
+  })();
+  
+}
+function hashSecret(clientSecret, username, clientId) {
+  return crypto
+    .createHmac('SHA256', clientSecret)
+    .update(username + clientId)
+    .digest('base64')
+}
 
 // Logout / Clear Profile
 export const logout = () => (dispatch) => {
