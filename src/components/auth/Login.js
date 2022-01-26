@@ -94,16 +94,40 @@ const Login = ({ login, isAuthenticated }) => {
       //SecretHash: hashSecret(clientSecret, username, clientId),
     };
     let authenticationDetails = new AuthenticationDetails(userAuth);
-    cognitoUser.authenticateUser(authenticationDetails, {
-      onSuccess: function (result) {
-        let accessToken = result.getAccessToken().getJwtToken();
-        console.log(accessToken);
-      },
+    try {
+        cognitoUser.authenticateUser(authenticationDetails, {
+            onSuccess: function (result) {
+              // we got the token back
+              let accessToken = result.getAccessToken().getJwtToken();
 
-      onFailure: function (err) {
-        console.log(err);
-      },
-    });
+
+
+              console.log(accessToken);
+            },
+            onFailure: function (err) {
+                switch (err.code) {
+                    case "UserNotConfirmedException":
+                        console.log('Account not confirmed.');
+                        break;
+                    case "NotAuthorizedException":
+                        console.log('Incrrect username or password');
+                        break;
+                    default:
+                        break;
+                }
+              console.log(err);
+            },
+          });
+    } catch (error) {
+        console.log('we threw attempting to authenticateUser');
+    }
+    //   ==================================
+    //   auth confirmed proceed with user
+    //   ==================================
+    let currentUserInfo = {};
+    let currentSession = {};
+    
+    
   };
   function hashSecret(clientSecret, username, clientId) {
     return crypto
