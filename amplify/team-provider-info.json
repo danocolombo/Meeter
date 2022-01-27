@@ -1,0 +1,20 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-themeeting-dev-182149-authRole",
+      "UnauthRoleArn": "arn:aws:iam::226036691416:role/amplify-themeeting-dev-182149-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::226036691416:role/amplify-themeeting-dev-182149-authRole",
+      "Region": "us-east-1",
+      "DeploymentBucketName": "amplify-themeeting-dev-182149-deployment",
+      "UnauthRoleName": "amplify-themeeting-dev-182149-unauthRole",
+      "StackName": "amplify-themeeting-dev-182149",
+      "StackId": "arn:aws:cloudformation:us-east-1:226036691416:stack/amplify-themeeting-dev-182149/eae0e730-7fc7-11ec-b31f-0a4ff17fedd7",
+      "AmplifyAppId": "d1isenw0d5on82"
+    },
+    "categories": {
+      "auth": {
+        "themeetingd8e5b7fd": {}
+      }
+    }
+  }
+}

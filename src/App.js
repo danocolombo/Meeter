@@ -4,6 +4,11 @@ import Navbar from './components/layout/Navbar';
 import Landing from './components/layout/Landing';
 import Routes from './components/routing/Routes';
 
+// Amplify 
+import Amplify from 'aws-amplify';
+import awsconfig from './aws-exports';
+import { AmplifySignOut, withAuthenticator } from '@aws-amplify/ui-react';
+
 // Redux
 import { Provider } from 'react-redux';
 import store from './store';
@@ -16,7 +21,7 @@ if (localStorage.token) {
     //if token is defined, throw it in axios header
     setAuthToken(localStorage.token);
 }
-
+Amplify.configure(awsconfig);
 const App = () => {
     useEffect(() => {
         store.dispatch(loadUser());
@@ -24,6 +29,7 @@ const App = () => {
 
     return (
         <Provider store={store}>
+            <AmplifySignOut />
             <Router>
                 <Fragment>
                     <Navbar />
