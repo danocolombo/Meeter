@@ -2,15 +2,10 @@ import axios from "axios";
 import {
   CognitoUser,
   AuthenticationDetails,
-  CognitoIdentityServiceProvider,
-  CognitoUserAttribute,
-  CognitoUserPool,
 } from "amazon-cognito-identity-js";
-import { CognitoIdentityProviderClient, CognitoIdentityProvider } from "@aws-sdk/client-cognito-identity-provider";
+import { CognitoIdentityProvider } from "@aws-sdk/client-cognito-identity-provider";
 import { setAlert } from "./alert";
 import {
-  REGISTER_SUCCESS,
-  REGISTER_FAIL,
   USER_LOADED,
   AUTH_ERROR,
   LOGIN_SUCCESS,
