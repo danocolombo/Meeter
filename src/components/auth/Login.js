@@ -4,11 +4,12 @@ import { connect } from "react-redux";
 import { Auth } from 'aws-amplify';
 import { setAlert } from "../../actions/alert";
 import PropTypes from "prop-types";
+import { processLogin } from "../../actions/auth";
 
 import crypto from "crypto";
 
 
-const Login = ({ login, isAuthenticated }) => {
+const Login = ({ login, isAuthenticated, processLogin }) => {
   
   const thisVersion = process.env.REACT_APP_MEETER_VERSION;
   const history = useHistory();
@@ -101,11 +102,11 @@ const Login = ({ login, isAuthenticated }) => {
           currentSession = data;
       });
       //   GO TO DASHBOARD
-      return <Redirect to="/dashboard" />;
+      processLogin(username, password);
       // we will get true if user is registered or false if not
       //TODO ++++++++++++++++++++++++++++++++++++++
       //TODO--- NEED TO HAVE FUNCTION TO saveUser
-      alert('saveUser call ');
+      alert('processLogin call returned ');
       //TODO ++++++++++++++++++++++++++++++++++++++
       // const userIsRegistered = await saveUser(
       //     currentUserInfo,
@@ -208,10 +209,13 @@ const Login = ({ login, isAuthenticated }) => {
 
 Login.propTypes = {
   isAuthenticated: PropTypes.bool,
+  processLogin: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({
   isAuthenticated: state.auth.isAuthenticated,
 });
 
-export default connect(mapStateToProps)(Login);
+export default connect(mapStateToProps,{
+    processLogin
+  })(Login);
