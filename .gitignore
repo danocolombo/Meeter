@@ -6,6 +6,7 @@ src/components/ds_drive
 src/.DS_Store
 build/
 .env
+.env_preAmplify
 
 #amplify-do-not-edit-begin
 amplify/\#current-cloud-backend

@@ -33,16 +33,19 @@ const Login = ({ login, isAuthenticated, processLogin }) => {
           
           if (user.challengeName === 'NEW_PASSWORD_REQUIRED') {
               // const { requiredAttributes } = user.challengeParam; // the array of required attributes, e.g ['email', 'given_name','family_name', 'gender']
+              // this.router.navigateByUrl('/');
               Auth.completeNewPassword(
                   username, // the Cognito User Object
                   password,
-                  []
                   // the new password
                   // OPTIONAL, the required attributes
-                  // {
-                  //     email: 'xxxx@example.com',
-                  //     phone_number: '1234567890'
-                  // }
+                  {
+                      email: username,
+                      phone_number: '+12345678901',
+                      gender: "m",
+                      first_name: "john",
+                      last_name: "doe"
+                  }
               )
               .then((user) => {
                 // at this time the user is logged in if no MFA required
@@ -74,6 +77,11 @@ const Login = ({ login, isAuthenticated, processLogin }) => {
                         alertType: 'danger',
                     };
                     break;
+                case "NotAuthorizedException":
+                  alertPayload = {
+                    msg: e.message,
+                    alertType: 'danger'
+                  };
                 default:
                     alertPayload = {
                         msg: 'Signin error: [' + e.message + ']',
