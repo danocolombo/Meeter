@@ -1,22 +1,4 @@
 {
-  "alpha": {
-    "awscloudformation": {
-      "AuthRoleName": "amplify-meeter6-alpha-185356-authRole",
-      "UnauthRoleArn": "arn:aws:iam::226036691416:role/amplify-meeter6-alpha-185356-unauthRole",
-      "AuthRoleArn": "arn:aws:iam::226036691416:role/amplify-meeter6-alpha-185356-authRole",
-      "Region": "us-east-1",
-      "DeploymentBucketName": "amplify-meeter6-alpha-185356-deployment",
-      "UnauthRoleName": "amplify-meeter6-alpha-185356-unauthRole",
-      "StackName": "amplify-meeter6-alpha-185356",
-      "StackId": "arn:aws:cloudformation:us-east-1:226036691416:stack/amplify-meeter6-alpha-185356/674a20d0-7fcc-11ec-b347-0a12735f5c69",
-      "AmplifyAppId": "d23fg6hx8akats"
-    },
-    "categories": {
-      "auth": {
-        "meeter608d30371": {}
-      }
-    }
-  },
   "beta": {
     "awscloudformation": {
       "AuthRoleName": "amplify-meeter6-beta-195935-authRole",
@@ -27,6 +9,24 @@
       "UnauthRoleName": "amplify-meeter6-beta-195935-unauthRole",
       "StackName": "amplify-meeter6-beta-195935",
       "StackId": "arn:aws:cloudformation:us-east-1:226036691416:stack/amplify-meeter6-beta-195935/92f95c60-7fd5-11ec-a57d-12f6914b066f",
+      "AmplifyAppId": "d23fg6hx8akats"
+    },
+    "categories": {
+      "auth": {
+        "meeter608d30371": {}
+      }
+    }
+  },
+  "alpha": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-meeter6-alpha-185356-authRole",
+      "UnauthRoleArn": "arn:aws:iam::226036691416:role/amplify-meeter6-alpha-185356-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::226036691416:role/amplify-meeter6-alpha-185356-authRole",
+      "Region": "us-east-1",
+      "DeploymentBucketName": "amplify-meeter6-alpha-185356-deployment",
+      "UnauthRoleName": "amplify-meeter6-alpha-185356-unauthRole",
+      "StackName": "amplify-meeter6-alpha-185356",
+      "StackId": "arn:aws:cloudformation:us-east-1:226036691416:stack/amplify-meeter6-alpha-185356/674a20d0-7fcc-11ec-b347-0a12735f5c69",
       "AmplifyAppId": "d23fg6hx8akats"
     },
     "categories": {
