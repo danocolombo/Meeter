@@ -1,10 +1,10 @@
 {
   "version": "1",
   "cognitoConfig": {
-    "identityPoolName": "meeter608d30371_identitypool_08d30371",
+    "identityPoolName": "meeter6530d6e64_identitypool_530d6e64",
     "allowUnauthenticatedIdentities": false,
-    "resourceNameTruncated": "meeter08d30371",
-    "userPoolName": "meeter608d30371_userpool_08d30371",
+    "resourceNameTruncated": "meeter530d6e64",
+    "userPoolName": "meeter6530d6e64_userpool_530d6e64",
     "autoVerifiedAttributes": [
       "email"
     ],
@@ -20,10 +20,7 @@
     "passwordPolicyMinLength": 8,
     "passwordPolicyCharacters": [],
     "requiredAttributes": [
-      "email",
-      "family_name",
-      "gender",
-      "given_name"
+      "email"
     ],
     "aliasAttributes": [],
     "userpoolClientGenerateSecret": false,
@@ -34,16 +31,12 @@
     "userpoolClientReadAttributes": [
       "email"
     ],
-    "userpoolClientLambdaRole": "meeter08d30371_userpoolclient_lambda_role",
+    "userpoolClientLambdaRole": "meeter530d6e64_userpoolclient_lambda_role",
     "userpoolClientSetAttributes": false,
-    "sharedId": "08d30371",
-    "resourceName": "meeter608d30371",
+    "sharedId": "530d6e64",
+    "resourceName": "meeter6530d6e64",
     "authSelections": "identityPoolAndUserPool",
     "useDefault": "default",
-    "usernameAttributes": [
-      "email"
-    ],
-    "triggers": {},
     "userPoolGroupList": [],
     "serviceName": "Cognito",
     "usernameCaseSensitive": false,

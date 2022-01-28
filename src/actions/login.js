@@ -327,7 +327,7 @@ export const register = (theRequest) => async (dispatch) => {
       Password: password,
       Username: userName,
       
-      SecretHash: hashSecret(clientSecret, userName, clientId),
+      //SecretHash: hashSecret(clientSecret, userName, clientId),
       UserAttributes: [
         {
           Name: 'given_name',

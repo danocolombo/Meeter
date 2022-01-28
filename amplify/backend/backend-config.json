@@ -1,20 +1,15 @@
 {
   "auth": {
-    "meeter608d30371": {
+    "meeter6530d6e64": {
       "service": "Cognito",
       "providerPlugin": "awscloudformation",
       "dependsOn": [],
       "customAuth": false,
       "frontendAuthConfig": {
         "socialProviders": [],
-        "usernameAttributes": [
-          "EMAIL"
-        ],
+        "usernameAttributes": [],
         "signupAttributes": [
-          "EMAIL",
-          "FAMILY_NAME",
-          "GENDER",
-          "GIVEN_NAME"
+          "EMAIL"
         ],
         "passwordProtectionSettings": {
           "passwordPolicyMinLength": 8,
