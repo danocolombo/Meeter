@@ -1,17 +1,4 @@
 {
-  "twoseven": {
-    "awscloudformation": {
-      "AuthRoleName": "amplify-meeter6-twoseven-205707-authRole",
-      "UnauthRoleArn": "arn:aws:iam::226036691416:role/amplify-meeter6-twoseven-205707-unauthRole",
-      "AuthRoleArn": "arn:aws:iam::226036691416:role/amplify-meeter6-twoseven-205707-authRole",
-      "Region": "us-east-1",
-      "DeploymentBucketName": "amplify-meeter6-twoseven-205707-deployment",
-      "UnauthRoleName": "amplify-meeter6-twoseven-205707-unauthRole",
-      "StackName": "amplify-meeter6-twoseven-205707",
-      "StackId": "arn:aws:cloudformation:us-east-1:226036691416:stack/amplify-meeter6-twoseven-205707/9c89f6b0-7fdd-11ec-8c08-12996053af03",
-      "AmplifyAppId": "d23fg6hx8akats"
-    }
-  },
   "twoeight": {
     "awscloudformation": {
       "AuthRoleName": "amplify-meeter6-twoeight-50257-authRole",
