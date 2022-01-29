@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { Auth } from 'aws-amplify';
 import { setAlert } from '../../actions/alert';
 import PropTypes from 'prop-types';
-import { processLogin } from '../../actions/amplify';
+import { processLogin } from '../../actions/auth';
 
 import crypto from 'crypto';
 
@@ -14,12 +14,13 @@ const Login = ({ login, isAuthenticated, processLogin }) => {
     const [userIsRegistered, setUserIsRegistered] = useState(false);
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+   
 
     const signIn = async (dispatch) => {
         //   ++++++++++++++++++++++++++++++++++++
         //   SIGN IN
         //   ++++++++++++++++++++++++++++++++++++
-
+        let meeterUser = {};
         let alertPayload = {};
         try {
             await Auth.signIn(username, password)
@@ -28,7 +29,13 @@ const Login = ({ login, isAuthenticated, processLogin }) => {
                     // at this point we should have cognito user pool details
                     // username, email, given_name, family_name and gender. We
                     // may have others so save waht we get.
-
+                    //=============================
+                    meeterUser.id = user?.attributes?.sub;
+                    meeterUser.firstName = user?.attributes?.given_name;
+                    meeterUser.lastName = user?.attributes?.family_name;
+                    meeterUser.gender = user?.attributes?.gender;
+                    meeterUser.email = user?.attributes?.email;
+                    meeterUser.username = user?.username;
                     if (user.challengeName === 'NEW_PASSWORD_REQUIRED') {
                         // const { requiredAttributes } = user.challengeParam; // the array of required attributes, e.g ['email', 'given_name','family_name', 'gender']
                         // this.router.navigateByUrl('/');
@@ -105,8 +112,12 @@ const Login = ({ login, isAuthenticated, processLogin }) => {
             await Auth.currentSession().then((data) => {
                 currentSession = data;
             });
+            meeterUser.token = currentSession?.accessToken?.jwtToken;
             //   GO TO DASHBOARD
-            processLogin(username, password);
+
+
+
+            await processLogin(meeterUser);
             // we will get true if user is registered or false if not
             //TODO ++++++++++++++++++++++++++++++++++++++
             //TODO--- NEED TO HAVE FUNCTION TO saveUser
