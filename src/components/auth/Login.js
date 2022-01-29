@@ -36,34 +36,45 @@ const Login = ({ login, isAuthenticated, processLogin }) => {
                     meeterUser.gender = user?.attributes?.gender;
                     meeterUser.email = user?.attributes?.email;
                     meeterUser.username = user?.username;
-                    if (user.challengeName === 'NEW_PASSWORD_REQUIRED') {
-                        // const { requiredAttributes } = user.challengeParam; // the array of required attributes, e.g ['email', 'given_name','family_name', 'gender']
-                        // this.router.navigateByUrl('/');
-                        Auth.completeNewPassword(
-                            username, // the Cognito User Object
-                            password,
-                            // the new password
-                            // OPTIONAL, the required attributes
-                            {
-                                email: username,
-                                phone_number: '+12345678901',
-                                gender: 'm',
-                                first_name: 'john',
-                                last_name: 'doe',
+                    return async function() {
+                        await Auth.updateUserAttributes(user, {
+                            'address': '105 Main St. New York, NY 10001',
+                            'custom:defaultClientId': 'TBD',
+                            'custom:shirt': 'TBD',
+                        });
+                    
+                        if (user.challengeName === 'NEW_PASSWORD_REQUIRED') {
+                            // const { requiredAttributes } = user.challengeParam; // the array of required attributes, e.g ['email', 'given_name','family_name', 'gender']
+                            // this.router.navigateByUrl('/');
+                            return async function() {
+                                return Auth.completeNewPassword(
+                                    username, // the Cognito User Object
+                                    password,
+                                    // the new password
+                                    // OPTIONAL, the required attributes
+                                    {
+                                        email: username,
+                                        phone_number: '+12345678901',
+                                        gender: 'm',
+                                        first_name: 'john',
+                                        last_name: 'doe',
+                                    }
+                                ).then((user) => {
+                                    // at this time the user is logged in if no MFA required
+                                    console.log('authenticated: ', user);
+                                })
+                                .catch((e) => {
+                                    const alertPayload = {
+                                        msg: 'Authentication failed. Please check your credentials',
+                                        alertType: 'danger',
+                                    };
+                                    setAlert(alertPayload);
+                                    return;
+                                });
                             }
-                        )
-                            .then((user) => {
-                                // at this time the user is logged in if no MFA required
-                                console.log('authenticated: ', user);
-                            })
-                            .catch((e) => {
-                                const alertPayload = {
-                                    msg: 'Authentication failed. Please check your credentials',
-                                    alertType: 'danger',
-                                };
-                                setAlert(alertPayload);
-                                return;
-                            });
+                        
+                                
+                        }
                     }
                     //user is good to proceed
                 })

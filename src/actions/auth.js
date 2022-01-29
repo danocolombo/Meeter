@@ -25,44 +25,172 @@ import UserPool from "./UserPool";
 import { Auth } from "aws-amplify";
 
 export const processLogin = (meeterUser) => async (dispatch) => {
-    //dispatch to save
-    let login_success_data = {
-        token: meeterUser.token
+  //dispatch to save
+  console.log(meeterUser.username + ": " + meeterUser.id);
+  let login_success_data = {
+    token: meeterUser.token,
+  };
+  //pass the jwt to LOGIN_SUCCESS
+  //save token in redux
+  dispatch({
+    type: LOGIN_SUCCESS,
+    payload: login_success_data,
+  });
+  // set the session token ??
+  if (localStorage.token) {
+    setAuthToken(localStorage.token);
+  }
+  // get Meeter Info for user
+  try {
+      const config = {
+        headers: {
+          "Access-Control-Allow-Headers":
+            "Content-Type, x-auth-token, Access-Control-Allow-Headers",
+          "Content-Type": "application/json",
+        },
       };
-      //pass the jwt to LOGIN_SUCCESS
-      //save token in redux
+      // take the _id value and get user from meeter API
+      let sub = meeterUser.id;
+      let obj = {
+        operation: "authenticate",
+        payload: { uid: meeterUser.id },
+      };
+      const body = JSON.stringify(obj);
+
+      const api2use = process.env.REACT_APP_MEETER_API + "/user";
+      let authResponse = null;
+      console.log('1-BEFORE');
+      axios
+          .post(api2use, body, config)
+          .then((response) => {
+            authResponse = response;
+            console.log('2-THEN');
+          })
+          .catch((e) => {
+            dispatch(setAlert(e.message, "danger"));
+            dispatch({ type: LOGIN_FAIL });
+            console.log('2-catch');
+          });
+      
+      console.log('3-after axios');
+      // const res = await axios.post(api2use, body, config);
+
+      // now add response data location: res.data.body.x values
+      // to the values already passed in from login (cognito)
+      let user_data = {
+        _id: meeterUser.id,
+        username: meeterUser.username,
+        firstName: meeterUser.firstName,
+        lastName: meeterUser.lastName,
+        email: meeterUser.email,
+        gender: meeterUser.gender,
+        defaultClient: authResponse.data.body.defaultClient,
+        defaultClientId: authResponse.data.body.defaultClientId,
+        defaultClientRole: authResponse.data.body.role,
+        defaultClientStatus: authResponse.data.body.status,
+      };
+      let active_data = {
+        client: authResponse.data.body.defaultClient,
+        clientId: authResponse.data.body.defaultClientId,
+        role: authResponse.data.body.role,
+        status: authResponse.data.body.status,
+      };
+      // this next dispatch does nothing...??
       dispatch({
-        type: LOGIN_SUCCESS,
-        payload: login_success_data,
+        type: SET_ACTIVES,
+        payload: active_data,
+      });
+      dispatch({
+        type: USER_LOADED,
+        payload: user_data,
       });
 
+      let theClient = authResponse.data.body.defaultClient;
+      //---------------------------------------
+      // now go get defaultGroups and configs
+      //---------------------------------------
+      //   LOAD CLIENT
+      //   ===================
+      try {
+        // get the client info from database
+        let client = theClient;
+        const config = {
+          headers: {
+            "Access-Control-Allow-Headers":
+              "Content-Type, x-auth-token, Access-Control-Allow-Headers",
+            "Content-Type": "application/json",
+          },
+        };
+        let obj1 = {
+          operation: "getClientInfo",
+          payload: {
+            clientId: client,
+          },
+        };
+        let body = JSON.stringify(obj1);
+        let api2use = process.env.REACT_APP_MEETER_API + "/clients";
+        let clientInfoRes = null;
+        axios
+          .post(api2use, body, config)
+          .then((response) => {
+            clientInfoRes = response;
+          })
+          .catch((e) => {
+            if (e.response.status === 404) {
+              throw new Error(`${e.config.url} not found`);
+              throw e;
+            }
+            dispatch({
+              type: AUTH_ERROR,
+            });
+          });
+        if (clientInfoRes.status === 200) {
+          dispatch({
+            type: SET_CLIENT,
+            payload: clientInfoRes.data.body,
+          });
+          // need to check if we got any body, then define the
+          // defaultGroups and the configs.
+          if (Object.keys(clientInfoRes.data.body).length > 0) {
+            let clientInfo = clientInfoRes.data.body.Items[0];
+            //confirm we have defaultGroups and save
+            if (clientInfo.hasOwnProperty("defaultGroups")) {
+              dispatch({
+                type: SET_DEFAULT_GROUPS,
+                payload: clientInfo.defaultGroups,
+              });
+            }
+            if (clientInfo.hasOwnProperty("clientConfigs")) {
+              dispatch({
+                type: SET_MTG_CONFIGS,
+                payload: clientInfo.clientConfigs,
+              });
+            }
+            if (clientInfo.hasOwnProperty("clientUsers")) {
+              dispatch({
+                type: SET_CLIENT_USERS,
+                payload: clientInfo.clientUsers,
+              });
+            }
+          } else {
+            console.log("NO RESPONSE DATA");
+            dispatch({
+              type: AUTH_ERROR,
+            });
+          }
+        }
+      } catch (err) {
+        dispatch({
+          type: AUTH_ERROR,
+        });
+      }
+  } catch (err) {
+    console.log('what');
+  }
 
+};
 
-}
-  
-//   // try to authenticate....
-//   try {
-    
-//         //======================================
-//         // now lets get our user information
-//         // from Cognito, send to loadUser
-//         let uData = {
-//           _id: data.idToken.payload.sub,
-//           username: data.idToken.payload.username,
-//           email: data.idToken.payload.email,
-//           firstName: data.idToken.payload.given_name,
-//           lastName: data.idToken.payload.family_name,
-//           gender: data.idToken.payload.gender,
-//         };
-//         //----------------------------------------
-//         // take the info known and then continue
-//         // loading user
-//         //----------------------------------------
-//         //   LOAD USER
-//         //   ======================
-//         if (localStorage.token) {
-//           setAuthToken(localStorage.token);
-//         }
+//
 //         try {
 //           const config = {
 //             headers: {
