@@ -1,6 +1,6 @@
 {
-    "name": "Meeter",
-    "version": "0.1.0",
+    "name": "meeter",
+    "version": "0.6.0",
     "private": true,
     "dependencies": {
         "@aws-amplify/ui-react": "^2.1.10",
