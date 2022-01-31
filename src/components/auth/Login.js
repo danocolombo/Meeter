@@ -235,7 +235,7 @@ const Login = ({
                 <div className='form-group'>
                     <input
                         type='text'
-                        placeholder='Email Address'
+                        placeholder='Username'
                         name='userName'
                         value={username}
                         onChange={(e) => setUsername(e.target.value)}
