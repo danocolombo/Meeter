@@ -21,6 +21,7 @@
         "glob-parent": "^6.0.2",
         "materialize-css": "^1.0.0",
         "moment": "^2.29.1",
+        "node-fetch": "2.6.7",
         "node-gyp": "^8.4.1",
         "react": "^16.13.1",
         "react-dev-utils": "^12.0.0",
