@@ -1,0 +1,20 @@
+{
+  "twoeight": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-meeter6-twoeight-50257-authRole",
+      "UnauthRoleArn": "arn:aws:iam::226036691416:role/amplify-meeter6-twoeight-50257-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::226036691416:role/amplify-meeter6-twoeight-50257-authRole",
+      "Region": "us-east-1",
+      "DeploymentBucketName": "amplify-meeter6-twoeight-50257-deployment",
+      "UnauthRoleName": "amplify-meeter6-twoeight-50257-unauthRole",
+      "StackName": "amplify-meeter6-twoeight-50257",
+      "StackId": "arn:aws:cloudformation:us-east-1:226036691416:stack/amplify-meeter6-twoeight-50257/7b4ef150-8021-11ec-b84d-0eed4bf4bc43",
+      "AmplifyAppId": "d23fg6hx8akats"
+    },
+    "categories": {
+      "auth": {
+        "meeter6530d6e64": {}
+      }
+    }
+  }
+}

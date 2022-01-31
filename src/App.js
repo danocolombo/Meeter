@@ -9,9 +9,12 @@ import { Provider } from 'react-redux';
 import store from './store';
 import { loadUser } from './actions/login';
 import setAuthToken from './utils/setAuthToken';
+import Amplify from "aws-amplify";
+import awsExports from "./aws-exports";
 
 import './App.css';
 
+Amplify.configure(awsExports);
 if (localStorage.token) {
     //if token is defined, throw it in axios header
     setAuthToken(localStorage.token);
