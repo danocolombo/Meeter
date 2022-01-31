@@ -4,17 +4,12 @@ import { Link, Redirect } from 'react-router-dom';
 import { setAlert } from '../../actions/alert';
 import { register } from '../../actions/login';
 import PropTypes from 'prop-types';
-import { makeStyles, useTheme } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { NativeSelect } from '@material-ui/core';
 import { FormControlLabel } from '@material-ui/core';
 import { Checkbox } from '@material-ui/core';
 import { TextField } from '@material-ui/core';
-
-import Signup from './component.register';
-import RegisterOptionalInfo from './component.register.optional';
-import RegisterRequiredInfo from './component.register.required';
-import { UsernameConfigurationType } from '@aws-sdk/client-cognito-identity-provider';
 
 const Register = ({ setAlert, register, isAuthenticated }) => {
     //   const [formData, setFormData] = useState({
@@ -204,14 +199,14 @@ const Register = ({ setAlert, register, isAuthenticated }) => {
     const handleLoginDef = (e) => {
         setUserNameIsVisible(!userNameIsVisible);
     };
-    const handleInputChange = (e) => {
-        this.setState({
-            [e.target.name]: e.target.value,
-        });
-    };
-    const handleBirthdayChange = (e) => {
-        setBirthday(e.target.value);
-    };
+    // const handleInputChange = (e) => {
+    //     this.setState({
+    //         [e.target.name]: e.target.value,
+    //     });
+    // };
+    // const handleBirthdayChange = (e) => {
+    //     setBirthday(e.target.value);
+    // };
     const handleDateChange = (event) => {
         setBirthday(event.target.value);
         // alert("Birthday:" + birthday);
@@ -223,12 +218,12 @@ const Register = ({ setAlert, register, isAuthenticated }) => {
         // let okay2go = true;
         // first name needs to be more than chars and only text.
         let myRegxp = /^([a-zA-Z0-9_-]){3,15}$/;
-        if (myRegxp.test(firstName) == false) {
+        if (myRegxp.test(firstName) === false) {
             alert('First Name needs to be 3 characters or more');
             window.scrollTo(0, 0);
             return;
         }
-        if (myRegxp.test(lastName) == false) {
+        if (myRegxp.test(lastName) === false) {
             alert('Last Name needs to be 3 characters or more');
             window.scrollTo(0, 0);
             return;
@@ -240,7 +235,7 @@ const Register = ({ setAlert, register, isAuthenticated }) => {
         }
         let emailRegex =
             /(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9]))\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9])|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/;
-        if (emailRegex.test(email) == false) {
+        if (emailRegex.test(email) === false) {
             alert('email is not supported');
             window.scrollTo(0, 0);
             return;
@@ -255,7 +250,7 @@ const Register = ({ setAlert, register, isAuthenticated }) => {
             return;
         }
         userNameRegex = /^([a-zA-Z0-9_-]){5,15}$/;
-        if (!userNameIsVisible && userNameRegex.test(userName) == false) {
+        if (!userNameIsVisible && userNameRegex.test(userName) === false) {
             alert(
                 'Usernames have to be 5-15 in length, using letters, numbers, dash (-) or underscore (_)\nIf you want to use your email, check the box above.'
             );
@@ -269,7 +264,7 @@ const Register = ({ setAlert, register, isAuthenticated }) => {
         }
         let passwordRegex =
             /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[\^$*.\[\]{}\(\)?\-\"!@#%&\/,><\':;|_~`])\S{8,99}$/;
-        if (passwordRegex.test(password1) == false) {
+        if (passwordRegex.test(password1) === false) {
             alert(
                 'Password requirements:\n' +
                     '  minimum length of 8\n' +
@@ -304,7 +299,7 @@ const Register = ({ setAlert, register, isAuthenticated }) => {
         if (phone) {
             const phoneRegex =
                 /^([+]?[\s0-9]+)?(\d{3}|[(]?[0-9]+[)])?([-]?[\s]?[0-9])+$/i;
-            if (phoneRegex.test(phone) == false) {
+            if (phoneRegex.test(phone) === false) {
                 alert('Phone number is invalid');
                 window.scrollTo(0, 0);
                 return;
