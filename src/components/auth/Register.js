@@ -556,6 +556,15 @@ const Register = ({ setAlert, register, isAuthenticated }) => {
             </form>
 
             {/* <RegisterOptionalInfo /> */}
+            <div>
+                <div className='register-user-page__offer-confirm-box'>
+                    Have you registered and need to confirm your account?
+                    <Link className='NEED_TO_DEFINE' to='/confirm'>
+                        {' '}
+                        Click here
+                    </Link>
+                </div>
+            </div>
 
             <p className='my-1'>
                 Already have an account? <Link to='/login'>Sign In</Link>

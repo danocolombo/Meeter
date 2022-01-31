@@ -263,7 +263,10 @@ const Login = ({
             </div>
             <p className='my-1'>
                 Don't have an account? <Link to='/register'>Sign Up</Link>
+                <br />
+                Need to confirm account? <Link to='/confirm'>Click Here</Link>
             </p>
+
             <div className='appVersion'>build: {thisVersion}</div>
         </Fragment>
     );
