@@ -9,12 +9,15 @@ const ConfirmUser = () => {
 
     return (
         <Fragment>
-            <h1 className='large text-primary'>Sign In</h1>
+            <h1 className='large text-primary'>Confirm Account</h1>
             <p className='lead'>
                 <i className='fas fa-user' /> Confirm Your Account
             </p>
 
             <p className='my-1'>
+                Already have a confirmed account?{' '}
+                <Link to='/login'>Click Here</Link>
+                <br />
                 Don't have an account? <Link to='/register'>Sign Up</Link>
             </p>
             <div className='appVersion'>build: {thisVersion}</div>
