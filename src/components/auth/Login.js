@@ -11,12 +11,7 @@ import {
     dispatchUserInfo,
     getClientDBInfo,
     dispatchClientInfo,
-    dispatchGroupInfo,
-    dispatchMeetingConfigs,
-    dispatchClientUsers,
 } from '../../actions/auth';
-// import setAuthToken from '../../utils/setAuthToken';
-// import crypto from 'crypto';
 
 const Login = ({
     isAuthenticated,
@@ -26,13 +21,9 @@ const Login = ({
     dispatchUserInfo,
     getClientDBInfo,
     dispatchClientInfo,
-    dispatchGroupInfo,
-    dispatchMeetingConfigs,
-    dispatchClientUsers,
 }) => {
     const thisVersion = process.env.REACT_APP_MEETER_VERSION;
     const history = useHistory();
-    const [userIsRegistered, setUserIsRegistered] = useState(false);
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
 
@@ -58,12 +49,6 @@ const Login = ({
                     meeterUser.email = user?.attributes?.email;
                     meeterUser.username = user?.username;
                     return async function () {
-                        // await Auth.updateUserAttributes(user, {
-                        //     address: '105 Main St. New York, NY 10001',
-                        //     'custom:defaultClientId': 'TBD',
-                        //     'custom:shirt': 'TBD',
-                        // });
-
                         if (user.challengeName === 'NEW_PASSWORD_REQUIRED') {
                             // const { requiredAttributes } = user.challengeParam; // the array of required attributes, e.g ['email', 'given_name','family_name', 'gender']
                             // this.router.navigateByUrl('/');
@@ -125,7 +110,6 @@ const Login = ({
                             };
                             break;
                     }
-                    setAlert(alertPayload);
                     return;
                 });
             //   --------------------------------
@@ -200,57 +184,14 @@ const Login = ({
             let clientRes = await getClientDBInfo(meeterUser.clientCode);
             let clientInfo = {
                 clientId: meeterUser.clientId,
-                clientName: clientRes.clientName,
+                clientName: clientRes?.Items[0]?.clientName,
                 clientCode: meeterUser.clientCode,
-                defaultGroups: clientRes.defaultGroups,
-                clientUsers: clientRes.clientUsers,
-                clientConfigs: clientRes.clientConfigs,
+                defaultGroups: clientRes?.Items[0]?.defaultGroups,
+                clientUsers: clientRes?.Items[0]?.clientUsers,
+                clientConfigs: clientRes?.Items[0]?.clientConfigs,
             };
             //   DISPATCH SET CLIENT
             await dispatchClientInfo(clientInfo);
-            alert('are we done?');
-            // DISPATCH DEFAULT GROUPS
-            //TODO: setup default group info
-            // await dispatchGroupInfo(groupInfo);
-            //   DISPATCH MEETING CONFIGS
-            //TODO: setup meeting configs
-            // await dispatchMeetingConfigs(meetingConfigs);
-            // DISPATCH CLIENT USERS
-            //TODO: setup clientUserInfo
-            // await dispatchClientUsers(clientUserInfo);
-            alert('DONE WITH NEW');
-            //   OOOOOOOOOOOOOOOOOOOOOO
-            //   OLD BELOW THIS PART
-            //   OOOOOOOOOOOOOOOOOOOOOO
-
-            //   GO TO DASHBOARD
-            // dispatchLoginSuccess(meeterUser);
-
-            // await processLogin(meeterUser);
-            // we will get true if user is registered or false if not
-            //TODO ++++++++++++++++++++++++++++++++++++++
-            //TODO--- NEED TO HAVE FUNCTION TO saveUser
-            alert('processLogin call returned ');
-            //TODO ++++++++++++++++++++++++++++++++++++++
-            // const userIsRegistered = await saveUser(
-            //     currentUserInfo,
-            //     currentSession
-            // );
-            //TODO ++++++++++++++++++++++++++++++++++++++
-            //TODO--- NEED TO HAVE FUNCTION TO getRegistrations
-            alert('getRegistration call ');
-            //TODO ++++++++++++++++++++++++++++++++++++++
-            //await getRegistrations(currentUserInfo.attributes.sub);
-
-            //let user know if they need to complete registration
-            console.log('REGISTERED: ' + userIsRegistered);
-            !userIsRegistered ? console.log('NOPE') : console.log('YEP');
-
-            //TODO +++++++++++++++++++++++++
-            //TODO turn spinner off
-            //TODO +++++++++++++++++++++++++
-            //clearSpinner();
-            userIsRegistered ? history.push('/') : history.push('/profile');
         } catch (error) {
             switch (error) {
                 case 'No current user':
@@ -334,10 +275,6 @@ Login.propTypes = {
     dispatchUserInfo: PropTypes.func.isRequired,
     getClientDBInfo: PropTypes.func.isRequired,
     dispatchClientInfo: PropTypes.func.isRequired,
-    dispatchGroupInfo: PropTypes.func.isRequired,
-    dispatchMeetingConfigs: PropTypes.func.isRequired,
-    dispatchClientUsers: PropTypes.func.isRequired,
-    // dispatchLoginSuccess: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({
@@ -351,7 +288,4 @@ export default connect(mapStateToProps, {
     dispatchUserInfo,
     getClientDBInfo,
     dispatchClientInfo,
-    dispatchGroupInfo,
-    dispatchMeetingConfigs,
-    dispatchClientUsers,
 })(Login);

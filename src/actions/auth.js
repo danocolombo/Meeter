@@ -1,28 +1,13 @@
 import axios from 'axios';
-// import {
-//     CognitoUser,
-//     AuthenticationDetails,
-//     CognitoUserPool,
-// } from "amazon-cognito-identity-js";
-// import { CognitoIdentityProvider } from "@aws-sdk/client-cognito-identity-provider";
-import { setAlert } from './alert';
 import {
     USER_LOADED,
-    AUTH_ERROR,
     LOGIN_SUCCESS,
-    LOGIN_FAIL,
-    LOGOUT,
-    CLEAR_PROFILE,
     SET_ACTIVES,
     SET_MTG_CONFIGS,
     SET_DEFAULT_GROUPS,
     SET_CLIENT_USERS,
     SET_CLIENT,
 } from './types';
-
-import crypto from 'crypto';
-import UserPool from './UserPool';
-import { Auth } from 'aws-amplify';
 
 export const dispatchAuth = (jwtToken) => async (dispatch) => {
     //dispatch to save
