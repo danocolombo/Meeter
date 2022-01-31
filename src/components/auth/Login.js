@@ -33,9 +33,11 @@ const Login = ({
         //   ++++++++++++++++++++++++++++++++++++
         let meeterUser = {};
         let alertPayload = {};
+        // make the login username lowercase
+        const usernameToUse = String(username).toLowerCase();
 
         try {
-            await Auth.signIn(username, password)
+            await Auth.signIn(usernameToUse, password)
                 .then((user) => {
                     // ----------------------------
                     // at this point we should have cognito user pool details
