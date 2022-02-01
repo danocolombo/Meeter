@@ -20,10 +20,10 @@ import EditGathering from '../gatherings/EditGathering';
 import EditGroup from '../gatherings/EditGroup';
 import EditPerson from '../people/EditPerson';
 //import GatheringForm from '../gatherings/GatheringForm';
-import NotFound from '../layout/NotFound';
+// import NotFound from '../layout/NotFound';
 import PrivateRoute from '../routing/PrivateRoute';
 import UserProfile from '../profile/UserProfile';
-import Landing from '../layout/Landing';
+// import Landing from '../layout/Landing';
 import ErrorPage from '../layout/Error';
 // import PersonForm from '../people/PersonForm';
 
@@ -34,7 +34,7 @@ const Routes = () => {
             <Switch>
                 <Route exact path='/register' component={Register} />
                 <Route exact path='/login' component={Login} />
-                <Route exact path='/confirm' component={ConfirmUser} />
+                <Route exact path='/confirmuser' component={ConfirmUser} />
                 <Route exact path='/userprofile' component={UserProfile} />
                 {/* <PrivateRoute exact path='/profiles' component={Profiles} />
                 <PrivateRoute exact path='/profile/:id' component={Profile} /> */}

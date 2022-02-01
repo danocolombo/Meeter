@@ -1,7 +1,8 @@
 import React, { Fragment, useState } from 'react';
 import { connect } from 'react-redux';
-import { Link, Redirect } from 'react-router-dom';
-import { setAlert } from '../../actions/alert';
+import { Auth } from 'aws-amplify';
+import { Link, Redirect, useHistory } from 'react-router-dom';
+import { setAlert, setRegisterAlert } from '../../actions/alert';
 import { register } from '../../actions/login';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
@@ -10,6 +11,7 @@ import { NativeSelect } from '@material-ui/core';
 import { FormControlLabel } from '@material-ui/core';
 import { Checkbox } from '@material-ui/core';
 import { TextField } from '@material-ui/core';
+import { UpdateUserAttributesCommand } from '@aws-sdk/client-cognito-identity-provider';
 
 const Register = ({ setAlert, register, isAuthenticated }) => {
     //   const [formData, setFormData] = useState({
@@ -178,7 +180,7 @@ const Register = ({ setAlert, register, isAuthenticated }) => {
         shirtLabel: { margin: 0, padding: 0 },
         shirtInput: { margin: 0, padding: 0, textAlign: 'right' },
     }));
-
+    const history = useHistory();
     const classes = useStyles();
     const [userNameIsVisible, setUserNameIsVisible] = useState(false);
     const [firstName, setFirstName] = useState('');
@@ -211,10 +213,11 @@ const Register = ({ setAlert, register, isAuthenticated }) => {
         setBirthday(event.target.value);
         // alert("Birthday:" + birthday);
     };
-    const onSubmit = (e) => {
+    const handleSubmitClick = (e) => {
         //NOTE: username set to lowercase
         setUserName(String(userName).toLowerCase());
         e.preventDefault();
+        let alertPayload = {};
         // let okay2go = true;
         // first name needs to be more than chars and only text.
         let myRegxp = /^([a-zA-Z0-9_-]){3,15}$/;
@@ -276,25 +279,10 @@ const Register = ({ setAlert, register, isAuthenticated }) => {
             window.scrollTo(0, 0);
             return;
         }
-        const theRequest = {
-            email: email,
-            password: password1,
-            firstName: firstName,
-            lastName: lastName,
-            gender: gender,
-        };
-        if (userNameIsVisible) {
-            //------------------------------------
-            // want to use email as userName
-            //------------------------------------
-            theRequest.preferred_username = email;
-        } else {
-            theRequest.preferred_username = userName;
-            theRequest.userName = userName;
-        }
-        // check for optional information
+        let uAttributes = [];
+        let userAttributes = {};
         if (address) {
-            theRequest.address = address;
+            uAttributes.push({ Name: 'address', Value: address });
         }
         if (phone) {
             const phoneRegex =
@@ -312,20 +300,108 @@ const Register = ({ setAlert, register, isAuthenticated }) => {
                 updatePhone = updatePhone.replace(' ', '');
                 updatePhone = updatePhone.replace('-', '');
                 //now add +1 to front of number
-                theRequest.phone = '+1' + updatePhone;
+                uAttributes.push({
+                    Name: 'phone_number',
+                    Value: updatePhone,
+                });
             }
         }
         if (birthday) {
-            theRequest.birthday = birthday;
+            uAttributes.push({
+                Name: 'birthdate',
+                Value: birthday,
+            });
         }
-        if (shirt) {
-            theRequest.shirt = shirt;
-        }
-        register(theRequest);
-        // alert("see console log");
-        // console.log(theRequest);
+        // if (shirt) {
+        //     uAttributes.push({
+        //         Name: 'birthdate',
+        //         Value: birthday,
+        //     });
+        // }
+        // const theRequestAttributes = {
+        //     email: email,
+        //     given_name: firstName,
+        //     family_name: lastName,
+        //     gender: gender,
+        //     preferred_username: userName,
+        // };
+        // check for optional information
 
-        // window.scrollTo(0, 0);
+        //   REGISTER THE USER !!!!!!!!
+        console.log('uAttributes:\n', uAttributes);
+        try {
+            // Auth.signUp({
+            //     ClientId: "521ktk6vc6v3ddj8gh6qicnblt'",
+            //     Username: 'snoopy',
+            //     Password: 'Jan123!',
+            //     UserAttributes: [
+            //         { Name: 'given_name', Value: 'Joe' },
+            //         { Name: 'family_name', Value: 'Cool' },
+            //         { Name: 'email', Value: 'jcool@peanuts.org' },
+            //         { Name: 'birthdate', Value: '1960-4-01' },
+            //         { Name: 'phone_number', Value: '+12345678901' },
+            //         { Name: 'username', Value: 'snoopy' },
+            //     ],
+            // })
+            Auth.signUp({
+                username: userName,
+                password: password1,
+                attributes: UpdateUserAttributesCommand,
+            })
+                .then((data) => {
+                    let url = '/confirmUser/' + userName;
+                    history.push(url);
+                })
+                .catch((err) => {
+                    // if (err) {
+                    //     err.forEach((err) => dispatch(setAlert(err.message, 'danger')));
+                    // }
+                    switch (err.code) {
+                        case 'UsernameExistsException':
+                            alert('1');
+                            alertPayload = {
+                                msg: err.message,
+                                alertType: 'danger',
+                            };
+                            setRegisterAlert(alertPayload);
+                            console.log('ERR1: err.code');
+                            break;
+                        case 'InvalidPasswordException':
+                            alert('2');
+                            alertPayload = {
+                                msg:
+                                    'Password does not meet requirements.\n[' +
+                                    err.message +
+                                    ']',
+                                alertType: 'danger',
+                                timeout: 10000,
+                            };
+                            break;
+                        default:
+                            alert('3');
+                            alertPayload = {
+                                msg:
+                                    'Registration error: [' +
+                                    JSON.stringify(err) +
+                                    ']',
+                                alertType: 'danger',
+                                timeout: 10000,
+                            };
+                            console.log('ERR2: err.code');
+                            break;
+                    }
+                    setRegisterAlert(alertPayload);
+                });
+        } catch (error) {
+            alert('4');
+            alertPayload = {
+                msg: 'Registration error: [' + JSON.stringify(error) + ']',
+                alertType: 'danger',
+            };
+            console.log('error3: error.code');
+            setAlert(alertPayload);
+            console.log('error:' + error);
+        }
     };
     if (isAuthenticated) {
         return <Redirect to='/dashboard' />;
@@ -337,148 +413,143 @@ const Register = ({ setAlert, register, isAuthenticated }) => {
             <p className='lead'>
                 <i className='fas fa-user' /> Create Your Account
             </p>
-            <form className='form' onSubmit={onSubmit}>
-                <div name='container' className={classes.mainContainer}>
-                    <div name='row' className={classes.regRow}>
-                        <div name='col1' className={classes.firstNameWrapper}>
-                            First Name
-                            <br />
+            <div name='container' className={classes.mainContainer}>
+                <div name='row' className={classes.regRow}>
+                    <div name='col1' className={classes.firstNameWrapper}>
+                        First Name
+                        <br />
+                        <input
+                            type='text'
+                            placeholder='First Name'
+                            name='firstName'
+                            value={firstName}
+                            onChange={(e) => setFirstName(e.target.value)}
+                            className={classes.firstNameInput}
+                        />
+                    </div>
+                    <div name='col2' className={classes.lastNameWrapper}>
+                        Last Name
+                        <br />
+                        <input
+                            type='text'
+                            placeholder='Last Name'
+                            name='lastName'
+                            value={lastName}
+                            onChange={(e) => setLastName(e.target.value)}
+                            className={classes.lastNameInput}
+                        />
+                    </div>
+                    <div name='col3' className={classes.genderWrapper}>
+                        Gender
+                        <br />
+                        <NativeSelect
+                            defaultValue={'?'}
+                            className={classes.genderInput}
+                            onChange={(e) => setGender(e.target.value)}
+                            inputProps={{
+                                name: 'gender',
+                                id: 'uncontrolled-native',
+                            }}
+                        >
+                            <option value={'?'}>?</option>
+                            <option value={'f'}>F</option>
+                            <option value={'m'}>M</option>
+                        </NativeSelect>
+                    </div>
+                </div>
+                <div className={classes.regRow}>
+                    <div>
+                        <input
+                            type='email'
+                            placeholder='Email'
+                            name='email'
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            className={classes.emailInput}
+                        />
+                    </div>
+                    <div className={classes.checkLoginWrapper}>
+                        <FormControlLabel
+                            value='end'
+                            control={<Checkbox />}
+                            className={classes.checkLoginInput}
+                            label='use for login'
+                            labelPlacement='end'
+                            onClick={() => handleLoginDef()}
+                        />
+                    </div>
+                </div>
+                {!userNameIsVisible ? (
+                    <div className={classes.regRow}>
+                        <div className={classes.userNameWrapper}>
+                            <div className={classes.userNameLabel}>
+                                Username
+                            </div>
                             <input
                                 type='text'
-                                placeholder='First Name'
-                                name='firstName'
-                                value={firstName}
-                                onChange={(e) => setFirstName(e.target.value)}
-                                className={classes.firstNameInput}
+                                placeholder='username'
+                                name='userName'
+                                value={userName}
+                                onChange={(e) => setUserName(e.target.value)}
+                                className={classes.userNameInput}
                             />
-                        </div>
-                        <div name='col2' className={classes.lastNameWrapper}>
-                            Last Name
-                            <br />
-                            <input
-                                type='text'
-                                placeholder='Last Name'
-                                name='lastName'
-                                value={lastName}
-                                onChange={(e) => setLastName(e.target.value)}
-                                className={classes.lastNameInput}
-                            />
-                        </div>
-                        <div name='col3' className={classes.genderWrapper}>
-                            Gender
-                            <br />
-                            <NativeSelect
-                                defaultValue={'?'}
-                                className={classes.genderInput}
-                                onChange={(e) => setGender(e.target.value)}
-                                inputProps={{
-                                    name: 'gender',
-                                    id: 'uncontrolled-native',
-                                }}
-                            >
-                                <option value={'?'}>?</option>
-                                <option value={'f'}>F</option>
-                                <option value={'m'}>M</option>
-                            </NativeSelect>
                         </div>
                     </div>
-                    <div className={classes.regRow}>
+                ) : null}
+                <div className={classes.regRow}>
+                    <div className={classes.passwordWrapper}>
+                        <div className={classes.passwordLabel}>Password</div>
+                        <input
+                            type='password'
+                            placeholder='Password'
+                            name='password1'
+                            value={password1}
+                            onChange={(e) => setPassword1(e.target.value)}
+                            className={classes.passwordInput}
+                        />
+                    </div>
+                </div>
+                <div className={classes.regRow}>
+                    <div className={classes.passwordWrapper}>
+                        <div className={classes.passwordLabel}>
+                            Password Confirmation
+                        </div>
+                        <input
+                            type='password'
+                            placeholder='Password'
+                            name='password1'
+                            value={password2}
+                            onChange={(e) => setPassword2(e.target.value)}
+                            className={classes.passwordInput}
+                        />
+                    </div>
+                </div>
+                {/* //    OPTIONAL SEPARATOR  */}
+
+                <div className={classes.breakLineWrapper}>
+                    <hr className={classes.breakLine} />
+                    <div className={classes.optionalLabel}>
+                        OPTIONAL INFORMATION
+                    </div>
+                    <hr className={classes.breakLine} />
+                </div>
+                <div className={classes.optionalWrapper}>
+                    <div className={classes.tRow}>
+                        <div className={classes.addressLabel}>Address</div>
                         <div>
                             <input
-                                type='email'
-                                placeholder='Email'
-                                name='email'
-                                value={email}
-                                onChange={(e) => setEmail(e.target.value)}
-                                className={classes.emailInput}
-                            />
-                        </div>
-                        <div className={classes.checkLoginWrapper}>
-                            <FormControlLabel
-                                value='end'
-                                control={<Checkbox />}
-                                className={classes.checkLoginInput}
-                                label='use for login'
-                                labelPlacement='end'
-                                onClick={() => handleLoginDef()}
-                            />
-                        </div>
-                    </div>
-                    {!userNameIsVisible ? (
-                        <div className={classes.regRow}>
-                            <div className={classes.userNameWrapper}>
-                                <div className={classes.userNameLabel}>
-                                    Username
-                                </div>
-                                <input
-                                    type='text'
-                                    placeholder='username'
-                                    name='userName'
-                                    value={userName}
-                                    onChange={(e) =>
-                                        setUserName(e.target.value)
-                                    }
-                                    className={classes.userNameInput}
-                                />
-                            </div>
-                        </div>
-                    ) : null}
-                    <div className={classes.regRow}>
-                        <div className={classes.passwordWrapper}>
-                            <div className={classes.passwordLabel}>
-                                Password
-                            </div>
-                            <input
-                                type='password'
-                                placeholder='Password'
-                                name='password1'
-                                value={password1}
-                                onChange={(e) => setPassword1(e.target.value)}
-                                className={classes.passwordInput}
+                                type='text'
+                                placeholder='Street, City, State, Postal Code'
+                                name='address'
+                                value={address}
+                                onChange={(e) => setAddress(e.target.value)}
+                                className={classes.addressInput}
                             />
                         </div>
                     </div>
                     <div className={classes.regRow}>
-                        <div className={classes.passwordWrapper}>
-                            <div className={classes.passwordLabel}>
-                                Password Confirmation
-                            </div>
-                            <input
-                                type='password'
-                                placeholder='Password'
-                                name='password1'
-                                value={password2}
-                                onChange={(e) => setPassword2(e.target.value)}
-                                className={classes.passwordInput}
-                            />
-                        </div>
-                    </div>
-                    {/* //    OPTIONAL SEPARATOR  */}
-
-                    <div className={classes.breakLineWrapper}>
-                        <hr className={classes.breakLine} />
-                        <div className={classes.optionalLabel}>
-                            OPTIONAL INFORMATION
-                        </div>
-                        <hr className={classes.breakLine} />
-                    </div>
-                    <div className={classes.optionalWrapper}>
-                        <div className={classes.tRow}>
-                            <div className={classes.addressLabel}>Address</div>
-                            <div>
-                                <input
-                                    type='text'
-                                    placeholder='Street, City, State, Postal Code'
-                                    name='address'
-                                    value={address}
-                                    onChange={(e) => setAddress(e.target.value)}
-                                    className={classes.addressInput}
-                                />
-                            </div>
-                        </div>
-                        <div className={classes.regRow}>
-                            <div className={classes.phoneWrapper}>
-                                {/* <div className={classes.phoneLabel}>Phone</div>
+                        <div className={classes.phoneWrapper}>
+                            {/* <div className={classes.phoneLabel}>Phone</div>
                 <div>
                   <input
                     type="text"
@@ -489,71 +560,71 @@ const Register = ({ setAlert, register, isAuthenticated }) => {
                     className={classes.phoneInput}
                   />
                 </div> */}
-                                <input
-                                    type='phone'
-                                    name='phone'
-                                    value={phone}
-                                    onChange={(e) => setPhone(e.target.value)}
-                                    className='phoneInput'
-                                />
+                            <input
+                                type='phone'
+                                name='phone'
+                                value={phone}
+                                onChange={(e) => setPhone(e.target.value)}
+                                className='phoneInput'
+                            />
+                        </div>
+                        <div className={classes.birthdayWrapper}>
+                            <div className={classes.birthdayLabel}>
+                                Birthday
                             </div>
-                            <div className={classes.birthdayWrapper}>
-                                <div className={classes.birthdayLabel}>
-                                    Birthday
+                            {/* <BasicDatePicker dateLabel="Birthday" theDate={birthday} onChange={(e) => setBirthday(e.target.value)}/> */}
+                            <TextField
+                                id='date'
+                                label='Select Date'
+                                type='date'
+                                defaultValue={birthday}
+                                value={birthday}
+                                format='MM/dd/yyyy'
+                                onChange={handleDateChange}
+                                InputLabelProps={{
+                                    shrink: true,
+                                }}
+                            />
+                        </div>
+                        <div>
+                            <div className={classes.shirtWrapper}>
+                                <div className={classes.shirtLabel}>
+                                    Shirt Size
                                 </div>
-                                {/* <BasicDatePicker dateLabel="Birthday" theDate={birthday} onChange={(e) => setBirthday(e.target.value)}/> */}
-                                <TextField
-                                    id='date'
-                                    label='Select Date'
-                                    type='date'
-                                    defaultValue={birthday}
-                                    value={birthday}
-                                    format='MM/dd/yyyy'
-                                    onChange={handleDateChange}
-                                    InputLabelProps={{
-                                        shrink: true,
-                                    }}
-                                />
-                            </div>
-                            <div>
-                                <div className={classes.shirtWrapper}>
-                                    <div className={classes.shirtLabel}>
-                                        Shirt Size
-                                    </div>
-                                    <div className={classes.shirtInput}>
-                                        <NativeSelect
-                                            defaultValue={'?'}
-                                            className={classes.shirtInput}
-                                            // onChange={(e) => setShirt(value)}
-                                            onChange={(e) =>
-                                                setShirt(e.target.value)
-                                            }
-                                            inputProps={{
-                                                name: 'shirt',
-                                                id: 'uncontrolled-native',
-                                            }}
-                                        >
-                                            <option value={''}>?</option>
-                                            <option value={'s'}>S</option>
-                                            <option value={'m'}>M</option>
-                                            <option value={'l'}>L</option>
-                                            <option value={'xl'}>XL</option>
-                                            <option value={'xxl'}>2 XL</option>
-                                            <option value={'xxxl'}>3 XL</option>
-                                            <option value={'xxxl'}>4 XL</option>
-                                        </NativeSelect>
-                                    </div>
+                                <div className={classes.shirtInput}>
+                                    <NativeSelect
+                                        defaultValue={'?'}
+                                        className={classes.shirtInput}
+                                        // onChange={(e) => setShirt(value)}
+                                        onChange={(e) =>
+                                            setShirt(e.target.value)
+                                        }
+                                        inputProps={{
+                                            name: 'shirt',
+                                            id: 'uncontrolled-native',
+                                        }}
+                                    >
+                                        <option value={''}>?</option>
+                                        <option value={'s'}>S</option>
+                                        <option value={'m'}>M</option>
+                                        <option value={'l'}>L</option>
+                                        <option value={'xl'}>XL</option>
+                                        <option value={'xxl'}>2 XL</option>
+                                        <option value={'xxxl'}>3 XL</option>
+                                        <option value={'xxxl'}>4 XL</option>
+                                    </NativeSelect>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <input
-                        type='submit'
-                        className='btn btn-primary'
-                        value='Register'
-                    />
                 </div>
-            </form>
+                <input
+                    type='submit'
+                    className='btn btn-primary'
+                    value='Register'
+                    onClick={handleSubmitClick}
+                />
+            </div>
 
             {/* <RegisterOptionalInfo /> */}
             <div>
