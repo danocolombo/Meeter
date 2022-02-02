@@ -283,6 +283,7 @@ const Register = ({ setAlert, register, isAuthenticated }) => {
         let userAttributes = {};
         if (address) {
             uAttributes.push({ Name: 'address', Value: address });
+            userAttributes.address = address;
         }
         if (phone) {
             const phoneRegex =
@@ -304,6 +305,7 @@ const Register = ({ setAlert, register, isAuthenticated }) => {
                     Name: 'phone_number',
                     Value: updatePhone,
                 });
+                userAttributes.phone = updatePhone;
             }
         }
         if (birthday) {
@@ -311,6 +313,7 @@ const Register = ({ setAlert, register, isAuthenticated }) => {
                 Name: 'birthdate',
                 Value: birthday,
             });
+            userAttributes.birthday = birthday;
         }
         // if (shirt) {
         //     uAttributes.push({
@@ -329,6 +332,7 @@ const Register = ({ setAlert, register, isAuthenticated }) => {
 
         //   REGISTER THE USER !!!!!!!!
         console.log('uAttributes:\n', uAttributes);
+        console.log('userAttributes: \n', userAttributes);
         try {
             // Auth.signUp({
             //     ClientId: "521ktk6vc6v3ddj8gh6qicnblt'",
@@ -346,7 +350,7 @@ const Register = ({ setAlert, register, isAuthenticated }) => {
             Auth.signUp({
                 username: userName,
                 password: password1,
-                attributes: UpdateUserAttributesCommand,
+                attributes: userAttributes,
             })
                 .then((data) => {
                     let url = '/confirmUser/' + userName;
@@ -577,7 +581,7 @@ const Register = ({ setAlert, register, isAuthenticated }) => {
                                 id='date'
                                 label='Select Date'
                                 type='date'
-                                defaultValue={birthday}
+                                // defaultValue={birthday}
                                 value={birthday}
                                 format='MM/dd/yyyy'
                                 onChange={handleDateChange}
