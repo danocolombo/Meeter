@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import { Auth } from 'aws-amplify';
 import { Link, Redirect, useHistory } from 'react-router-dom';
 import { setAlert, setRegisterAlert } from '../../actions/alert';
-import { dispatchThis } from '../../actions/dispatchMessage';
 import { register } from '../../actions/login';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
@@ -12,12 +11,9 @@ import { NativeSelect } from '@material-ui/core';
 import { FormControlLabel } from '@material-ui/core';
 import { Checkbox } from '@material-ui/core';
 import { TextField } from '@material-ui/core';
-import {
-    ExplicitAuthFlowsType,
-    UpdateUserAttributesCommand,
-} from '@aws-sdk/client-cognito-identity-provider';
+import { UpdateUserAttributesCommand } from '@aws-sdk/client-cognito-identity-provider';
 
-const Register = ({ dispatchThis, register, isAuthenticated }) => {
+const Register = ({ setAlert, register, isAuthenticated }) => {
     //   const [formData, setFormData] = useState({
     //     name: "",
     //     email: "",
@@ -221,8 +217,7 @@ const Register = ({ dispatchThis, register, isAuthenticated }) => {
         //NOTE: username set to lowercase
         setUserName(String(userName).toLowerCase());
         e.preventDefault();
-        // let alertPayload = {};
-        let userAttributes = {};
+        let alertPayload = {};
         // let okay2go = true;
         // first name needs to be more than chars and only text.
         let myRegxp = /^([a-zA-Z0-9_-]){3,15}$/;
@@ -231,13 +226,11 @@ const Register = ({ dispatchThis, register, isAuthenticated }) => {
             window.scrollTo(0, 0);
             return;
         }
-        userAttributes.given_name = firstName;
         if (myRegxp.test(lastName) === false) {
             alert('Last Name needs to be 3 characters or more');
             window.scrollTo(0, 0);
             return;
         }
-        userAttributes.family_name = lastName;
         if (gender === '?') {
             alert('Please select your gender');
             window.scrollTo(0, 0);
@@ -250,9 +243,8 @@ const Register = ({ dispatchThis, register, isAuthenticated }) => {
             window.scrollTo(0, 0);
             return;
         }
-        userAttributes.email = email;
-
         let userNameRegex = /^([a-zA-Z0-9_-]){1,100}$/;
+
         if (!userNameIsVisible && userName.length < 1) {
             alert(
                 'You need to provide a username or indicate you are going to use your email'
@@ -268,8 +260,6 @@ const Register = ({ dispatchThis, register, isAuthenticated }) => {
             window.scrollTo(0, 0);
             return;
         }
-        userAttributes.preferred_username = userName;
-
         if (password1 !== password2) {
             alert('your passwords need to match');
             window.scrollTo(0, 0);
@@ -289,8 +279,10 @@ const Register = ({ dispatchThis, register, isAuthenticated }) => {
             window.scrollTo(0, 0);
             return;
         }
-
+        let uAttributes = [];
+        let userAttributes = {};
         if (address) {
+            uAttributes.push({ Name: 'address', Value: address });
             userAttributes.address = address;
         }
         if (phone) {
@@ -308,62 +300,52 @@ const Register = ({ dispatchThis, register, isAuthenticated }) => {
                 updatePhone = updatePhone.replace(')', '');
                 updatePhone = updatePhone.replace(' ', '');
                 updatePhone = updatePhone.replace('-', '');
-                // 2. now add +1 to front of number
-                updatePhone = '+1' + updatePhone;
-
+                //now add +1 to front of number
+                uAttributes.push({
+                    Name: 'phone_number',
+                    Value: updatePhone,
+                });
                 userAttributes.phone = updatePhone;
             }
         }
         if (birthday) {
-            userAttributes.birthdate = birthday;
+            uAttributes.push({
+                Name: 'birthdate',
+                Value: birthday,
+            });
+            userAttributes.birthday = birthday;
         }
         // if (shirt) {
-        //     userAttributes.shirt = shirt;
+        //     uAttributes.push({
+        //         Name: 'birthdate',
+        //         Value: birthday,
+        //     });
         // }
-        userAttributes = {
-            email: email,
-            given_name: firstName,
-            family_name: lastName,
-            gender: gender,
-            preferred_username: userName,
-        };
+        // const theRequestAttributes = {
+        //     email: email,
+        //     given_name: firstName,
+        //     family_name: lastName,
+        //     gender: gender,
+        //     preferred_username: userName,
+        // };
         // check for optional information
 
         //   REGISTER THE USER !!!!!!!!
+        console.log('uAttributes:\n', uAttributes);
         console.log('userAttributes: \n', userAttributes);
-
         try {
-            //   +++++++++++++++++++++++++++
-            //   THIS WORKS, IMPLEMENTED
-            //   +++++++++++++++++++++++++++
-            // Auth.signUp({
-            //     Username: 'snoopy4',
-            //     Password: 'Feb2022!',
-            //     attributes: {
-            //         email: 'joecool@peanuts.com',
-            //         given_name: 'joe',
-            //         family_name: 'cool',
-            //         gender: 'm',
-            //         phone_number: '+12345678901',
-            //     },
-            // });
-            //   +++++++++++++++++++++++++++
-            //   SCREWS UP REQUEST, NON-FUNCTIONAL
-            //   +++++++++++++++++++++++++++
             // Auth.signUp({
             //     ClientId: "521ktk6vc6v3ddj8gh6qicnblt'",
-            //     username: 'snoopy5',
-            //     password: 'Misery2022!',
-            //     attributes: [
-            //         { Name: 'email', Value: 'joecool@peanuts.com' },
-            //         { Name: 'given_name', Value: 'joe' },
-            //         { Name: 'family_name', Value: 'cool' },
-            //         { Name: 'gender', Value: 'm' },
+            //     Username: 'snoopy',
+            //     Password: 'Jan123!',
+            //     UserAttributes: [
+            //         { Name: 'given_name', Value: 'Joe' },
+            //         { Name: 'family_name', Value: 'Cool' },
+            //         { Name: 'email', Value: 'jcool@peanuts.org' },
+            //         { Name: 'birthdate', Value: '1960-4-01' },
             //         { Name: 'phone_number', Value: '+12345678901' },
-            //         { Name: 'email', Value: 'jcool@peanuts.com' },
-            //         { Name: 'username', Value: 'snoopy5' },
+            //         { Name: 'username', Value: 'snoopy' },
             //     ],
-            //     ValidationData: null,
             // })
             Auth.signUp({
                 username: userName,
@@ -371,7 +353,6 @@ const Register = ({ dispatchThis, register, isAuthenticated }) => {
                 attributes: userAttributes,
             })
                 .then((data) => {
-                    dispatchThis('SUCCESS, NOW CONFIRM...', 'green');
                     let url = '/confirmUser/' + userName;
                     history.push(url);
                 })
@@ -381,49 +362,48 @@ const Register = ({ dispatchThis, register, isAuthenticated }) => {
                     // }
                     switch (err.code) {
                         case 'UsernameExistsException':
-                            // alert('1');
-                            dispatchThis(err.message, 'red');
-                            // alertPayload = {
-                            //     msg: err.message,
-                            //     alertType: 'danger',
-                            // };
-
+                            alert('1');
+                            alertPayload = {
+                                msg: err.message,
+                                alertType: 'danger',
+                            };
+                            setRegisterAlert(alertPayload);
                             console.log('ERR1: err.code');
                             break;
                         case 'InvalidPasswordException':
-                            // alert('2');
-                            dispatchThis(err.message, 'red');
-                            // alertPayload = {
-                            //     msg:
-                            //         'Password does not meet requirements.\n[' +
-                            //         err.message +
-                            //         ']',
-                            //     alertType: 'danger',
-                            //     timeout: 10000,
-                            // };
+                            alert('2');
+                            alertPayload = {
+                                msg:
+                                    'Password does not meet requirements.\n[' +
+                                    err.message +
+                                    ']',
+                                alertType: 'danger',
+                                timeout: 10000,
+                            };
                             break;
                         default:
-                            // alert('3');
-                            dispatchThis(err.message, 'red');
-                            // alertPayload = {
-                            //     msg:
-                            //         'Registration error: [' +
-                            //         JSON.stringify(err) +
-                            //         ']',
-                            //     alertType: 'danger',
-                            //     timeout: 10000,
-                            // };
-
+                            alert('3');
+                            alertPayload = {
+                                msg:
+                                    'Registration error: [' +
+                                    JSON.stringify(err) +
+                                    ']',
+                                alertType: 'danger',
+                                timeout: 10000,
+                            };
+                            console.log('ERR2: err.code');
                             break;
                     }
+                    setRegisterAlert(alertPayload);
                 });
         } catch (error) {
-            // alert('4');
-            dispatchThis(
-                'Registration error: [' + JSON.stringify(error) + ']',
-                'red'
-            );
-
+            alert('4');
+            alertPayload = {
+                msg: 'Registration error: [' + JSON.stringify(error) + ']',
+                alertType: 'danger',
+            };
+            console.log('error3: error.code');
+            setAlert(alertPayload);
             console.log('error:' + error);
         }
     };
@@ -670,7 +650,6 @@ const Register = ({ dispatchThis, register, isAuthenticated }) => {
 
 Register.propTypes = {
     setAlert: PropTypes.func.isRequired,
-    dispathThis: PropTypes.func.isRequired,
     register: PropTypes.func.isRequired,
     isAuthenticated: PropTypes.bool,
 };
@@ -679,6 +658,4 @@ const mapStateToProps = (state) => ({
     isAuthenticated: state.auth.isAuthenticated,
 });
 
-export default connect(mapStateToProps, { setAlert, dispatchThis, register })(
-    Register
-);
+export default connect(mapStateToProps, { setAlert, register })(Register);
