@@ -492,16 +492,18 @@ const Register = ({ dispatchThis, register, isAuthenticated }) => {
                             className={classes.emailInput}
                         />
                     </div>
-                    <div className={classes.checkLoginWrapper}>
-                        <FormControlLabel
-                            value='end'
-                            control={<Checkbox />}
-                            className={classes.checkLoginInput}
-                            label='use for login'
-                            labelPlacement='end'
-                            onClick={() => handleLoginDef()}
-                        />
-                    </div>
+                    {
+                        // <div className={classes.checkLoginWrapper}>
+                        //     <FormControlLabel
+                        //         value='end'
+                        //         control={<Checkbox />}
+                        //         className={classes.checkLoginInput}
+                        //         label='use for login'
+                        //         labelPlacement='end'
+                        //         onClick={() => handleLoginDef()}
+                        //     />
+                        // </div>
+                    }
                 </div>
                 {!userNameIsVisible ? (
                     <div className={classes.regRow}>
@@ -654,7 +656,7 @@ const Register = ({ dispatchThis, register, isAuthenticated }) => {
             <div>
                 <div className='register-user-page__offer-confirm-box'>
                     Have you registered and need to confirm your account?
-                    <Link className='NEED_TO_DEFINE' to='/confirm'>
+                    <Link className='NEED_TO_DEFINE' to='/confirmuser'>
                         {' '}
                         Click here
                     </Link>

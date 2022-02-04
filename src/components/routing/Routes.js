@@ -39,6 +39,11 @@ const Routes = () => {
                     path='/confirmuser/:userName'
                     component={ConfirmUser}
                 />
+                <PrivateRoute
+                    exact
+                    path='/confirmuser'
+                    component={ConfirmUser}
+                />
                 <Route exact path='/userprofile' component={UserProfile} />
                 {/* <PrivateRoute exact path='/profiles' component={Profiles} />
                 <PrivateRoute exact path='/profile/:id' component={Profile} /> */}
