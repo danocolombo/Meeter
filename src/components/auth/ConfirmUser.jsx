@@ -8,7 +8,7 @@ import PropTypes from 'prop-types';
 import './component.confirmUser.styles.scss';
 // import {} from '../../actions/auth';
 
-const ConfirmUser = ({ dispatchThis, id }) => {
+const ConfirmUser = ({ dispatchThis, registeredName }) => {
     const history = useHistory();
     // variables for the form
     const [userName, setUserName] = useState('');
@@ -28,8 +28,8 @@ const ConfirmUser = ({ dispatchThis, id }) => {
     //     dispatchThis('RED', 'red');
     // };
     useEffect(() => {
-        if (id !== '0') {
-            setUserName(id);
+        if (registeredName !== '0') {
+            setUserName(registeredName);
         } else {
             setUserName('');
         }
@@ -42,6 +42,17 @@ const ConfirmUser = ({ dispatchThis, id }) => {
     const handleSubmitClick = (event) => {
         event.preventDefault();
         let alertPayload = {};
+        if (!userName) {
+            dispatchThis('Your username is required', 'red');
+            return null;
+        }
+        if (!code) {
+            dispatchThis(
+                'Please check your email and enter the confirmation code.',
+                'red'
+            );
+            return null;
+        }
         if (userName.length < 4 || code.length < 6) {
             alertPayload = {
                 msg: 'User Name and Code are required.',
@@ -52,8 +63,12 @@ const ConfirmUser = ({ dispatchThis, id }) => {
         }
         // setSpinner();
         try {
-            Auth.confirmSignUp(id, code)
+            Auth.confirmSignUp(userName, code)
                 .then((data) => {
+                    //--------------------------------
+                    // load meeterUserProfile and
+                    // put user in meeterClientProfile
+                    //--------------------------------
                     alertPayload = {
                         msg: 'Your registration is verified.',
                         alertType: 'success',
@@ -134,8 +149,9 @@ const ConfirmUser = ({ dispatchThis, id }) => {
     };
     return (
         <div className='register-confirm-page__wrapper'>
+            <h1 className='large text-primary'>Confirm Account</h1>
             <div className='register-confiirm-page__instructions'>
-                Check your email for a confirmation code & enter below to
+                Check your email for a confirmation code <br />& enter below to
                 confirm your registration.
             </div>
             <div className='register-confiirm-page__input-line'>
@@ -148,7 +164,7 @@ const ConfirmUser = ({ dispatchThis, id }) => {
                         name='userName'
                         id='userName'
                         value={userName}
-                        onChange={handleChange}
+                        onChange={(e) => setUserName(e.target.value)}
                         required
                     />
                 </div>
@@ -160,7 +176,7 @@ const ConfirmUser = ({ dispatchThis, id }) => {
                         type='text'
                         id='code'
                         name='code'
-                        onChange={handleChange}
+                        onChange={(e) => setCode(e.target.value)}
                         value={code}
                         required
                     />

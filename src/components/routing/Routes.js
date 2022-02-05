@@ -36,7 +36,7 @@ const Routes = () => {
                 <Route exact path='/login' component={Login} />
                 <Route
                     exact
-                    path='/confirmuser/:userName'
+                    path='/confirmuser/:registeredName'
                     component={ConfirmUser}
                 />
                 <PrivateRoute
