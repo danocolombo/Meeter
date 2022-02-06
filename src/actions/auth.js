@@ -55,6 +55,44 @@ export const getUserDBInfo = (meeterUserId) => async (dispatch) => {
         return errorResponse;
     }
 };
+//   ===================================
+//   save temporary registration in DDB
+//   ===================================
+
+export const saveTemporaryRegistration = (registration) => async (dispatch) => {
+    // get Meeter Info for user
+    try {
+        const config = {
+            headers: {
+                'Access-Control-Allow-Headers':
+                    'Content-Type, x-auth-token, Access-Control-Allow-Headers',
+                'Content-Type': 'application/json',
+            },
+        };
+        // take the _id value and get user from meeter API
+
+        let obj = {
+            operation: 'saveTempRegistration',
+            payload: {
+                Item: { registration },
+            },
+        };
+        const body = JSON.stringify(obj);
+
+        const api2use = process.env.REACT_APP_MEETER_API + '/user';
+        const res = await axios.post(api2use, body, config);
+        return res.data;
+    } catch (err) {
+        let errorResponse = {
+            body: {
+                message: 'no user info in meeter database',
+                error: err,
+            },
+            status: '400',
+        };
+        return errorResponse;
+    }
+};
 
 //   ===================================
 //   save the active info to REDUX

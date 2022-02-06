@@ -12,12 +12,18 @@ import { NativeSelect } from '@material-ui/core';
 import { FormControlLabel } from '@material-ui/core';
 import { Checkbox } from '@material-ui/core';
 import { TextField } from '@material-ui/core';
+import { saveTemporaryRegistration } from '../../actions/auth';
 import {
     ExplicitAuthFlowsType,
     UpdateUserAttributesCommand,
 } from '@aws-sdk/client-cognito-identity-provider';
 
-const Register = ({ dispatchThis, register, isAuthenticated }) => {
+const Register = ({
+    dispatchThis,
+    register,
+    isAuthenticated,
+    saveTemporaryRegistration,
+}) => {
     //   const [formData, setFormData] = useState({
     //     name: "",
     //     email: "",
@@ -289,9 +295,15 @@ const Register = ({ dispatchThis, register, isAuthenticated }) => {
             window.scrollTo(0, 0);
             return;
         }
-
+        let temporaryRegistrationInfo = {
+            userName: userName,
+            firstName: firstName,
+            lastName: lastName,
+            email: email,
+        };
         if (address) {
             userAttributes.address = address;
+            temporaryRegistrationInfo.address = address;
         }
         if (phone) {
             const phoneRegex =
@@ -312,14 +324,17 @@ const Register = ({ dispatchThis, register, isAuthenticated }) => {
                 updatePhone = '+1' + updatePhone;
 
                 userAttributes.phone = updatePhone;
+                temporaryRegistrationInfo.phone = updatePhone;
             }
         }
         if (birthday) {
             userAttributes.birthdate = birthday;
+            temporaryRegistrationInfo.birthday = birthday;
         }
-        // if (shirt) {
-        //     userAttributes.shirt = shirt;
-        // }
+        if (shirt) {
+            // userAttributes.shirt = shirt;
+            temporaryRegistrationInfo.shirt = shirt;
+        }
         userAttributes = {
             email: email,
             given_name: firstName,
@@ -372,6 +387,12 @@ const Register = ({ dispatchThis, register, isAuthenticated }) => {
             })
                 .then((data) => {
                     dispatchThis('SUCCESS, NOW CONFIRM...', 'green');
+                    //============================================
+                    // save the registration info for future use
+                    //============================================
+                    saveTemporaryRegistration(temporaryRegistrationInfo)
+                        .then(console.log('temp registrion saved.'))
+                        .catch(console.log('we had an error'));
                     let url = '/confirmUser/' + userName;
                     history.push(url);
                 })
@@ -662,6 +683,7 @@ Register.propTypes = {
     setAlert: PropTypes.func.isRequired,
     dispathThis: PropTypes.func.isRequired,
     register: PropTypes.func.isRequired,
+    saveTemporaryRegistration: PropTypes.func.isRequired,
     isAuthenticated: PropTypes.bool,
 };
 
@@ -669,6 +691,9 @@ const mapStateToProps = (state) => ({
     isAuthenticated: state.auth.isAuthenticated,
 });
 
-export default connect(mapStateToProps, { setAlert, dispatchThis, register })(
-    Register
-);
+export default connect(mapStateToProps, {
+    setAlert,
+    dispatchThis,
+    register,
+    saveTemporaryRegistration,
+})(Register);

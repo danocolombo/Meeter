@@ -4,11 +4,10 @@ import { connect } from 'react-redux';
 import { FormGroup, FormControlLabel, Button } from '@material-ui/core';
 import Switch from '@material-ui/core/Switch';
 import Spinner from '../layout/Spinner';
-import {
-    // toggleConfig,
-    // getMtgConfigs,
-    updateMeetingConfigs,
-} from '../../actions/admin';
+import // toggleConfig,
+// getMtgConfigs,
+//updateMeetingConfigs,
+'../../actions/admin';
 import { toggleConfig, getMtgConfigs } from '../../actions/administration';
 
 const initialState = {
@@ -37,9 +36,9 @@ const initialState = {
     cleanupContact: true,
 };
 const MeetingConfig = ({
-    toggleConfig,
+    //toggleConfig,
     getclientConfigs,
-    updateMeetingConfigs,
+    //updateMeetingConfigs,
     auth: { activeClient },
     meeter: { clientConfigs, loading },
     history,
@@ -133,19 +132,19 @@ const MeetingConfig = ({
     const handleChange = (event) => {
         setFormData({ ...formData, [event.target.name]: event.target.checked });
         // the call to update is passing, configname, and value to be, along with clientId
-        toggleConfig(event.target.name, event.target.checked, client);
+        //toggleConfig(event.target.name, event.target.checked, client);
         alert('changing ' + event.target.name + ':' + event.target.checked);
     };
     const onSubmit = (e) => {
         e.preventDefault();
-        const theConfigs = updateMeetingConfigs(
-            formData,
-            history,
-            activeClient,
-            true
-        );
-        console.log('backfrom updateMeetingConfigs call');
-        console.table(theConfigs);
+        // const theConfigs = updateMeetingConfigs(
+        //     formData,
+        //     history,
+        //     activeClient,
+        //     true
+        // );
+        // console.log('backfrom updateMeetingConfigs call');
+        // console.table(theConfigs);
         window.scrollTo(0, 0);
     };
     return loading ? (
@@ -432,9 +431,9 @@ const MeetingConfig = ({
 };
 
 MeetingConfig.propTypes = {
-    toggleConfig: PropTypes.func.isRequired,
+    //toggleConfig: PropTypes.func.isRequired,
     getMtgConfigs: PropTypes.func.isRequired,
-    updateMeetingConfigs: PropTypes.func.isRequired,
+    // updateMeetingConfigs: PropTypes.func.isRequired,
     client: PropTypes.object.isRequired,
 };
 const mapStateToProps = (state) => ({
@@ -444,7 +443,7 @@ const mapStateToProps = (state) => ({
 });
 
 export default connect(mapStateToProps, {
-    toggleConfig,
+    //toggleConfig,
     getMtgConfigs,
-    updateMeetingConfigs,
+    // updateMeetingConfigs,
 })(MeetingConfig);
