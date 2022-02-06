@@ -189,7 +189,7 @@ const Login = ({
                 clientName: clientRes?.Items[0]?.clientName,
                 clientCode: meeterUser.clientCode,
                 defaultGroups: clientRes?.Items[0]?.defaultGroups,
-                clientUsers: clientRes?.Items[0]?.clientUsers,
+                clientUsers: clientRes?.Items[0]?.users,
                 clientConfigs: clientRes?.Items[0]?.clientConfigs,
             };
             //   DISPATCH SET CLIENT
