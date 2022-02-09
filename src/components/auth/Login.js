@@ -123,8 +123,22 @@ const Login = ({
             await Auth.currentSession().then((data) => {
                 currentSessionInfo = data;
             });
+
             if (currentSessionInfo?.idToken?.jwtToken) {
                 meeterUser.jwtToken = currentSessionInfo.idToken.jwtToken;
+                //get the user information returned from Cognito
+                meeterUser.userName =
+                    currentSessionInfo.idToken?.payload['cognito:username'];
+                meeterUser.auth_time =
+                    currentSessionInfo.idToken?.payload?.auth_time;
+                meeterUser.exp = currentSessionInfo.idToken?.payload?.exp;
+                meeterUser.email = currentSessionInfo.idToken?.payload?.email;
+                meeterUser.lastName =
+                    currentSessionInfo.idToken?.payload?.family_name;
+                meeterUser.firstName =
+                    currentSessionInfo.idToken?.payload?.given_name;
+                meeterUser.gender = currentSessionInfo.idToken?.payload?.gender;
+                meeterUser.id = currentSessionInfo.idToken?.payload?.sub;
             } else {
                 //   NEED TO THROW ERROR, WE DON'T HAVE SESSION
                 //TODO ---> need to handle no session
@@ -145,10 +159,13 @@ const Login = ({
                 meeterUser.phone_number = userDBInfo.body.phone;
                 meeterUser.clientId = userDBInfo.body.defaultClientId;
                 meeterUser.clientCode = userDBInfo.body.defaultClient;
-                //todo maybe set default if 'undefined'
-                meeterUser.role = userDBInfo.body.role;
-                //todo maybe set default if 'undefined'
-                meeterUser.status = userDBInfo.body.status;
+
+                userDBInfo.body?.role
+                    ? (meeterUser.role = userDBInfo.body.role)
+                    : (meeterUser.role = 'NOTSET');
+                userDBInfo.body?.status
+                    ? (meeterUser.status = userDBInfo.body.status)
+                    : (meeterUser.status = 'NOTSET');
             } else {
                 //=========================
                 // no user response from db
@@ -178,8 +195,12 @@ const Login = ({
                 gender: meeterUser.gender,
                 defaultClient: meeterUser.clientCode,
                 defaultClientId: meeterUser.clientId,
-                defaultClientRole: meeterUser.role,
-                defaultClientStatus: meeterUser.status,
+                defaultClientRole: meeterUser?.role
+                    ? meeterUser.role
+                    : 'NOTSET',
+                defaultClientStatus: meeterUser?.status
+                    ? meeterUser.status
+                    : 'NOTSET',
             };
             await dispatchUserInfo(userInfo);
             //   getClient from DDB
@@ -189,7 +210,7 @@ const Login = ({
                 clientName: clientRes?.Items[0]?.clientName,
                 clientCode: meeterUser.clientCode,
                 defaultGroups: clientRes?.Items[0]?.defaultGroups,
-                clientUsers: clientRes?.Items[0]?.users,
+                clientUsers: clientRes?.Items[0]?.clientUsers,
                 clientConfigs: clientRes?.Items[0]?.clientConfigs,
             };
             //   DISPATCH SET CLIENT

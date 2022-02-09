@@ -15,7 +15,7 @@ const ClientUser = ({
     suspendClientUser,
     auth: { activeRole },
     auth,
-    user: { _id, name, role, status },
+    user: { _id, firstName, lastName, role, status },
     showActions,
 }) => (
     // <div className='clientUser bg-white p-1 my-1'>
@@ -27,7 +27,9 @@ const ClientUser = ({
         }
     >
         <div>
-            <h4>{name}</h4>
+            <h4>
+                {firstName} {lastName}
+            </h4>
         </div>
         <div>
             {status === 'approved' && (

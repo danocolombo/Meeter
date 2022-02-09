@@ -295,7 +295,11 @@ const Register = ({
             window.scrollTo(0, 0);
             return;
         }
+        let epochTime = Math.floor(Date.now() / 1000);
+        let oneHourFromNow = epochTime + 3600;
+
         let temporaryRegistrationInfo = {
+            expiration: oneHourFromNow,
             userName: userName,
             firstName: firstName,
             lastName: lastName,
@@ -390,9 +394,11 @@ const Register = ({
                     //============================================
                     // save the registration info for future use
                     //============================================
-                    saveTemporaryRegistration(temporaryRegistrationInfo)
-                        .then(console.log('temp registrion saved.'))
-                        .catch(console.log('we had an error'));
+                    // data.user_sub is the cognito userId
+                    saveTemporaryRegistration(
+                        data.userSub,
+                        temporaryRegistrationInfo
+                    );
                     let url = '/confirmUser/' + userName;
                     history.push(url);
                 })
@@ -681,7 +687,7 @@ const Register = ({
 
 Register.propTypes = {
     setAlert: PropTypes.func.isRequired,
-    dispathThis: PropTypes.func.isRequired,
+    dispatchThis: PropTypes.func.isRequired,
     register: PropTypes.func.isRequired,
     saveTemporaryRegistration: PropTypes.func.isRequired,
     isAuthenticated: PropTypes.bool,

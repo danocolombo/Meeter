@@ -5,15 +5,13 @@ import { connect } from 'react-redux';
 import Spinner from '../layout/Spinner';
 import DashLogo from '../../img/MMeeterLogo.png';
 
-
 const Dashboard = ({ auth, meeter }) => {
     useEffect(() => {
         if (!auth.token || auth.isAuthenticated === null) {
             return <Redirect to='/login' />;
         }
-        
     }, []);
-    
+
     return auth.loading || meeter.loading ? (
         <Spinner />
     ) : (
@@ -25,8 +23,17 @@ const Dashboard = ({ auth, meeter }) => {
             </p>
             {auth.user !== null ? (
                 <Fragment>
-                    <h2>Now the fun begins</h2>
-                    
+                    {auth.user.defaultClientRole === 'NOTSET' ? (
+                        <div className='dashboard-component_welcome_message'>
+                            Your account is being reviewed.
+                            <br />
+                            Check back soon...
+                        </div>
+                    ) : (
+                        <div className='dashboard-component_welcome_message'>
+                            Now the fun begins
+                        </div>
+                    )}
                 </Fragment>
             ) : (
                 <Fragment>

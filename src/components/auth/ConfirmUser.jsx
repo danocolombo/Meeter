@@ -4,11 +4,18 @@ import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { Auth } from 'aws-amplify';
 import { connect } from 'react-redux';
 import { dispatchThis } from '../../actions/dispatchMessage';
+import { moveTempUserToProd } from '../../actions/auth';
+import { addUserToClient } from '../../actions/admin';
 import PropTypes from 'prop-types';
 import './component.confirmUser.styles.scss';
 // import {} from '../../actions/auth';
 
-const ConfirmUser = ({ dispatchThis, registeredName }) => {
+const ConfirmUser = ({
+    dispatchThis,
+    registeredName,
+    moveTempUserToProd,
+    addUserToClient,
+}) => {
     const history = useHistory();
     // variables for the form
     const [userName, setUserName] = useState('');
@@ -65,16 +72,46 @@ const ConfirmUser = ({ dispatchThis, registeredName }) => {
         try {
             Auth.confirmSignUp(userName, code)
                 .then((data) => {
-                    //--------------------------------
-                    // load meeterUserProfile and
-                    // put user in meeterClientProfile
-                    //--------------------------------
-                    alertPayload = {
-                        msg: 'Your registration is verified.',
-                        alertType: 'success',
-                    };
-                    dispatchThis(alertPayload.msg, 'green');
-                    history.push('/login');
+                    moveTempUserToProd(userName)
+                        .then((moveResponse) => {
+                            alertPayload = {
+                                msg: 'Your registration is verified.',
+                                alertType: 'success',
+                            };
+                            dispatchThis(alertPayload.msg, 'green');
+                            // history.push('/login');
+                        })
+                        .catch((err) => {
+                            console.log('catch');
+                            alertPayload = {
+                                msg:
+                                    'Account confirmed, issues with profile.\nProceed to Login.\n[' +
+                                    err.message +
+                                    ']',
+                                alertType: 'danger',
+                            };
+                            dispatchThis(alertPayload, 'yellow');
+                            history.push('/login');
+                        });
+                    // addUserToClient(userName)
+                    //     .then((res) => {
+                    //         alertPayload = {
+                    //             msg: 'Your role needs to be reviewed.',
+                    //             alertType: 'success',
+                    //         };
+                    //         dispatchThis(alertPayload.msg, 'green');
+                    //         history.push('/login');
+                    //     })
+                    //     .catch((err) => {
+                    //         alertPayload = {
+                    //             msg:
+                    //                 'Please have admin review your role & status\n[' +
+                    //                 err.message +
+                    //                 ']',
+                    //             alertType: 'danger',
+                    //         };
+                    //         dispatchThis(alertPayload, 'yellow');
+                    //     });
                 })
                 .catch((err) => {
                     switch (err.code) {
@@ -203,8 +240,14 @@ const ConfirmUser = ({ dispatchThis, registeredName }) => {
 
 ConfirmUser.propTypes = {
     dispatchThis: PropTypes.func.isRequired,
+    moveTempUserToProd: PropTypes.func.isRequired,
+    addUserToClient: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({});
 
-export default connect(mapStateToProps, { dispatchThis })(ConfirmUser);
+export default connect(mapStateToProps, {
+    dispatchThis,
+    moveTempUserToProd,
+    addUserToClient,
+})(ConfirmUser);

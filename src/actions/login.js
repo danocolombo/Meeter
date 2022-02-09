@@ -181,7 +181,7 @@ export const loadUser = (userId) => async (dispatch) => {
         };
         // take the _id value and get user from meeter API
         let sub = userId.uData._id;
-        let obj = { operation: 'authenticate', payload: { uid: sub } };
+        let obj = { operation: 'authenticate', payload: { userId: sub } };
         const body = JSON.stringify(obj);
 
         const api2use = process.env.REACT_APP_MEETER_API + '/user';

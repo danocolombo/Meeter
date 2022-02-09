@@ -109,7 +109,38 @@ export const updateDefaultGroup = (revised) => async (dispatch) => {
         dispatch(setAlert('Default Group Update Failed.', 'danger'));
     }
 };
-
+export const addUserToClient = (user) => async (dispatch) => {
+    //==========================================
+    // add user to client
+    //==========================================
+    const config = {
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    };
+    //=========================
+    // get user from username
+    //=========================
+    try {
+        const res = await axios.put(`/api/client/defaultgroup`, user, config);
+        if (res === null) {
+            console.log('res from put was null');
+        }
+        // now get the default groups and reload Redux
+        const ress = await axios.get(`/api/client/defaultgroups/${user}`);
+        if (ress === null) {
+            console.log('ress from get was null');
+        }
+        dispatch({
+            type: 'SET_DEFAULT_GROUPS',
+            payload: ress.data,
+        });
+        dispatch(setAlert('Default Group Updated.', 'success'));
+    } catch (err) {
+        console.log('actions/admin.js updateDefaultGroup ADMIN_ERROR');
+        dispatch(setAlert('Default Group Update Failed.', 'danger'));
+    }
+};
 export const grantUserRegistration =
     (cid, id, role, email) => async (dispatch) => {
         // this is called from Admin/DisplaySecurity when a user with permission has
