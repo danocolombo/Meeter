@@ -161,6 +161,30 @@ const Register = ({
             width: '70vw',
             marginBottom: '1em',
         },
+        streetLabel: {
+            fontWeight: 'bold',
+        },
+        streetControl: {
+            textAlign: 'left',
+        },
+        cityLabel: {
+            fontWeight: 'bold',
+        },
+        cityControl: {
+            textAlign: 'left',
+        },
+        stateLabel: {
+            fontWeight: 'bold',
+        },
+        stateControl: {
+            textAlign: 'left',
+        },
+        postalCodeLabel: {
+            fontWeight: 'bold',
+        },
+        postalCodeControl: {
+            textAlign: 'left',
+        },
         phoneWrapper: {
             // border: "1px solid blue",
             backgroundColor: '#f1f1f1',
@@ -201,6 +225,11 @@ const Register = ({
     const [password1, setPassword1] = useState('');
     const [password2, setPassword2] = useState('');
     const [address, setAddress] = useState('');
+    const [street, setStreet] = useState('');
+    const [city, setCity] = useState('');
+    const [stateProv, setStateProv] = useState('');
+    const [postalCode, setPostalCode] = useState('');
+
     const [phone, setPhone] = useState('');
     const [birthday, setBirthday] = useState('');
     const [shirt, setShirt] = useState('');
@@ -588,19 +617,61 @@ const Register = ({
                             />
                         </div>
                     </div>
+                    <div className={classes.tRow}>
+                        <div className={classes.streetLabel}>Street</div>
+                        <div>
+                            <input
+                                type='text'
+                                placeholder=''
+                                name='street'
+                                value={street}
+                                onChange={(e) => setStreet(e.target.value)}
+                                className={classes.streetControl}
+                            />
+                        </div>
+                    </div>
+                    <div className={classes.tRow}>
+                        <div className={classes.cityLabel}>City</div>
+                        <div>
+                            <input
+                                type='text'
+                                placeholder=''
+                                name='city'
+                                value={city}
+                                onChange={(e) => setCity(e.target.value)}
+                                className={classes.cityControl}
+                            />
+                        </div>
+                    </div>
+                    <div className={classes.tRow}>
+                        <div className={classes.stateLabel}>State</div>
+                        <div>
+                            <input
+                                type='text'
+                                placeholder=''
+                                name='stateProv'
+                                value={stateProv}
+                                onChange={(e) => setStateProv(e.target.value)}
+                                className={classes.stateControl}
+                            />
+                        </div>
+                    </div>
+                    <div className={classes.tRow}>
+                        <div className={classes.postalCodeLabel}>Postal</div>
+                        <div>
+                            <input
+                                type='text'
+                                placeholder=''
+                                name='postalCode'
+                                value={postalCode}
+                                onChange={(e) => setPostalCode(e.target.value)}
+                                className={classes.postalCodeControl}
+                            />
+                        </div>
+                    </div>
                     <div className={classes.regRow}>
+                        <div className={classes.phoneLabel}>Telephone</div>
                         <div className={classes.phoneWrapper}>
-                            {/* <div className={classes.phoneLabel}>Phone</div>
-                <div>
-                  <input
-                    type="text"
-                    placeholder="(208) 340-1234"
-                    name="phone"
-                    value={phone}
-                    onChange={(e) => setPhone(e.target.value)}
-                    className={classes.phoneInput}
-                  />
-                </div> */}
                             <input
                                 type='phone'
                                 name='phone'
