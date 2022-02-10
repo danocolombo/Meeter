@@ -34,6 +34,7 @@ const SystemConfig = ({
     // let theClient = [];
     // let theDefaultGroups = [];
     const [expanded, setExpanded] = React.useState(false);
+
     const handleChange = (panel) => (event, isExpanded) => {
         setExpanded(isExpanded ? panel : false);
     };
@@ -61,7 +62,14 @@ const SystemConfig = ({
                         aria-controls='panel1bh-content'
                         id='panel1bh-header'
                     >
-                        <h1>Default Group Definitions</h1>
+                        <h1>
+                            Default Group Definitions{' '}
+                            {expanded === 'panel1' ? (
+                                <i className='fa fa-sort-down'></i>
+                            ) : (
+                                <i className='fa fa-sort-up'></i>
+                            )}
+                        </h1>
                     </AccordionSummary>
 
                     <AccordionDetails>
@@ -144,7 +152,14 @@ const SystemConfig = ({
                         aria-controls='panel1bh-content'
                         id='panel1bh-header'
                     >
-                        <h1>Registered Users</h1>
+                        <h1>
+                            Registered Users{' '}
+                            {expanded === 'panel2' ? (
+                                <i className='fa fa-sort-down'></i>
+                            ) : (
+                                <i className='fa fa-sort-up'></i>
+                            )}
+                        </h1>
                     </AccordionSummary>
                     <AccordionDetails>
                         <div className='posts'>
@@ -175,7 +190,14 @@ const SystemConfig = ({
                         aria-controls='panel1bh-content'
                         id='panel1bh-header'
                     >
-                        <h1>Meeting Configurations</h1>
+                        <h1>
+                            Meeting Configurations{' '}
+                            {expanded === 'panel3' ? (
+                                <i className='fa fa-sort-down'></i>
+                            ) : (
+                                <i className='fa fa-sort-up'></i>
+                            )}
+                        </h1>
                     </AccordionSummary>
 
                     <AccordionDetails>

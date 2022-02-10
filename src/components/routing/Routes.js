@@ -2,6 +2,7 @@ import React from 'react';
 import { Route, Switch, Redirect } from 'react-router-dom';
 import Register from '../auth/Register';
 import Login from '../auth/Login';
+import ConfirmUser from '../auth/ConfirmUser';
 import Alert from '../layout/Alert';
 import Dashboard from '../dashboard/Dashboard';
 // ====================
@@ -19,16 +20,12 @@ import EditGathering from '../gatherings/EditGathering';
 import EditGroup from '../gatherings/EditGroup';
 import EditPerson from '../people/EditPerson';
 //import GatheringForm from '../gatherings/GatheringForm';
-import NotFound from '../layout/NotFound';
+// import NotFound from '../layout/NotFound';
 import PrivateRoute from '../routing/PrivateRoute';
 import UserProfile from '../profile/UserProfile';
-import Landing from '../layout/Landing';
+// import Landing from '../layout/Landing';
 import ErrorPage from '../layout/Error';
 // import PersonForm from '../people/PersonForm';
-
-
-
-
 
 const Routes = () => {
     return (
@@ -37,6 +34,16 @@ const Routes = () => {
             <Switch>
                 <Route exact path='/register' component={Register} />
                 <Route exact path='/login' component={Login} />
+                <Route
+                    exact
+                    path='/confirmuser/:registeredName'
+                    component={ConfirmUser}
+                />
+                <PrivateRoute
+                    exact
+                    path='/confirmuser'
+                    component={ConfirmUser}
+                />
                 <Route exact path='/userprofile' component={UserProfile} />
                 {/* <PrivateRoute exact path='/profiles' component={Profiles} />
                 <PrivateRoute exact path='/profile/:id' component={Profile} /> */}
@@ -86,21 +93,13 @@ const Routes = () => {
                     path='/EditPerson/:id'
                     component={EditPerson}
                 />
-                <PrivateRoute
-                    exact
-                    path='/Config'
-                    component={MeeterConfig}
-                />
+                <PrivateRoute exact path='/Config' component={MeeterConfig} />
                 <PrivateRoute
                     exact
                     path='/EditDefaultGroups'
                     component={EditDefaultGroups}
                 />
-                <Route
-                        exact
-                        path='/404'
-                        render={(props) => <ErrorPage />}
-                    />
+                <Route exact path='/404' render={(props) => <ErrorPage />} />
                 <Redirect to='/404' />
                 {/* <Route path='*' component={ErrorPage}/> */}
                 {/* <Route component={NotFound} /> */}

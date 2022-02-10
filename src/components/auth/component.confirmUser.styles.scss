@@ -1,0 +1,64 @@
+.register-confirm-page__wrapper {
+    display: flex;
+    flex-direction: column;
+    max-width: 90vw;
+    margin-left: 10vw;
+}
+.register-confiirm-page__instructions {
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-weight: normal;
+    padding-bottom: 2em;
+}
+.register-confiirm-page__input-line {
+    max-width: 100vw;
+    // border: black solid 1px;
+    // background-color: yellow;
+}
+.register-confirm-page__input-label {
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS',
+        sans-serif;
+}
+.register-confirm-page__input-control {
+    margin-bottom: 1em;
+}
+.register-confirm-page__button-control {
+    padding: 3px 5px;
+    margin: 1px;
+    color: white;
+    font-size: 0.8em;
+    background-color: green;
+    border-radius: 3px;
+}
+.register-confirm-page__button-cancel-control {
+    padding: 3px 5px;
+    margin: 1px;
+    color: black;
+    font-size: 0.8em;
+    background-color: orange;
+    border-radius: 3px;
+}
+.register-confirm-page__page-header {
+    font-size: 1em;
+    font-weight: bold;
+    background-color: #4484ce;
+    width: 80vw;
+    padding: 2px 0px;
+    margin-top: 5px;
+    color: white;
+    text-align: center;
+    border: black solid 1px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+}
+.register-confirm-page__offer-confirm-box {
+    margin-top: 5px;
+    background-color: white;
+    color: black;
+    padding: 3px 5px;
+    border-radius: 5px;
+}
+.register-confirm-page__confirmation-link {
+    text-decoration: none;
+    color: blue;
+    font-weight: bold;
+}

@@ -38,7 +38,10 @@ export const getUserDBInfo = (meeterUserId) => async (dispatch) => {
         };
         // take the _id value and get user from meeter API
 
-        let obj = { operation: 'authenticate', payload: { uid: meeterUserId } };
+        let obj = {
+            operation: 'authenticate',
+            payload: { userId: meeterUserId },
+        };
         const body = JSON.stringify(obj);
 
         const api2use = process.env.REACT_APP_MEETER_API + '/user';
@@ -48,6 +51,86 @@ export const getUserDBInfo = (meeterUserId) => async (dispatch) => {
         let errorResponse = {
             body: {
                 message: 'no user info in meeter database',
+                error: err,
+            },
+            status: '400',
+        };
+        return errorResponse;
+    }
+};
+//   ===================================
+//   save temporary registration in DDB
+//   ===================================
+
+export const saveTemporaryRegistration =
+    (userId, registration) => async (dispatch) => {
+        // get Meeter Info for user
+        try {
+            const config = {
+                headers: {
+                    'Access-Control-Allow-Headers':
+                        'Content-Type, x-auth-token, Access-Control-Allow-Headers',
+                    'Content-Type': 'application/json',
+                },
+            };
+            // take the _id value and get user from meeter API
+
+            let obj = {
+                operation: 'saveTempRegistration',
+                payload: {
+                    userId: userId,
+                    Item: registration,
+                },
+            };
+            const body = JSON.stringify(obj);
+
+            const api2use = process.env.REACT_APP_MEETER_API + '/user';
+            const res = await axios.post(api2use, body, config);
+            return res.data;
+        } catch (err) {
+            let errorResponse = {
+                body: {
+                    message: 'no user info in meeter database',
+                    error: err,
+                },
+                status: '400',
+            };
+            return errorResponse;
+        }
+    };
+//   ===================================
+//   copy the original registation entry
+//   to the mtrUser table and delete the
+//   the temp entry.
+//   ===================================
+
+export const moveTempUserToProd = (userName) => async (dispatch) => {
+    try {
+        const config = {
+            headers: {
+                'Access-Control-Allow-Headers':
+                    'Content-Type, x-auth-token, Access-Control-Allow-Headers',
+                'Content-Type': 'application/json',
+            },
+        };
+        // take the _id value and get user from meeter API
+
+        let obj = {
+            operation: 'moveUserTempToProd',
+            payload: {
+                userName: userName,
+            },
+        };
+        const body = JSON.stringify(obj);
+
+        const api2use = process.env.REACT_APP_MEETER_API + '/user';
+        const res = await axios.post(api2use, body, config);
+        return res.data;
+    } catch (err) {
+        let errorResponse = {
+            body: {
+                message:
+                    'challenges with moving the temp user to mtrUsers tables',
                 error: err,
             },
             status: '400',

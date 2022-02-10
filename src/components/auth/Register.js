@@ -1,22 +1,29 @@
 import React, { Fragment, useState } from 'react';
 import { connect } from 'react-redux';
-import { Link, Redirect } from 'react-router-dom';
-import { setAlert } from '../../actions/alert';
+import { Auth } from 'aws-amplify';
+import { Link, Redirect, useHistory } from 'react-router-dom';
+import { setAlert, setRegisterAlert } from '../../actions/alert';
+import { dispatchThis } from '../../actions/dispatchMessage';
 import { register } from '../../actions/login';
 import PropTypes from 'prop-types';
-import { makeStyles, useTheme } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { NativeSelect } from '@material-ui/core';
 import { FormControlLabel } from '@material-ui/core';
 import { Checkbox } from '@material-ui/core';
 import { TextField } from '@material-ui/core';
+import { saveTemporaryRegistration } from '../../actions/auth';
+import {
+    ExplicitAuthFlowsType,
+    UpdateUserAttributesCommand,
+} from '@aws-sdk/client-cognito-identity-provider';
 
-import Signup from './component.register';
-import RegisterOptionalInfo from './component.register.optional';
-import RegisterRequiredInfo from './component.register.required';
-import { UsernameConfigurationType } from '@aws-sdk/client-cognito-identity-provider';
-
-const Register = ({ setAlert, register, isAuthenticated }) => {
+const Register = ({
+    dispatchThis,
+    register,
+    isAuthenticated,
+    saveTemporaryRegistration,
+}) => {
     //   const [formData, setFormData] = useState({
     //     name: "",
     //     email: "",
@@ -183,7 +190,7 @@ const Register = ({ setAlert, register, isAuthenticated }) => {
         shirtLabel: { margin: 0, padding: 0 },
         shirtInput: { margin: 0, padding: 0, textAlign: 'right' },
     }));
-
+    const history = useHistory();
     const classes = useStyles();
     const [userNameIsVisible, setUserNameIsVisible] = useState(false);
     const [firstName, setFirstName] = useState('');
@@ -204,35 +211,39 @@ const Register = ({ setAlert, register, isAuthenticated }) => {
     const handleLoginDef = (e) => {
         setUserNameIsVisible(!userNameIsVisible);
     };
-    const handleInputChange = (e) => {
-        this.setState({
-            [e.target.name]: e.target.value,
-        });
-    };
-    const handleBirthdayChange = (e) => {
-        setBirthday(e.target.value);
-    };
+    // const handleInputChange = (e) => {
+    //     this.setState({
+    //         [e.target.name]: e.target.value,
+    //     });
+    // };
+    // const handleBirthdayChange = (e) => {
+    //     setBirthday(e.target.value);
+    // };
     const handleDateChange = (event) => {
         setBirthday(event.target.value);
         // alert("Birthday:" + birthday);
     };
-    const onSubmit = (e) => {
+    const handleSubmitClick = (e) => {
         //NOTE: username set to lowercase
         setUserName(String(userName).toLowerCase());
         e.preventDefault();
+        // let alertPayload = {};
+        let userAttributes = {};
         // let okay2go = true;
         // first name needs to be more than chars and only text.
         let myRegxp = /^([a-zA-Z0-9_-]){3,15}$/;
-        if (myRegxp.test(firstName) == false) {
+        if (myRegxp.test(firstName) === false) {
             alert('First Name needs to be 3 characters or more');
             window.scrollTo(0, 0);
             return;
         }
-        if (myRegxp.test(lastName) == false) {
+        userAttributes.given_name = firstName;
+        if (myRegxp.test(lastName) === false) {
             alert('Last Name needs to be 3 characters or more');
             window.scrollTo(0, 0);
             return;
         }
+        userAttributes.family_name = lastName;
         if (gender === '?') {
             alert('Please select your gender');
             window.scrollTo(0, 0);
@@ -240,13 +251,14 @@ const Register = ({ setAlert, register, isAuthenticated }) => {
         }
         let emailRegex =
             /(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9]))\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9])|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/;
-        if (emailRegex.test(email) == false) {
+        if (emailRegex.test(email) === false) {
             alert('email is not supported');
             window.scrollTo(0, 0);
             return;
         }
-        let userNameRegex = /^([a-zA-Z0-9_-]){1,100}$/;
+        userAttributes.email = email;
 
+        let userNameRegex = /^([a-zA-Z0-9_-]){1,100}$/;
         if (!userNameIsVisible && userName.length < 1) {
             alert(
                 'You need to provide a username or indicate you are going to use your email'
@@ -255,13 +267,15 @@ const Register = ({ setAlert, register, isAuthenticated }) => {
             return;
         }
         userNameRegex = /^([a-zA-Z0-9_-]){5,15}$/;
-        if (!userNameIsVisible && userNameRegex.test(userName) == false) {
+        if (!userNameIsVisible && userNameRegex.test(userName) === false) {
             alert(
                 'Usernames have to be 5-15 in length, using letters, numbers, dash (-) or underscore (_)\nIf you want to use your email, check the box above.'
             );
             window.scrollTo(0, 0);
             return;
         }
+        userAttributes.preferred_username = userName;
+
         if (password1 !== password2) {
             alert('your passwords need to match');
             window.scrollTo(0, 0);
@@ -269,7 +283,7 @@ const Register = ({ setAlert, register, isAuthenticated }) => {
         }
         let passwordRegex =
             /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[\^$*.\[\]{}\(\)?\-\"!@#%&\/,><\':;|_~`])\S{8,99}$/;
-        if (passwordRegex.test(password1) == false) {
+        if (passwordRegex.test(password1) === false) {
             alert(
                 'Password requirements:\n' +
                     '  minimum length of 8\n' +
@@ -281,30 +295,24 @@ const Register = ({ setAlert, register, isAuthenticated }) => {
             window.scrollTo(0, 0);
             return;
         }
-        const theRequest = {
-            email: email,
-            password: password1,
+        let epochTime = Math.floor(Date.now() / 1000);
+        let oneHourFromNow = epochTime + 3600;
+
+        let temporaryRegistrationInfo = {
+            expiration: oneHourFromNow,
+            userName: userName,
             firstName: firstName,
             lastName: lastName,
-            gender: gender,
+            email: email,
         };
-        if (userNameIsVisible) {
-            //------------------------------------
-            // want to use email as userName
-            //------------------------------------
-            theRequest.preferred_username = email;
-        } else {
-            theRequest.preferred_username = userName;
-            theRequest.userName = userName;
-        }
-        // check for optional information
         if (address) {
-            theRequest.address = address;
+            userAttributes.address = address;
+            temporaryRegistrationInfo.address = address;
         }
         if (phone) {
             const phoneRegex =
                 /^([+]?[\s0-9]+)?(\d{3}|[(]?[0-9]+[)])?([-]?[\s]?[0-9])+$/i;
-            if (phoneRegex.test(phone) == false) {
+            if (phoneRegex.test(phone) === false) {
                 alert('Phone number is invalid');
                 window.scrollTo(0, 0);
                 return;
@@ -316,21 +324,135 @@ const Register = ({ setAlert, register, isAuthenticated }) => {
                 updatePhone = updatePhone.replace(')', '');
                 updatePhone = updatePhone.replace(' ', '');
                 updatePhone = updatePhone.replace('-', '');
-                //now add +1 to front of number
-                theRequest.phone = '+1' + updatePhone;
+                // 2. now add +1 to front of number
+                updatePhone = '+1' + updatePhone;
+
+                userAttributes.phone = updatePhone;
+                temporaryRegistrationInfo.phone = updatePhone;
             }
         }
         if (birthday) {
-            theRequest.birthday = birthday;
+            userAttributes.birthdate = birthday;
+            temporaryRegistrationInfo.birthday = birthday;
         }
         if (shirt) {
-            theRequest.shirt = shirt;
+            // userAttributes.shirt = shirt;
+            temporaryRegistrationInfo.shirt = shirt;
         }
-        register(theRequest);
-        // alert("see console log");
-        // console.log(theRequest);
+        userAttributes = {
+            email: email,
+            given_name: firstName,
+            family_name: lastName,
+            gender: gender,
+            preferred_username: userName,
+        };
+        // check for optional information
 
-        // window.scrollTo(0, 0);
+        //   REGISTER THE USER !!!!!!!!
+        console.log('userAttributes: \n', userAttributes);
+
+        try {
+            //   +++++++++++++++++++++++++++
+            //   THIS WORKS, IMPLEMENTED
+            //   +++++++++++++++++++++++++++
+            // Auth.signUp({
+            //     Username: 'snoopy4',
+            //     Password: 'Feb2022!',
+            //     attributes: {
+            //         email: 'joecool@peanuts.com',
+            //         given_name: 'joe',
+            //         family_name: 'cool',
+            //         gender: 'm',
+            //         phone_number: '+12345678901',
+            //     },
+            // });
+            //   +++++++++++++++++++++++++++
+            //   SCREWS UP REQUEST, NON-FUNCTIONAL
+            //   +++++++++++++++++++++++++++
+            // Auth.signUp({
+            //     ClientId: "521ktk6vc6v3ddj8gh6qicnblt'",
+            //     username: 'snoopy5',
+            //     password: 'Misery2022!',
+            //     attributes: [
+            //         { Name: 'email', Value: 'joecool@peanuts.com' },
+            //         { Name: 'given_name', Value: 'joe' },
+            //         { Name: 'family_name', Value: 'cool' },
+            //         { Name: 'gender', Value: 'm' },
+            //         { Name: 'phone_number', Value: '+12345678901' },
+            //         { Name: 'email', Value: 'jcool@peanuts.com' },
+            //         { Name: 'username', Value: 'snoopy5' },
+            //     ],
+            //     ValidationData: null,
+            // })
+            Auth.signUp({
+                username: userName,
+                password: password1,
+                attributes: userAttributes,
+            })
+                .then((data) => {
+                    dispatchThis('SUCCESS, NOW CONFIRM...', 'green');
+                    //============================================
+                    // save the registration info for future use
+                    //============================================
+                    // data.user_sub is the cognito userId
+                    saveTemporaryRegistration(
+                        data.userSub,
+                        temporaryRegistrationInfo
+                    );
+                    let url = '/confirmUser/' + userName;
+                    history.push(url);
+                })
+                .catch((err) => {
+                    // if (err) {
+                    //     err.forEach((err) => dispatch(setAlert(err.message, 'danger')));
+                    // }
+                    switch (err.code) {
+                        case 'UsernameExistsException':
+                            // alert('1');
+                            dispatchThis(err.message, 'red');
+                            // alertPayload = {
+                            //     msg: err.message,
+                            //     alertType: 'danger',
+                            // };
+
+                            console.log('ERR1: err.code');
+                            break;
+                        case 'InvalidPasswordException':
+                            // alert('2');
+                            dispatchThis(err.message, 'red');
+                            // alertPayload = {
+                            //     msg:
+                            //         'Password does not meet requirements.\n[' +
+                            //         err.message +
+                            //         ']',
+                            //     alertType: 'danger',
+                            //     timeout: 10000,
+                            // };
+                            break;
+                        default:
+                            // alert('3');
+                            dispatchThis(err.message, 'red');
+                            // alertPayload = {
+                            //     msg:
+                            //         'Registration error: [' +
+                            //         JSON.stringify(err) +
+                            //         ']',
+                            //     alertType: 'danger',
+                            //     timeout: 10000,
+                            // };
+
+                            break;
+                    }
+                });
+        } catch (error) {
+            // alert('4');
+            dispatchThis(
+                'Registration error: [' + JSON.stringify(error) + ']',
+                'red'
+            );
+
+            console.log('error:' + error);
+        }
     };
     if (isAuthenticated) {
         return <Redirect to='/dashboard' />;
@@ -342,148 +464,133 @@ const Register = ({ setAlert, register, isAuthenticated }) => {
             <p className='lead'>
                 <i className='fas fa-user' /> Create Your Account
             </p>
-            <form className='form' onSubmit={onSubmit}>
-                <div name='container' className={classes.mainContainer}>
-                    <div name='row' className={classes.regRow}>
-                        <div name='col1' className={classes.firstNameWrapper}>
-                            First Name
-                            <br />
+            <div name='container' className={classes.mainContainer}>
+                <div name='row' className={classes.regRow}>
+                    <div name='col1' className={classes.firstNameWrapper}>
+                        First Name
+                        <br />
+                        <input
+                            type='text'
+                            placeholder='First Name'
+                            name='firstName'
+                            value={firstName}
+                            onChange={(e) => setFirstName(e.target.value)}
+                            className={classes.firstNameInput}
+                        />
+                    </div>
+                    <div name='col2' className={classes.lastNameWrapper}>
+                        Last Name
+                        <br />
+                        <input
+                            type='text'
+                            placeholder='Last Name'
+                            name='lastName'
+                            value={lastName}
+                            onChange={(e) => setLastName(e.target.value)}
+                            className={classes.lastNameInput}
+                        />
+                    </div>
+                    <div name='col3' className={classes.genderWrapper}>
+                        Gender
+                        <br />
+                        <NativeSelect
+                            defaultValue={'?'}
+                            className={classes.genderInput}
+                            onChange={(e) => setGender(e.target.value)}
+                            inputProps={{
+                                name: 'gender',
+                                id: 'uncontrolled-native',
+                            }}
+                        >
+                            <option value={'?'}>?</option>
+                            <option value={'f'}>F</option>
+                            <option value={'m'}>M</option>
+                        </NativeSelect>
+                    </div>
+                </div>
+                <div className={classes.regRow}>
+                    <div>
+                        <input
+                            type='email'
+                            placeholder='Email'
+                            name='email'
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            className={classes.emailInput}
+                        />
+                    </div>
+                </div>
+                {!userNameIsVisible ? (
+                    <div className={classes.regRow}>
+                        <div className={classes.userNameWrapper}>
+                            <div className={classes.userNameLabel}>
+                                Username
+                            </div>
                             <input
                                 type='text'
-                                placeholder='First Name'
-                                name='firstName'
-                                value={firstName}
-                                onChange={(e) => setFirstName(e.target.value)}
-                                className={classes.firstNameInput}
+                                placeholder='username'
+                                name='userName'
+                                value={userName}
+                                onChange={(e) => setUserName(e.target.value)}
+                                className={classes.userNameInput}
                             />
-                        </div>
-                        <div name='col2' className={classes.lastNameWrapper}>
-                            Last Name
-                            <br />
-                            <input
-                                type='text'
-                                placeholder='Last Name'
-                                name='lastName'
-                                value={lastName}
-                                onChange={(e) => setLastName(e.target.value)}
-                                className={classes.lastNameInput}
-                            />
-                        </div>
-                        <div name='col3' className={classes.genderWrapper}>
-                            Gender
-                            <br />
-                            <NativeSelect
-                                defaultValue={'?'}
-                                className={classes.genderInput}
-                                onChange={(e) => setGender(e.target.value)}
-                                inputProps={{
-                                    name: 'gender',
-                                    id: 'uncontrolled-native',
-                                }}
-                            >
-                                <option value={'?'}>?</option>
-                                <option value={'f'}>F</option>
-                                <option value={'m'}>M</option>
-                            </NativeSelect>
                         </div>
                     </div>
-                    <div className={classes.regRow}>
+                ) : null}
+                <div className={classes.regRow}>
+                    <div className={classes.passwordWrapper}>
+                        <div className={classes.passwordLabel}>Password</div>
+                        <input
+                            type='password'
+                            placeholder='Password'
+                            name='password1'
+                            value={password1}
+                            onChange={(e) => setPassword1(e.target.value)}
+                            className={classes.passwordInput}
+                        />
+                    </div>
+                </div>
+                <div className={classes.regRow}>
+                    <div className={classes.passwordWrapper}>
+                        <div className={classes.passwordLabel}>
+                            Password Confirmation
+                        </div>
+                        <input
+                            type='password'
+                            placeholder='Password'
+                            name='password1'
+                            value={password2}
+                            onChange={(e) => setPassword2(e.target.value)}
+                            className={classes.passwordInput}
+                        />
+                    </div>
+                </div>
+                {/* //    OPTIONAL SEPARATOR  */}
+
+                <div className={classes.breakLineWrapper}>
+                    <hr className={classes.breakLine} />
+                    <div className={classes.optionalLabel}>
+                        OPTIONAL INFORMATION
+                    </div>
+                    <hr className={classes.breakLine} />
+                </div>
+                <div className={classes.optionalWrapper}>
+                    <div className={classes.tRow}>
+                        <div className={classes.addressLabel}>Address</div>
                         <div>
                             <input
-                                type='email'
-                                placeholder='Email'
-                                name='email'
-                                value={email}
-                                onChange={(e) => setEmail(e.target.value)}
-                                className={classes.emailInput}
-                            />
-                        </div>
-                        <div className={classes.checkLoginWrapper}>
-                            <FormControlLabel
-                                value='end'
-                                control={<Checkbox />}
-                                className={classes.checkLoginInput}
-                                label='use for login'
-                                labelPlacement='end'
-                                onClick={() => handleLoginDef()}
-                            />
-                        </div>
-                    </div>
-                    {!userNameIsVisible ? (
-                        <div className={classes.regRow}>
-                            <div className={classes.userNameWrapper}>
-                                <div className={classes.userNameLabel}>
-                                    Username
-                                </div>
-                                <input
-                                    type='text'
-                                    placeholder='username'
-                                    name='userName'
-                                    value={userName}
-                                    onChange={(e) =>
-                                        setUserName(e.target.value)
-                                    }
-                                    className={classes.userNameInput}
-                                />
-                            </div>
-                        </div>
-                    ) : null}
-                    <div className={classes.regRow}>
-                        <div className={classes.passwordWrapper}>
-                            <div className={classes.passwordLabel}>
-                                Password
-                            </div>
-                            <input
-                                type='password'
-                                placeholder='Password'
-                                name='password1'
-                                value={password1}
-                                onChange={(e) => setPassword1(e.target.value)}
-                                className={classes.passwordInput}
+                                type='text'
+                                placeholder='Street, City, State, Postal Code'
+                                name='address'
+                                value={address}
+                                onChange={(e) => setAddress(e.target.value)}
+                                className={classes.addressInput}
                             />
                         </div>
                     </div>
                     <div className={classes.regRow}>
-                        <div className={classes.passwordWrapper}>
-                            <div className={classes.passwordLabel}>
-                                Password Confirmation
-                            </div>
-                            <input
-                                type='password'
-                                placeholder='Password'
-                                name='password1'
-                                value={password2}
-                                onChange={(e) => setPassword2(e.target.value)}
-                                className={classes.passwordInput}
-                            />
-                        </div>
-                    </div>
-                    {/* //    OPTIONAL SEPARATOR  */}
-
-                    <div className={classes.breakLineWrapper}>
-                        <hr className={classes.breakLine} />
-                        <div className={classes.optionalLabel}>
-                            OPTIONAL INFORMATION
-                        </div>
-                        <hr className={classes.breakLine} />
-                    </div>
-                    <div className={classes.optionalWrapper}>
-                        <div className={classes.tRow}>
-                            <div className={classes.addressLabel}>Address</div>
-                            <div>
-                                <input
-                                    type='text'
-                                    placeholder='Street, City, State, Postal Code'
-                                    name='address'
-                                    value={address}
-                                    onChange={(e) => setAddress(e.target.value)}
-                                    className={classes.addressInput}
-                                />
-                            </div>
-                        </div>
-                        <div className={classes.regRow}>
-                            <div className={classes.phoneWrapper}>
-                                {/* <div className={classes.phoneLabel}>Phone</div>
+                        <div className={classes.phoneWrapper}>
+                            {/* <div className={classes.phoneLabel}>Phone</div>
                 <div>
                   <input
                     type="text"
@@ -494,73 +601,82 @@ const Register = ({ setAlert, register, isAuthenticated }) => {
                     className={classes.phoneInput}
                   />
                 </div> */}
-                                <input
-                                    type='phone'
-                                    name='phone'
-                                    value={phone}
-                                    onChange={(e) => setPhone(e.target.value)}
-                                    className='phoneInput'
-                                />
+                            <input
+                                type='phone'
+                                name='phone'
+                                value={phone}
+                                onChange={(e) => setPhone(e.target.value)}
+                                className='phoneInput'
+                            />
+                        </div>
+                        <div className={classes.birthdayWrapper}>
+                            <div className={classes.birthdayLabel}>
+                                Birthday
                             </div>
-                            <div className={classes.birthdayWrapper}>
-                                <div className={classes.birthdayLabel}>
-                                    Birthday
+                            {/* <BasicDatePicker dateLabel="Birthday" theDate={birthday} onChange={(e) => setBirthday(e.target.value)}/> */}
+                            <TextField
+                                id='date'
+                                label='Select Date'
+                                type='date'
+                                // defaultValue={birthday}
+                                value={birthday}
+                                format='MM/dd/yyyy'
+                                onChange={handleDateChange}
+                                InputLabelProps={{
+                                    shrink: true,
+                                }}
+                            />
+                        </div>
+                        <div>
+                            <div className={classes.shirtWrapper}>
+                                <div className={classes.shirtLabel}>
+                                    Shirt Size
                                 </div>
-                                {/* <BasicDatePicker dateLabel="Birthday" theDate={birthday} onChange={(e) => setBirthday(e.target.value)}/> */}
-                                <TextField
-                                    id='date'
-                                    label='Select Date'
-                                    type='date'
-                                    defaultValue={birthday}
-                                    value={birthday}
-                                    format='MM/dd/yyyy'
-                                    onChange={handleDateChange}
-                                    InputLabelProps={{
-                                        shrink: true,
-                                    }}
-                                />
-                            </div>
-                            <div>
-                                <div className={classes.shirtWrapper}>
-                                    <div className={classes.shirtLabel}>
-                                        Shirt Size
-                                    </div>
-                                    <div className={classes.shirtInput}>
-                                        <NativeSelect
-                                            defaultValue={'?'}
-                                            className={classes.shirtInput}
-                                            // onChange={(e) => setShirt(value)}
-                                            onChange={(e) =>
-                                                setShirt(e.target.value)
-                                            }
-                                            inputProps={{
-                                                name: 'shirt',
-                                                id: 'uncontrolled-native',
-                                            }}
-                                        >
-                                            <option value={''}>?</option>
-                                            <option value={'s'}>S</option>
-                                            <option value={'m'}>M</option>
-                                            <option value={'l'}>L</option>
-                                            <option value={'xl'}>XL</option>
-                                            <option value={'xxl'}>2 XL</option>
-                                            <option value={'xxxl'}>3 XL</option>
-                                            <option value={'xxxl'}>4 XL</option>
-                                        </NativeSelect>
-                                    </div>
+                                <div className={classes.shirtInput}>
+                                    <NativeSelect
+                                        defaultValue={'?'}
+                                        className={classes.shirtInput}
+                                        // onChange={(e) => setShirt(value)}
+                                        onChange={(e) =>
+                                            setShirt(e.target.value)
+                                        }
+                                        inputProps={{
+                                            name: 'shirt',
+                                            id: 'uncontrolled-native',
+                                        }}
+                                    >
+                                        <option value={''}>?</option>
+                                        <option value={'s'}>S</option>
+                                        <option value={'m'}>M</option>
+                                        <option value={'l'}>L</option>
+                                        <option value={'xl'}>XL</option>
+                                        <option value={'xxl'}>2 XL</option>
+                                        <option value={'xxxl'}>3 XL</option>
+                                        <option value={'xxxl'}>4 XL</option>
+                                    </NativeSelect>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <input
-                        type='submit'
-                        className='btn btn-primary'
-                        value='Register'
-                    />
                 </div>
-            </form>
+                <input
+                    type='submit'
+                    className='btn btn-primary'
+                    value='Register'
+                    onClick={handleSubmitClick}
+                />
+            </div>
 
             {/* <RegisterOptionalInfo /> */}
+            <div>
+                <div className='register-user-page__offer-confirm-box'>
+                    Have you registered and need to confirm your account?
+                    <Link className='NEED_TO_DEFINE' to='/confirm'>
+                        {' '}
+                        Click here
+                    </Link>
+                </div>
+            </div>
 
             <p className='my-1'>
                 Already have an account? <Link to='/login'>Sign In</Link>
@@ -571,7 +687,9 @@ const Register = ({ setAlert, register, isAuthenticated }) => {
 
 Register.propTypes = {
     setAlert: PropTypes.func.isRequired,
+    dispatchThis: PropTypes.func.isRequired,
     register: PropTypes.func.isRequired,
+    saveTemporaryRegistration: PropTypes.func.isRequired,
     isAuthenticated: PropTypes.bool,
 };
 
@@ -579,4 +697,9 @@ const mapStateToProps = (state) => ({
     isAuthenticated: state.auth.isAuthenticated,
 });
 
-export default connect(mapStateToProps, { setAlert, register })(Register);
+export default connect(mapStateToProps, {
+    setAlert,
+    dispatchThis,
+    register,
+    saveTemporaryRegistration,
+})(Register);

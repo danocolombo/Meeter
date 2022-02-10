@@ -290,6 +290,11 @@ export const deleteGathering = (meeting2Delete, view) => async (dispatch) => {
 
         let api2use = process.env.REACT_APP_MEETER_API + '/meetings';
         let res = await axios.post(api2use, body, config);
+        if (res.status !== '200') {
+            dispatch(setAlert('Meeting Cannot Be Removed', 'danger'));
+            return;
+        }
+        //delete the redux reference
         if (view === true) {
             dispatch({
                 type: DELETE_GATHERING,
