@@ -67,6 +67,7 @@ const Register = ({
             // backgroundColor: "#f1f1f1",
             paddingTop: '5px',
             paddingRight: '1em',
+            fontWeight: 'bold',
             '@media (max-width: 500px)': {
                 paddingBottom: '5px',
             },
@@ -76,6 +77,7 @@ const Register = ({
             // border: "1px solid blue",
             backgroundColor: '#f1f1f1',
             paddingTop: '5px',
+            fontWeight: 'bold',
             '@media (max-width: 500px)': {
                 paddingBottom: '5px',
             },
@@ -87,6 +89,7 @@ const Register = ({
             backgroundColor: '#f1f1f1',
             // justifyContent: "center",
             textAlign: 'center',
+            fontWeight: 'bold',
             // "@media (max-width: 600px)": {
             //   textAlign: "left",
             //   marginBottom: "1em",
@@ -99,18 +102,22 @@ const Register = ({
             padding: 0,
             // backgroundColor: "#f1f1f1",
         },
+        emailLabel: {
+            fontWeight: 'bold',
+            marginTop: '.5em',
+        },
         emailInput: {
-            marginTop: '10px',
             maxWidth: '600px',
-            minWidth: '50vw',
+            width: '400px',
+            // minWidth: '50vw',
         },
-        checkLoginWrapper: {
-            marginLeft: '1em',
-        },
-        checkLoginInput: {
-            // paddingLeft: "1em",
-            // marginLeft: "1em",
-        },
+        // checkLoginWrapper: {
+        //     marginLeft: '1em',
+        // },
+        // checkLoginInput: {
+        //     // paddingLeft: "1em",
+        //     // marginLeft: "1em",
+        // },
         userNameWrapper: {
             // border: "1px solid blue",
             // backgroundColor: "#f1f1f1",
@@ -118,6 +125,8 @@ const Register = ({
         },
         userNameLabel: {
             paddingRight: '1em',
+            fontWeight: 'bold',
+            marginTop: '.5em',
         },
         userNameInput: {
             maxWidth: '200px',
@@ -131,13 +140,17 @@ const Register = ({
             backgroundColor: '#ffffff',
             marginBottom: '10px',
         },
-        passwordLabel: { paddingRight: '1em' },
+        passwordLabel: {
+            paddingRight: '1em',
+            fontWeight: 'bold',
+            marginTop: '.5em',
+        },
         breakLineWrapper: {
             marginBottom: '1em',
         },
         optionalWrapper: {
             border: '2px double blue',
-            padding: '3px',
+            padding: '15px',
             marginBottom: '1em',
         },
         breakLine: {
@@ -161,6 +174,35 @@ const Register = ({
             width: '70vw',
             marginBottom: '1em',
         },
+        streetLabel: {
+            fontWeight: 'bold',
+        },
+        streetControl: {
+            textAlign: 'left',
+            width: '400px',
+        },
+        cityLabel: {
+            marginTop: '1em',
+            fontWeight: 'bold',
+        },
+        cityControl: {
+            textAlign: 'left',
+            width: '200px',
+        },
+        stateLabel: {
+            fontWeight: 'bold',
+            marginTop: '1em',
+        },
+        stateControl: {
+            textAlign: 'left',
+        },
+        postalCodeLabel: {
+            fontWeight: 'bold',
+            marginTop: '1em',
+        },
+        postalCodeControl: {
+            textAlign: 'left',
+        },
         phoneWrapper: {
             // border: "1px solid blue",
             backgroundColor: '#f1f1f1',
@@ -169,9 +211,12 @@ const Register = ({
         },
         phoneLabel: {
             // paddingRight: "1em",
+            fontWeight: 'bold',
+            marginTop: '1em',
         },
         birthdayLabel: {
             paddingRight: '1em',
+            fontWeight: 'bold',
         },
         birthdayWrapper: {
             // border: "1px solid blue",
@@ -187,8 +232,8 @@ const Register = ({
             // marginLeft: "1em",
             // marginTop: ".5em",
         },
-        shirtLabel: { margin: 0, padding: 0 },
-        shirtInput: { margin: 0, padding: 0, textAlign: 'right' },
+        shirtLabel: { margin: 0, padding: 0, fontWeight: 'bold' },
+        shirtInput: { margin: 0, padding: 0 },
     }));
     const history = useHistory();
     const classes = useStyles();
@@ -201,6 +246,11 @@ const Register = ({
     const [password1, setPassword1] = useState('');
     const [password2, setPassword2] = useState('');
     const [address, setAddress] = useState('');
+    const [street, setStreet] = useState('');
+    const [city, setCity] = useState('');
+    const [stateProv, setStateProv] = useState('');
+    const [postalCode, setPostalCode] = useState('');
+
     const [phone, setPhone] = useState('');
     const [birthday, setBirthday] = useState('');
     const [shirt, setShirt] = useState('');
@@ -305,9 +355,25 @@ const Register = ({
             lastName: lastName,
             email: email,
         };
-        if (address) {
-            userAttributes.address = address;
-            temporaryRegistrationInfo.address = address;
+        // if (address) {
+        //     userAttributes.address = address;
+        //     temporaryRegistrationInfo.address = address;
+        // }
+        if (street) {
+            userAttributes.street = street;
+            temporaryRegistrationInfo.street = street;
+        }
+        if (city) {
+            userAttributes.city = city;
+            temporaryRegistrationInfo.city = city;
+        }
+        if (stateProv) {
+            userAttributes.stateProv = stateProv;
+            temporaryRegistrationInfo.stateProv = stateProv;
+        }
+        if (postalCode) {
+            userAttributes.postalCode = postalCode;
+            temporaryRegistrationInfo.postalCode = postalCode;
         }
         if (phone) {
             const phoneRegex =
@@ -509,7 +575,8 @@ const Register = ({
                     </div>
                 </div>
                 <div className={classes.regRow}>
-                    <div>
+                    <div className={classes.emailWrapper}>
+                        <div className={classes.emailLabel}>Email</div>
                         <input
                             type='email'
                             placeholder='Email'
@@ -520,23 +587,21 @@ const Register = ({
                         />
                     </div>
                 </div>
-                {!userNameIsVisible ? (
-                    <div className={classes.regRow}>
-                        <div className={classes.userNameWrapper}>
-                            <div className={classes.userNameLabel}>
-                                Username
-                            </div>
-                            <input
-                                type='text'
-                                placeholder='username'
-                                name='userName'
-                                value={userName}
-                                onChange={(e) => setUserName(e.target.value)}
-                                className={classes.userNameInput}
-                            />
-                        </div>
+
+                <div className={classes.regRow}>
+                    <div className={classes.userNameWrapper}>
+                        <div className={classes.userNameLabel}>Username</div>
+                        <input
+                            type='text'
+                            placeholder='username'
+                            name='userName'
+                            value={userName}
+                            onChange={(e) => setUserName(e.target.value)}
+                            className={classes.userNameInput}
+                        />
                     </div>
-                ) : null}
+                </div>
+
                 <div className={classes.regRow}>
                     <div className={classes.passwordWrapper}>
                         <div className={classes.passwordLabel}>Password</div>
@@ -575,7 +640,7 @@ const Register = ({
                     <hr className={classes.breakLine} />
                 </div>
                 <div className={classes.optionalWrapper}>
-                    <div className={classes.tRow}>
+                    {/* <div className={classes.tRow}>
                         <div className={classes.addressLabel}>Address</div>
                         <div>
                             <input
@@ -587,20 +652,65 @@ const Register = ({
                                 className={classes.addressInput}
                             />
                         </div>
+                    </div> */}
+                    <div className={classes.tRow}>
+                        <div className={classes.streetLabel}>Street</div>
+                        <div>
+                            <input
+                                type='text'
+                                placeholder=''
+                                name='street'
+                                value={street}
+                                onChange={(e) => setStreet(e.target.value)}
+                                className={classes.streetControl}
+                            />
+                        </div>
                     </div>
-                    <div className={classes.regRow}>
+                    <div className={classes.tRow}>
+                        <div className={classes.cityLabel}>City</div>
+                        <div>
+                            <input
+                                type='text'
+                                placeholder=''
+                                name='city'
+                                value={city}
+                                onChange={(e) => setCity(e.target.value)}
+                                className={classes.cityControl}
+                            />
+                        </div>
+                    </div>
+                    <div className={classes.tRow}>
+                        <div className={classes.stateLabel}>State</div>
+                        <div>
+                            <input
+                                type='text'
+                                placeholder=''
+                                name='stateProv'
+                                value={stateProv}
+                                onChange={(e) => setStateProv(e.target.value)}
+                                className={classes.stateControl}
+                            />
+                        </div>
+                    </div>
+                    <div className={classes.tRow}>
+                        <div className={classes.postalCodeLabel}>Postal</div>
+                        <div>
+                            <input
+                                type='number'
+                                placeholder=''
+                                name='postalCode'
+                                value={postalCode}
+                                min='10000'
+                                max='99999'
+                                width='5'
+                                onChange={(e) => setPostalCode(e.target.value)}
+                                className={classes.postalCodeControl}
+                            />
+                        </div>
+                    </div>
+                    <div className={classes.tRow}>
+                        <div className={classes.phoneLabel}>Telephone</div>
                         <div className={classes.phoneWrapper}>
-                            {/* <div className={classes.phoneLabel}>Phone</div>
-                <div>
-                  <input
-                    type="text"
-                    placeholder="(208) 340-1234"
-                    name="phone"
-                    value={phone}
-                    onChange={(e) => setPhone(e.target.value)}
-                    className={classes.phoneInput}
-                  />
-                </div> */}
                             <input
                                 type='phone'
                                 name='phone'
@@ -616,7 +726,7 @@ const Register = ({
                             {/* <BasicDatePicker dateLabel="Birthday" theDate={birthday} onChange={(e) => setBirthday(e.target.value)}/> */}
                             <TextField
                                 id='date'
-                                label='Select Date'
+                                // label='Select Date'
                                 type='date'
                                 // defaultValue={birthday}
                                 value={birthday}
