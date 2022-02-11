@@ -196,6 +196,41 @@ export const getClientDBInfo = (clientId) => async (dispatch) => {
         return errorResponse;
     }
 };
+export const getPotentialUsers = () => async (dispatch) => {
+    //this just returns all the users from dynamo that
+    //have defaultClient set to "tbd"
+    try {
+        const config = {
+            headers: {
+                'Access-Control-Allow-Headers':
+                    'Content-Type, x-auth-token, Access-Control-Allow-Headers',
+                'Content-Type': 'application/json',
+            },
+        };
+        let obj = {
+            operation: 'getTBDUsers',
+        };
+
+        let body = JSON.stringify(obj);
+
+        let api2use = process.env.REACT_APP_MEETER_API + '/users';
+        let res = await axios.post(api2use, body, config);
+        // console.log('res:' + JSON.stringify(res.data));
+        if (res.status === 200) {
+            return res;
+        }
+    } catch (err) {
+        let errorResponse = {
+            body: {
+                message: 'error getting TBA users',
+                error: err,
+            },
+            status: '400',
+        };
+        return errorResponse;
+    }
+};
+
 //   ===================================
 //   save the client info to REDUX
 //   ===================================
