@@ -13,6 +13,7 @@ import { AccordionSummary } from '@material-ui/core';
 
 import DefaultGroup from './DefaultGroup';
 import ClientUser from './ClientUser';
+import UserComponent from './components/users/user.component';
 import MeetingConfigForm from './MeetingConfigForm';
 import GroupItem from './components/group-component';
 
@@ -156,7 +157,7 @@ const SystemConfig = ({
                         id='panel1bh-header'
                     >
                         <h1>
-                            Registered Users{' '}
+                            Client Users{' '}
                             {expanded === 'panel2' ? (
                                 <i className='fa fa-sort-down'></i>
                             ) : (
@@ -172,7 +173,7 @@ const SystemConfig = ({
                                         <tr>
                                             <td>
                                                 {clientUsers.map((user) => (
-                                                    <ClientUser
+                                                    <UserComponent
                                                         key={user.userId}
                                                         user={user}
                                                     />

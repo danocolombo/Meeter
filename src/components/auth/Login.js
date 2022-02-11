@@ -223,6 +223,7 @@ const Login = ({
                 // add them to clientUsers
                 if (results?.data?.body?.Items) {
                     let clientUsers = clientInfo?.clientUsers;
+                    // eslint-disable-next-line array-callback-return
                     results.data.body.Items.map((user) => {
                         let userToAdd = {
                             firstName: user.firstName,
@@ -239,7 +240,6 @@ const Login = ({
                         };
                     });
                 }
-                console.log('DONE ADDING TBD USERS');
             }
             //   DISPATCH SET CLIENT
             await dispatchClientInfo(clientInfo);

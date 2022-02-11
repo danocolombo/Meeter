@@ -8,7 +8,7 @@ import {
     approveClientUser,
     suspendClientUser,
 } from '../../actions/admin';
-
+import UserComponent from './components/users/user.component';
 const ClientUser = ({
     deleteClientUser,
     approveClientUser,
@@ -20,6 +20,7 @@ const ClientUser = ({
 }) => {
     return (
         // <div className='clientUser bg-white p-1 my-1'>
+
         <div
             className={
                 status !== 'approved'
@@ -27,6 +28,9 @@ const ClientUser = ({
                     : 'clientUser bg-white p-1 my'
             }
         >
+            <div>
+                <UserComponent />
+            </div>
             <div>
                 <h4>
                     {firstName} {lastName}
