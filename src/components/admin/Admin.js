@@ -36,12 +36,15 @@ const SystemConfig = ({
     // let theClient = [];
     // let theDefaultGroups = [];
     const [expanded, setExpanded] = React.useState(false);
-
+    const [meeterUsers, setMeeterUsers] = React.useState(clientUsers);
     const handleChange = (panel) => (event, isExpanded) => {
         setExpanded(isExpanded ? panel : false);
     };
     const handleAddGroupClick = () => {
         console.log('Please Add Group');
+    };
+    const handleUserUpdate = (userUpdates) => {
+        console.log('User Updates\n', userUpdates);
     };
     return loading ? (
         <Spinner />
@@ -176,6 +179,9 @@ const SystemConfig = ({
                                                     <UserComponent
                                                         key={user.userId}
                                                         user={user}
+                                                        onUserUpdate={
+                                                            handleUserUpdate
+                                                        }
                                                     />
                                                 ))}
                                             </td>
