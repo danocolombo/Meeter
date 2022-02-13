@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 
 // import Moment from 'react-moment';
@@ -8,7 +8,7 @@ import {
     approveClientUser,
     suspendClientUser,
 } from '../../actions/admin';
-
+import UserComponent from './components/users/user.component';
 const ClientUser = ({
     deleteClientUser,
     approveClientUser,
@@ -17,69 +17,75 @@ const ClientUser = ({
     auth,
     user: { _id, firstName, lastName, role, status },
     showActions,
-}) => (
-    // <div className='clientUser bg-white p-1 my-1'>
-    <div
-        className={
-            status !== 'approved'
-                ? 'clientUser bg-light-yellow p my'
-                : 'clientUser bg-white p-1 my'
-        }
-    >
-        <div>
-            <h4>
-                {firstName} {lastName}
-            </h4>
-        </div>
-        <div>
-            {status === 'approved' && (
-                <p className='my-1'>Current Role: {role}</p>
-            )}
-            {status !== 'approved' && (
-                <p className='my-1'>
-                    Requested Role:{' '}
-                    <strong>
-                        <u>{role}</u>
-                    </strong>
-                </p>
-            )}
+}) => {
+    return (
+        // <div className='clientUser bg-white p-1 my-1'>
 
-            {showActions && (
-                <Fragment>
-                    {status !== 'approved' && (
-                        <button
-                            onClick={() => approveClientUser(_id)}
-                            type='button'
-                            className='btn btn-success'
-                        >
-                            <i className='fas fa-thumbs-up' />
-                        </button>
-                    )}
-                    {!auth.loading && role !== 'superuser' && (
-                        <button
-                            onClick={() => suspendClientUser(_id)}
-                            type='button'
-                            className='btn btn-light-blue'
-                        >
-                            <i className='fas fa-ban' />
-                        </button>
-                    )}
-                    {!auth.loading && role !== 'superuser' && (
-                        <button
-                            onClick={() =>
-                                deleteClientUser(auth.activeClient, _id)
-                            }
-                            type='button'
-                            className='btn btn-danger'
-                        >
-                            <i className='fas fa-times' />
-                        </button>
-                    )}
-                </Fragment>
-            )}
+        <div
+            className={
+                status !== 'approved'
+                    ? 'clientUser bg-light-yellow p my'
+                    : 'clientUser bg-white p-1 my'
+            }
+        >
+            <div>
+                <UserComponent />
+            </div>
+            <div>
+                <h4>
+                    {firstName} {lastName}
+                </h4>
+            </div>
+            <div>
+                {status === 'approved' && (
+                    <p className='my-1'>Current Role: {role}</p>
+                )}
+                {status !== 'approved' && (
+                    <p className='my-1'>
+                        Requested Role:{' '}
+                        <strong>
+                            <u>{role}</u>
+                        </strong>
+                    </p>
+                )}
+
+                {showActions && (
+                    <Fragment>
+                        {status !== 'approved' && (
+                            <button
+                                onClick={() => approveClientUser(_id)}
+                                type='button'
+                                className='btn btn-success'
+                            >
+                                <i className='fas fa-thumbs-up' />
+                            </button>
+                        )}
+                        {!auth.loading && role !== 'superuser' && (
+                            <button
+                                onClick={() => suspendClientUser(_id)}
+                                type='button'
+                                className='btn btn-light-blue'
+                            >
+                                <i className='fas fa-ban' />
+                            </button>
+                        )}
+                        {!auth.loading && role !== 'superuser' && (
+                            <button
+                                onClick={() =>
+                                    deleteClientUser(auth.activeClient, _id)
+                                }
+                                type='button'
+                                className='btn btn-danger'
+                            >
+                                <i className='fas fa-times' />
+                            </button>
+                        )}
+                    </Fragment>
+                )}
+            </div>
         </div>
-    </div>
-);
+    );
+};
 ClientUser.defaultProps = {
     showActions: true,
 };

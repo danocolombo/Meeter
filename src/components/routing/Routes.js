@@ -9,6 +9,7 @@ import Dashboard from '../dashboard/Dashboard';
 // for config/admin
 //=====================
 import MeeterConfig from '../admin/Config';
+import MeeterAdmin from '../admin/Admin';
 import EditDefaultGroups from '../admin/DefaultGroupForm';
 // import Profiles from '../profiles/Profiles';
 // import Profile from '../profile/UserProfile';
@@ -93,7 +94,7 @@ const Routes = () => {
                     path='/EditPerson/:id'
                     component={EditPerson}
                 />
-                <PrivateRoute exact path='/Config' component={MeeterConfig} />
+                <PrivateRoute exact path='/Config' component={MeeterAdmin} />
                 <PrivateRoute
                     exact
                     path='/EditDefaultGroups'

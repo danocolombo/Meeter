@@ -11,6 +11,7 @@ import {
     dispatchUserInfo,
     getClientDBInfo,
     dispatchClientInfo,
+    getPotentialUsers,
 } from '../../actions/auth';
 
 const Login = ({
@@ -21,6 +22,7 @@ const Login = ({
     dispatchUserInfo,
     getClientDBInfo,
     dispatchClientInfo,
+    getPotentialUsers,
 }) => {
     const thisVersion = process.env.REACT_APP_MEETER_VERSION;
     const history = useHistory();
@@ -213,6 +215,32 @@ const Login = ({
                 clientUsers: clientRes?.Items[0]?.clientUsers,
                 clientConfigs: clientRes?.Items[0]?.clientConfigs,
             };
+            //   get undefined users to list in clientUsers
+            //   this allows supersuer to add users to client
+            const results = await getPotentialUsers();
+            if (results) {
+                // check if TBD users are found, if so
+                // add them to clientUsers
+                if (results?.data?.body?.Items) {
+                    let clientUsers = clientInfo?.clientUsers;
+                    // eslint-disable-next-line array-callback-return
+                    results.data.body.Items.map((user) => {
+                        let userToAdd = {
+                            firstName: user.firstName,
+                            lastName: user.lastName,
+                            role: 'undefined',
+                            userId: user.uid,
+                            status: 'undefined',
+                        };
+                        clientUsers.push(userToAdd);
+                        //add the user to the group
+                        clientInfo = {
+                            ...clientInfo,
+                            clientUsers,
+                        };
+                    });
+                }
+            }
             //   DISPATCH SET CLIENT
             await dispatchClientInfo(clientInfo);
         } catch (error) {
@@ -297,6 +325,7 @@ const Login = ({
 Login.propTypes = {
     isAuthenticated: PropTypes.bool,
     getUserDBInfo: PropTypes.func.isRequired,
+    getPotentialUsers: PropTypes.func.isRequired,
     dispatchAuth: PropTypes.func.isRequired,
     dispatchActives: PropTypes.func.isRequired,
     dispatchUserInfo: PropTypes.func.isRequired,
@@ -311,6 +340,7 @@ const mapStateToProps = (state) => ({
 export default connect(mapStateToProps, {
     dispatchAuth,
     getUserDBInfo,
+    getPotentialUsers,
     dispatchActives,
     dispatchUserInfo,
     getClientDBInfo,

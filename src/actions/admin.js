@@ -7,6 +7,7 @@ import {
     SET_DEFAULT_GROUPS,
     ADD_DEFAULT_GROUP,
     REMOVE_CLIENT_USER,
+    UPDATE_CLIENT_USER,
 } from './types';
 
 // GET CLIENT INFO
@@ -369,6 +370,157 @@ export const updateMeetingConfigs =
             console.log('res is null');
         }
         dispatch(setAlert('Would have saved the values.', 'success'));
+    };
+export const updateUserCredentials =
+    (userUpdates, userHistory) => async (dispatch) => {
+        // this will possibly do multiple udpates
+        // the current values in clientUsers will drive actions necessary
+        //---------------------------------------------------------------
+        // if updates are not differnt than curent settings, return
+        if (
+            userHistory.role === userUpdates.role &&
+            userHistory.status === userUpdates.status
+        ) {
+            // no updates to make = return
+            return;
+        }
+
+        //  ----------------------------------------------
+        //  old              | new         | action
+        // -----------------------------------------------
+        // role: undefined    | !undefined   | add user to mtrClient.users
+        // status: undefined  |             | update mtrUser w/client
+        //------------------------------------------------
+        // role !undefined    | !undefined   | update role & status mtrClient
+        //------------------------------------------------
+        //   NEED TO ADD USER TO updateClientUser
+        if (
+            userHistory.role === 'undefined' &&
+            userUpdates.role !== 'undefined'
+        ) {
+            // add user to client definitions
+            try {
+                const config = {
+                    headers: {
+                        'Access-Control-Allow-Headers':
+                            'Content-Type, x-auth-token, Access-Control-Allow-Headers',
+                        'Content-Type': 'application/json',
+                    },
+                };
+                let obj = {
+                    operation: 'addClientUser',
+                    payload: {
+                        clientId: userUpdates.client,
+                        userId: userUpdates.userId,
+                        firstName: userUpdates.firstName,
+                        lastName: userUpdates.lastName,
+                        role: userUpdates.role,
+                        status: userUpdates.status,
+                    },
+                };
+
+                let body = JSON.stringify(obj);
+
+                let api2use = process.env.REACT_APP_MEETER_API + '/clients';
+                let res = await axios.post(api2use, body, config);
+
+                if (res.status === 200) {
+                    dispatch({
+                        type: UPDATE_CLIENT_USER,
+                        payload: {
+                            firstName: userUpdates.firstName,
+                            lastName: userUpdates.lastName,
+                            role: userUpdates.role,
+                            status: userUpdates.status,
+                            userId: userUpdates.userId,
+                        },
+                    });
+                    dispatch(setAlert('user credentials updated', 'success'));
+                }
+                //===========================================
+            } catch (err) {
+                console.log(err);
+            }
+            //==========================================
+            // update the users default client
+            //==========================================
+            try {
+                const config = {
+                    headers: {
+                        'Access-Control-Allow-Headers':
+                            'Content-Type, x-auth-token, Access-Control-Allow-Headers',
+                        'Content-Type': 'application/json',
+                    },
+                };
+                let obj = {
+                    operation: 'updateDefaultClient',
+                    payload: {
+                        Item: {
+                            userId: userUpdates.userId,
+                            defaultClientId: userUpdates.clientId,
+                            defaultClient: userUpdates.client,
+                        },
+                    },
+                };
+
+                let body = JSON.stringify(obj);
+
+                let api2use = process.env.REACT_APP_MEETER_API + '/users';
+                let res = await axios.post(api2use, body, config);
+                if (res.status !== '200') {
+                    console.log('error');
+                }
+                //===========================================
+            } catch (err) {
+                console.log(err);
+            }
+        } else {
+            //================================================
+            //   JUST UPDATE USER ROLE & STATUS IN mtrClients
+            //================================================
+            try {
+                const config = {
+                    headers: {
+                        'Access-Control-Allow-Headers':
+                            'Content-Type, x-auth-token, Access-Control-Allow-Headers',
+                        'Content-Type': 'application/json',
+                    },
+                };
+                let obj = {
+                    operation: 'updateUserAuth',
+                    payload: {
+                        client: userUpdates.client,
+                        userId: userUpdates.userId,
+                        role: userUpdates.role,
+                        status: userUpdates.status,
+                    },
+                };
+
+                let body = JSON.stringify(obj);
+
+                let api2use = process.env.REACT_APP_MEETER_API + '/clients';
+                let res = await axios.post(api2use, body, config);
+                console.log('\nres:\n', res, '\n');
+                if (res.status === 200) {
+                }
+                //===========================================
+                if (res.status === 200) {
+                    dispatch({
+                        type: UPDATE_CLIENT_USER,
+                        payload: {
+                            firstName: userUpdates.firstName,
+                            lastName: userUpdates.lastName,
+                            role: userUpdates.role,
+                            status: userUpdates.status,
+                            userId: userUpdates.userId,
+                        },
+                    });
+                    dispatch(setAlert('user credentials updated', 'success'));
+                }
+            } catch (err) {
+                console.log(err);
+            }
+        }
     };
 export const approveClientUser = (id) => async (dispatch) => {
     //this updates the status of the user (id) in client

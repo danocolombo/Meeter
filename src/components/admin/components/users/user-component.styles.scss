@@ -1,0 +1,179 @@
+.user-component__component-wrapper {
+    max-width: 18em;
+    min-width: 15em;
+    margin-top: 1em;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.4);
+}
+.user-component__user-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    // background-color: DodgerBlue;
+}
+.user-component__options {
+    margin-bottom: 1em;
+}
+.user-component__user-name {
+    font-size: 1em;
+    align-items: center;
+    // margin-left: 0.5em;
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+}
+.user-component__role-label {
+    color: black;
+    margin-left: 0.5em;
+    font-weight: normal;
+}
+.user-component__role-control {
+    // margin-left: 1em;
+    margin-bottom: 0.5em;
+    width: 95px;
+}
+.user-component__status-label {
+    color: black;
+    margin-left: 0.5em;
+    font-weight: normal;
+}
+.user-component__status-control {
+    // margin-left: 1em;
+    margin-bottom: 1em;
+    width: 95px;
+}
+.user-component__button-wrapper {
+    // background-color: rgb(61, 32, 221);
+    // border: black solid 1px;
+    width: auto;
+    align-content: center;
+    text-align: center;
+}
+.user-component__button-control {
+    border: #5c0f0f, solid 1px;
+    background-color: red;
+    align-content: center;
+    border-radius: 20px;
+}
+//   OLD STUFF - DELETE SOON
+.group-item__container {
+    flex-direction: row;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    border: black solid 1px;
+    background-color: #f1f1f1;
+    width: 80vw;
+    text-align: left;
+    // line-height: 50px;
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+    padding: 1em;
+    font-size: 1em;
+}
+.group-item__row {
+    margin-left: 0;
+}
+.group-item__label {
+    font-weight: bold;
+}
+.group-item__value {
+    font-style: italic;
+}
+
+//===========================
+//   OLD STYLES
+//===========================
+.config-component__wrapper {
+    // display: flex;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    border: black solid 1px;
+    margin-bottom: 15px;
+    padding: 20px;
+}
+.config-page__add-default-group-row {
+    display: flex;
+    cursor: pointer;
+}
+.config-page__add-icon {
+    color: green;
+}
+.config-page__add-words {
+    color: green;
+    padding: 3px;
+}
+.config-page__add-style {
+    display: flex;
+    justify-content: space-between;
+}
+.config-page__new-group-nav-link {
+    display: flex;
+}
+.config-component__first-row {
+    display: flex;
+    flex-flow: row wrap;
+
+    /* This aligns items to the end line on main-axis */
+
+    // padding-right: 15px;
+}
+.config-component__icon-row {
+    display: flex;
+    justify-content: space-between;
+    // flex-flow: row wrap;
+}
+.config-compoment__gender {
+    color: blue;
+}
+.config-component__label-style {
+    font-size: large;
+    font-weight: bold;
+}
+.config-component__value-style {
+    font-size: large;
+    padding-left: 1ch;
+}
+.config-component__title {
+    color: red;
+}
+.config-component__trash-style {
+    color: red;
+    font-weight: bold;
+    // flex: 1;
+    font-size: large;
+    justify-content: flex-end;
+    padding-right: 10px;
+    padding-top: 0px;
+    padding-bottom: 0px;
+    margin: 0px;
+}
+.config-component__edit-style {
+    color: blue;
+}
+.config-component__trash-style {
+    color: red;
+}
+.config-component__second-row {
+    padding-left: 10px;
+}
+.gather-component__type-style {
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size: large;
+    font-style: italic;
+    font-weight: bold;
+    color: green;
+}
+.config-new-group__wrapper {
+    // display: flex;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    border: black solid 1px;
+    margin-bottom: 15px;
+    max-width: 500px;
+    padding: 20px;
+}
+.config-new-group__group-detail-box {
+    display: flex;
+    flex-direction: column;
+    max-width: 500px;
+    gap: 10px;
+}
+.config-new-group__gender-select {
+    padding-left: 10px;
+}
