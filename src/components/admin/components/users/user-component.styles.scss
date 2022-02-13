@@ -29,7 +29,7 @@
 .user-component__role-control {
     // margin-left: 1em;
     margin-bottom: 0.5em;
-    width: 75px;
+    width: 95px;
 }
 .user-component__status-label {
     color: black;
@@ -39,14 +39,20 @@
 .user-component__status-control {
     // margin-left: 1em;
     margin-bottom: 1em;
-    width: 75px;
+    width: 95px;
 }
 .user-component__button-wrapper {
-    background-color: cyan;
+    // background-color: rgb(61, 32, 221);
+    // border: black solid 1px;
+    width: auto;
+    align-content: center;
+    text-align: center;
 }
 .user-component__button-control {
+    border: #5c0f0f, solid 1px;
+    background-color: red;
     align-content: center;
-    border-radius: 5px;
+    border-radius: 20px;
 }
 //   OLD STUFF - DELETE SOON
 .group-item__container {

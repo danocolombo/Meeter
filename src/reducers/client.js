@@ -2,6 +2,8 @@ import {
     SET_CLIENT,
     REMOVE_DEFAULT_GROUP,
     ADD_DEFAULT_GROUP,
+    ADD_CLIENT_USER,
+    UPDATE_CLIENT_USER,
     CLEAR_CLIENT,
     SET_MTG_CONFIGS,
 } from '../actions/types';
@@ -32,6 +34,19 @@ export default function (state = initialState, action) {
                 defaultGroups: payload?.defaultGroups,
                 clientUsers: payload?.clientUsers,
                 clientConfigs: payload?.clientConfigs,
+            };
+        case ADD_CLIENT_USER:
+            // this inserts the payload into the clientUsers array
+            return {
+                ...state,
+                clientUsers: [...state.clientUsers, payload],
+            };
+        case UPDATE_CLIENT_USER:
+            return {
+                ...state,
+                clientUsers: state.clientUsers.map((user) =>
+                    user.userId === payload.userId ? payload : user
+                ),
             };
         case REMOVE_DEFAULT_GROUP:
             console.log('REMOVE_DEFAULT_GROUP in client reducer');

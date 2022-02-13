@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { Button } from '@material-ui/core';
 import './user-component.styles.scss';
 const UserComponent = ({
+    auth: { user },
     user: { userId, firstName, lastName, role, status },
     onUserUpdate,
 }) => {
@@ -74,14 +75,17 @@ const UserComponent = ({
                                     Status:
                                 </label>
                             </div>
-                            <div className='user-component__button-wrapper'>
-                                <Button
-                                    className='user-component__button-control'
-                                    type='submit'
-                                >
-                                    Save
-                                </Button>
-                            </div>
+                            {userId !== user._id && (
+                                <div className='user-component__button-wrapper'>
+                                    <Button
+                                        variant='outlined'
+                                        className='user-component__button-control'
+                                        type='submit'
+                                    >
+                                        Update
+                                    </Button>
+                                </div>
+                            )}
                         </div>
                     </div>
                 </div>

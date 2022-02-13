@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useState } from 'react';
 import PropTypes from 'prop-types';
 import { NavLink } from 'react-router-dom';
 import { connect } from 'react-redux';
@@ -17,7 +17,11 @@ import UserComponent from './components/users/user.component';
 import MeetingConfigForm from './MeetingConfigForm';
 import GroupItem from './components/group-component';
 
-import { getClientUsers, getDefGroups } from '../../actions/admin';
+import {
+    getClientUsers,
+    getDefGroups,
+    updateUserCredentials,
+} from '../../actions/admin';
 import { getMtgConfigs } from '../../actions/administration';
 
 const SystemConfig = ({
@@ -31,12 +35,13 @@ const SystemConfig = ({
         clientUsers,
         clientConfigs,
     },
+    updateUserCredentials,
     historyView,
 }) => {
     // let theClient = [];
     // let theDefaultGroups = [];
-    const [expanded, setExpanded] = React.useState(false);
-    const [meeterUsers, setMeeterUsers] = React.useState(clientUsers);
+    const [expanded, setExpanded] = useState(false);
+
     const handleChange = (panel) => (event, isExpanded) => {
         setExpanded(isExpanded ? panel : false);
     };
@@ -44,8 +49,16 @@ const SystemConfig = ({
         console.log('Please Add Group');
     };
     const handleUserUpdate = (userUpdates) => {
-        console.log('User Updates\n', userUpdates);
+        // console.log('User Updates\n', userUpdates);
+        userUpdates.client = clientCode;
+        userUpdates.clientId = clientId;
+        let theOne = clientUsers.filter(
+            (user) => user.userId === userUpdates.userId
+        );
+        let userHistory = theOne[0];
+        updateUserCredentials(userUpdates, userHistory);
     };
+
     return loading ? (
         <Spinner />
     ) : (
@@ -240,6 +253,7 @@ SystemConfig.propTypes = {
     getClientUsers: PropTypes.func.isRequired,
     getDefGroups: PropTypes.func.isRequired,
     getMtgConfigs: PropTypes.func.isRequired,
+    updateUserCredentials: PropTypes.func.isRequired,
 };
 const mapStateToProps = (state) => ({
     meeter: state.meeter,
@@ -250,4 +264,5 @@ export default connect(mapStateToProps, {
     getClientUsers,
     getDefGroups,
     getMtgConfigs,
+    updateUserCredentials,
 })(SystemConfig);
