@@ -1,8 +1,7 @@
-import React, { useState } from 'react';
+import React, { Fragment, useState } from 'react';
 import { Link, Redirect, useHistory } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { Auth } from 'aws-amplify';
-import { Grid } from '@material-ui/core';
 import { setAlert } from '../../actions/alert';
 import PropTypes from 'prop-types';
 import {
@@ -14,7 +13,7 @@ import {
     dispatchClientInfo,
     getPotentialUsers,
 } from '../../actions/auth';
-import './login.styles.scss';
+
 const Login = ({
     isAuthenticated,
     getUserDBInfo,
@@ -276,56 +275,41 @@ const Login = ({
         //-----------------------------------------------------
         return <Redirect to='/dashboard' />;
     }
-    const formSubmitHandler = (e) => {
-        e.preventDefault();
-        signIn();
-    };
 
     return (
-        <form onSubmit={formSubmitHandler}>
-            <div class='login-page__ui-container'>
-                <h1 className='login-page__header'>Sign In</h1>
-                <div class='login-item'>
-                    <form action='' method='post' class='form form-login'>
-                        <div class='form-field'>
-                            <label class='user' for='login-username'>
-                                <span class='hidden'>Username</span>
-                            </label>
-                            <input
-                                id='userName'
-                                name='userName'
-                                value={username}
-                                type='text'
-                                class='form-input'
-                                placeholder='Username'
-                                onChange={(e) => setUsername(e.target.value)}
-                                required
-                            />
-                        </div>
-
-                        <div class='form-field'>
-                            <label class='lock' for='login-password'>
-                                <span class='hidden'>Password</span>
-                            </label>
-                            <input
-                                id='password'
-                                name='password'
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)}
-                                type='password'
-                                class='form-input'
-                                placeholder='Password'
-                                required
-                            />
-                        </div>
-
-                        <div class='form-field'>
-                            <input type='submit' value='Log in' />
-                        </div>
-                    </form>
+        <Fragment>
+            <h1 className='large text-primary'>Sign In</h1>
+            <p className='lead'>
+                <i className='fas fa-user' /> Sign Into Your Account
+            </p>
+            <div>
+                <div className='form-group'>
+                    <input
+                        type='text'
+                        placeholder='Username'
+                        name='userName'
+                        value={username}
+                        onChange={(e) => setUsername(e.target.value)}
+                        required
+                    />
                 </div>
+                <div className='form-group'>
+                    <input
+                        type='password'
+                        placeholder='Password'
+                        name='password'
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        minLength='6'
+                    />
+                </div>
+                <input
+                    type='button'
+                    onClick={signIn}
+                    className='btn btn-primary'
+                    value='Login'
+                />
             </div>
-
             <p className='my-1'>
                 Don't have an account? <Link to='/register'>Sign Up</Link>
                 <br />
@@ -334,7 +318,7 @@ const Login = ({
             </p>
 
             <div className='appVersion'>build: {thisVersion}</div>
-        </form>
+        </Fragment>
     );
 };
 
