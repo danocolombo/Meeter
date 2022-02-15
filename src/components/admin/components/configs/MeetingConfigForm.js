@@ -3,12 +3,12 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { FormGroup, FormControlLabel, Button } from '@material-ui/core';
 import Switch from '@material-ui/core/Switch';
-import Spinner from '../layout/Spinner';
-import // toggleConfig,
-// getMtgConfigs,
-//updateMeetingConfigs,
-'../../actions/admin';
-import { toggleConfig, getMtgConfigs } from '../../actions/administration';
+import Spinner from '../../../layout/Spinner';
+
+import {
+    toggleConfig,
+    getMtgConfigs,
+} from '../../../../actions/administration';
 
 const initialState = {
     setupContact: true,

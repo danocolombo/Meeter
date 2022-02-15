@@ -11,11 +11,12 @@ import { AccordionSummary } from '@material-ui/core';
 
 //--------------------------------------
 
-import DefaultGroup from './DefaultGroup';
-import ClientUser from './ClientUser';
+// import DefaultGroup from './DefaultGroup';
+// import ClientUser from './ClientUser';
 import UserComponent from './components/users/user.component';
-import MeetingConfigForm from './MeetingConfigForm';
-import GroupItem from './components/group-component';
+import MeetingConfigForm from './components/configs/MeetingConfigForm';
+// import GroupComponent from './components/groups/group-component';
+import GroupsComponent from './components/groups/groups-component';
 
 import {
     getClientUsers,
@@ -65,14 +66,10 @@ const SystemConfig = ({
         <Fragment>
             <div>
                 <h2 className='large text-primary'>
-                    <i className='fa fa-user-secret'></i>&nbsp;&nbsp;System
-                    Configuration
+                    <i className='fa fa-user-secret'></i>&nbsp;&nbsp;SysCon
                 </h2>
             </div>
-            <p>This will be the security information for {clientName}</p>
-
-            {/* <GroupItem /> */}
-
+            <p>System Management Console</p>
             <div className='medium'>
                 <Accordion
                     expanded={expanded === 'panel1'}
@@ -83,7 +80,7 @@ const SystemConfig = ({
                         id='panel1bh-header'
                     >
                         <h1>
-                            Default Group Definitions{' '}
+                            Groups{' '}
                             {expanded === 'panel1' ? (
                                 <i className='fa fa-sort-down'></i>
                             ) : (
@@ -93,73 +90,12 @@ const SystemConfig = ({
                     </AccordionSummary>
 
                     <AccordionDetails>
-                        <div className='posts'>
+                        <div>
                             {defaultGroups ? (
-                                <>
-                                    <table>
-                                        <tbody>
-                                            <tr>
-                                                <td>
-                                                    {defaultGroups.map(
-                                                        (dGroup) => (
-                                                            <GroupItem
-                                                                key={
-                                                                    dGroup.groupId
-                                                                }
-                                                                defGroup={
-                                                                    dGroup
-                                                                }
-                                                            />
-                                                        )
-                                                    )}
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                    <div
-                                        className={
-                                            'config-page__add-default-group-row'
-                                        }
-                                        onClick={() => handleAddGroupClick()}
-                                    >
-                                        <NavLink
-                                            to='/EditDefaultGroups'
-                                            className={
-                                                'config-page__new-group-nav-link'
-                                            }
-                                        >
-                                            <div
-                                                className={
-                                                    'config-page__add-icon'
-                                                }
-                                            >
-                                                <i
-                                                    key='two'
-                                                    className='material-icons'
-                                                >
-                                                    add_circle_outline
-                                                </i>
-                                            </div>
-                                            <div
-                                                className={
-                                                    'config-page__add-words'
-                                                }
-                                            >
-                                                Add New Default Group
-                                            </div>
-                                        </NavLink>
-                                    </div>
-                                </>
+                                <GroupsComponent
+                                    defaultGroups={defaultGroups}
+                                />
                             ) : null}
-                            {/* {activeRole === 'superuser' ? (
-                                <DefaultGroupForm />
-                            ) : (
-                                <Fragment>
-                                    <p>Feature coming soon...</p>
-                                    <br />
-                                    <br />
-                                </Fragment>
-                            )} */}
                         </div>
                     </AccordionDetails>
                 </Accordion>
@@ -173,7 +109,7 @@ const SystemConfig = ({
                         id='panel1bh-header'
                     >
                         <h1>
-                            Client Users{' '}
+                            Users{' '}
                             {expanded === 'panel2' ? (
                                 <i className='fa fa-sort-down'></i>
                             ) : (
@@ -214,7 +150,7 @@ const SystemConfig = ({
                         id='panel1bh-header'
                     >
                         <h1>
-                            Meeting Configurations{' '}
+                            Configurations{' '}
                             {expanded === 'panel3' ? (
                                 <i className='fa fa-sort-down'></i>
                             ) : (

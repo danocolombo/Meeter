@@ -25,6 +25,26 @@
 .group-item__value {
     font-style: italic;
 }
+.group-item__delete-button-wrapper {
+    display: flex;
+    justify-content: right;
+}
+.group-item__delete-button {
+    background-color: red;
+    color: white;
+    padding: 0.1rem 0.5rem;
+    border: none;
+    cursor: pointer;
+    font-size: 0.7rem;
+    align-items: flex-end;
+}
+.group-item__button-wrapper {
+    padding: 1rem;
+    justify-content: center;
+}
+.group-item__edit-button {
+    font-size: 0.5rem;
+}
 
 //===========================
 //   OLD STYLES

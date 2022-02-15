@@ -50,7 +50,7 @@ const UserComponent = ({
                                 </select>
                                 <label
                                     className='user-component__role-label'
-                                    for='role'
+                                    htmlFor='role'
                                 >
                                     Role:
                                 </label>
@@ -70,7 +70,7 @@ const UserComponent = ({
                                 </select>
                                 <label
                                     className='user-component__status-label'
-                                    for='status'
+                                    htmlFor='status'
                                 >
                                     Status:
                                 </label>
