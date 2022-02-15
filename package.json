@@ -17,7 +17,7 @@
         "axios": "^0.21.2",
         "crypto": "^1.0.1",
         "date-fns": "^2.28.0",
-        "follow-redirects": "1.14.7",
+        "follow-redirects": "1.14.8",
         "glob-parent": "^6.0.2",
         "materialize-css": "^1.0.0",
         "moment": "^2.29.1",
