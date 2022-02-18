@@ -1,18 +1,33 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
+import Modal from '../../../modals/wrapper.modal';
+import EditDefaultGroup from '../../../modals/admin/admin-edit-default-group.component';
+import { saveTmpDefaultGroup } from '../../../../actions/group';
 import './groups-component.styles.scss';
 const GroupComponent = ({
     group: { groupId, gender, groupTitle, location, facilitator },
-    onDeleteGroup,
+    onGroupUpdate,
+    onGroupDelete,
 }) => {
+    const [modalIsVisible, setModalIsVisible] = useState(false);
+    const handleUpdateRequest = (updatedGroup) => {
+        setModalIsVisible(false);
+        onGroupUpdate(updatedGroup);
+    };
+    const handleDeleteRequest = (groupId) => {
+        setModalIsVisible(false);
+        onGroupDelete(groupId);
+    };
     return (
         <>
             <div className='group-item__wrapper'>
                 <div className='group-item__container'>
                     <div className='group-item__delete-button-wrapper'>
                         <button
-                            onClick={() => onDeleteGroup(groupId)}
+                            onClick={() => handleDeleteRequest(groupId)}
                             type='button'
                             className='group-item__delete-button'
                         >
@@ -39,14 +54,32 @@ const GroupComponent = ({
                         <Button
                             variant='contained'
                             className='group-item__edit-button'
-                            href={`/EditGathering/${groupId}`}
+                            onClick={() => setModalIsVisible(true)}
                         >
                             EDIT
                         </Button>
                     </Stack>
                 </div>
             </div>
+            <Modal isOpened={modalIsVisible}>
+                <div>
+                    <EditDefaultGroup
+                        group={{
+                            grpId: groupId,
+                            grpGender: gender,
+                            grpTitle: groupTitle,
+                            grpFacilitator: facilitator,
+                            grpLocation: location,
+                        }}
+                        onCancel={() => setModalIsVisible(false)}
+                        onUpdate={handleUpdateRequest}
+                    />
+                </div>
+            </Modal>
         </>
     );
 };
-export default GroupComponent;
+GroupComponent.propTypes = {
+    saveTmpDefaultGroup: PropTypes.func.isRequired,
+};
+export default connect(null, { saveTmpDefaultGroup })(GroupComponent);

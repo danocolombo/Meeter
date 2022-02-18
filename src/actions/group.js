@@ -89,6 +89,11 @@ export const clearGroups = () => async (dispatch) => {
         });
     }
 };
+export const loadDefaultGroup = (groupId) => async (dispatch) => {
+    return new Promise((resolve) => {
+        return { statusCode: '200', msg: 'TESTING' };
+    });
+};
 
 // Get group by groupId
 export const getGroup = (groupId) => async (dispatch) => {
@@ -123,6 +128,53 @@ export const getGroup = (groupId) => async (dispatch) => {
             type: GET_GROUP,
             payload: res.data.body,
         });
+    } catch (err) {
+        dispatch({
+            type: GROUP_ERROR,
+            payload: {
+                msg: err.response.statusText,
+                status: err.response.status,
+            },
+        });
+    }
+};
+export const getDefaultGroup = (groupId) => async (dispatch) => {
+    // get the group from client.defaultGroups
+    // return to calling function
+};
+export const saveTmpDefaultGroup = (groupId) => async (dispatch) => {
+    try {
+        dispatch({ type: CLEAR_GROUP });
+
+        // const config = {
+        //     headers: {
+        //         'Access-Control-Allow-Headers':
+        //             'Content-Type, x-auth-token, Access-Control-Allow-Headers',
+        //         'Content-Type': 'application/json',
+        //     },
+        // };
+
+        // let obj = {
+        //     operation: 'getGroupById',
+        //     payload: {
+        //         groupId: groupId,
+        //     },
+        // };
+        // let body = JSON.stringify(obj);
+
+        // let api2use = process.env.REACT_APP_MEETER_API + '/groups';
+        // let res = await axios.post(api2use, body, config);
+        //const res = await axios.get(`/api/groups/group/${groupId}`);
+
+        // dispatch({
+        //     type: SET_TMP_GROUP,
+        //     payload: res.data.body,
+        // });
+
+        // dispatch({
+        //     type: GET_GROUP,
+        //     payload: res.data.body,
+        // });
     } catch (err) {
         dispatch({
             type: GROUP_ERROR,

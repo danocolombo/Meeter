@@ -43,6 +43,14 @@ export const getClientUsers = (client) => async (dispatch) => {
         });
     }
 };
+export const removeDefaultGroup = (clientId, groupId) => async (dispatch) => {
+    //remove from database
+    console.log('IN deleteDefaultGroup (action)');
+    console.log('clientId:' + clientId);
+    console.log('groupId: ' + groupId);
+
+    //remove from redux
+};
 
 export const getDefGroups = (cid) => async (dispatch) => {
     //this loads all the default groups for cid

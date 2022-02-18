@@ -93,6 +93,7 @@ const SystemConfig = ({
                         <div>
                             {defaultGroups ? (
                                 <GroupsComponent
+                                    clientId={clientId}
                                     defaultGroups={defaultGroups}
                                 />
                             ) : null}

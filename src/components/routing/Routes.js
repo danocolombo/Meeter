@@ -97,7 +97,7 @@ const Routes = () => {
                 <PrivateRoute exact path='/Config' component={MeeterAdmin} />
                 <PrivateRoute
                     exact
-                    path='/EditDefaultGroups/:groupId'
+                    path='/EditDefaultGroup/:groupId'
                     component={EditDefaultGroups}
                 />
                 <Route exact path='/404' render={(props) => <ErrorPage />} />

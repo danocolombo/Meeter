@@ -1,7 +1,9 @@
-import React, { useState } from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import { addDefaultGroup } from '../../../../actions/admin';
+import React, { useState, useEffect } from 'react';
+// import { withRouter } from 'react-router-dom';
+// import PropTypes from 'prop-types';
+//import { connect } from 'react-redux';
+//import { clearTmpGroup, getGroup, getGroups } from '../../../../actions/group';
+// import { Edit } from '@material-ui/icons';
 const initialState = {
     gender: '',
     groupTitle: '',
@@ -9,9 +11,36 @@ const initialState = {
     facilitator: '',
     clientId: '',
 };
-const NewDefaultGroup = ({ addDefaultGroup, client }) => {
+const EditDefaultGroup = ({
+    // addDefaultGroup,
+    // client: { defaultGroups },
+    // group: { tmpGroup },
+    // clearTmpGroup,
+    // getDefaultGroup,
+    group,
+    match,
+}) => {
     const [formData, setFormData] = useState(initialState);
-    const { gender, groupTitle, location, facilitator, clientId } = formData;
+    // useEffect(() => {
+    //     clearTmpGroup();
+    // }, []);
+    // useEffect(() => {
+    //     if (match?.params?.groupId) {
+    //         alert('we got a groupId number');
+    //         // get the group from redux and save to variable
+    //         getGroup(match.params.groupId, defaultGroups);
+    //         let theGroup = defaultGroups.filter(
+    //             (group) => group.groupId === match.params.groupId
+    //         );
+    //         console.log('theGroup:\n', theGroup);
+    //         alert(theGroup);
+    //     } else {
+    //         alert('no groupId detected');
+    //     }
+    //     return;
+    // }, [tmpGroup]);
+
+    const { gender, groupTitle, location, facilitator, groupId } = formData;
     const onChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
@@ -22,8 +51,8 @@ const NewDefaultGroup = ({ addDefaultGroup, client }) => {
                 className='form my-1'
                 onSubmit={(e) => {
                     e.preventDefault();
-                    formData.clientId = client.clientId;
-                    addDefaultGroup({ formData });
+                    // formData.clientId = client.clientId;
+                    // addDefaultGroup({ formData });
                     // gender('');
                     // title('');
                     // location('');
@@ -81,12 +110,16 @@ const NewDefaultGroup = ({ addDefaultGroup, client }) => {
         </div>
     );
 };
-
-NewDefaultGroup.propTypes = {
-    addDefaultGroup: PropTypes.func.isRequired,
-    client: PropTypes.object.isRequired,
-};
-const mapStateToProps = (state) => ({
-    client: state.client,
-});
-export default connect(mapStateToProps, { addDefaultGroup })(NewDefaultGroup);
+export default EditDefaultGroup;
+// EditDefaultGroup.propTypes = {
+//     getGroup: PropTypes.func.isRequired,
+//     client: PropTypes.object.isRequired,
+//     group: PropTypes.object.isRequired,
+// };
+// const mapStateToProps = (state) => ({
+//     client: state.client,
+//     group: state.group,
+// });
+// export default connect(mapStateToProps, {
+//     getGroup,
+// })(withRouter(EditDefaultGroup));

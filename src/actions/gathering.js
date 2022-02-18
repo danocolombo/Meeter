@@ -16,6 +16,7 @@ import {
     CLEAR_GATHERING,
     GET_HATHERINGS,
     CLEAR_HATHERINGS,
+    GET_DEFAULT_GROUP,
 } from './types';
 
 export const getMeeting = (meetingId) => async (dispatch) => {
@@ -40,13 +41,14 @@ export const getMeeting = (meetingId) => async (dispatch) => {
                 meetingId: meetingId,
             },
         };
+        let results = dispatch({ type: GET_DEFAULT_GROUP });
+        console.log('results:\n', results);
 
         let body = JSON.stringify(obj);
 
         let api2use = process.env.REACT_APP_MEETER_API + '/meetings';
         let res = await axios.post(api2use, body, config);
-
-        dispatch({
+        let setResults = dispatch({
             type: SET_MEETING,
             payload: res.data.body,
         });
