@@ -36,6 +36,7 @@ const GroupsComponent = ({ clientId, defaultGroups, removeDefaultGroup }) => {
             <Modal isOpened={modalIsVisible}>
                 <div>
                     <EditDefaultGroup
+                        key={clientId}
                         group={{
                             grpId: 0,
                             grpGender: 'x',

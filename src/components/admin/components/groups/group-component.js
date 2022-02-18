@@ -64,6 +64,7 @@ const GroupComponent = ({
             <Modal isOpened={modalIsVisible}>
                 <div>
                     <EditDefaultGroup
+                        key={groupId}
                         group={{
                             grpId: groupId,
                             grpGender: gender,

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import Select from '@mui/material/Select';
 import InputLabel from '@mui/material/InputLabel';
+import { MenuItem } from '@mui/material';
 import FormControl from '@mui/material/FormControl';
 
 import './admin-edit-default-group.styles.scss';
@@ -32,6 +33,12 @@ const EditDefaultGroup = ({
                 break;
         }
     };
+    const meetingGenders = [
+        { value: 'm', label: 'Men' },
+        { value: 'f', label: 'Women' },
+        { value: 'x', label: 'Other' },
+    ];
+    let gValue = 'x';
     return (
         <div>
             <FormControl variant='standard' sx={{ m: 1, minWidth: 120 }}>
@@ -49,17 +56,36 @@ const EditDefaultGroup = ({
                         className='admin-edit-default-group-component__form-wrapper'
                     >
                         <Select
+                            defaultValue={(grpId = '0' ? 'DEFAULT' : gender)}
                             className='admin-edit-default-group-component__gender-control'
                             name='gender'
                             id='gender'
                             value={gender}
-                            onChange={(e) => {
-                                setGender(e.target.value);
-                            }}
+                            onChange={(e) => setGender(e.target.value)}
+                            // onChange={(e) => {
+                            //     setGender((preValues) => {
+                            //         return [...preValues, e.target.value];
+                            //     });
+                            // }}
                         >
-                            <option value='m'>Men</option>
-                            <option value='f'>Women</option>
-                            <option value='x'>Mixed</option>
+                            {
+                                (grpId = '0' ? (
+                                    <MenuItem id='0' value='DEFAULT' disabled>
+                                        Choose a salutation ...
+                                    </MenuItem>
+                                ) : null)
+                            }
+                            ;
+                            {meetingGenders.map((g) => (
+                                <MenuItem
+                                    id={g.value}
+                                    key={g.value}
+                                    value={g.value}
+                                >
+                                    {g.label}
+                                </MenuItem>
+                            ))}
+                            ;
                         </Select>
                     </FormControl>
                     <div className='admin-edit-default-group-component__title-box'>
