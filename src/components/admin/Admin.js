@@ -1,6 +1,5 @@
 import React, { Fragment, useState } from 'react';
 import PropTypes from 'prop-types';
-import { NavLink } from 'react-router-dom';
 import { connect } from 'react-redux';
 import Spinner from '../layout/Spinner';
 //--------------------------------------
@@ -10,12 +9,8 @@ import { AccordionDetails } from '@material-ui/core';
 import { AccordionSummary } from '@material-ui/core';
 
 //--------------------------------------
-
-// import DefaultGroup from './DefaultGroup';
-// import ClientUser from './ClientUser';
 import UserComponent from './components/users/user.component';
 import MeetingConfigForm from './components/configs/MeetingConfigForm';
-// import GroupComponent from './components/groups/group-component';
 import GroupsComponent from './components/groups/groups-component';
 
 import {
@@ -45,9 +40,6 @@ const SystemConfig = ({
 
     const handleChange = (panel) => (event, isExpanded) => {
         setExpanded(isExpanded ? panel : false);
-    };
-    const handleAddGroupClick = () => {
-        console.log('Please Add Group');
     };
     const handleUserUpdate = (userUpdates) => {
         // console.log('User Updates\n', userUpdates);

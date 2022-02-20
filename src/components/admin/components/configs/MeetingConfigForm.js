@@ -6,7 +6,7 @@ import Switch from '@material-ui/core/Switch';
 import Spinner from '../../../layout/Spinner';
 
 import {
-    toggleConfig,
+    // toggleConfig,
     getMtgConfigs,
 } from '../../../../actions/administration';
 

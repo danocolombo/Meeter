@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 // import { withRouter } from 'react-router-dom';
 // import PropTypes from 'prop-types';
 //import { connect } from 'react-redux';
@@ -21,26 +21,8 @@ const EditDefaultGroup = ({
     match,
 }) => {
     const [formData, setFormData] = useState(initialState);
-    // useEffect(() => {
-    //     clearTmpGroup();
-    // }, []);
-    // useEffect(() => {
-    //     if (match?.params?.groupId) {
-    //         alert('we got a groupId number');
-    //         // get the group from redux and save to variable
-    //         getGroup(match.params.groupId, defaultGroups);
-    //         let theGroup = defaultGroups.filter(
-    //             (group) => group.groupId === match.params.groupId
-    //         );
-    //         console.log('theGroup:\n', theGroup);
-    //         alert(theGroup);
-    //     } else {
-    //         alert('no groupId detected');
-    //     }
-    //     return;
-    // }, [tmpGroup]);
 
-    const { gender, title, location, facilitator, groupId } = formData;
+    const { gender, title, location, facilitator } = formData;
     const onChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };

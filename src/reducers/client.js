@@ -1,4 +1,3 @@
-import { FreeBreakfastRounded } from '@material-ui/icons';
 import {
     SET_CLIENT,
     REMOVE_DEFAULT_GROUP,

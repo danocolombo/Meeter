@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import Button from '@mui/material/Button';
@@ -13,7 +13,6 @@ const GroupComponent = ({
     onGroupDelete,
 }) => {
     const [modalIsVisible, setModalIsVisible] = useState(false);
-    const refModal = useRef();
     const handleUpdateRequest = (updatedGroup) => {
         setModalIsVisible(false);
         onGroupUpdate(updatedGroup);
