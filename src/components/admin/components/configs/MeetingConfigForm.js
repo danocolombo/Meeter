@@ -150,283 +150,279 @@ const MeetingConfig = ({
     return loading ? (
         <Spinner />
     ) : (
-        (console.log('cafeCnt:' + cafeCnt),
-        console.log('cafeCoordinator:' + cafeCoordinator),
-        (
-            <Fragment>
-                <div className='post-form'>
-                    {/* <div className='bg-primary p'>
+        <Fragment>
+            <div className='post-form'>
+                {/* <div className='bg-primary p'>
                 <h3>Meeting Configurations</h3>
             </div> */}
-                    <form>
-                        <div className='MeetingConfigFormBox'>
-                            <FormGroup>
-                                <FormControlLabel
-                                    control={
-                                        <Switch
-                                            checked={donations}
-                                            onChange={handleChange}
-                                            name='donations'
-                                            color='primary'
-                                        />
-                                    }
-                                    label='Donations'
-                                />
-                                <FormControlLabel
-                                    control={
-                                        <Switch
-                                            checked={setupContact}
-                                            onChange={handleChange}
-                                            name='setupContact'
-                                            color='primary'
-                                        />
-                                    }
-                                    label='Setup Contact'
-                                />
-                                <FormControlLabel
-                                    control={
-                                        <Switch
-                                            checked={cleanupContact}
-                                            onChange={handleChange}
-                                            name='cleanupContact'
-                                            color='primary'
-                                        />
-                                    }
-                                    label='Clean-up Contact'
-                                />
-                                <FormControlLabel
-                                    control={
-                                        <Switch
-                                            checked={transportationContact}
-                                            onChange={handleChange}
-                                            name='transportationContact'
-                                            color='primary'
-                                        />
-                                    }
-                                    label='Transportation Contact'
-                                />
-                                <FormControlLabel
-                                    control={
-                                        <Switch
-                                            checked={transportationCnt}
-                                            onChange={handleChange}
-                                            name='transportationCnt'
-                                            color='primary'
-                                        />
-                                    }
-                                    label='Transportation Count/Usage'
-                                />
-                                <FormControlLabel
-                                    control={
-                                        <Switch
-                                            checked={avContact}
-                                            onChange={handleChange}
-                                            name='avContact'
-                                            color='primary'
-                                        />
-                                    }
-                                    label='Audio/Visual Contact'
-                                />
-                                <FormControlLabel
-                                    control={
-                                        <Switch
-                                            checked={greeterContact1}
-                                            onChange={handleChange}
-                                            name='greeterContact1'
-                                            color='primary'
-                                        />
-                                    }
-                                    label='Greeter 1 Contact'
-                                />
-                                <FormControlLabel
-                                    control={
-                                        <Switch
-                                            checked={greeterContact2}
-                                            onChange={handleChange}
-                                            name='greeterContact2'
-                                            color='primary'
-                                        />
-                                    }
-                                    label='Greeter 2 Contact'
-                                />
-                                <FormControlLabel
-                                    control={
-                                        <Switch
-                                            checked={resourceContact}
-                                            onChange={handleChange}
-                                            name='resourceContact'
-                                            color='primary'
-                                        />
-                                    }
-                                    label='Resources Contact'
-                                />
-                                <FormControlLabel
-                                    control={
-                                        <Switch
-                                            checked={announcementsContact}
-                                            onChange={handleChange}
-                                            name='announcementsContact'
-                                            color='primary'
-                                        />
-                                    }
-                                    label='Announcements Contact'
-                                />
-                                <FormControlLabel
-                                    control={
-                                        <Switch
-                                            checked={closingContact}
-                                            onChange={handleChange}
-                                            name='closingContact'
-                                            color='primary'
-                                        />
-                                    }
-                                    label='Closing Contact'
-                                />
-                                <FormControlLabel
-                                    control={
-                                        <Switch
-                                            checked={securityContact}
-                                            onChange={handleChange}
-                                            name='securityContact'
-                                            color='primary'
-                                        />
-                                    }
-                                    label='Security Contact'
-                                />
-                                <FormControlLabel
-                                    control={
-                                        <Switch
-                                            checked={mealCnt}
-                                            onChange={handleChange}
-                                            name='mealCnt'
-                                            color='primary'
-                                        />
-                                    }
-                                    label='Meal Count'
-                                />
-                                <FormControlLabel
-                                    control={
-                                        <Switch
-                                            checked={meal}
-                                            onChange={handleChange}
-                                            name='meal'
-                                            color='primary'
-                                        />
-                                    }
-                                    label='Meal Description'
-                                />
-                                <FormControlLabel
-                                    control={
-                                        <Switch
-                                            checked={mealCoordinator}
-                                            onChange={handleChange}
-                                            name='mealCoordinator'
-                                            color='primary'
-                                        />
-                                    }
-                                    label='Meal Contact/Coordinator'
-                                />
-                                <FormControlLabel
-                                    control={
-                                        <Switch
-                                            checked={cafeCnt}
-                                            onChange={handleChange}
-                                            name='cafeCnt'
-                                            color='primary'
-                                        />
-                                    }
-                                    label='Cafe Numbers'
-                                />
-                                <FormControlLabel
-                                    control={
-                                        <Switch
-                                            checked={cafeCoordinator}
-                                            onChange={handleChange}
-                                            name='cafeCoordinator'
-                                            color='primary'
-                                        />
-                                    }
-                                    label='Cafe Coordinator'
-                                />
-                                <FormControlLabel
-                                    control={
-                                        <Switch
-                                            checked={nursery}
-                                            onChange={handleChange}
-                                            name='nursery'
-                                            color='primary'
-                                        />
-                                    }
-                                    label='Nursery Numbers'
-                                />
-                                <FormControlLabel
-                                    control={
-                                        <Switch
-                                            checked={nurseryContact}
-                                            onChange={handleChange}
-                                            name='nurseryContact'
-                                            color='primary'
-                                        />
-                                    }
-                                    label='Nursery Contact'
-                                />
-                                <FormControlLabel
-                                    control={
-                                        <Switch
-                                            checked={children}
-                                            onChange={handleChange}
-                                            name='children'
-                                            color='primary'
-                                        />
-                                    }
-                                    label='Children Numbers'
-                                />
-                                <FormControlLabel
-                                    control={
-                                        <Switch
-                                            checked={childrenContact}
-                                            onChange={handleChange}
-                                            name='childrenContact'
-                                            color='primary'
-                                        />
-                                    }
-                                    label='Children Contact'
-                                />
-                                <FormControlLabel
-                                    control={
-                                        <Switch
-                                            checked={youth}
-                                            onChange={handleChange}
-                                            name='youth'
-                                            color='primary'
-                                        />
-                                    }
-                                    label='Youth Numbers'
-                                />
-                                <FormControlLabel
-                                    control={
-                                        <Switch
-                                            checked={youthContact}
-                                            onChange={handleChange}
-                                            name='youthContact'
-                                            color='primary'
-                                        />
-                                    }
-                                    label='Youth Contact'
-                                />
-                                <Button
-                                    variant='contained'
-                                    color='secondary'
-                                    onClick={onSubmit}
-                                >
-                                    Save Configurations
-                                </Button>
-                            </FormGroup>
-                        </div>
-                    </form>
-                </div>
-            </Fragment>
-        ))
+                <form>
+                    <div className='MeetingConfigFormBox'>
+                        <FormGroup>
+                            <FormControlLabel
+                                control={
+                                    <Switch
+                                        checked={donations}
+                                        onChange={handleChange}
+                                        name='donations'
+                                        color='primary'
+                                    />
+                                }
+                                label='Donations'
+                            />
+                            <FormControlLabel
+                                control={
+                                    <Switch
+                                        checked={setupContact}
+                                        onChange={handleChange}
+                                        name='setupContact'
+                                        color='primary'
+                                    />
+                                }
+                                label='Setup Contact'
+                            />
+                            <FormControlLabel
+                                control={
+                                    <Switch
+                                        checked={cleanupContact}
+                                        onChange={handleChange}
+                                        name='cleanupContact'
+                                        color='primary'
+                                    />
+                                }
+                                label='Clean-up Contact'
+                            />
+                            <FormControlLabel
+                                control={
+                                    <Switch
+                                        checked={transportationContact}
+                                        onChange={handleChange}
+                                        name='transportationContact'
+                                        color='primary'
+                                    />
+                                }
+                                label='Transportation Contact'
+                            />
+                            <FormControlLabel
+                                control={
+                                    <Switch
+                                        checked={transportationCnt}
+                                        onChange={handleChange}
+                                        name='transportationCnt'
+                                        color='primary'
+                                    />
+                                }
+                                label='Transportation Count/Usage'
+                            />
+                            <FormControlLabel
+                                control={
+                                    <Switch
+                                        checked={avContact}
+                                        onChange={handleChange}
+                                        name='avContact'
+                                        color='primary'
+                                    />
+                                }
+                                label='Audio/Visual Contact'
+                            />
+                            <FormControlLabel
+                                control={
+                                    <Switch
+                                        checked={greeterContact1}
+                                        onChange={handleChange}
+                                        name='greeterContact1'
+                                        color='primary'
+                                    />
+                                }
+                                label='Greeter 1 Contact'
+                            />
+                            <FormControlLabel
+                                control={
+                                    <Switch
+                                        checked={greeterContact2}
+                                        onChange={handleChange}
+                                        name='greeterContact2'
+                                        color='primary'
+                                    />
+                                }
+                                label='Greeter 2 Contact'
+                            />
+                            <FormControlLabel
+                                control={
+                                    <Switch
+                                        checked={resourceContact}
+                                        onChange={handleChange}
+                                        name='resourceContact'
+                                        color='primary'
+                                    />
+                                }
+                                label='Resources Contact'
+                            />
+                            <FormControlLabel
+                                control={
+                                    <Switch
+                                        checked={announcementsContact}
+                                        onChange={handleChange}
+                                        name='announcementsContact'
+                                        color='primary'
+                                    />
+                                }
+                                label='Announcements Contact'
+                            />
+                            <FormControlLabel
+                                control={
+                                    <Switch
+                                        checked={closingContact}
+                                        onChange={handleChange}
+                                        name='closingContact'
+                                        color='primary'
+                                    />
+                                }
+                                label='Closing Contact'
+                            />
+                            <FormControlLabel
+                                control={
+                                    <Switch
+                                        checked={securityContact}
+                                        onChange={handleChange}
+                                        name='securityContact'
+                                        color='primary'
+                                    />
+                                }
+                                label='Security Contact'
+                            />
+                            <FormControlLabel
+                                control={
+                                    <Switch
+                                        checked={mealCnt}
+                                        onChange={handleChange}
+                                        name='mealCnt'
+                                        color='primary'
+                                    />
+                                }
+                                label='Meal Count'
+                            />
+                            <FormControlLabel
+                                control={
+                                    <Switch
+                                        checked={meal}
+                                        onChange={handleChange}
+                                        name='meal'
+                                        color='primary'
+                                    />
+                                }
+                                label='Meal Description'
+                            />
+                            <FormControlLabel
+                                control={
+                                    <Switch
+                                        checked={mealCoordinator}
+                                        onChange={handleChange}
+                                        name='mealCoordinator'
+                                        color='primary'
+                                    />
+                                }
+                                label='Meal Contact/Coordinator'
+                            />
+                            <FormControlLabel
+                                control={
+                                    <Switch
+                                        checked={cafeCnt}
+                                        onChange={handleChange}
+                                        name='cafeCnt'
+                                        color='primary'
+                                    />
+                                }
+                                label='Cafe Numbers'
+                            />
+                            <FormControlLabel
+                                control={
+                                    <Switch
+                                        checked={cafeCoordinator}
+                                        onChange={handleChange}
+                                        name='cafeCoordinator'
+                                        color='primary'
+                                    />
+                                }
+                                label='Cafe Coordinator'
+                            />
+                            <FormControlLabel
+                                control={
+                                    <Switch
+                                        checked={nursery}
+                                        onChange={handleChange}
+                                        name='nursery'
+                                        color='primary'
+                                    />
+                                }
+                                label='Nursery Numbers'
+                            />
+                            <FormControlLabel
+                                control={
+                                    <Switch
+                                        checked={nurseryContact}
+                                        onChange={handleChange}
+                                        name='nurseryContact'
+                                        color='primary'
+                                    />
+                                }
+                                label='Nursery Contact'
+                            />
+                            <FormControlLabel
+                                control={
+                                    <Switch
+                                        checked={children}
+                                        onChange={handleChange}
+                                        name='children'
+                                        color='primary'
+                                    />
+                                }
+                                label='Children Numbers'
+                            />
+                            <FormControlLabel
+                                control={
+                                    <Switch
+                                        checked={childrenContact}
+                                        onChange={handleChange}
+                                        name='childrenContact'
+                                        color='primary'
+                                    />
+                                }
+                                label='Children Contact'
+                            />
+                            <FormControlLabel
+                                control={
+                                    <Switch
+                                        checked={youth}
+                                        onChange={handleChange}
+                                        name='youth'
+                                        color='primary'
+                                    />
+                                }
+                                label='Youth Numbers'
+                            />
+                            <FormControlLabel
+                                control={
+                                    <Switch
+                                        checked={youthContact}
+                                        onChange={handleChange}
+                                        name='youthContact'
+                                        color='primary'
+                                    />
+                                }
+                                label='Youth Contact'
+                            />
+                            <Button
+                                variant='contained'
+                                color='secondary'
+                                onClick={onSubmit}
+                            >
+                                Save Configurations
+                            </Button>
+                        </FormGroup>
+                    </div>
+                </form>
+            </div>
+        </Fragment>
     );
 };
 

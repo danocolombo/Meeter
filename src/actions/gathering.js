@@ -336,12 +336,11 @@ export const addDefaultGroups =
         };
         defGroups.map(async (group) => {
             // 1. add group to groups table in DDB
-            // API requires that we send "title", not "groupTitle"
             // and we need to add meetingsId
             let defGroup = {};
             for (var key in group) {
                 if (group.hasOwnProperty(key)) {
-                    if (key === 'groupTitle') {
+                    if (key === 'title') {
                         defGroup.title = group[key];
                     } else {
                         defGroup[key] = group[key];

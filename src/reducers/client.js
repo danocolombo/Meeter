@@ -1,6 +1,8 @@
+import { FreeBreakfastRounded } from '@material-ui/icons';
 import {
     SET_CLIENT,
     REMOVE_DEFAULT_GROUP,
+    UPDATE_DEFAULT_GROUP,
     ADD_DEFAULT_GROUP,
     ADD_CLIENT_USER,
     UPDATE_CLIENT_USER,
@@ -49,19 +51,26 @@ export default function (state = initialState, action) {
                 ),
             };
         case REMOVE_DEFAULT_GROUP:
-            console.log('REMOVE_DEFAULT_GROUP in client reducer');
-            console.log('payload request value: ' + payload);
             return {
                 ...state,
                 defaultGroups: state.defaultGroups.filter(
                     (group) => group.groupId !== payload
                 ),
             };
+        case UPDATE_DEFAULT_GROUP:
+            return {
+                ...state,
+                defaultGroups: state.defaultGroups.map((grp) =>
+                    grp.groupId === payload.groupId ? payload : grp
+                ),
+            };
+
         case ADD_DEFAULT_GROUP:
             return {
                 ...state,
                 defaultGroups: [...state.defaultGroups, payload],
             };
+
         case SET_MTG_CONFIGS:
             return {
                 ...state,

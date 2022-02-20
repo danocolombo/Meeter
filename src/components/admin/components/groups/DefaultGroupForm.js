@@ -6,7 +6,7 @@ import React, { useState, useEffect } from 'react';
 // import { Edit } from '@material-ui/icons';
 const initialState = {
     gender: '',
-    groupTitle: '',
+    title: '',
     location: '',
     facilitator: '',
     clientId: '',
@@ -40,7 +40,7 @@ const EditDefaultGroup = ({
     //     return;
     // }, [tmpGroup]);
 
-    const { gender, groupTitle, location, facilitator, groupId } = formData;
+    const { gender, title, location, facilitator, groupId } = formData;
     const onChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
@@ -78,9 +78,9 @@ const EditDefaultGroup = ({
                     <input
                         type='text'
                         className='DGF-Title'
-                        placeholder='groupTitle'
-                        name='groupTitle'
-                        value={groupTitle}
+                        placeholder='title'
+                        name='title'
+                        value={title}
                         onChange={onChange}
                         required
                     />

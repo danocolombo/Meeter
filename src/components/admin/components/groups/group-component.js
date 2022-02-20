@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import Button from '@mui/material/Button';
@@ -8,11 +8,12 @@ import EditDefaultGroup from '../../../modals/admin/admin-edit-default-group.com
 import { saveTmpDefaultGroup } from '../../../../actions/group';
 import './groups-component.styles.scss';
 const GroupComponent = ({
-    group: { groupId, gender, groupTitle, location, facilitator },
+    group: { groupId, gender, title, location, facilitator },
     onGroupUpdate,
     onGroupDelete,
 }) => {
     const [modalIsVisible, setModalIsVisible] = useState(false);
+    const refModal = useRef();
     const handleUpdateRequest = (updatedGroup) => {
         setModalIsVisible(false);
         onGroupUpdate(updatedGroup);
@@ -36,7 +37,7 @@ const GroupComponent = ({
                     </div>
                     <div className='group-item__row'>
                         <div className='group-item__label'>
-                            {gender === 'f' ? "Women's" : "Men's"} {groupTitle}
+                            {gender === 'f' ? "Women's" : "Men's"} {title}
                         </div>
                     </div>
                     <div className='group-item__row'>
@@ -68,7 +69,7 @@ const GroupComponent = ({
                         group={{
                             grpId: groupId,
                             grpGender: gender,
-                            grpTitle: groupTitle,
+                            grpTitle: title,
                             grpFacilitator: facilitator,
                             grpLocation: location,
                         }}
