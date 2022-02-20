@@ -4,9 +4,8 @@ import {
     SET_GROUPS,
     CLEAR_GROUPS,
     REMOVE_GROUP,
+    GET_DEFAULT_GROUP,
     TURN_MEEETINGLOADING_OFF,
-    
-    
 } from '../actions/types';
 
 const initialState = {
@@ -31,12 +30,17 @@ export default function (state = initialState, action) {
                 turnout: payload,
                 meetingLoading: false,
             };
+        case GET_DEFAULT_GROUP:
+            let msg = 'test';
+            return { msg: msg };
         case SET_GROUPS:
             state = {
                 ...state,
-                groups: payload.sort((a,b) => (a.gender > b.gender) ? 1 : ((b.gender > a.gender) ? -1 : 0)),
-                meetingsLoading: false
-            }
+                groups: payload.sort((a, b) =>
+                    a.gender > b.gender ? 1 : b.gender > a.gender ? -1 : 0
+                ),
+                meetingsLoading: false,
+            };
             return state;
         case CLEAR_MEETING:
             return {
@@ -54,9 +58,11 @@ export default function (state = initialState, action) {
         case REMOVE_GROUP:
             return {
                 ...state,
-                groups: state.groups.filter((group) => group.groupId !== payload),
+                groups: state.groups.filter(
+                    (group) => group.groupId !== payload
+                ),
                 groupLoading: false,
-            };  
+            };
         default:
             return state;
     }

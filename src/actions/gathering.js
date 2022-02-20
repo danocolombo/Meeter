@@ -16,6 +16,7 @@ import {
     CLEAR_GATHERING,
     GET_HATHERINGS,
     CLEAR_HATHERINGS,
+    GET_DEFAULT_GROUP,
 } from './types';
 
 export const getMeeting = (meetingId) => async (dispatch) => {
@@ -40,13 +41,14 @@ export const getMeeting = (meetingId) => async (dispatch) => {
                 meetingId: meetingId,
             },
         };
+        let results = dispatch({ type: GET_DEFAULT_GROUP });
+        console.log('results:\n', results);
 
         let body = JSON.stringify(obj);
 
         let api2use = process.env.REACT_APP_MEETER_API + '/meetings';
         let res = await axios.post(api2use, body, config);
-
-        dispatch({
+        let setResults = dispatch({
             type: SET_MEETING,
             payload: res.data.body,
         });
@@ -334,12 +336,11 @@ export const addDefaultGroups =
         };
         defGroups.map(async (group) => {
             // 1. add group to groups table in DDB
-            // API requires that we send "title", not "groupTitle"
             // and we need to add meetingsId
             let defGroup = {};
             for (var key in group) {
                 if (group.hasOwnProperty(key)) {
-                    if (key === 'groupTitle') {
+                    if (key === 'title') {
                         defGroup.title = group[key];
                     } else {
                         defGroup[key] = group[key];

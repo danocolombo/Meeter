@@ -11,7 +11,7 @@ import {
 
 export const dispatchAuth = (jwtToken) => async (dispatch) => {
     //dispatch to save
-    console.log('check this token out:\n', jwtToken);
+    // console.log('check this token out:\n', jwtToken);
     let login_success_data = {
         token: jwtToken,
     };

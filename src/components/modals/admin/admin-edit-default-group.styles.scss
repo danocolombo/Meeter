@@ -1,0 +1,128 @@
+.admin-edit-default-group-component__wrapper {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    width: 80vw;
+    transform: translate(-50%, -50%);
+    display: flex;
+    flex-direction: column;
+    // margin: 20px;
+    border: black solid 1px;
+    border-radius: 5px;
+    background-color: lightgray;
+}
+.admin-edit-default-group-component__header {
+    background-color: #4484ce;
+    color: white;
+    text-align: center;
+    padding: 3px 0px;
+    border-bottom: black solid 1px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+}
+.admin-edit-default-group-component__message {
+    padding: 10px;
+    text-align: center;
+}
+.admin-edit-default-group-component__form-wrapper {
+    align-items: center;
+}
+.admin-edit-default-group-component__gender-box,
+.admin-edit-default-group-component__title-box,
+.admin-edit-default-group-component__facilitator-box,
+.admin-edit-default-group-component__location-box {
+    margin: 10px 0px 5px 0px;
+    text-align: center;
+}
+.admin-edit-default-group-component__gender-control {
+    margin-bottom: 0em;
+    padding: 0;
+    width: 95px;
+    align-items: center;
+}
+.admin-edit-default-group-component__button-wrapper {
+    text-align: center;
+    margin-bottom: 10px;
+}
+.admin-edit-default-group-component__submit-button {
+    padding: 2px 5px;
+    margin: 5px 5px 5px 0px;
+    background-color: yellow;
+}
+.admin-edit-default-group-component__cancel-button {
+    padding: 2px 5px;
+    margin: 5px 0px 5px 5px;
+}
+.reset-password__wrapper {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    width: 80vw;
+    transform: translate(-50%, -50%);
+    display: flex;
+    flex-direction: column;
+    // margin: 20px;
+    border: black solid 1px;
+    border-radius: 5px;
+    background-color: lightgray;
+}
+.reset-password__header {
+    background-color: #4484ce;
+    color: white;
+    text-align: center;
+    padding: 3px 0px;
+    border-bottom: black solid 1px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+}
+.reset-password__message {
+    padding: 10px;
+    text-align: center;
+}
+.reset-password__username-textbox-wrapper {
+    margin: 10px 0px 5px 0px;
+    text-align: center;
+}
+.reset-password__username-warning {
+    text-align: center;
+    margin: 5px 0px 15px 0px;
+}
+.reset-password__username-warning-msg {
+    // padding: 5px;
+    color: red;
+    font-weight: bold;
+    font-size: 1.1em;
+}
+
+.reset-password__button-wrapper {
+    text-align: center;
+    margin-bottom: 10px;
+}
+.reset-password__ok-button {
+    padding: 2px 5px;
+    margin: 5px 5px 5px 0px;
+    background-color: yellow;
+}
+.reset-password__cancel-button {
+    padding: 2px 5px;
+    margin: 5px 0px 5px 5px;
+}
+// MEDIA ALTERATIONS ** MEDIA ALTERATIONS ** MEDIA ALTERATIONS **
+//Iphone Series
+@media only screen and (min-width: 320px) and (max-width: 767px) {
+    .reset-password__wrapper {
+        width: 80vw;
+    }
+}
+//IPAD Series
+@media only screen and (min-width: 768px) and (max-width: 1023px) {
+    .reset-password__wrapper {
+        width: 450px;
+    }
+}
+//desktop
+@media only screen and (min-width: 1024px) {
+    .reset-password__wrapper {
+        width: 450px;
+    }
+}

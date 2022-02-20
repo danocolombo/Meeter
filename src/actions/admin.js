@@ -4,10 +4,11 @@ import { randomBytes, createCipheriv } from 'crypto';
 import {
     SET_CLIENT_USERS,
     ADMIN_ERROR,
-    SET_DEFAULT_GROUPS,
     ADD_DEFAULT_GROUP,
     REMOVE_CLIENT_USER,
+    SET_DEFAULT_GROUPS,
     UPDATE_CLIENT_USER,
+    UPDATE_DEFAULT_GROUP,
 } from './types';
 
 // GET CLIENT INFO
@@ -34,6 +35,46 @@ export const getClientUsers = (client) => async (dispatch) => {
         });
     } catch (err) {
         console.log('actions/admin.js getClientUsers ADMIN_ERROR');
+        dispatch({
+            type: ADMIN_ERROR,
+            payload: {
+                msg: err.response.statusText,
+                status: err.response.status,
+            },
+        });
+    }
+};
+export const removeDefaultGroup = (clientId, groupId) => async (dispatch) => {
+    //remove from database
+    let deleteRequest = {};
+    deleteRequest.clientId = clientId;
+    deleteRequest.groupId = groupId;
+    try {
+        const config = {
+            headers: {
+                'Access-Control-Allow-Headers':
+                    'Content-Type, x-auth-token, Access-Control-Allow-Headers',
+                'Content-Type': 'application/json',
+            },
+        };
+        let obj = {
+            operation: 'removeDefaultGroup',
+            payload: deleteRequest,
+        };
+
+        let body = JSON.stringify(obj);
+
+        let api2use = process.env.REACT_APP_MEETER_API + '/clients';
+        let res = await axios.post(api2use, body, config);
+
+        if (res.status === 200) {
+            dispatch({
+                type: 'REMOVE_DEFAULT_GROUP',
+                payload: groupId,
+            });
+            dispatch(setAlert('client updated', 'success'));
+        }
+    } catch (err) {
         dispatch({
             type: ADMIN_ERROR,
             payload: {
@@ -71,45 +112,104 @@ export const getDefGroups = (cid) => async (dispatch) => {
     }
 };
 
-export const updateDefaultGroup = (revised) => async (dispatch) => {
-    console.log('getting the work done.');
-    console.log('_id:' + revised._id);
-    console.log('client: ' + revised.cid);
-    console.log('gender: ' + revised.gender);
-    console.log('title: ' + revised.title);
-    console.log('location: ' + revised.location);
-    console.log('facilitator: ' + revised.gender);
+export const addDefaultGroup = (clientId, request) => async (dispatch) => {
+    // dispatch(setAlert('addDefaultGroup clicked', 'success'));
+    // let groupId = randomBytes(16).toString('base64');
+    let groupId = getUniqueId();
+    //add default group to client entry in AWS dynamodb
+    let newGroup = {};
+    newGroup.clientId = clientId;
+    newGroup.groupId = groupId;
+    newGroup.gender = request.gender;
+    newGroup.title = request.title;
+    newGroup.facilitator = request.facilitator;
+    newGroup.location = request.location;
+
+    // newGroup.clientId = clientId;
+    newGroup.groupId = groupId;
+
+    //send the new default group to AWS API
     try {
         const config = {
             headers: {
+                'Access-Control-Allow-Headers':
+                    'Content-Type, x-auth-token, Access-Control-Allow-Headers',
                 'Content-Type': 'application/json',
             },
         };
-        const res = await axios.put(
-            `/api/client/defaultgroup`,
-            revised,
-            config
-        );
-        if (res === null) {
-            console.log('res from put was null');
+        let obj = {
+            operation: 'addNewDefaultGroup',
+            payload: newGroup,
+        };
+
+        let body = JSON.stringify(obj);
+
+        let api2use = process.env.REACT_APP_MEETER_API + '/clients';
+        let res = await axios.post(api2use, body, config);
+        // console.log('res:' + JSON.stringify(res.data));
+        if (res.status === 200) {
+            dispatch({
+                type: ADD_DEFAULT_GROUP,
+                payload: newGroup,
+            });
+            dispatch(setAlert('client updated', 'success'));
         }
-        // now get the default groups and reload Redux
-        const ress = await axios.get(
-            `/api/client/defaultgroups/${revised.cid}`
-        );
-        if (ress === null) {
-            console.log('ress from get was null');
-        }
-        dispatch({
-            type: 'SET_DEFAULT_GROUPS',
-            payload: ress.data,
-        });
-        dispatch(setAlert('Default Group Updated.', 'success'));
     } catch (err) {
-        console.log('actions/admin.js updateDefaultGroup ADMIN_ERROR');
-        dispatch(setAlert('Default Group Update Failed.', 'danger'));
+        dispatch({
+            type: ADMIN_ERROR,
+            payload: {
+                msg: err.response.statusText,
+                status: err.response.status,
+            },
+        });
     }
 };
+export const updateDefaultGroup =
+    (clientId, updatedGroup) => async (dispatch) => {
+        let newGroup = {};
+        newGroup.clientId = clientId;
+        newGroup.groupId = updatedGroup.groupId;
+        newGroup.gender = updatedGroup.gender;
+        newGroup.title = updatedGroup.title;
+        newGroup.facilitator = updatedGroup.facilitator;
+        newGroup.location = updatedGroup.location;
+        try {
+            const config = {
+                headers: {
+                    'Access-Control-Allow-Headers':
+                        'Content-Type, x-auth-token, Access-Control-Allow-Headers',
+                    'Content-Type': 'application/json',
+                },
+            };
+            let obj = {
+                operation: 'updateDefaultGroup',
+                payload: newGroup,
+            };
+
+            let body = JSON.stringify(obj);
+
+            let api2use = process.env.REACT_APP_MEETER_API + '/clients';
+            let res = await axios.post(api2use, body, config);
+            // console.log('res:' + JSON.stringify(res.data));
+            if (res.status === 200) {
+                //take clientId out of group info
+                delete newGroup.clientId;
+                dispatch({
+                    type: UPDATE_DEFAULT_GROUP,
+                    payload: newGroup,
+                });
+                dispatch(setAlert('client updated', 'success'));
+            }
+        } catch (err) {
+            dispatch({
+                type: ADMIN_ERROR,
+                payload: {
+                    msg: err.response.statusText,
+                    status: err.response.status,
+                },
+            });
+        }
+    };
 export const addUserToClient = (user) => async (dispatch) => {
     //==========================================
     // add user to client
@@ -549,49 +649,3 @@ function getUniqueId() {
     encrypted = Buffer.concat([encrypted, cipher.final()]);
     return encrypted.toString('hex');
 }
-
-export const addDefaultGroup = (request, clientId) => async (dispatch) => {
-    dispatch(setAlert('addDefaultGroup clicked', 'success'));
-    // let groupId = randomBytes(16).toString('base64');
-    let groupId = getUniqueId();
-    //add default group to client entry in AWS dynamodb
-    let newGroup = request.formData;
-    // newGroup.clientId = clientId;
-    newGroup.groupId = groupId;
-
-    //send the new default group to AWS API
-    try {
-        const config = {
-            headers: {
-                'Access-Control-Allow-Headers':
-                    'Content-Type, x-auth-token, Access-Control-Allow-Headers',
-                'Content-Type': 'application/json',
-            },
-        };
-        let obj = {
-            operation: 'addNewDefaultGroup',
-            payload: newGroup,
-        };
-
-        let body = JSON.stringify(obj);
-
-        let api2use = process.env.REACT_APP_MEETER_API + '/clients';
-        let res = await axios.post(api2use, body, config);
-        // console.log('res:' + JSON.stringify(res.data));
-        if (res.status === 200) {
-            dispatch({
-                type: ADD_DEFAULT_GROUP,
-                payload: newGroup,
-            });
-            dispatch(setAlert('client updated', 'success'));
-        }
-    } catch (err) {
-        dispatch({
-            type: ADMIN_ERROR,
-            payload: {
-                msg: err.response.statusText,
-                status: err.response.status,
-            },
-        });
-    }
-};

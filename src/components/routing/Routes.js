@@ -8,9 +8,9 @@ import Dashboard from '../dashboard/Dashboard';
 // ====================
 // for config/admin
 //=====================
-import MeeterConfig from '../admin/Config';
+// import MeeterConfig from '../admin/Config';
 import MeeterAdmin from '../admin/Admin';
-import EditDefaultGroups from '../admin/DefaultGroupForm';
+import EditDefaultGroups from '../admin/components/groups/DefaultGroupForm';
 // import Profiles from '../profiles/Profiles';
 // import Profile from '../profile/UserProfile';
 
@@ -97,7 +97,7 @@ const Routes = () => {
                 <PrivateRoute exact path='/Config' component={MeeterAdmin} />
                 <PrivateRoute
                     exact
-                    path='/EditDefaultGroups'
+                    path='/EditDefaultGroup/:groupId'
                     component={EditDefaultGroups}
                 />
                 <Route exact path='/404' render={(props) => <ErrorPage />} />

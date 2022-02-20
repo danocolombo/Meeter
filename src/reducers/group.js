@@ -16,7 +16,6 @@ export default function (state = initialState, action) {
     const { type, payload } = action;
 
     switch (type) {
-
         case GET_GROUP:
             return {
                 ...state,
@@ -33,7 +32,7 @@ export default function (state = initialState, action) {
             return {
                 ...state,
                 tmpGroup: null,
-                groupLoading: false
+                groupLoading: false,
             };
         case CLEAR_GROUP:
             return {
