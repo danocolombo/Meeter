@@ -213,8 +213,19 @@ const Login = ({
                 clientCode: meeterUser.clientCode,
                 defaultGroups: clientRes?.Items[0]?.defaultGroups,
                 clientUsers: clientRes?.Items[0]?.clientUsers,
-                clientConfigs: clientRes?.Items[0]?.clientConfigs,
+                // clientConfigs: clientRes?.Items[0]?.clientConfigs,
+                nones: clientRes?.Items[0]?.nones,
             };
+            //========================================
+            // convert configs map to object for redux
+            //========================================
+            let configs = clientInfo.nones;
+            let newConfig = {};
+            configs.forEach(function (value, key) {
+                newConfig[value[0]] = value[1];
+            });
+            clientInfo.clientConfigs = newConfig;
+
             //   get undefined users to list in clientUsers
             //   this allows supersuer to add users to client
             const results = await getPotentialUsers();
