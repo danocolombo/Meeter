@@ -12,6 +12,7 @@ import { AccordionSummary } from '@material-ui/core';
 import UserComponent from './components/users/user.component';
 import MeetingConfigForm from './components/configs/MeetingConfigForm';
 import GroupsComponent from './components/groups/groups-component';
+import ConfigsComponent from './components/configs/configs-component';
 
 import {
     getClientUsers,
@@ -156,7 +157,10 @@ const SystemConfig = ({
                         <div className='posts'>
                             {active.role === 'superuser' ||
                             active.role === 'owner' ? (
-                                <MeetingConfigForm />
+                                <ConfigsComponent
+                                    clientId={clientId}
+                                    clientConfigs={clientConfigs}
+                                />
                             ) : (
                                 <Fragment>
                                     <p>Feature coming soon...</p>

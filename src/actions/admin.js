@@ -111,7 +111,10 @@ export const getDefGroups = (cid) => async (dispatch) => {
         });
     }
 };
-
+export const updateConfig = (configUpdate) => async (dispatch) => {
+    console.log('updateConfig(admin), configUpdate:\n', configUpdate);
+    return null;
+};
 export const addDefaultGroup = (clientId, request) => async (dispatch) => {
     // dispatch(setAlert('addDefaultGroup clicked', 'success'));
     // let groupId = randomBytes(16).toString('base64');
@@ -164,6 +167,7 @@ export const addDefaultGroup = (clientId, request) => async (dispatch) => {
         });
     }
 };
+
 export const updateDefaultGroup =
     (clientId, updatedGroup) => async (dispatch) => {
         let newGroup = {};
