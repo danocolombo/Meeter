@@ -66,7 +66,7 @@ const EditGathering = ({
     meeter: { active },
     meeting: { turnout, groups, meetingLoading },
     group: { tmpGroup },
-    client: { defaultGroups, clientConfigs },
+    client: { defaultGroups, clientConfigs, configFlags },
     // clientConfigs,
     createGathering,
     getMeeting,
@@ -80,6 +80,7 @@ const EditGathering = ({
     history,
 }) => {
     const [formData, setFormData] = useState(initialState);
+    const [teacher, setTeacher] = useState(configFlags['teacher']);
     useEffect(() => {
         // need to clear the redux meeting data
         clearTmpGroup();
@@ -176,10 +177,7 @@ const EditGathering = ({
         // }
         <Fragment>
             <h1 className='standard-font text-primary'>Your Meeting</h1>
-            {/* <p className='lead'>
-                <i className='fas fa-user' /> Have at it...
-                <br />
-            </p> */}
+            <div>teacher:{console.log(configFlags)}</div>
             <small>* = required field</small>
             <form className='form' onSubmit={onSubmit}>
                 <div>
@@ -265,7 +263,7 @@ const EditGathering = ({
                 )}
                 {/* SHOW AVContact TEXTBOX IF CONFIGURED        */}
                 {/* --- ???????????????????????????? ----- */}
-                {clientConfigs['avContact'] === true ? (
+                {clientConfigs['avContact'] !== false ? (
                     <div className='form-group'>
                         <h4>Audio/Visual Contact</h4>
                         <input
@@ -319,7 +317,7 @@ const EditGathering = ({
                 <small className='form-text'>Number of newcomers?</small>
                 {/* SHOW DONATIONS IF CONFIGURED        */}
                 {/* --- ???????????????????????????? ----- */}
-                {clientConfigs['donations'] === true ? (
+                {clientConfigs['donations'] !== false ? (
                     <div className='form-group'>
                         <h4>Donations</h4>
                         <input
@@ -339,7 +337,7 @@ const EditGathering = ({
                 ) : null}
                 {/* SHOW MEAL DESCRIPTION IF CONFIGURED        */}
                 {/* --- ???????????????????????????? ----- */}
-                {clientConfigs['meal'] === true ? (
+                {clientConfigs['meal'] !== false ? (
                     <div className='form-group'>
                         <h4>Meal</h4>
                         <input
@@ -355,7 +353,7 @@ const EditGathering = ({
                 ) : null}
                 {/* SHOW MEAL COORDINATOR IF CONFIGURED        */}
                 {/* --- ???????????????????????????? ----- */}
-                {clientConfigs['mealCoordinator'] === true ? (
+                {clientConfigs['mealCoordinator'] !== false ? (
                     <div className='form-group'>
                         <h4>Meal Contact</h4>
                         <input
@@ -370,7 +368,7 @@ const EditGathering = ({
                 ) : null}
                 {/* SHOW MEAL COUNT IF CONFIGURED        */}
                 {/* --- ???????????????????????????? ----- */}
-                {clientConfigs['mealCnt'] === true ? (
+                {clientConfigs['mealCnt'] !== false ? (
                     <div className='form-group'>
                         <h4>Meal Count</h4>
                         <input
@@ -389,7 +387,7 @@ const EditGathering = ({
                 ) : null}
                 {/* SHOW CAFE COORDINATOR IF CONFIGURED        */}
                 {/* --- ???????????????????????????? ----- */}
-                {clientConfigs['cafeCoordinator'] === true ? (
+                {clientConfigs['cafeCoordinator'] !== false ? (
                     <div className='form-group'>
                         <h4>Cafe Coordinator</h4>
                         <input
@@ -405,7 +403,7 @@ const EditGathering = ({
                 ) : null}
                 {/* SHOW CAFE COUNT IF CONFIGURED        */}
                 {/* --- ???????????????????????????? ----- */}
-                {clientConfigs['cafeCount'] === true ? (
+                {clientConfigs['cafeCount'] !== false ? (
                     <div className='form-group'>
                         <h4>Cafe Attendees</h4>
                         <input
@@ -424,7 +422,7 @@ const EditGathering = ({
                 ) : null}
                 {/* SHOW GREETER 1 IF CONFIGURED        */}
                 {/* --- ???????????????????????????? ----- */}
-                {clientConfigs['greeterContact1'] === true ? (
+                {clientConfigs['greeterContact1'] !== false ? (
                     <div className='form-group'>
                         <h4>Greeter</h4>
                         <input
@@ -440,7 +438,7 @@ const EditGathering = ({
                 ) : null}
                 {/* SHOW GREETER 2 IF CONFIGURED        */}
                 {/* --- ???????????????????????????? ----- */}
-                {clientConfigs['greeterContact2'] === true ? (
+                {clientConfigs['greeterContact2'] !== false ? (
                     <div className='form-group'>
                         <h4>Greeter</h4>
                         <input
@@ -456,7 +454,7 @@ const EditGathering = ({
                 ) : null}
                 {/* SHOW RESOURCES CONTACT IF CONFIGURED        */}
                 {/* --- ???????????????????????????? ----- */}
-                {clientConfigs['resourceContact'] === true ? (
+                {clientConfigs['resourceContact'] !== false ? (
                     <div className='form-group'>
                         <h4>Resources Contact</h4>
                         <input
@@ -472,7 +470,7 @@ const EditGathering = ({
                 ) : null}
                 {/* SHOW ANNOUNCEMENTS CONTACT IF CONFIGURED        */}
                 {/* --- ???????????????????????????? ----- */}
-                {clientConfigs['announcementsContact'] === true ? (
+                {clientConfigs['announcementsContact'] !== false ? (
                     <div className='form-group'>
                         <h4>Announcements Contact</h4>
                         <input
@@ -490,7 +488,7 @@ const EditGathering = ({
                 ) : null}
                 {/* SHOW CLOSING CONTACT IF CONFIGURED        */}
                 {/* --- ???????????????????????????? ----- */}
-                {clientConfigs['closingContact'] === true ? (
+                {clientConfigs['closingContact'] !== false ? (
                     <div className='form-group'>
                         <h4>Closing Contact</h4>
                         <input
@@ -506,7 +504,7 @@ const EditGathering = ({
                 ) : null}
                 {/* SHOW SECURITY IF CONFIGURED        */}
                 {/* --- ???????????????????????????? ----- */}
-                {clientConfigs['securityContact'] === true ? (
+                {clientConfigs['securityContact'] !== false ? (
                     <div className='form-group'>
                         <h4>Security Coordinator</h4>
                         <input
@@ -525,7 +523,7 @@ const EditGathering = ({
                 <hr className='group-ruler' />
                 {/* SHOW NURSERY COORDINATOR IF CONFIGURED        */}
                 {/* --- ???????????????????????????? ----- */}
-                {clientConfigs['nurseryContact'] === true ? (
+                {clientConfigs['nurseryContact'] !== false ? (
                     <div className='form-group'>
                         <h4>Nursery Contact</h4>
                         <input
@@ -541,7 +539,7 @@ const EditGathering = ({
                 ) : null}
                 {/* SHOW NURSERY COUNT IF CONFIGURED        */}
                 {/* --- ???????????????????????????? ----- */}
-                {clientConfigs['nursery'] === true ? (
+                {clientConfigs['nursery'] !== false ? (
                     <div className='form-group'>
                         <h4>Nursery Count</h4>
                         <input
@@ -560,7 +558,7 @@ const EditGathering = ({
                 ) : null}
                 {/* SHOW CHILDREN COORDINATOR IF CONFIGURED        */}
                 {/* --- ???????????????????????????? ----- */}
-                {clientConfigs['childrenContact'] === true ? (
+                {clientConfigs['childrenContact'] !== false ? (
                     <div className='form-group'>
                         <h4>Childern Contact</h4>
                         <input
@@ -576,7 +574,7 @@ const EditGathering = ({
                 ) : null}
                 {/* SHOW CHILDREN COUNT IF CONFIGURED        */}
                 {/* --- ???????????????????????????? ----- */}
-                {clientConfigs['children'] === true ? (
+                {clientConfigs['children'] !== false ? (
                     <div className='form-group'>
                         <h4>Children Count</h4>
                         <input
@@ -595,7 +593,7 @@ const EditGathering = ({
                 ) : null}
                 {/* SHOW YOUTH COORDINATOR IF CONFIGURED        */}
                 {/* --- ???????????????????????????? ----- */}
-                {clientConfigs['youthContact'] === true ? (
+                {clientConfigs['youthContact'] !== false ? (
                     <div className='form-group'>
                         <h4>Youth Contact</h4>
                         <input
@@ -611,7 +609,7 @@ const EditGathering = ({
                 ) : null}
                 {/* SHOW YOUTH COUNT IF CONFIGURED        */}
                 {/* --- ???????????????????????????? ----- */}
-                {clientConfigs['youth'] === true ? (
+                {clientConfigs['youth'] !== false ? (
                     <div className='form-group'>
                         <h4>Youth Count</h4>
                         <input
@@ -630,7 +628,7 @@ const EditGathering = ({
                 ) : null}
                 {/* SHOW SETUP IF CONFIGURED        */}
                 {/* --- ???????????????????????????? ----- */}
-                {clientConfigs['setupContact'] === true ? (
+                {clientConfigs['setupContact'] !== false ? (
                     <div className='form-group'>
                         <h4>Setup Coordinator</h4>
                         <input
@@ -646,7 +644,7 @@ const EditGathering = ({
                 ) : null}
                 {/* SHOW CLEANUP IF CONFIGURED        */}
                 {/* --- ???????????????????????????? ----- */}
-                {clientConfigs['cleanupContact'] === true ? (
+                {clientConfigs['cleanupContact'] !== false ? (
                     <div className='form-group'>
                         <h4>Clean-up Coordinator</h4>
                         <input
@@ -664,7 +662,7 @@ const EditGathering = ({
                 ) : null}
                 {/* SHOW TRANSPORTATION IF CONFIGURED        */}
                 {/* --- ???????????????????????????? ----- */}
-                {clientConfigs['transportationContact'] === true ? (
+                {clientConfigs['transportationContact'] !== false ? (
                     <div className='form-group'>
                         <h4>Transportation Coordinator</h4>
                         <input
@@ -680,7 +678,7 @@ const EditGathering = ({
                 ) : null}
                 {/* SHOW YOUTH COUNT IF CONFIGURED        */}
                 {/* --- ???????????????????????????? ----- */}
-                {clientConfigs['transportationCount'] === true ? (
+                {clientConfigs['transportationCount'] !== false ? (
                     <div className='form-group'>
                         <h4>Transportation Guests</h4>
                         <input

@@ -9,7 +9,10 @@ import Modal from '../../../modals/wrapper.modal';
 import EditDefaultGroup from '../../../modals/admin/admin-edit-default-group.component';
 import { saveTmpDefaultGroup } from '../../../../actions/group';
 import './configs-component.styles.scss';
-const ConfigComponent = ({ setting, value, onConfigUpdate }) => {
+const ConfigComponent = ({
+    config: { key, config, setting, label },
+    onConfigUpdate,
+}) => {
     const handleUpdateRequest = (updatedSetting) => {
         onConfigUpdate(updatedSetting);
     };
@@ -18,14 +21,15 @@ const ConfigComponent = ({ setting, value, onConfigUpdate }) => {
             <FormControlLabel
                 control={
                     <Switch
-                        checked={value}
+                        checked={setting}
                         onChange={handleUpdateRequest}
-                        name='setting'
+                        name={config}
                         color='primary'
                     />
                 }
-                label={setting}
-            /><br/>
+                label={label}
+            />
+            <br />
         </>
     );
 };

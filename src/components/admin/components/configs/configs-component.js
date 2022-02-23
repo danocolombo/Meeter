@@ -7,18 +7,6 @@ import ConfigComponent from './config-component';
 import { updateConfig } from '../../../../actions/admin';
 import './configs-component.styles.scss';
 const ConfigsComponent = ({ clientId, clientConfigs, updateConfig }) => {
-    // convert the clientConfigs object to a map to iterate over
-    //const configurations = new Map(Object.entries(clientConfigs));
-    const convertedValues = new Map(Object.entries(clientConfigs));
-    // setup value to iterate over.
-    let configs = [];
-    let cnt = 0;
-    convertedValues.forEach(function (value, key) {
-        // console.log(key + ':' + value);
-        let item = { key: cnt++, setting: key, value: value };
-        configs.push(item);
-    });
-
     const handleConfigUpdate = (newConfig) => {
         //add the client and send the group to be updated
         // updateConfig(newConfig)
@@ -31,11 +19,10 @@ const ConfigsComponent = ({ clientId, clientConfigs, updateConfig }) => {
             {/* {clientConfigs.forEach(function (value, key) {
                 console.log(key + ':' + value);
             })} */}
-            {configs.map((cfg) => (
+            {clientConfigs.map((cfg) => (
                 <ConfigComponent
-                    key={cfg.key}
-                    setting={cfg.setting}
-                    value={cfg.value}
+                    key={cfg.config}
+                    config={cfg}
                     onConfigUpdate={handleConfigUpdate}
                 />
             ))}

@@ -56,6 +56,16 @@ export const getMeeting = (meetingId) => async (dispatch) => {
         setAlert('getMeeting error.', 'danger');
     }
 };
+//+++++++++++++++++++++++++++++
+// simplfy configs
+//+++++++++++++++++++++++++++++
+export const simplifyConfigs = (clientConfigs) => async (dispatch) => {
+    const configSet = new Map();
+    clientConfigs.map((cfg) => {
+        configSet.set(cfg.config, cfg.setting);
+    });
+    return configSet;
+};
 //#########################
 //get gatherings
 //#########################

@@ -214,17 +214,19 @@ const Login = ({
                 defaultGroups: clientRes?.Items[0]?.defaultGroups,
                 clientUsers: clientRes?.Items[0]?.clientUsers,
                 // clientConfigs: clientRes?.Items[0]?.clientConfigs,
-                nones: clientRes?.Items[0]?.nones,
+                configFlags: clientRes?.Items[0]?.configFlags,
+                configurations: clientRes?.Items[0]?.configurations,
+                configMap: clientRes?.Items[0]?.nones,
             };
             //========================================
             // convert configs map to object for redux
             //========================================
-            let configs = clientInfo.nones;
+            let configs = clientInfo.configMap;
             let newConfig = {};
             configs.forEach(function (value, key) {
                 newConfig[value[0]] = value[1];
             });
-            clientInfo.clientConfigs = newConfig;
+            clientInfo.clientConfigs = clientInfo.configurations;
 
             //   get undefined users to list in clientUsers
             //   this allows supersuer to add users to client

@@ -16,6 +16,7 @@ const initialState = {
     defaultGroups: [],
     clientUsers: [],
     clientConfigs: [],
+    configFlags: [],
     error: {},
 };
 
@@ -35,6 +36,7 @@ export default function (state = initialState, action) {
                 defaultGroups: payload?.defaultGroups,
                 clientUsers: payload?.clientUsers,
                 clientConfigs: payload?.clientConfigs,
+                configFlags: payload?.configFlags,
             };
         case ADD_CLIENT_USER:
             // this inserts the payload into the clientUsers array
