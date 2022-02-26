@@ -15,7 +15,8 @@ import EditDefaultGroups from '../admin/components/groups/DefaultGroupForm';
 // import Profile from '../profile/UserProfile';
 
 import People from '../people/People';
-// import Gathering from '../gatherings/Gathering';
+import ConfigTest from '../admin/ConfigTest';
+import Gathering from '../gatherings/Gathering';
 import Gatherings from '../gatherings/Gatherings';
 import EditGathering from '../gatherings/EditGathering';
 import EditGroup from '../gatherings/EditGroup';
@@ -34,6 +35,7 @@ const Routes = () => {
             <Alert />
             <Switch>
                 <Route exact path='/register' component={Register} />
+                <Route exact path='/test' component={ConfigTest} />
                 <Route exact path='/login' component={Login} />
                 <Route
                     exact
@@ -82,7 +84,7 @@ const Routes = () => {
                 <PrivateRoute
                     exact
                     path='/EditGathering/:id'
-                    component={EditGathering}
+                    component={Gathering}
                 />
                 <PrivateRoute
                     exact

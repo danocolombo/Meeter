@@ -47,6 +47,18 @@ const Navbar = ({ auth, meeter, logout }) => {
                         </li>
                     </Fragment>
                 ) : null}
+                {auth.user &&
+                (meeter.active.role === 'superuser' ||
+                    meeter.active.role === 'owner') &&
+                meeter.active.status === 'approved' ? (
+                    <Fragment>
+                        <li>
+                            <Link to='/test'>
+                                ? <span className='hide-sm'> TEST</span>
+                            </Link>
+                        </li>
+                    </Fragment>
+                ) : null}
 
                 {auth.user && meeter.active.status === 'approved' ? (
                     <Fragment>
