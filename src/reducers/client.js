@@ -7,6 +7,7 @@ import {
     UPDATE_CLIENT_USER,
     CLEAR_CLIENT,
     SET_MTG_CONFIGS,
+    UPDATE_MTG_CONFIGS,
 } from '../actions/types';
 
 const initialState = {
@@ -71,7 +72,13 @@ export default function (state = initialState, action) {
                 ...state,
                 defaultGroups: [...state.defaultGroups, payload],
             };
-
+        case UPDATE_MTG_CONFIGS:
+            return {
+                ...state,
+                clientConfigs: payload.configs,
+                configFlags: payload.flags,
+                loading: false,
+            };
         case SET_MTG_CONFIGS:
             return {
                 ...state,

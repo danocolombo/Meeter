@@ -213,20 +213,9 @@ const Login = ({
                 clientCode: meeterUser.clientCode,
                 defaultGroups: clientRes?.Items[0]?.defaultGroups,
                 clientUsers: clientRes?.Items[0]?.clientUsers,
-                // clientConfigs: clientRes?.Items[0]?.clientConfigs,
                 configFlags: clientRes?.Items[0]?.configFlags,
-                configurations: clientRes?.Items[0]?.configurations,
-                configMap: clientRes?.Items[0]?.nones,
+                clientConfigs: clientRes?.Items[0]?.configurations,
             };
-            //========================================
-            // convert configs map to object for redux
-            //========================================
-            let configs = clientInfo.configMap;
-            let newConfig = {};
-            configs.forEach(function (value, key) {
-                newConfig[value[0]] = value[1];
-            });
-            clientInfo.clientConfigs = clientInfo.configurations;
 
             //   get undefined users to list in clientUsers
             //   this allows supersuer to add users to client
@@ -295,34 +284,38 @@ const Login = ({
             <p className='lead'>
                 <i className='fas fa-user' /> Sign Into Your Account
             </p>
-            <div>
-                <div className='form-group'>
+            <form>
+                <div>
+                    <div className='form-group'>
+                        <input
+                            type='text'
+                            placeholder='Username'
+                            autoComplete='off'
+                            name='userName'
+                            value={username}
+                            onChange={(e) => setUsername(e.target.value)}
+                            required
+                        />
+                    </div>
+                    <div className='form-group'>
+                        <input
+                            type='password'
+                            autoComplete='off'
+                            placeholder='Password'
+                            name='password'
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            minLength='6'
+                        />
+                    </div>
                     <input
-                        type='text'
-                        placeholder='Username'
-                        name='userName'
-                        value={username}
-                        onChange={(e) => setUsername(e.target.value)}
-                        required
+                        type='button'
+                        onClick={signIn}
+                        className='btn btn-primary'
+                        value='Login'
                     />
                 </div>
-                <div className='form-group'>
-                    <input
-                        type='password'
-                        placeholder='Password'
-                        name='password'
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        minLength='6'
-                    />
-                </div>
-                <input
-                    type='button'
-                    onClick={signIn}
-                    className='btn btn-primary'
-                    value='Login'
-                />
-            </div>
+            </form>
             <p className='my-1'>
                 Don't have an account? <Link to='/register'>Sign Up</Link>
                 <br />

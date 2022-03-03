@@ -42,7 +42,7 @@ export const getMeeting = (meetingId) => async (dispatch) => {
             },
         };
         let results = dispatch({ type: GET_DEFAULT_GROUP });
-        console.log('results:\n', results);
+        // console.log('results:\n', results);
 
         let body = JSON.stringify(obj);
 

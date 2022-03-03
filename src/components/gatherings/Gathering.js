@@ -245,7 +245,7 @@ const EditGathering = ({
                 )}
                 {/* SHOW AVContact TEXTBOX IF CONFIGURED        */}
                 {/* --- ???????????????????????????? ----- */}
-                {clientConfigs['avContact'] !== false ? (
+                {configFlags['avContact'] === true ? (
                     <div className='form-group'>
                         <h4>Audio/Visual Contact</h4>
                         <input

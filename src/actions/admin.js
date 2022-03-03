@@ -9,7 +9,9 @@ import {
     SET_DEFAULT_GROUPS,
     UPDATE_CLIENT_USER,
     UPDATE_DEFAULT_GROUP,
+    UPDATE_MTG_CONFIGS,
 } from './types';
+import { ContactsOutlined } from '@material-ui/icons';
 
 // GET CLIENT INFO
 
@@ -111,10 +113,71 @@ export const getDefGroups = (cid) => async (dispatch) => {
         });
     }
 };
-export const updateConfig = (configUpdate) => async (dispatch) => {
-    console.log('updateConfig(admin), configUpdate:\n', configUpdate);
-    return null;
-};
+export const updateConfiguration =
+    (config, clientId, clientCode) => async (dispatch) => {
+        //send the new default group to AWS API
+        try {
+            const configHeader = {
+                headers: {
+                    'Access-Control-Allow-Headers':
+                        'Content-Type, x-auth-token, Access-Control-Allow-Headers',
+                    'Content-Type': 'application/json',
+                },
+            };
+            let obj = {
+                operation: 'updateMeetingConfig',
+                payload: {
+                    client: clientCode,
+                    clientId: clientId,
+                    config: config.config,
+                    value: config.newValue,
+                    label: config.label,
+                },
+            };
+
+            let body = JSON.stringify(obj);
+
+            let api2use = process.env.REACT_APP_MEETER_API + '/clients';
+            let res = await axios.post(api2use, body, configHeader);
+            // console.log('res:' + JSON.stringify(res.data));
+            if (res.status === 200) {
+                //now update the redux store
+                // 1. update configurations
+                let updatedConfigurations =
+                    res.data.body.Item.configurations.map((cfg) => {
+                        return cfg.config === config.config
+                            ? {
+                                  config: config.config,
+                                  setting: config.newValue,
+                                  label: config.label,
+                              }
+                            : cfg;
+                    });
+
+                // 2. update configFlags
+                let updatedConfigFlags = res.data.body.Item.configFlags;
+                updatedConfigFlags[config.config] = config.newValue;
+                let payload_data = {};
+                payload_data.configs = updatedConfigurations;
+                payload_data.flags = updatedConfigFlags;
+                //update the config
+
+                dispatch({
+                    type: UPDATE_MTG_CONFIGS,
+                    payload: payload_data,
+                });
+                dispatch(setAlert('client updated', 'success'));
+            }
+        } catch (err) {
+            dispatch({
+                type: ADMIN_ERROR,
+                payload: {
+                    msg: err?.response,
+                    status: err.response?.status,
+                },
+            });
+        }
+    };
 export const addDefaultGroup = (clientId, request) => async (dispatch) => {
     // dispatch(setAlert('addDefaultGroup clicked', 'success'));
     // let groupId = randomBytes(16).toString('base64');

@@ -84,7 +84,7 @@ const Routes = () => {
                 <PrivateRoute
                     exact
                     path='/EditGathering/:id'
-                    component={Gathering}
+                    component={EditGathering}
                 />
                 <PrivateRoute
                     exact

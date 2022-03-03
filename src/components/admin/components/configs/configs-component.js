@@ -4,14 +4,12 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import ConfigComponent from './config-component';
 
-import { updateConfig } from '../../../../actions/admin';
+//import { updateConfig } from '../../../../actions/admin';
 import './configs-component.styles.scss';
-const ConfigsComponent = ({ clientId, clientConfigs, updateConfig }) => {
+const ConfigsComponent = ({ clientId, clientConfigs, onConfigUpdate }) => {
     const handleConfigUpdate = (newConfig) => {
         //add the client and send the group to be updated
-        // updateConfig(newConfig)
-        alert('configs-component:onConfigUpdate');
-        return null;
+        onConfigUpdate(newConfig);
     };
     return (
         <>
@@ -29,9 +27,10 @@ const ConfigsComponent = ({ clientId, clientConfigs, updateConfig }) => {
         </>
     );
 };
-ConfigsComponent.propTypes = {
-    updateConfig: PropTypes.func.isRequired,
-};
-export default connect(null, {
-    updateConfig,
-})(withRouter(ConfigsComponent));
+export default ConfigsComponent;
+// ConfigsComponent.propTypes = {
+//     updateConfig: PropTypes.func.isRequired,
+// };
+// export default connect(null, {
+//     updateConfig,
+// })(withRouter(ConfigsComponent));

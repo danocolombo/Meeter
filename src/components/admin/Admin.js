@@ -18,6 +18,7 @@ import {
     getClientUsers,
     getDefGroups,
     updateUserCredentials,
+    updateConfiguration,
 } from '../../actions/admin';
 import { getMtgConfigs } from '../../actions/administration';
 
@@ -33,6 +34,7 @@ const SystemConfig = ({
         clientConfigs,
     },
     updateUserCredentials,
+    updateConfiguration,
     historyView,
 }) => {
     // let theClient = [];
@@ -51,6 +53,17 @@ const SystemConfig = ({
         );
         let userHistory = theOne[0];
         updateUserCredentials(userUpdates, userHistory);
+    };
+    const handleConfigChange = (config) => {
+        console.log(
+            'components.Admin config:' +
+                config.config +
+                '\nsetting:' +
+                config.newValue +
+                '\nlabel:' +
+                config.label
+        );
+        updateConfiguration(config, clientId, clientCode);
     };
 
     return loading ? (
@@ -160,6 +173,7 @@ const SystemConfig = ({
                                 <ConfigsComponent
                                     clientId={clientId}
                                     clientConfigs={clientConfigs}
+                                    onConfigUpdate={handleConfigChange}
                                 />
                             ) : (
                                 <Fragment>
@@ -187,6 +201,7 @@ SystemConfig.propTypes = {
     getDefGroups: PropTypes.func.isRequired,
     getMtgConfigs: PropTypes.func.isRequired,
     updateUserCredentials: PropTypes.func.isRequired,
+    updateConfiguration: PropTypes.func.isRequired,
 };
 const mapStateToProps = (state) => ({
     meeter: state.meeter,
@@ -198,4 +213,5 @@ export default connect(mapStateToProps, {
     getDefGroups,
     getMtgConfigs,
     updateUserCredentials,
+    updateConfiguration,
 })(SystemConfig);
