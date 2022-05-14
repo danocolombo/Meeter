@@ -175,7 +175,19 @@ export const createGathering =
                 // delete formData.meetingId;
                 formData.meetingId = '0';
             }
-
+            //==========================================
+            // need to create mtgCompKey for the new mtg
+            //==========================================
+            // desire:
+            // clientId#YYYY#MM#DD
+            // example: wbc#2022#05#14
+            // then save as mtgCompKey
+            //------------------------------------------
+            let tmp = activeClient;
+            //now get the date parts
+            let dParts = formData.meetingDate.split('-');
+            tmp = tmp + '#' + dParts[0] + '#' + dParts[1] + '#' + dParts[2];
+            formData.mtgCompKey = tmp;
             //==========================================
             // new 5.5 AWS API call
             //==========================================
