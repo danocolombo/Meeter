@@ -20,7 +20,7 @@
         "follow-redirects": "1.14.8",
         "glob-parent": "^6.0.2",
         "materialize-css": "^1.0.0",
-        "moment": "^2.29.1",
+        "moment": "^2.29.4",
         "node-fetch": "2.6.7",
         "node-gyp": "^8.4.1",
         "react": "^16.13.1",
